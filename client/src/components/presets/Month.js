@@ -1,11 +1,11 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import PresetForm from '../presets/PresetForm';
-import PresetFilter from '../presets/PresetFilter';
-import PresetNegativeFilter from '../presets/PresetNegativeFilter';
+
 import Sum from '../presets/Sum';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
 import Purchases from './Purchases';
+import MonthSummary from './MonthSummary';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
@@ -19,17 +19,14 @@ const Month = () => {
   return (
     <Fragment>
       <Datemenu />
-      <div className='grid-3'>
+      <div className='monthgrid'>
         <div>
           <PresetForm />
           {presetContext.sum === null ? null : <Sum />}
           <Purchases />
         </div>
         <div>
-          <PresetFilter />
-        </div>
-        <div>
-          <PresetNegativeFilter />
+          <MonthSummary />
         </div>
       </div>
     </Fragment>
