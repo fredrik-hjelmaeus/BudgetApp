@@ -8,9 +8,11 @@ const MonthSummary = () => {
       <div className='card_monthright bold'>
         <div className='grid-2'>
           <div>
+            <h3 className='all-center text-gray underline'>Income</h3>
             <PresetFilter />
           </div>
           <div>
+            <h3 className='all-center text-gray underline'>Expenses</h3>
             <PresetNegativeFilter />
           </div>
         </div>
