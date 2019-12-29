@@ -84,6 +84,10 @@ img {
   font-weight: bold;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
 .text-center {
   text-align: center;
 }
@@ -341,6 +345,17 @@ img {
   outline: none;
 }
 
+.btn-form {
+  padding: 0.4rem 1.3rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: opacity 0.2s ease-in;
+  outline: none;
+  font-weight: normal;
+}
+
 .btn-white {
   max-width: 163px;
   padding: 0.4rem 1.3rem;
@@ -488,7 +503,8 @@ img {
   color: #333;
 }
 
-.btn:hover {
+.btn:hover,
+.btn-form:hover {
   opacity: 0.8;
 }
 
@@ -568,17 +584,21 @@ input::placeholder {
 .monthitem {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: start;
+  bosrder: 1px solid green;
+  border-bottom: 1px solid var(--gray-color);
 }
 
 .monthitem button {
   background: none;
-  border: none;
+  bordder: 1px solid red;
   margin: 0;
-  border-bottom: 1px solid var(--gray-color);
-  padding: 0px 0px;
-  margin: 5px;
+  brorder-bottom: 1px solid var(--gray-color);
+  padding: 0px 5px;
+  margin: 1px 6px;
+  flex-wrap: nowrap;
 }
 
 .bgtest {
@@ -589,9 +609,10 @@ input::placeholder {
 }
 
 .namebutton {
-  padding: 50px;
-  justify-self: left;
-  align-self: left;
+  bosrder: 1px solid #f00 !important;
+
+  flex: 2;
+  borsder-bottom: 1px solid var(--gray-color);
 }
 
 /* YearGridLeft */

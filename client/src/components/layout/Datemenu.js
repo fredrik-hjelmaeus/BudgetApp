@@ -9,7 +9,7 @@ const Datemenu = () => {
     setMonth('2019');
 
     return () => {
-      console.log('test');
+      //console.log('test');
     };
   }, [presetContext.month === null && presetContext.year === null]);
 
