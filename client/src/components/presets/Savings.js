@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PresetContext from '../../context/preset/presetContext';
-import piggyicon from '../layout/piggybank.svg';
+import piggyicon from '../layout/images/piggybank.svg';
 import PiggybankSavings from './PiggybankSavings';
 
 const Savings = () => {

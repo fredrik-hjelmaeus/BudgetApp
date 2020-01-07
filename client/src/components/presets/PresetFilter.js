@@ -13,8 +13,7 @@ const PresetFilter = () => {
     getPresets,
     presets,
     filterOutNegativeNumsAndMonth,
-    filterOutPositiveNumsAndMonth,
-    calcCategoryByMonth
+    filterOutPositiveNumsAndMonth
   } = presetContext;
 
   useEffect(() => {
@@ -26,7 +25,6 @@ const PresetFilter = () => {
     if (month !== null && presets !== null) {
       filterOutPositiveNumsAndMonth(month);
       filterOutNegativeNumsAndMonth(month);
-      calcCategoryByMonth(month);
     } // eslint-disable-next-line
   }, [month, presets]);
 

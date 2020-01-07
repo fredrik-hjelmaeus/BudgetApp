@@ -1,18 +1,22 @@
-import React, { useContext } from 'react';
-import PresetContext from '../../context/preset/presetContext';
+import React from 'react';
 
 const SumByCategoryItem = ({ catsumitem }) => {
-  const presetContext = useContext(PresetContext);
-
   return (
-    <div className='card bg-light'>
-      <h4 className={catsumitem.SumOfCat > 0 ? 'text-primary' : 'text-danger'}>
+    <div className='card-categorybalance bg-white'>
+      <span className='text-gray items-categorybalance'>
         {catsumitem.cat}:{'    '}
-        {catsumitem.SumOfCat}
-        <br />
-        {presetContext.year && 'Montly Avg: '}
-        {presetContext.year && parseInt(parseFloat(catsumitem.SumOfCat / 12))}
-      </h4>
+        <div
+          className={
+            catsumitem.SumOfCat > 0
+              ? 'text-success numberitem-categorybalance'
+              : 'text-danger numberitem-categorybalance'
+          }
+        >
+          {catsumitem.SumOfCat}
+        </div>
+        {/*        {presetContext.year && 'Montly Avg: '}  detta används vid årsrapport endast.
+        {presetContext.year && parseInt(parseFloat(catsumitem.SumOfCat / 12))} */}
+      </span>
     </div>
   );
 };
