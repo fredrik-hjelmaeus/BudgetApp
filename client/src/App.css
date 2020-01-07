@@ -60,6 +60,10 @@ img {
   margin: 5px;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 /* Text Styles*/
 .x-large {
   font-size: 3.5rem;
@@ -82,6 +86,9 @@ img {
 
 .bold {
   font-weight: bold;
+}
+.regular {
+  font-weight: normal;
 }
 
 .underline {
@@ -189,19 +196,6 @@ img {
   border: 1px solid var(--gray-color);
 }
 
-.card_monthright {
-  background: #ffffff;
-  max-width: 90%;
-  height: auto;
-  margin: auto;
-  margin-top: 5vh;
-  margin-bottom: 5vh;
-  overflow: hidden;
-  padding: 1rem;
-  position: relative;
-  border: 1px solid var(--gray-color);
-}
-
 /* List */
 
 .list {
@@ -280,6 +274,9 @@ img {
 .mx-1 {
   margin: 0 0.8rem;
 }
+.mt-1 {
+  margin-top: 1rem;
+}
 
 /* Flex */
 .flexcolumn {
@@ -354,6 +351,7 @@ img {
   transition: opacity 0.2s ease-in;
   outline: none;
   font-weight: normal;
+  overflow: hidden;
 }
 
 .btn-white {
@@ -563,7 +561,7 @@ textarea {
   background-color: var(--light-color);
   border: none;
   border-bottom: 1px solid var(--gray-color);
-  outline: 0;
+  outline: none;
 }
 
 input::placeholder {
@@ -586,33 +584,378 @@ input::placeholder {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start;
-  align-items: start;
-  bosrder: 1px solid green;
-  border-bottom: 1px solid var(--gray-color);
+  align-items: flex-end;
+  margin: 5px 10px;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.card_monthright {
+  background: #ffffff;
+  max-width: 90%;
+  height: auto;
+  margin: auto;
+  min-height: 1000px;
+
+  margin-bottom: 5vh;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+  border: 1px solid var(--gray-color);
+}
+
+.card_top_monthright {
+  background: #ffffff;
+  max-width: 90%;
+  height: auto;
+  margin: auto;
+  min-height: 46px;
+  margin-top: 5vh;
+  margin-bottom: 1.5vh;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+  border: 1px solid var(--gray-color);
 }
 
 .monthitem button {
   background: none;
-  bordder: 1px solid red;
   margin: 0;
-  brorder-bottom: 1px solid var(--gray-color);
   padding: 0px 5px;
   margin: 1px 6px;
   flex-wrap: nowrap;
-}
-
-.bgtest {
-  background: url('./components/layout/antelope-canyon-1868413_1920.png')
-    repeat-y;
-  z-index: -10;
   overflow: hidden;
 }
 
-.namebutton {
-  bosrder: 1px solid #f00 !important;
+.bgmonthright {
+  background: url('./components/layout/antelope-canyon-1868413_1920.png')
+    repeat-y;
+  z-index: -10;
+  overflow: visible;
+}
 
+.namebutton {
   flex: 2;
-  borsder-bottom: 1px solid var(--gray-color);
+  max-width: 50% !important;
+}
+
+.presetformtitle {
+  margin-top: 1.5rem;
+}
+
+.presetform {
+  background: var(--light-color);
+  border: 1px solid var(--gray-color);
+  min-height: 500px;
+  padding: 2rem;
+}
+
+.presetformspan {
+  display: flex;
+}
+
+.presetformname {
+  flex: 2.5;
+  margin-right: 1rem;
+}
+
+.presetformnumber {
+  flex: 1;
+}
+
+/* Customize the label (the container) note that there is a grid-2-span-container for entire checkbox-alignment */
+.presetformtypecheckboxcontainer {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.presetformtypecheckboxcontainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.presetformcheckbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border: 2px var(--gray-color) solid;
+}
+
+/* On mouse-over, add a grey background color */
+.presetformtypecheckboxcontainer:hover input ~ .presetformcheckbox {
+  background-color: var(--gray-color);
+}
+
+/* When the checkbox is checked, add a gray background */
+.presetformtypecheckboxcontainer input:checked ~ .presetformcheckbox {
+  background-color: var(--gray-color);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.presetformcheckbox:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.presetformtypecheckboxcontainer input:checked ~ .presetformcheckbox:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.presetformtypecheckboxcontainer .presetformcheckbox:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.presetformselectcategory select {
+  margin-bottom: 3rem;
+}
+
+.btn-presetformadd {
+  display: block;
+  color: var(--light-color);
+  font-weight: bold !important;
+  width: 100%;
+  background: var(--gray-color);
+  padding: 0.7rem;
+  border: 2px solid var(--light-color);
+  border-radius: 4px;
+}
+
+/* CategoryBalance , Balance by Category*/
+.categorybalance {
+  background: var(--light-color);
+  border: 1px solid var(--gray-color);
+  min-height: 500px;
+  padding: 2rem;
+}
+
+.card-categorybalance {
+  padding: 0.5rem 1rem;
+  border: var(--gray-color) 1px solid;
+  margin: 1rem 0;
+  font-size: 16px;
+}
+
+.items-categorybalance {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.numberitem-categorybalance {
+  margin-left: auto;
+}
+
+/* Purchase */
+.purchasegrid {
+  display: grid;
+  grid-template-columns: 3fr 1fr 26px 1fr 24px;
+  grid-gap: 10px;
+  align-items: center;
+}
+
+.purchasetitlebtn {
+  display: block;
+  background: none;
+  outline: none;
+  border: none;
+  text-align: start;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.purchasenumberbtn {
+  display: block;
+  background: none;
+  outline: none;
+  border: none;
+  tsext-align: end;
+  jusstify-self: end !important;
+  margin: auto;
+  justify-content: end;
+  align-items: end;
+  text-align: right;
+}
+
+.purchasepiggybankbtn {
+  background: none;
+  bordder: solid 1px red;
+  margin: 0;
+  padding: 0;
+  justify-content: start;
+  align-items: start;
+  text-align: left;
+}
+
+.btn-buy {
+  border: solid 2px var(--success-color);
+  background: none;
+  color: var(--success-color);
+  border-radius: 4px;
+  padding: 0px 9px 0px 9px;
+  font-size: 12px;
+  text-align: center;
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.btn-onemonthleft {
+  align-items: center !important;
+  white-space: nowrap;
+  border: solid 2px var(--orange-color);
+  background: none;
+  color: var(--orange-color);
+  border-radius: 4px;
+  padding: 0px 9px 0px 9px;
+  font-size: 12px;
+  margin: auto;
+  margin-left: 8px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+}
+.btn-onemonthleft:hover {
+  color: var(--success-color);
+  border: solid 2px var(--success-color);
+}
+
+.btn-moremonthsleft {
+  align-items: center !important;
+  white-space: nowrap;
+  border: solid 2px var(--gray-color);
+  background: none;
+  color: var(--gray-color);
+  border-radius: 4px;
+  padding: 0px 4px 0px 4px;
+  font-size: 12px;
+  margin: auto;
+  margin-left: 8px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+}
+.btn-moremonthsleft:hover {
+  color: var(--success-color);
+  border: solid 2px var(--success-color);
+}
+
+.btn-trashicon {
+  border: none;
+  background: none;
+  cursor: pointer;
+  max-width: 24px;
+  outline: none;
+}
+
+.modal-content-deletepurchase {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: auto auto minmax(100px, auto) auto auto;
+  background-color: var(--light-color);
+  box-shadow: 0px 3px 6px #2b2b2b;
+  margin: auto;
+  padding: 20px 40px;
+  border: 1px solid #000000;
+  width: 461px;
+  height: 489px;
+  font-size: 14px;
+}
+
+.purchasemodaldeletebutton {
+  outline: none;
+  background: var(--danger-color);
+  display: block;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  border: 2px solid var(--dark-color);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.purchasemodalobjname {
+  color: var(--orange-color);
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  width: auto;
+  overflow: visible;
+  word-wrap: break-word;
+}
+
+/* Addtopiggybankmodal */
+
+.piggybankmodalsubmitbutton {
+  outline: none;
+  background: var(--success-color);
+  display: block;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  border: 2px solid var(--dark-color);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.piggybankmodalsubmitbutton:hover {
+  opacity: 0.8;
+}
+
+.piggybankmodalnumbername {
+  color: var(--orange-color);
+
+  font-size: 5rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  text-align: center;
+  width: auto;
+  overflow: visible;
+  word-wrap: break-word;
+}
+
+.piggybankmodal-objname {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.modalpiggybankheader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: end;
+  margin-top: 2rem;
 }
 
 /* YearGridLeft */
@@ -773,7 +1116,8 @@ table th {
   float: right;
   cursor: pointer;
   border: none;
-  padding: 12px;
+  padding: 14px;
+  outline: none;
 }
 /* Datemenu */
 
@@ -952,4 +1296,166 @@ footer .footer-cols li {
 .item-exit-active {
   opacity: 0;
   transition: opacity 1000ms ease-in;
+}
+
+/* RangeSlider */
+
+/*
+    thumbHeight = 20px,
+    thumbBorderWidth = 4px,
+    trackColor = #ccc,
+    activeTrackColor = #777,
+    trackHeight = 4px,
+    thumbColor = red,
+    activeThumbColor = darkOrange
+  */
+
+input[type='range'] {
+  width: 100%;
+  height: 28px; /* thumbHeight + (2 x thumbBorderWidth)*/
+  -webkit-appearance: none; /*remove the line*/
+  outline: none;
+  /*background-color:cyan;*/
+  border: 0; /*for firefox on android*/
+  padding: 0 8px; /*for IE*/
+  margin: 8px 0;
+  background: none;
+}
+
+/*chrome and opera*/
+input[type='range']::-webkit-slider-runnable-track {
+  background: var(--dark-color); /*trackColor*/
+  height: 12px; /*trackHeight*/
+  border-radius: 8px; /*trackHeight*/
+  transition: 0.3s;
+}
+
+input[type='range']:hover::-webkit-slider-runnable-track,
+input[type='range']:focus::-webkit-slider-runnable-track {
+  background: var(--gray-color); /*activeTrackColor*/
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: var(--success-color); /*thumbColor*/
+  width: 18px; /* thumbHeight + (2 x thumbBorderWidth)*/
+  height: 18px; /* thumbHeight + (2 x thumbBorderWidth)*/
+  border-radius: 50%;
+  margin-top: -4px; /* -[thumbHeight + (2 x thumbBorderWidth) - trackHeight]/2*/
+  cursor: pointer;
+  border: 2px solid #fff; /*border-width should be equal to thumbBorderWidth if you want same border width across all browsers and border-color should match the background*/
+  transition: 0.3s;
+}
+
+input[type='range']:hover::-webkit-slider-thumb,
+input[type='range']:focus::-webkit-slider-thumb {
+  background: var(--dark-color); /*activeThumbColor*/
+}
+
+/*firefox*/
+input[type='range']::-moz-focus-outer {
+  border: 0;
+}
+
+input[type='range']::-moz-range-track {
+  background: #ccc; /*trackColor*/
+  height: 4px; /*trackHeight*/
+  border-radius: 4px; /*trackHeight*/
+  /*background isn't animatable, so can't use transition*/
+}
+
+input[type='range']:hover::-moz-range-track,
+input[type='range']:focus::-moz-range-track {
+  background: #777; /*activeTrackColor*/
+}
+
+input[type='range']::-moz-range-thumb {
+  background: red; /*thumbColor*/
+  width: 20px; /*thumbHeight*/
+  height: 20px; /*thumbHeight*/
+  border-radius: 50%;
+  cursor: pointer;
+  border: 4px solid #fff; /*border-width = thumbBorderWidth, border-color should match the background*/
+}
+
+input[type='range']:hover::-moz-range-thumb,
+input[type='range']:focus::-moz-range-thumb {
+  background: darkOrange; /*activeThumbColor*/
+}
+
+input[type='range']::-moz-range-progress {
+  background: red; /*thumbColor*/
+  border-radius: 4px; /*trackHeight*/
+  height: 4px; /*trackHeight*/
+}
+
+input[type='range']:hover::-moz-range-progress,
+input[type='range']:focus::-moz-range-progress {
+  background: darkOrange; /*activeThumbColor*/
+}
+
+/*edge and IE*/
+input[type='range']::-ms-track {
+  background: #ccc; /*trackColor*/
+  height: 4px; /*trackHeight*/
+  border-radius: 4px; /*trackHeight*/
+  border: none;
+  color: transparent;
+}
+
+input[type='range']:hover::-ms-track,
+input[type='range']:focus::-ms-track {
+  background: #777; /*activeTrackColor*/
+}
+
+input[type='range']::-ms-thumb {
+  background: red; /*thumbColor*/
+  width: 20px; /*thumbHeight*/
+  height: 20px; /*thumbHeight*/
+  border-radius: 50%;
+  border: none;
+  margin: 0 4px 0; /*0 thumbBorderWidth 0*/
+  box-shadow: 0 0 0 4px #fff; /*0 0 0 thumbBorderWidth #fff, box-shadow color should match the background*/
+  /*cursor:pointer; doesn't work*/
+}
+
+input[type='range']:hover::-ms-thumb,
+input[type='range']:focus::-ms-thumb {
+  background: darkOrange; /*activeThumbColor*/
+}
+
+input[type='range']::-ms-tooltip {
+  display: none; /*tooltip makes thumb sliding lagy*/
+}
+
+input[type='range']::-ms-fill-lower {
+  background: red; /*thumbColor*/
+  border-radius: 4px; /*trackHeight*/
+}
+
+input[type='range']:hover::-ms-fill-lower,
+input[type='range']:focus::-ms-fill-lower {
+  background: darkOrange; /*activeThumbColor*/
+}
+
+.vertically-stacked-slider {
+  padding: 8px;
+}
+
+.vertically-stacked-slider > input[type='range'] {
+  padding: 0;
+}
+
+.horizontally-stacked-slider {
+  display: flex;
+  align-items: center;
+}
+
+.horizontally-stacked-slider > .title {
+  flex: 1;
+  padding: 8px;
+}
+
+.horizontally-stacked-slider > input[type='range'] {
+  flex: 1;
 }

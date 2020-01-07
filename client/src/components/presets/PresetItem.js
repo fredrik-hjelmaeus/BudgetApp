@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
+import DeleteSVG from '../layout/images/DeleteSVG';
 
 import {
   Bankfee,
@@ -122,7 +123,16 @@ const PresetItem = ({ preset }) => {
         return Commute;
     }
   };
-
+  // state to handle deletebutton-hover
+  const [DelbtnColor, setDelbtnColor] = useState(false);
+  //on delete button hover
+  const onHover = () => {
+    setDelbtnColor(true);
+  };
+  //on delete button stop hover
+  const stopHover = () => {
+    setDelbtnColor(false);
+  };
   const onDelete = () => {
     deletePreset(_id);
     cancelEdit();
@@ -136,7 +146,9 @@ const PresetItem = ({ preset }) => {
           <button
             onClick={() => setEdit(preset)}
             className={
-              number > 0 ? ' text-primary btn-form' : ' text-primary btn-form'
+              number > 0
+                ? ' text-primary btn-form no-wrap'
+                : ' text-primary btn-form no-wrap'
             }
           >
             {name}
@@ -163,8 +175,19 @@ const PresetItem = ({ preset }) => {
         </button>
       </div>
       <div>
-        <button className='btn text-primary' onClick={onDelete}>
-          x
+        <button
+          className='btn text-primary delete'
+          value='delbtn'
+          name={name}
+          onMouseEnter={onHover}
+          onMouseLeave={stopHover}
+          onClick={onDelete}
+        >
+          {DelbtnColor === true ? (
+            <DeleteSVG fill='var(--danger-color)' />
+          ) : (
+            <DeleteSVG fill='var(--light-color)' />
+          )}
         </button>
       </div>
     </div>

@@ -1,8 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
+import CssContext from '../../context/css/cssContext';
+import TrashiconSVG from '../layout/images/TrashiconSVG';
+import PiggybankSVG from '../layout/images/PiggybankSVG';
 
 const PurchaseItem = ({ Item }) => {
   const presetContext = useContext(PresetContext);
+  const cssContext = useContext(CssContext);
+  const { toggleModal, setModalprops } = cssContext;
 
   const {
     deletePreset,
@@ -11,55 +16,162 @@ const PurchaseItem = ({ Item }) => {
     MonthSum,
     sendEdit,
     month,
-    edit
+    edit,
+    presets,
+    addPreset
   } = presetContext;
 
-  const [preset] = useState(
-    {
-      name: Item.name,
-      number: Item.number * -1,
-      month,
-      category: Item.category,
-      type: 'overhead'
-    },
-    [presetContext, edit]
+  const [MonthsLeftBeforePurchase] = useState(
+    parseInt(parseFloat((Item.number - Item.piggybank) / MonthSum))
   );
 
-  const onBuy = () => {
-    sendEdit(preset);
+  // when buy, create one post under income and one under expenses . May be better written
+  const [expensepreset] = useState({
+    _id: Item._id,
+    name: Item.name,
+    number: Math.abs(Item.number + (Item.number - Item.piggybank)) * -1,
+    month: Item.month,
+    category: Item.category,
+    type: 'overhead',
+    piggybank: 0
+  });
+  const [incomepreset] = useState({
+    _id: Item._id,
+    name: Item.name,
+    number: Math.abs(Item.number),
+    month: Item.month,
+    category: Item.category,
+    type: 'overhead',
+    piggybank: 0
+  });
 
-    console.log(preset);
+  const onBuy = () => {
+    sendEdit(expensepreset); //switch from type:purchase to type overhead .
+    addPreset(incomepreset); //switch from type:purchase to type overhead .
+  };
+
+  const onSave = () => {
+    //activate modal
+    setModalprops(Item);
+    toggleModal('addtopiggybank');
   };
 
   const onDelete = () => {
-    deletePreset(Item._id);
-    cancelEdit();
+    //calls on modal to activate in Month.js
+    toggleModal('deletepurchase');
+    //switch from purchase to savings. set piggybanksaving as number.
+    setModalprops(Item);
+  };
+
+  // states to handle piggyhover
+  const [PiggyHover, setPiggyHover] = useState(false);
+  //on piggybank button hover
+  const onPiggyHover = () => {
+    setPiggyHover(true);
+  };
+  //on piggybank button stop hover
+  const stopPiggyHover = () => {
+    setPiggyHover(false);
+  };
+
+  // states to handle trashhover
+  const [TrashHover, setTrashHover] = useState(false);
+  //on trash button hover
+  const onTrashHover = () => {
+    setTrashHover(true);
+  };
+  //on trash button stop hover
+  const stopTrashHover = () => {
+    setTrashHover(false);
+  };
+
+  // display of piggybankicon
+  const onPiggybank = MonthsLeftBeforePurchase => {
+    switch (MonthsLeftBeforePurchase) {
+      case 0:
+        return null;
+      case 1:
+        return PiggyHover === true ? ( // 1 month left
+          <PiggybankSVG fill='var(--success-color)' /> //onHover show green
+        ) : Item.piggybank !== 0 ? (
+          <PiggybankSVG fill='var(--orange-color)' />
+        ) : (
+          <PiggybankSVG fill='var(--gray-color)' />
+        );
+      default:
+        return PiggyHover === true ? ( // many months left
+          <PiggybankSVG fill='var(--success-color)' /> //onHover show green
+        ) : Item.piggybank !== 0 ? (
+          <PiggybankSVG fill='var(--orange-color)' />
+        ) : (
+          <PiggybankSVG fill='var(--gray-color)' />
+        );
+    }
   };
 
   return (
-    <div className='card bg-light'>
-      <h4>
+    <div className='card-categorybalance bg-white'>
+      <span className='text-gray purchasegrid'>
         <button
           onClick={() => setEdit(Item)}
-          className={MonthSum > 0 ? 'text-primary' : 'text-danger'}
+          className={
+            MonthSum > 0
+              ? 'purchasetitlebtn no-wrap text-gray'
+              : 'btn text-danger'
+          }
         >
-          {Item.name} {Item.number}
+          {Item.name}
         </button>
-        <button className='btn btn-danger btn-sm' onClick={onDelete}>
-          x
+        <button
+          onClick={() => setEdit(Item)}
+          className={
+            MonthSum > 0
+              ? 'purchasenumberbtn no-wrap text-danger bold'
+              : 'purchasenumberbtn no-wrap text-danger bold'
+          }
+        >
+          {Item.number}
         </button>
-        {MonthSum >= Item.number ? (
-          <button className='btn btn-primary btn-sm' onClick={onBuy}>
-            o
+        <button
+          className='btn text-primary purchasepiggybankbtn'
+          value='piggybank'
+          name='piggybank'
+          onClick={onSave}
+          onMouseEnter={onPiggyHover}
+          onMouseLeave={stopPiggyHover}
+        >
+          {onPiggybank(MonthsLeftBeforePurchase)}
+        </button>
+
+        {MonthsLeftBeforePurchase === 0 ? (
+          <button className='btn btn-success btn-buy' onClick={onBuy}>
+            BUY
           </button>
-        ) : MonthSum > 0 &&
-          parseFloat(Item.number / MonthSum) >= 0.0 &&
-          parseFloat(Item.number / MonthSum) <= 2.0 ? (
-          'Next Month!'
+        ) : MonthsLeftBeforePurchase === 1 ? (
+          <button className='btn-onemonthleft' onClick={onSave}>
+            1 Month
+          </button>
         ) : (
-          `Can afford in ${parseInt(parseFloat(Item.number / MonthSum))} months`
+          <button className='btn-moremonthsleft' onClick={onSave}>
+            {`${MonthsLeftBeforePurchase} months`}
+          </button>
         )}
-      </h4>
+
+        <button
+          className='btn-trashicon'
+          onClick={onDelete}
+          onMouseEnter={onTrashHover}
+          onMouseLeave={stopTrashHover}
+          value='trashicon'
+          name='trashicon'
+        >
+          {TrashHover === true ? (
+            <TrashiconSVG fill='red' />
+          ) : (
+            <TrashiconSVG fill='var(--gray-color)' />
+          )}
+        </button>
+      </span>
     </div>
   );
 };

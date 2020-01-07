@@ -43,7 +43,7 @@ router.post(
     }
     //validering avklarad
 
-    const { name, number, month, category, type } = req.body;
+    const { name, number, month, category, type, piggybank } = req.body;
     try {
       const newPreset = new Preset({
         name,
@@ -51,6 +51,7 @@ router.post(
         month,
         category,
         type,
+        piggybank,
         user: req.user.id
       });
 
@@ -68,7 +69,7 @@ router.post(
 // @desc    Update preset
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
-  const { name, number, category, type } = req.body;
+  const { name, number, category, type, piggybank } = req.body;
 
   // Build preset object
   const presetFields = {};
@@ -76,6 +77,7 @@ router.put('/:id', auth, async (req, res) => {
   if (number) presetFields.number = number;
   if (category) presetFields.category = category;
   if (type) presetFields.type = type;
+  if (piggybank) presetFields.piggybank = piggybank;
 
   try {
     let preset = await Preset.findById(req.params.id);

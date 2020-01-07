@@ -1,31 +1,52 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import PresetForm from '../presets/PresetForm';
-
-import Sum from '../presets/Sum';
+import DeletePurchaseModal from './DeletePurchaseModal';
+import AddtoPiggybankModal from './AddtoPiggybankModal';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
+import CssContext from '../../context/css/cssContext';
 import Purchases from './Purchases';
 import MonthSummary from './MonthSummary';
+import CategoryBalance from './CategoryBalance';
+import Sum from '../presets/Sum';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
+  const cssContext = useContext(CssContext);
+  const { modal, modalprops } = cssContext;
+  const {
+    presets,
+    calcSum,
+    setPurchase,
+    MonthSum,
+    calcMonthSum,
+    month
+  } = presetContext;
 
   useEffect(() => {
-    presetContext.presets && presetContext.calcSum(9, null, 'init');
-    presetContext.presets && presetContext.setPurchase();
+    presets && calcSum(9, null, 'init');
+    presets && setPurchase();
+    presets && calcMonthSum(month);
     // eslint-disable-next-line
-  }, [presetContext.presets]);
+  }, [presets]);
 
+  useEffect(() => {
+    console.log('modalchange');
+  }, [modal]);
   return (
     <Fragment>
+      {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
+      {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
       <Datemenu />
       <div className='monthgrid'>
         <div>
           <PresetForm />
-          {presetContext.sum === null ? null : <Sum />}
-          <Purchases />
+          <CategoryBalance />
+
+          {MonthSum !== null && MonthSum > 0 && <Purchases />}
         </div>
-        <div>
+        <div className='bgmonthright'>
+          <Sum />
           <MonthSummary />
         </div>
       </div>

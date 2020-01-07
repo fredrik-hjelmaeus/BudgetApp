@@ -25,6 +25,10 @@ const PresetSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  piggybank: {
+    type: Number,
+    required: false
+  },
   date: {
     type: Date,
     default: Date.now
