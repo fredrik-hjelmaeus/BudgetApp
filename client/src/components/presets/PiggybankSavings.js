@@ -6,10 +6,10 @@ const PiggybankSavings = () => {
   const presetContext = useContext(PresetContext);
   const { purchases } = presetContext;
   useEffect(() => {
-    presetContext.presets && presetContext.setPurchase();
+    presetContext.setPurchase();
+    // eslint-disable-next-line
   }, [presetContext.presets]);
 
-  purchases && console.log(purchases);
   return (
     <Fragment>
       {purchases &&

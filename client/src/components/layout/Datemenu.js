@@ -7,11 +7,7 @@ const Datemenu = () => {
 
   useEffect(() => {
     setMonth('2019');
-
-    return () => {
-      //console.log('test');
-    };
-  }, [presetContext.month === null && presetContext.year === null]);
+  }, [presetContext.month, presetContext.year]);
 
   const onClick = e => {
     if (e.target.value !== undefined) {

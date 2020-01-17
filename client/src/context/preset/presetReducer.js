@@ -31,7 +31,10 @@ import {
   CATEGORY_SUMONLYNEGNUM_BYYEAR,
   CATEGORY_NAMEONLYNEGNUM_BYYEAR,
   SET_ALLMONTHSUM,
-  RESET_ALLMONTHSUM
+  RESET_ALLMONTHSUM,
+  ADDTO_PIGGYBANK,
+  SET_ACTIVE_PIGGYBANK,
+  CLEAR_PIGGYBANKS
 } from '../types';
 
 export default (state, action) => {
@@ -86,6 +89,21 @@ export default (state, action) => {
       return {
         ...state,
         purchases: state.presets.filter(preset => preset.type === 'purchase')
+      };
+    case SET_ACTIVE_PIGGYBANK:
+      return {
+        ...state,
+        piggybanks: action.payload
+      };
+    case CLEAR_PIGGYBANKS:
+      return {
+        ...state,
+        piggybanks: null
+      };
+    case ADDTO_PIGGYBANK:
+      return {
+        ...state,
+        piggybanks: [...state.piggybanks, action.payload]
       };
     case SUM:
       return {

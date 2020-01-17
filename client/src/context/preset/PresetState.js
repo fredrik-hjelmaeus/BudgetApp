@@ -35,7 +35,10 @@ import {
   CATEGORY_SUMONLYNEGNUM_BYYEAR,
   CATEGORY_NAMEONLYNEGNUM_BYYEAR,
   SET_ALLMONTHSUM,
-  RESET_ALLMONTHSUM
+  RESET_ALLMONTHSUM,
+  ADDTO_PIGGYBANK,
+  SET_ACTIVE_PIGGYBANK,
+  CLEAR_PIGGYBANKS
 } from '../types';
 
 const PresetState = props => {
@@ -64,7 +67,8 @@ const PresetState = props => {
     categorynameonlyposnumbyyear: null,
     categorynameonlynegnumbyyear: null,
     categorysumonlyposnumbyyear: null,
-    categorysumonlynegnumbyyear: null
+    categorysumonlynegnumbyyear: null,
+    piggybanks: []
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -261,7 +265,9 @@ const PresetState = props => {
         TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
         dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
       } else {
-        console.log('no objects to calculate in this month');
+        TotalMonthSum = 0;
+        dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
+        console.log(`no presets to calculate in this month ${month}`);
       }
     });
   };
@@ -286,7 +292,9 @@ const PresetState = props => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: MONTHSUM, payload: TotalMonthSum });
     } else {
-      console.log('no objects to calculate in this month');
+      console.log('No presets to calculate monthsum on this month');
+      TotalMonthSum = 0;
+      dispatch({ type: MONTHSUM, payload: TotalMonthSum });
     }
   };
 
@@ -650,6 +658,18 @@ const PresetState = props => {
     }
   };
 
+  const setActivePiggybank = preset => {
+    dispatch({ type: SET_ACTIVE_PIGGYBANK, payload: preset.piggybank });
+  };
+
+  const addtoPiggybanks = object => {
+    dispatch({ type: ADDTO_PIGGYBANK, payload: object });
+  };
+
+  const clearPiggybanks = () => {
+    dispatch({ type: CLEAR_PIGGYBANKS });
+  };
+
   return (
     <PresetContext.Provider
       value={{
@@ -677,6 +697,7 @@ const PresetState = props => {
         categorysumonlyposnumbyyear: state.categorysumonlyposnumbyyear,
         categorysumonlynegnumbyyear: state.categorysumonlynegnumbyyear,
         AllMonthSum: state.AllMonthSum,
+        piggybanks: state.piggybanks,
         addPreset,
         calcSum,
         deletePreset,
@@ -708,7 +729,10 @@ const PresetState = props => {
         setCategoryNameOnlyNegNumByYear,
         calcCategorySumOnlyPosNumByYear,
         calcCategorySumOnlyNegNumByYear,
-        calcAllMonthSum
+        calcAllMonthSum,
+        addtoPiggybanks,
+        setActivePiggybank,
+        clearPiggybanks
       }}
     >
       {props.children}

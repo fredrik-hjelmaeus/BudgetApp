@@ -1,10 +1,10 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PurchaseItem from './PurchaseItem';
 import PresetContext from '../../context/preset/presetContext';
 
 const Purchases = () => {
   const presetContext = useContext(PresetContext);
-  const { purchases, presets } = presetContext;
+  const { purchases } = presetContext;
 
   useEffect(() => {}, [presetContext.sendEdit]);
   //purchases ? console.log(purchases) : console.log('no');
