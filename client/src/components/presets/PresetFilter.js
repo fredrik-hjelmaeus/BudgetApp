@@ -10,16 +10,10 @@ const PresetFilter = () => {
     month,
     filteredmonthandposnum,
     loading,
-    getPresets,
     presets,
     filterOutNegativeNumsAndMonth,
     filterOutPositiveNumsAndMonth
   } = presetContext;
-
-  useEffect(() => {
-    getPresets();
-    // eslint-disable-next-line
-  }, [month]);
 
   useEffect(() => {
     if (month !== null && presets !== null) {

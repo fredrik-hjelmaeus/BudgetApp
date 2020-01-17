@@ -35,7 +35,7 @@ const Year = () => {
   useEffect(() => {
     getPresets();
     // eslint-disable-next-line
-  }, [year === null]);
+  }, [year]);
 
   // calculates initial account balance if and when presets is defined.
   useEffect(() => {

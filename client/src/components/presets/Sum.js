@@ -46,8 +46,7 @@ const Sum = () => {
               presetContext.MonthSum > 0 ? 'text-primary' : 'text-primary'
             }
           >
-            {' '}
-            Balance Month:{'    '}{' '}
+            Balance Month:{'    '}
           </span>
           <span
             className={

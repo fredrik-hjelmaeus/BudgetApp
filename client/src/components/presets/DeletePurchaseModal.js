@@ -6,11 +6,11 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 
 const DeletePurchaseModal = ({ Item }) => {
   const presetContext = useContext(PresetContext);
-  const { sendEdit, presets } = presetContext;
+  const { sendEdit } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
-  const { toggleModal, modal } = cssContext;
+  const { toggleModal } = cssContext;
 
   const onClick = e => {
     toggleModal('');
@@ -39,6 +39,7 @@ const DeletePurchaseModal = ({ Item }) => {
     //OnDelete calls useState witch is async. Therefore, useEffect is watching preset and runs as callback on setPreset.
     preset.type === 'savings' && sendEdit(preset); // check if setPreset ran and update preset in db.
     preset.type === 'savings' && toggleModal(''); // close modal
+    // eslint-disable-next-line
   }, [preset]);
 
   return (

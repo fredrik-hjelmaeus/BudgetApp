@@ -9,22 +9,11 @@ const PurchaseItem = ({ Item }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops } = cssContext;
 
-  const {
-    deletePreset,
-    cancelEdit,
-    setEdit,
-    MonthSum,
-    sendEdit,
-    month,
-    edit,
-    presets,
-    addPreset
-  } = presetContext;
+  const { setEdit, MonthSum, sendEdit, addPreset } = presetContext;
 
   const [MonthsLeftBeforePurchase] = useState(
     parseInt(parseFloat((Item.number - Item.piggybank) / MonthSum))
   );
-
   // when buy, create one post under income and one under expenses . May be better written
   const [expensepreset] = useState({
     _id: Item._id,

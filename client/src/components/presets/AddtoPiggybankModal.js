@@ -5,65 +5,100 @@ import CssContext from '../../context/css/cssContext';
 import PiggybankSVG from '../layout/images/PiggybankSVG';
 
 const AddtoPiggybankModal = ({ Item }) => {
+  // preset context
   const presetContext = useContext(PresetContext);
-  const { setEdit, sendEdit, MonthSum, cancelEdit } = presetContext;
+  const {
+    setEdit,
+    sendEdit,
+    MonthSum,
+    cancelEdit,
+    setActivePiggybank,
+    addtoPiggybanks,
+    piggybanks
+  } = presetContext;
 
-  useEffect(() => {
-    setEdit(Item);
-  }, []);
   // Css: modal context
   const cssContext = useContext(CssContext);
-  const { toggleModal, modal, setModalprops } = cssContext;
+  const { toggleModal, setModalprops } = cssContext;
 
-  const onClick = e => {
-    toggleModal('');
-  };
-
-  const [preset, setPreset] = useState(
-    {
-      _id: Item._id,
-      name: Item.name,
-      number: Item.number,
-      month: Item.month,
-      category: Item.category,
-      type: 'purchase',
-      piggybank: Item.piggybank
-    },
-    []
-  );
-
+  //preset/item local state
+  const [preset, setPreset] = useState({
+    _id: Item._id,
+    name: Item.name,
+    number: Item.number,
+    month: Item.month,
+    category: Item.category,
+    type: 'purchase',
+    piggybank: Item.piggybank
+  });
+  // Calc Amount to save
   let AmountToSave = MonthSum; //default startvalue
   if (parseInt(MonthSum) + parseInt(Item.piggybank) > Item.number) {
     AmountToSave = parseInt(Item.number) - parseInt(Item.piggybank);
   }
-
+  //piggybankstate
   const [piggybank, setPiggybank] = useState({ number: AmountToSave });
+
+  //set Item to default value of piggybanks
+  useEffect(() => {
+    setActivePiggybank(Item);
+  }, [Item]);
+
+  useEffect(() => {
+    piggybanks.length !== 0 &&
+      console.log(
+        'setActivePiggybank:',
+        piggybanks.map(piggybank => piggybank.savedAmount),
+        piggybanks.map(piggybank => piggybank.month)
+      );
+  }, [setActivePiggybank]);
 
   const onChange = e => {
     setPiggybank({
       ...piggybank,
       [e.target.name]: e.target.value
     });
-
-    // sets piggybanknumber. Ratio of monthsum-surplus(e.target.value) and adds what was already in piggybank(Item.piggybank)
-    setPreset({
-      ...preset,
-      piggybank: parseInt(e.target.value) + parseInt(Item.piggybank)
-    });
-    console.log(preset);
   };
-
   const onSubmit = () => {
-    // add new number to preset.piggybank
-    sendEdit(preset);
-    setModalprops(null);
-    cancelEdit();
-
-    toggleModal('');
-    //transfer local piggybankstate to preset.piggybank
+    addtoPiggybanks({
+      month: presetContext.month,
+      savedAmount: piggybank.number
+    });
+    //setActivePiggybank(null);
+    //setModalprops(null);
+    // cancelEdit();
+    //toggleModal('');
+    //calculate sum in piggybank.
   };
+  useEffect(() => {
+    presetContext.piggybanks !== undefined &&
+      setPreset({
+        ...preset,
+        _id: Item._id,
+        name: Item.name,
+        number: Item.number,
+        month: Item.month,
+        category: Item.category,
+        type: 'purchase',
+        piggybank: presetContext.piggybanks
+      });
+    console.log('setPreset:', preset);
+    presetContext.piggybanks[1] !== undefined &&
+      console.log('banks:', presetContext.piggybanks);
+  }, [presetContext.piggybanks]);
+  useEffect(() => {
+    // preset.piggybank !== undefined && console.log(preset.piggybank);
+    presetContext.piggybanks[1] !== undefined && sendEdit(preset);
+  }, [preset]);
+
+  // Close modal
+  const onClick = e => {
+    //console.log(piggybanks);
+    toggleModal('');
+  };
+
   return (
-    <div id='myModal' class='modal-register' style={{ display: 'block' }}>
+    <div id='myModal' className='modal-register' style={{ display: 'block' }}>
       <div className='modal-content-deletepurchase'>
         <span className='piggybankmodal-objname'>
           {Item.name}

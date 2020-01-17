@@ -27,7 +27,7 @@ const PresetForm = () => {
         month,
         category,
         type: 'overhead',
-        piggybank: 0
+        piggybank: [{ month, savedAmount: 0 }]
       });
     } // eslint-disable-next-line
   }, [edit, month, presets]);
@@ -39,7 +39,7 @@ const PresetForm = () => {
       month,
       category: 'Select an category',
       type: 'overhead',
-      piggybank: 0
+      piggybank: [{ month, savedAmount: '' }]
     },
     [presetContext, edit]
   );
@@ -213,7 +213,7 @@ const PresetForm = () => {
               checked={preset.type === 'overhead'}
               onChange={onChange}
             />
-            <span class='presetformcheckbox'></span>
+            <span className='presetformcheckbox'></span>
           </label>
           <label className='presetformtypecheckboxcontainer'>
             Purchase
@@ -224,7 +224,7 @@ const PresetForm = () => {
               checked={preset.type === 'purchase'}
               onChange={onChange}
             />
-            <span class='presetformcheckbox'></span>
+            <span className='presetformcheckbox'></span>
           </label>
           <label className='presetformtypecheckboxcontainer'>
             Savings
@@ -235,7 +235,7 @@ const PresetForm = () => {
               checked={preset.type === 'savings'}
               onChange={onChange}
             />
-            <span class='presetformcheckbox'></span>
+            <span className='presetformcheckbox'></span>
           </label>
           <label className='presetformtypecheckboxcontainer'>
             Capital
@@ -246,7 +246,7 @@ const PresetForm = () => {
               checked={preset.type === 'capital'}
               onChange={onChange}
             />{' '}
-            <span class='presetformcheckbox'></span>
+            <span className='presetformcheckbox'></span>
           </label>
         </span>
 

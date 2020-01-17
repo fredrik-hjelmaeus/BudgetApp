@@ -28,11 +28,11 @@ const Month = () => {
     presets && setPurchase();
     presets && calcMonthSum(month);
     // eslint-disable-next-line
-  }, [presets]);
+  }, [presets, month]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     console.log('modalchange');
-  }, [modal]);
+  }, [modal]); */
   return (
     <Fragment>
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
@@ -42,7 +42,6 @@ const Month = () => {
         <div>
           <PresetForm />
           <CategoryBalance />
-
           {MonthSum !== null && MonthSum > 0 && <Purchases />}
         </div>
         <div className='bgmonthright'>

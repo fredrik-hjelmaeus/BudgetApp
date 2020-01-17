@@ -13,9 +13,23 @@ const BarChart = () => {
           show: false
         },
         sparkline: {
-          enabled: false
+          enabled: true
         },
         background: '#fff'
+      },
+      // ritar baslinjen
+      annotations: {
+        yaxis: [
+          {
+            y: 0,
+            strokeDashArray: 0,
+            borderColor: '#000',
+            fillColor: '#c2c2c2',
+            opacity: 0.8,
+            offsetX: 0,
+            offsetY: 0
+          }
+        ]
       },
       // lägger in kategorier som styr antalet staplar som visas
       xaxis: {
@@ -33,6 +47,7 @@ const BarChart = () => {
           'November',
           'December'
         ],
+
         // labels är text på x-axeln, döljs
         labels: {
           show: false
@@ -43,7 +58,7 @@ const BarChart = () => {
         },
         // x-axelns linje, döljs
         axisBorder: {
-          show: true,
+          show: false,
           color: '#000000',
           offsetY: -74
         }

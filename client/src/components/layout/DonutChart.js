@@ -26,7 +26,7 @@ const DonutChart = ({ sums, names, colors }) => {
         }
       });
     sums && names && setSeries(sums);
-  }, [sums, names]);
+  }, [sums, names, colors]);
 
   // console.log(categorysumonlyposnumbyyear, categorynameonlyposnumbyyear);
   const [options, setOptions] = useState({});

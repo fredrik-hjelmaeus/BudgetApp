@@ -26,7 +26,18 @@ const PresetSchema = mongoose.Schema({
     required: true
   },
   piggybank: {
-    type: Number,
+    type: [
+      {
+        month: {
+          type: String,
+          required: false
+        },
+        savedAmount: {
+          type: Number,
+          required: false
+        }
+      }
+    ],
     required: false
   },
   date: {

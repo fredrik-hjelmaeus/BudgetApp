@@ -11,7 +11,6 @@ const Presets = () => {
 
   useEffect(() => {
     getPresets();
-
     //presetContext.calcSum(5, 0, 'Update');
     // eslint-disable-next-line
   }, []);
