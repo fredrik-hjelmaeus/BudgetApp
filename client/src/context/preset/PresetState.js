@@ -658,8 +658,8 @@ const PresetState = props => {
     }
   };
 
-  const setActivePiggybank = preset => {
-    dispatch({ type: SET_ACTIVE_PIGGYBANK, payload: preset.piggybank });
+  const setActivePiggybank = piggybank => {
+    dispatch({ type: SET_ACTIVE_PIGGYBANK, payload: piggybank });
   };
 
   const addtoPiggybanks = object => {

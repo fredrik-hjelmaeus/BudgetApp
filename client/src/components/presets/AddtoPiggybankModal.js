@@ -8,18 +8,15 @@ const AddtoPiggybankModal = ({ Item }) => {
   // preset context
   const presetContext = useContext(PresetContext);
   const {
-    setEdit,
     sendEdit,
     MonthSum,
-    cancelEdit,
     setActivePiggybank,
-    addtoPiggybanks,
-    piggybanks
+    addtoPiggybanks
   } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
-  const { toggleModal, setModalprops } = cssContext;
+  const { toggleModal, modalprops } = cssContext;
 
   //preset/item local state
   const [preset, setPreset] = useState({
@@ -31,47 +28,44 @@ const AddtoPiggybankModal = ({ Item }) => {
     type: 'purchase',
     piggybank: Item.piggybank
   });
+
   // Calc Amount to save
   let AmountToSave = MonthSum; //default startvalue
   if (parseInt(MonthSum) + parseInt(Item.piggybank) > Item.number) {
     AmountToSave = parseInt(Item.number) - parseInt(Item.piggybank);
   }
-  //piggybankstate
+
+  //piggybankstate, local state used for onChange-slider
   const [piggybank, setPiggybank] = useState({ number: AmountToSave });
 
-  //set Item to default value of piggybanks
+  //when Item changes,set Item to default value of presetContext.piggybanks
   useEffect(() => {
-    setActivePiggybank(Item);
-  }, [Item]);
+    setActivePiggybank(modalprops.piggybank);
+  }, []);
 
-  useEffect(() => {
-    piggybanks.length !== 0 &&
-      console.log(
-        'setActivePiggybank:',
-        piggybanks.map(piggybank => piggybank.savedAmount),
-        piggybanks.map(piggybank => piggybank.month)
-      );
-  }, [setActivePiggybank]);
-
+  // sets value from amount to save slider
   const onChange = e => {
     setPiggybank({
       ...piggybank,
       [e.target.name]: e.target.value
     });
   };
+
+  // on submit, add month and amount to save in presetContext.piggybanks
   const onSubmit = () => {
     addtoPiggybanks({
       month: presetContext.month,
       savedAmount: piggybank.number
     });
-    //setActivePiggybank(null);
-    //setModalprops(null);
-    // cancelEdit();
-    //toggleModal('');
-    //calculate sum in piggybank.
   };
+
+  // on presetContext.piggybanks change,set local preset with new presetContext.piggybanks-value.
   useEffect(() => {
-    presetContext.piggybanks !== undefined &&
+    if (
+      presetContext.piggybanks.length !== undefined &&
+      presetContext.piggybanks.length !== 0 &&
+      presetContext.piggybanks.length !== modalprops.piggybank.length
+    ) {
       setPreset({
         ...preset,
         _id: Item._id,
@@ -82,18 +76,29 @@ const AddtoPiggybankModal = ({ Item }) => {
         type: 'purchase',
         piggybank: presetContext.piggybanks
       });
-    console.log('setPreset:', preset);
-    presetContext.piggybanks[1] !== undefined &&
-      console.log('banks:', presetContext.piggybanks);
+    }
   }, [presetContext.piggybanks]);
+
+  // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
+  const sendMyEdit = async preset => {
+    await sendEdit(preset);
+    toggleModal('');
+    setActivePiggybank([]);
+  };
+
+  // on local preset change, push new preset to database
   useEffect(() => {
-    // preset.piggybank !== undefined && console.log(preset.piggybank);
-    presetContext.piggybanks[1] !== undefined && sendEdit(preset);
+    if (
+      presetContext.piggybanks.length !== undefined &&
+      presetContext.piggybanks.length !== 0 &&
+      presetContext.piggybanks.length !== modalprops.piggybank.length
+    ) {
+      sendMyEdit(preset);
+    }
   }, [preset]);
 
   // Close modal
   const onClick = e => {
-    //console.log(piggybanks);
     toggleModal('');
   };
 
