@@ -9,6 +9,7 @@ import Purchases from './Purchases';
 import MonthSummary from './MonthSummary';
 import CategoryBalance from './CategoryBalance';
 import Sum from '../presets/Sum';
+import MonthSavingsSummary from '../presets/MonthSavingsSummary';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
@@ -20,19 +21,23 @@ const Month = () => {
     setPurchase,
     MonthSum,
     calcMonthSum,
-    month
+    month,
+    calcMonthSavings,
+    monthsavings,
+    getMonthSavings,
+    getMonthPiggySavings,
+    monthpiggysavings
   } = presetContext;
 
   useEffect(() => {
     presets && calcSum(9, null, 'init');
     presets && setPurchase();
     presets && calcMonthSum(month);
+    presets && calcMonthSavings();
+    presets && getMonthSavings(month);
+    presets && getMonthPiggySavings();
     // eslint-disable-next-line
   }, [presets, month]);
-
-  /*   useEffect(() => {
-    console.log('modalchange');
-  }, [modal]); */
   return (
     <Fragment>
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
@@ -46,6 +51,9 @@ const Month = () => {
         </div>
         <div className='bgmonthright'>
           <Sum />
+          {(monthsavings !== null && <MonthSavingsSummary />) ||
+            (monthpiggysavings !== null && <MonthSavingsSummary />)}
+
           <MonthSummary />
         </div>
       </div>

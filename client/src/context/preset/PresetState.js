@@ -38,7 +38,12 @@ import {
   RESET_ALLMONTHSUM,
   ADDTO_PIGGYBANK,
   SET_ACTIVE_PIGGYBANK,
-  CLEAR_PIGGYBANKS
+  CLEAR_PIGGYBANKS,
+  CALC_MONTH_SAVINGS,
+  GET_MONTHSAVINGS,
+  GET_MONTHPIGGYSAVINGS,
+  DELETE_PIGGYBANK,
+  SUM_PIGGYBANKS_MONTH
 } from '../types';
 
 const PresetState = props => {
@@ -68,7 +73,11 @@ const PresetState = props => {
     categorynameonlynegnumbyyear: null,
     categorysumonlyposnumbyyear: null,
     categorysumonlynegnumbyyear: null,
-    piggybanks: []
+    piggybanks: [],
+    monthsavings: null,
+    monthsavingspresets: null,
+    monthpiggysavings: null,
+    SumPiggybanksMonth: 0
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -267,7 +276,7 @@ const PresetState = props => {
       } else {
         TotalMonthSum = 0;
         dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
-        console.log(`no presets to calculate in this month ${month}`);
+        //console.log(`no presets to calculate in this month ${month}`);
       }
     });
   };
@@ -292,7 +301,7 @@ const PresetState = props => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: MONTHSUM, payload: TotalMonthSum });
     } else {
-      console.log('No presets to calculate monthsum on this month');
+      //console.log('No presets to calculate monthsum on this month');
       TotalMonthSum = 0;
       dispatch({ type: MONTHSUM, payload: TotalMonthSum });
     }
@@ -313,7 +322,7 @@ const PresetState = props => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: POSMONTHSUM, payload: TotalMonthSum });
     } else {
-      console.log('no objects to calculate in this month');
+      //console.log('no objects to calculate in this month');
       dispatch({ type: POSMONTHSUM, payload: 0 });
     }
   };
@@ -333,7 +342,7 @@ const PresetState = props => {
       negnum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: NEGMONTHSUM, payload: negnum });
     } else {
-      console.log('no objects to calculate in this month');
+      //console.log('no objects to calculate in this month');
       dispatch({ type: NEGMONTHSUM, payload: 0 });
     }
   };
@@ -639,6 +648,35 @@ const PresetState = props => {
     }
   };
 
+  // Calc savings by month
+  const calcMonthSavings = () => {
+    //array att iterera igenom
+    let presetArray = [];
+    //håller uträknade summan
+    let TotalMonthSum = 0;
+    state.presets.map(preset => {
+      if (preset.type === 'savings' && preset.month === state.month)
+        presetArray.push(parseFloat(preset.number));
+    });
+    // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
+    if (presetArray.length !== 0) {
+      TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
+      dispatch({ type: CALC_MONTH_SAVINGS, payload: TotalMonthSum });
+      // console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
+    } else {
+      // console.log(`no monthsavings to calculate in ${state.month} `);
+    }
+  };
+
+  // Get presets with savings added in this month and purchases with piggybanksavings added in this month
+  const getMonthSavings = month => {
+    dispatch({ type: GET_MONTHSAVINGS, payload: month });
+  };
+
+  // Get presets with piggybank-savings added this month
+  const getMonthPiggySavings = () => {
+    dispatch({ type: GET_MONTHPIGGYSAVINGS, payload: state.month });
+  };
   // Calc capital sum
   const calcCapital = () => {
     //array att iterera igenom
@@ -654,7 +692,7 @@ const PresetState = props => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALCCAPITAL, payload: TotalMonthSum });
     } else {
-      console.log('no capital to calculate ');
+      // console.log('no capital to calculate ');
     }
   };
 
@@ -670,6 +708,13 @@ const PresetState = props => {
     dispatch({ type: CLEAR_PIGGYBANKS });
   };
 
+  const deletePiggybank = Item => {
+    dispatch({ type: DELETE_PIGGYBANK, payload: Item });
+  };
+
+  const setTotalOfAllPiggybanksThisMonth = Sum => {
+    dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
+  };
   return (
     <PresetContext.Provider
       value={{
@@ -698,6 +743,10 @@ const PresetState = props => {
         categorysumonlynegnumbyyear: state.categorysumonlynegnumbyyear,
         AllMonthSum: state.AllMonthSum,
         piggybanks: state.piggybanks,
+        monthsavings: state.monthsavings,
+        monthsavingspresets: state.monthsavingspresets,
+        monthpiggysavings: state.monthpiggysavings,
+        SumPiggybanksMonth: state.SumPiggybanksMonth,
         addPreset,
         calcSum,
         deletePreset,
@@ -732,7 +781,12 @@ const PresetState = props => {
         calcAllMonthSum,
         addtoPiggybanks,
         setActivePiggybank,
-        clearPiggybanks
+        clearPiggybanks,
+        calcMonthSavings,
+        getMonthSavings,
+        getMonthPiggySavings,
+        deletePiggybank,
+        setTotalOfAllPiggybanksThisMonth
       }}
     >
       {props.children}

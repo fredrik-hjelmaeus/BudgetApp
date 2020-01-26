@@ -7,13 +7,26 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 const PurchaseItem = ({ Item }) => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
-  const { toggleModal, setModalprops } = cssContext;
+  const { toggleModal, setModalprops, modal } = cssContext;
 
   const { setEdit, MonthSum, sendEdit, addPreset } = presetContext;
-
-  const [MonthsLeftBeforePurchase] = useState(
-    parseInt(parseFloat((Item.number - Item.piggybank) / MonthSum))
+  let counter = 0;
+  const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState(
+    parseInt(parseFloat((Item.number - counter) / MonthSum))
   );
+
+  const calcPiggybankSum = () => {
+    counter = 0;
+    Item.piggybank.map(Item => (counter = counter + Item.savedAmount));
+  };
+  //updates purchase values after modal change
+  useEffect(() => {
+    calcPiggybankSum();
+    setMonthsLeftBeforePurchase(
+      parseInt(parseFloat((Item.number - counter) / MonthSum))
+    ); // eslint-disable-next-line
+  }, [modal]);
+
   // when buy, create one post under income and one under expenses . May be better written
   const [expensepreset] = useState({
     _id: Item._id,

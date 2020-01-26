@@ -41,6 +41,7 @@ const AddtoPiggybankModal = ({ Item }) => {
   //when Item changes,set Item to default value of presetContext.piggybanks
   useEffect(() => {
     setActivePiggybank(modalprops.piggybank);
+    // eslint-disable-next-line
   }, []);
 
   // sets value from amount to save slider
@@ -76,8 +77,8 @@ const AddtoPiggybankModal = ({ Item }) => {
         type: 'purchase',
         piggybank: presetContext.piggybanks
       });
-    }
-  }, [presetContext.piggybanks]);
+    } // eslint-disable-next-line
+  }, [presetContext.piggybanks, modalprops.piggybank.length]);
 
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
   const sendMyEdit = async preset => {
@@ -94,7 +95,7 @@ const AddtoPiggybankModal = ({ Item }) => {
       presetContext.piggybanks.length !== modalprops.piggybank.length
     ) {
       sendMyEdit(preset);
-    }
+    } // eslint-disable-next-line
   }, [preset]);
 
   // Close modal

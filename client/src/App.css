@@ -617,6 +617,19 @@ input::placeholder {
   border: 1px solid var(--gray-color);
 }
 
+.card_monthright_surplussavings {
+  background: #ffffff;
+  max-width: 90%;
+  height: auto;
+  margin: auto;
+  min-height: 46px;
+  margin-bottom: 1.5vh;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+  border: 1px solid var(--gray-color);
+}
+
 .monthitem button {
   background: none;
   margin: 0;

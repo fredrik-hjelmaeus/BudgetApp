@@ -34,7 +34,11 @@ import {
   RESET_ALLMONTHSUM,
   ADDTO_PIGGYBANK,
   SET_ACTIVE_PIGGYBANK,
-  CLEAR_PIGGYBANKS
+  CLEAR_PIGGYBANKS,
+  CALC_MONTH_SAVINGS,
+  GET_MONTHSAVINGS,
+  GET_MONTHPIGGYSAVINGS,
+  SUM_PIGGYBANKS_MONTH
 } from '../types';
 
 export default (state, action) => {
@@ -89,6 +93,32 @@ export default (state, action) => {
       return {
         ...state,
         purchases: state.presets.filter(preset => preset.type === 'purchase')
+      };
+    case GET_MONTHSAVINGS:
+      return {
+        ...state,
+        monthsavingspresets: state.presets.filter(
+          preset => preset.type === 'savings' && preset.month === action.payload
+        )
+      };
+    case GET_MONTHPIGGYSAVINGS:
+      return {
+        ...state,
+        monthpiggysavings: state.presets
+          .filter(
+            preset =>
+              preset.type === 'purchase' && preset.piggybank.length !== 0
+          )
+          .map(preset =>
+            preset.piggybank.filter(
+              piggybank => piggybank.month === action.payload
+            )
+          )
+      };
+    case SUM_PIGGYBANKS_MONTH:
+      return {
+        ...state,
+        SumPiggybanksMonth: action.payload
       };
     case SET_ACTIVE_PIGGYBANK:
       return {
@@ -184,6 +214,11 @@ export default (state, action) => {
       return {
         ...state,
         savings: action.payload
+      };
+    case CALC_MONTH_SAVINGS:
+      return {
+        ...state,
+        monthsavings: action.payload
       };
     case CALCCAPITAL:
       return {
