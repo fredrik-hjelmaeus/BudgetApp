@@ -7,7 +7,7 @@ const Purchases = () => {
   const { purchases } = presetContext;
 
   useEffect(() => {}, [presetContext.sendEdit]);
-  //purchases ? console.log(purchases) : console.log('no');
+
   return (
     <div className='categorybalance'>
       <h4 className='all-center text-gray'>Purchases</h4>
