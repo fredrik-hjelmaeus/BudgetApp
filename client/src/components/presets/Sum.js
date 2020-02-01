@@ -14,7 +14,9 @@ const Sum = () => {
     monthsavings,
     MonthSum,
     sum,
-    SumPiggybanksMonth
+    SumPiggybanksMonth,
+    MonthBalance,
+    calcMonthBalance
   } = presetContext;
 
   useEffect(() => {
@@ -29,12 +31,9 @@ const Sum = () => {
     filteredmonthandposnum,
     filteredmonthandnegnum,
     monthsavings,
-    MonthSum
+    MonthSum,
+    SumPiggybanksMonth
   ]);
-
-  const calcMonthBalance = () => {
-    return MonthSum - monthsavings - SumPiggybanksMonth;
-  };
 
   return (
     <Fragment>
@@ -92,10 +91,8 @@ const Sum = () => {
         {/* Month Balance */}
         <div>
           Month Balance:
-          <span
-            className={calcMonthBalance() > 0 ? 'text-success' : 'text-danger'}
-          >
-            {calcMonthBalance()}
+          <span className={MonthBalance > 0 ? 'text-success' : 'text-danger'}>
+            {MonthBalance}
           </span>
         </div>
         {/*  Savings Month*/}

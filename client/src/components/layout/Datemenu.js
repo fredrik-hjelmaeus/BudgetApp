@@ -6,7 +6,9 @@ const Datemenu = () => {
   const [month, setMonth] = useState(null);
 
   useEffect(() => {
-    setMonth('2019');
+    presetContext.month !== null &&
+      presetContext.year !== null &&
+      setMonth('2019');
   }, [presetContext.month, presetContext.year]);
 
   const onClick = e => {
@@ -17,7 +19,7 @@ const Datemenu = () => {
         : presetContext.addMonth(e.target.value);
     }
   };
-
+  //console.log(month);
   return (
     <div className='datemenu'>
       <ul>
@@ -213,7 +215,7 @@ const Datemenu = () => {
           value='2019'
           name='2019'
         >
-          {presetContext.year === '2019' ? (
+          {month === '2019' ? (
             <strong className='text-dark'>{'< 2019'}</strong>
           ) : (
             '< 2019'
