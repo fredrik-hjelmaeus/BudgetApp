@@ -15,6 +15,7 @@ const MonthSavingsSummary = () => {
   const monthpurchasewithpiggybank = presets.filter(
     preset => preset.type === 'purchase' && preset.piggybank.length !== 0
   );
+
   // filters out piggybankvalues made in active month
   const filteroutbymonth = monthpurchasewithpiggybank.map(purchase =>
     purchase.piggybank.filter(
@@ -22,6 +23,7 @@ const MonthSavingsSummary = () => {
         piggybank.month === presetContext.month && piggybank.savedAmount !== 0
     )
   );
+
   // store only savedAmounts in an array
   const savedAmounts = filteroutbymonth.map(first =>
     first.map(second => second.savedAmount)
@@ -37,6 +39,7 @@ const MonthSavingsSummary = () => {
 
   useEffect(() => {
     setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
+    // eslint-disable-next-line
   }, [month, presets]);
 
   const createSavingsItem = () => {

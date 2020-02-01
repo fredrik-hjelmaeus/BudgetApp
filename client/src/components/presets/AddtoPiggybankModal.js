@@ -11,7 +11,8 @@ const AddtoPiggybankModal = ({ Item }) => {
     sendEdit,
     MonthSum,
     setActivePiggybank,
-    addtoPiggybanks
+    addtoPiggybanks,
+    MonthBalance
   } = presetContext;
 
   // Css: modal context
@@ -29,10 +30,24 @@ const AddtoPiggybankModal = ({ Item }) => {
     piggybank: Item.piggybank
   });
 
+  let AmountToSave; //init startvalue
+
+  // store only savedAmounts in an array
+  const savedAmounts = Item.piggybank.map(item => item.savedAmount);
+  // sift through savedAmounts and count totalsum
+  const SumOfPiggybanks = savedAmounts.reduce(
+    (a, b) => parseFloat(a) + parseFloat(b),
+    0
+  );
+  const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
   // Calc Amount to save
-  let AmountToSave = MonthSum; //default startvalue
-  if (parseInt(MonthSum) + parseInt(Item.piggybank) > Item.number) {
-    AmountToSave = parseInt(Item.number) - parseInt(Item.piggybank);
+  console.log(`Sumleft = ${SumLeftToSave}`);
+  if (parseInt(MonthBalance) > parseInt(SumLeftToSave)) {
+    console.log('Balance is larger');
+    AmountToSave = SumLeftToSave;
+  } else {
+    console.log('SumLeftToSave is larger than Month Balance');
+    AmountToSave = MonthBalance;
   }
 
   //piggybankstate, local state used for onChange-slider
@@ -56,7 +71,7 @@ const AddtoPiggybankModal = ({ Item }) => {
   const onSubmit = () => {
     addtoPiggybanks({
       month: presetContext.month,
-      savedAmount: piggybank.number
+      savedAmount: parseFloat(piggybank.number)
     });
   };
 
@@ -67,6 +82,7 @@ const AddtoPiggybankModal = ({ Item }) => {
       presetContext.piggybanks.length !== 0 &&
       presetContext.piggybanks.length !== modalprops.piggybank.length
     ) {
+      console.log('setPreset ran');
       setPreset({
         ...preset,
         _id: Item._id,
@@ -94,6 +110,8 @@ const AddtoPiggybankModal = ({ Item }) => {
       presetContext.piggybanks.length !== 0 &&
       presetContext.piggybanks.length !== modalprops.piggybank.length
     ) {
+      console.log('sendMyPreset ran');
+      console.log(preset);
       sendMyEdit(preset);
     } // eslint-disable-next-line
   }, [preset]);

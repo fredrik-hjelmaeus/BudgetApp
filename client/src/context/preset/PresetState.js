@@ -43,7 +43,8 @@ import {
   GET_MONTHSAVINGS,
   GET_MONTHPIGGYSAVINGS,
   DELETE_PIGGYBANK,
-  SUM_PIGGYBANKS_MONTH
+  SUM_PIGGYBANKS_MONTH,
+  CALC_MONTH_BALANCE
 } from '../types';
 
 const PresetState = props => {
@@ -77,7 +78,8 @@ const PresetState = props => {
     monthsavings: null,
     monthsavingspresets: null,
     monthpiggysavings: null,
-    SumPiggybanksMonth: 0
+    SumPiggybanksMonth: 0,
+    MonthBalance: null
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -662,10 +664,18 @@ const PresetState = props => {
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALC_MONTH_SAVINGS, payload: TotalMonthSum });
-      // console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
+      console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
     } else {
-      // console.log(`no monthsavings to calculate in ${state.month} `);
+      dispatch({ type: CALC_MONTH_SAVINGS, payload: null });
+      console.log(`no monthsavings to calculate in ${state.month} `);
     }
+  };
+
+  // calc month balance
+  const calcMonthBalance = () => {
+    const totalsum =
+      state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
+    dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
   };
 
   // Get presets with savings added in this month and purchases with piggybanksavings added in this month
@@ -747,6 +757,7 @@ const PresetState = props => {
         monthsavingspresets: state.monthsavingspresets,
         monthpiggysavings: state.monthpiggysavings,
         SumPiggybanksMonth: state.SumPiggybanksMonth,
+        MonthBalance: state.MonthBalance,
         addPreset,
         calcSum,
         deletePreset,
@@ -786,7 +797,8 @@ const PresetState = props => {
         getMonthSavings,
         getMonthPiggySavings,
         deletePiggybank,
-        setTotalOfAllPiggybanksThisMonth
+        setTotalOfAllPiggybanksThisMonth,
+        calcMonthBalance
       }}
     >
       {props.children}

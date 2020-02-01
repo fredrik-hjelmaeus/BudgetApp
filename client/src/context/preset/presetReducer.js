@@ -38,7 +38,8 @@ import {
   CALC_MONTH_SAVINGS,
   GET_MONTHSAVINGS,
   GET_MONTHPIGGYSAVINGS,
-  SUM_PIGGYBANKS_MONTH
+  SUM_PIGGYBANKS_MONTH,
+  CALC_MONTH_BALANCE
 } from '../types';
 
 export default (state, action) => {
@@ -224,6 +225,11 @@ export default (state, action) => {
       return {
         ...state,
         capital: action.payload
+      };
+    case CALC_MONTH_BALANCE:
+      return {
+        ...state,
+        MonthBalance: action.payload
       };
     case SEND_EDIT:
       return {
