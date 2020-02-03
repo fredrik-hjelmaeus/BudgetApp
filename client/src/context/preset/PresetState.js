@@ -137,6 +137,7 @@ const PresetState = props => {
         'Content-Type': 'application/json'
       }
     };
+    console.log(preset);
     try {
       const res = await axios.put(
         `/api/userpreset/${preset._id}`,

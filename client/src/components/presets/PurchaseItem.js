@@ -9,23 +9,34 @@ const PurchaseItem = ({ Item }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops, modal } = cssContext;
 
-  const { setEdit, MonthSum, sendEdit, addPreset } = presetContext;
-  let counter = 0;
-  const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState(
-    parseInt(parseFloat((Item.number - counter) / MonthSum))
-  );
+  const { setEdit, MonthBalance, sendEdit, addPreset } = presetContext;
+
+  const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState('');
 
   const calcPiggybankSum = () => {
-    counter = 0;
-    Item.piggybank.map(Item => (counter = counter + Item.savedAmount));
+    // store only savedAmounts in an array
+    const savedAmounts = Item.piggybank.map(item => item.savedAmount);
+    // sift through savedAmounts and count totalsum
+    const SumOfPiggybanks = savedAmounts.reduce(
+      (a, b) => parseFloat(a) + parseFloat(b),
+      0
+    );
+    const ItemAfterPiggy = Item.number - SumOfPiggybanks;
+    let MonthsLeft;
+    MonthBalance > 0 && MonthBalance !== null
+      ? (MonthsLeft = parseInt(
+          parseFloat(ItemAfterPiggy) / parseFloat(MonthBalance)
+        ))
+      : (MonthsLeft = '+50');
+
+    setMonthsLeftBeforePurchase(MonthsLeft);
   };
+
   //updates purchase values after modal change
   useEffect(() => {
     calcPiggybankSum();
-    setMonthsLeftBeforePurchase(
-      parseInt(parseFloat((Item.number - counter) / MonthSum))
-    ); // eslint-disable-next-line
-  }, [modal]);
+    // eslint-disable-next-line
+  }, [modal, MonthBalance, Item]);
 
   // when buy, create one post under income and one under expenses . May be better written
   const [expensepreset] = useState({
@@ -54,8 +65,8 @@ const PurchaseItem = ({ Item }) => {
 
   const onSave = () => {
     //activate modal
-    setModalprops(Item);
-    toggleModal('addtopiggybank');
+    MonthBalance > 0 && setModalprops(Item);
+    MonthBalance > 0 && toggleModal('addtopiggybank');
   };
 
   const onDelete = () => {
@@ -69,7 +80,7 @@ const PurchaseItem = ({ Item }) => {
   const [PiggyHover, setPiggyHover] = useState(false);
   //on piggybank button hover
   const onPiggyHover = () => {
-    setPiggyHover(true);
+    MonthBalance > 0 && setPiggyHover(true);
   };
   //on piggybank button stop hover
   const stopPiggyHover = () => {
@@ -93,7 +104,7 @@ const PurchaseItem = ({ Item }) => {
       case 0:
         return null;
       case 1:
-        return PiggyHover === true ? ( // 1 month left
+        return PiggyHover === true && MonthBalance > 0 ? ( // 1 month left
           <PiggybankSVG fill='var(--success-color)' /> //onHover show green
         ) : Item.piggybank !== 0 ? (
           <PiggybankSVG fill='var(--orange-color)' />
@@ -101,7 +112,7 @@ const PurchaseItem = ({ Item }) => {
           <PiggybankSVG fill='var(--gray-color)' />
         );
       default:
-        return PiggyHover === true ? ( // many months left
+        return PiggyHover === true && MonthBalance > 0 ? ( // many months left
           <PiggybankSVG fill='var(--success-color)' /> //onHover show green
         ) : Item.piggybank !== 0 ? (
           <PiggybankSVG fill='var(--orange-color)' />
@@ -116,18 +127,14 @@ const PurchaseItem = ({ Item }) => {
       <span className='text-gray purchasegrid'>
         <button
           onClick={() => setEdit(Item)}
-          className={
-            MonthSum > 0
-              ? 'purchasetitlebtn no-wrap text-gray'
-              : 'btn text-danger'
-          }
+          className={'purchasetitlebtn no-wrap text-gray'}
         >
           {Item.name}
         </button>
         <button
           onClick={() => setEdit(Item)}
           className={
-            MonthSum > 0
+            MonthBalance > 0
               ? 'purchasenumberbtn no-wrap text-danger bold'
               : 'purchasenumberbtn no-wrap text-danger bold'
           }
@@ -154,7 +161,14 @@ const PurchaseItem = ({ Item }) => {
             1 Month
           </button>
         ) : (
-          <button className='btn-moremonthsleft' onClick={onSave}>
+          <button
+            className={
+              MonthBalance > 0
+                ? 'btn-moremonthsleft'
+                : 'btn-moremonthsleftNoHoverConnection'
+            }
+            onClick={onSave}
+          >
             {`${MonthsLeftBeforePurchase} months`}
           </button>
         )}

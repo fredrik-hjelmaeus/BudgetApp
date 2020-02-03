@@ -4,9 +4,18 @@ import PresetContext from '../../context/preset/presetContext';
 
 const Purchases = () => {
   const presetContext = useContext(PresetContext);
-  const { purchases } = presetContext;
+  const {
+    purchases,
+    sendEdit,
+    presets,
+    calcMonthBalance,
+    MonthBalance,
+    piggybanks
+  } = presetContext;
 
-  useEffect(() => {}, [presetContext.sendEdit]);
+  useEffect(() => {
+    MonthBalance === null || (piggybanks === [] && calcMonthBalance());
+  }, [sendEdit, presets]);
 
   return (
     <div className='categorybalance'>

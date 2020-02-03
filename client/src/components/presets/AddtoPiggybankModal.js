@@ -9,7 +9,6 @@ const AddtoPiggybankModal = ({ Item }) => {
   const presetContext = useContext(PresetContext);
   const {
     sendEdit,
-    MonthSum,
     setActivePiggybank,
     addtoPiggybanks,
     MonthBalance
@@ -40,13 +39,11 @@ const AddtoPiggybankModal = ({ Item }) => {
     0
   );
   const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
+
   // Calc Amount to save
-  console.log(`Sumleft = ${SumLeftToSave}`);
   if (parseInt(MonthBalance) > parseInt(SumLeftToSave)) {
-    console.log('Balance is larger');
     AmountToSave = SumLeftToSave;
   } else {
-    console.log('SumLeftToSave is larger than Month Balance');
     AmountToSave = MonthBalance;
   }
 
@@ -82,7 +79,6 @@ const AddtoPiggybankModal = ({ Item }) => {
       presetContext.piggybanks.length !== 0 &&
       presetContext.piggybanks.length !== modalprops.piggybank.length
     ) {
-      console.log('setPreset ran');
       setPreset({
         ...preset,
         _id: Item._id,
@@ -110,8 +106,6 @@ const AddtoPiggybankModal = ({ Item }) => {
       presetContext.piggybanks.length !== 0 &&
       presetContext.piggybanks.length !== modalprops.piggybank.length
     ) {
-      console.log('sendMyPreset ran');
-      console.log(preset);
       sendMyEdit(preset);
     } // eslint-disable-next-line
   }, [preset]);
