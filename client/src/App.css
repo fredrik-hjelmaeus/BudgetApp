@@ -661,6 +661,12 @@ input::placeholder {
   padding: 2rem;
 }
 
+.presetformclosed {
+  background: var(--light-color);
+  border: 1px solid var(--gray-color);
+  padding: 2rem;
+}
+
 .presetformspan {
   display: flex;
 }
@@ -878,6 +884,24 @@ input::placeholder {
 .btn-moremonthsleft:hover {
   color: var(--success-color);
   border: solid 2px var(--success-color);
+}
+
+.btn-moremonthsleftNoHoverConnection {
+  align-items: center !important;
+  white-space: nowrap;
+  border: solid 2px var(--gray-color);
+  background: none;
+  color: var(--gray-color);
+  border-radius: 4px;
+  padding: 0px 4px 0px 4px;
+  font-size: 12px;
+  margin: auto;
+  margin-left: 8px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
 }
 
 .btn-trashicon {

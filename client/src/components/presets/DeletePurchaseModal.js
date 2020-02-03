@@ -6,7 +6,7 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 
 const DeletePurchaseModal = ({ Item }) => {
   const presetContext = useContext(PresetContext);
-  const { sendEdit } = presetContext;
+  const { addPreset, deletePreset, month } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
@@ -16,34 +16,29 @@ const DeletePurchaseModal = ({ Item }) => {
     toggleModal('');
   };
 
-  const [preset, setPreset] = useState({
-    _id: Item._id,
-    name: Item.name,
-    number: Item.number,
-    month: Item.month,
-    category: Item.category,
-    piggybank: Item.piggybank,
-    type: Item.type
-  });
-
   //cancel purchase
+  // for every piggybank that is not savedAmount 0,convert to new preset type savings at the month piggybankitem was registred. Then delete purchasepreset
   const onDelete = () => {
-    setPreset({
-      ...preset,
-      number: Item.piggybank, //transfer piggybanksavings from piggybank to number
-      piggybank: 0,
-      type: 'savings' //switch type from purchase to savings
-    });
+    const FilteredPiggybanks = Item.piggybank.filter(
+      piggybank => piggybank.savedAmount !== 0
+    );
+
+    FilteredPiggybanks.map(newSaving =>
+      addPreset({
+        name: Item.name,
+        number: newSaving.savedAmount,
+        month: newSaving.month,
+        category: Item.category,
+        type: 'savings', //switch type from purchase to savings)
+        piggybank: [{ month, savedAmount: '' }]
+      })
+    );
+    deletePreset(Item._id);
+    toggleModal('');
   };
-  useEffect(() => {
-    //OnDelete calls useState witch is async. Therefore, useEffect is watching preset and runs as callback on setPreset.
-    preset.type === 'savings' && sendEdit(preset); // check if setPreset ran and update preset in db.
-    preset.type === 'savings' && toggleModal(''); // close modal
-    // eslint-disable-next-line
-  }, [preset]);
 
   return (
-    <div id='myModal' class='modal-register' style={{ display: 'block' }}>
+    <div id='myModal' className='modal-register' style={{ display: 'block' }}>
       <div className='modal-content-deletepurchase'>
         <span>
           <button className='closebtn' value='close' onClick={onClick}></button>

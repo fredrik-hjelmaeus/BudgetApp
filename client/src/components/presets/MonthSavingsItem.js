@@ -112,6 +112,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
           ? Item.piggybank.filter(piggybank =>
               piggybank.month !== month
                 ? newPiggybankArray.push({
+                    _id: piggybank._id,
                     month: piggybank.month,
                     savedAmount: piggybank.savedAmount
                   })
@@ -131,10 +132,10 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       piggybank: newPiggybankArray
     });
   };
-  useEffect(() => {
+  /*  useEffect(() => {
     preset.piggybank.length !== Item.piggybank.length && sendEdit(preset);
   });
-
+ */
   return (
     <div className='monthitem'>
       <div className='namebutton'>
