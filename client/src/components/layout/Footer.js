@@ -7,48 +7,56 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <footer className='footer'>
-      <div className='footer-cols'>
-        <li>CONTACT</li>
+      <div className='footer__cols'>
+        <li className='footer__contact'>CONTACT</li>
         <li>
-          +46 072 515 16 03
+          <button className='footer__contact_btn'>+46 072 515 16 03</button>
           <br />
-          <button className='btn-footer'>gemigpost@hotmail.com</button>
+          <button className='footer__contact_btn'>gemigpost@hotmail.com</button>
         </li>
         <li></li>
-        <li>SERVICES</li>
+        <li className='footer__service'>SERVICES</li>
         <li>
-          <button className='btn-footer'>Guide</button>
+          <button className='footer__service_btn'>Guide</button>
           <br />
-          <button className='btn-footer'>FAQ</button>
+          <button className='footer__service_btn'>FAQ</button>
         </li>
         <li></li>
 
-        <li>INFORMATION</li>
+        <li className='footer__information'>INFORMATION</li>
         <li>
-          <Link to='/about' className='btn-footer'>
+          <Link to='/about' className='footer__information_btn'>
             About
           </Link>
 
           <br />
-          <button className='btn-footer'>Work with me</button>
+          <button className='footer__information_btn'>Work with me</button>
           <br />
-          <button className='btn-footer'>Policy privacy</button>
+          <button className='footer__information_btn'>Policy privacy</button>
           <br />
-          <button className='btn-footer'>Terms & Conditions</button>
+          <button className='footer__information_btn'>
+            Terms & Conditions
+          </button>
           <br />
-          <button className='btn-footer'>Press Enquires</button>
+          <button className='footer__information_btn'>Press Enquires</button>
         </li>
         <li></li>
-        <li>
-          <a href='https://www.instagram.com/leomessi/' className='btn-footer'>
+        <li className='footer__links'>
+          <a
+            href='https://www.instagram.com/leomessi/'
+            className='footer__links_btn'
+          >
             <img src={instagramicon} alt='img' className='footericons' />
           </a>
 
           {'     '}
-          <a href='https://twitter.com/imessi' className='btn-footer'>
+          <a href='https://twitter.com/imessi' className='footer__links_btn'>
             <img src={twittericon} alt='img' className='footericons' />
           </a>
-          <a href='https://www.facebook.com/leomessi/' className='btn-footer'>
+          <a
+            href='https://www.facebook.com/leomessi/'
+            className='footer__links_btn'
+          >
             <img src={facebookicon} alt='img' className='footericons' />
           </a>
         </li>
