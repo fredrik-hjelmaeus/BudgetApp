@@ -19,16 +19,16 @@ const Landing = () => {
   };
 
   return (
-    <div className='showcase'>
+    <div className='Landing__showcase'>
       {modal === 'login' && <LoginModal />}
       {modal === 'register' && <RegisterModal />}
       {modal === '' && (
-        <div className='flexcolumn'>
+        <div className='Landing'>
           <Logo />
 
           <div>
             <textarea
-              className='landingpagetextarea text-left lead text-light '
+              className='Landing__textarea text-left text-light '
               name='description'
               defaultValue='An app that helps you organize your economy.'
             ></textarea>
@@ -36,7 +36,7 @@ const Landing = () => {
           <div>
             {' '}
             <button
-              className='btn-white all-center'
+              className='Landing__btn__white all-center'
               value='login'
               onClick={onClick}
             >
@@ -45,7 +45,7 @@ const Landing = () => {
           </div>
           <div>
             <button
-              className='btn-black all-center'
+              className='Landing__btn__black all-center'
               value='register'
               onClick={onClick}
             >
