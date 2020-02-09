@@ -22,7 +22,7 @@ const Navbar = ({ title, icon }) => {
   };
   const authLinks = (
     <Fragment>
-      <li className='username titlenudge'>
+      <li className='navbar__username navbar__titlenudge'>
         <img
           src={personicon}
           alt='img'
@@ -58,9 +58,10 @@ const Navbar = ({ title, icon }) => {
   return (
     cssContext.navbar && (
       <div className='navbar bg-dark'>
-        <div className='inside'>
-          <h1 className='x-large titlenudge'>
+        <div className='navbar__inside'>
+          <h1 className='x-large navbar__titlenudge'>
             <img
+              className='navbar__icon'
               src={logoicon}
               alt='loading...'
               style={{
@@ -70,7 +71,7 @@ const Navbar = ({ title, icon }) => {
                 top: '0.75rem'
               }}
             />{' '}
-            {title}
+            <span className='navbar__title'> {title}</span>
           </h1>
           <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
         </div>

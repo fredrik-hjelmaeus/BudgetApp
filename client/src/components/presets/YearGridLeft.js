@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import CssContext from '../../context/css/cssContext';
+import PresetContext from '../../context/preset/presetContext';
 const YearGridLeft = () => {
   const cssContext = useContext(CssContext);
-
+  const presetContext = useContext(PresetContext);
+  const { year } = presetContext;
   const { yearsummary, setYearSummary } = cssContext;
 
   // sets css color when button is pressed
@@ -16,7 +18,7 @@ const YearGridLeft = () => {
 
   return (
     <div className='card bg-light yearGridleft'>
-      <h1 className='x-large'>2019</h1>
+      <h1 className='x-large'>{year}</h1>
       <h4>
         Yearly summary and comparison analysis with last year. Here you can also
         see differences in income/costs over the year.

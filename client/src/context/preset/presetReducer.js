@@ -72,8 +72,7 @@ export default (state, action) => {
     case ADD_MONTH:
       return {
         ...state,
-        month: action.payload,
-        year: null
+        month: action.payload
       };
     case ADD_PRESET:
       return {
