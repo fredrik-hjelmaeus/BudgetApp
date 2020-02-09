@@ -615,21 +615,36 @@ const PresetState = props => {
   };
 
   ////////////////////////////////////
-  const calcYearsum = () => {
+  const calcYearsum = year => {
     let numberArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-      preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
-      preset.type !== 'savings' && // då de las in före .type las till i backend.
-        preset.type !== 'capital' &&
-        numberArray.push(parseFloat(preset.number));
-    });
+    if (year === '2019' || year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined &&
+        preset.type !== null &&
+        preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+        preset.type !== 'savings' && // då de las in före .type las till i backend.
+          preset.type !== 'capital' &&
+          numberArray.push(parseFloat(preset.number));
+        console.log('2019 calling');
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year === state.year &&
+        preset.type !== null &&
+        preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+        preset.type !== 'savings' && // då de las in före .type las till i backend.
+          preset.type !== 'capital' &&
+          numberArray.push(parseFloat(preset.number));
+        console.log(`${state.year} called`);
+      });
+    }
 
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (numberArray.length !== 0) {
       const TotalSum = numberArray.reduce((a, b) => a + b, 0);
+      console.log(TotalSum);
       dispatch({ type: YEARSUM, payload: TotalSum });
-    }
+    } else dispatch({ type: YEARSUM, payload: 0 });
   };
 
   // Calc savings sum

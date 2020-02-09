@@ -1221,14 +1221,12 @@ table th {
   margin-bottom: 1rem;
 }
 
-/* Iphone 6/7/8 */
-@media (max-width: 480px) {
-  .navbar {
-    width: 100%;
-  }
+.navbar__icon {
+  borsder: 1px solid red;
+  padding: 0;
+  margin: 0;
 }
-
-.inside {
+.navbar__inside {
   max-width: 1366px;
   align-items: inherit;
   justify-content: inherit;
@@ -1236,16 +1234,20 @@ table th {
   width: inherit;
   display: inherit;
   margin: auto;
-  align-items: inherit;
 }
 
-.username {
+.navbar__title {
+  display: inline;
+}
+
+.navbar__username {
   font-size: 1.3rem;
   margin-right: 1rem;
 }
 
 .navbar ul {
   display: flex;
+  bordser: 1px solid orange;
 }
 
 .navbar a {
@@ -1258,9 +1260,62 @@ table th {
   color: var(--light-color);
 }
 
-.titlenudge {
+.navbar__titlenudge {
   position: relative;
   bottom: 0.35rem;
+}
+
+/* Iphone 6/7/8 */
+@media (max-width: 780px) {
+  .navbar {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    z-index: 1;
+    width: 100%;
+    opacity: 1;
+    margin-bottom: 1rem;
+  }
+
+  .navbar a {
+    color: #fff;
+    padding: 0;
+    margin: 0;
+  }
+  .navbar__inside {
+    align-items: center;
+
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    margin: 0;
+
+    borsder: 1px solid green;
+  }
+  .navbar__icon {
+    bordesr: 1px solid red;
+
+    padding: 0;
+    margin: 0;
+  }
+  .navbar__username {
+    font-size: 0.875rem;
+    margin-right: 1rem;
+    masrgin: 0;
+    padding: 0;
+    align-self: center;
+
+    bordser: 1px solid red;
+  }
+  .navbar__titlenudge {
+    position: relative;
+    bottom: 0.35rem;
+  }
+  .navbar__title {
+    display: none;
+  }
 }
 
 /* Footer */

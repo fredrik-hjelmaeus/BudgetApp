@@ -3,37 +3,65 @@ import PresetContext from '../../context/preset/presetContext';
 
 const Datemenu = () => {
   const presetContext = useContext(PresetContext);
+  const { year, setYear, addMonth } = presetContext;
   const [month, setMonth] = useState(null);
+  const [prevYear, setPrevYear] = useState(null);
+  const [nextYear, setNextYear] = useState(null);
 
   useEffect(() => {
-    presetContext.month !== null &&
-      presetContext.year !== null &&
-      setMonth('2019');
-  }, [presetContext.month, presetContext.year]);
+    presetContext.month !== null && year !== null && setMonth('2019');
+    year === null && setYear(2019);
+    year !== null && setPrevYear(parseInt(year - 1).toString());
+    year !== null && setNextYear((parseInt(year) + parseInt(1)).toString());
+  }, [presetContext.month, year, prevYear, nextYear]);
 
   const onClick = e => {
     if (e.target.value !== undefined) {
       setMonth(e.target.value);
-      e.target.value === '2019'
-        ? presetContext.setYear('2019')
-        : presetContext.addMonth(e.target.value);
+      if (e.target.value !== year.toString()) {
+        e.target.value !== prevYear && addMonth(e.target.value);
+        e.target.value !== nextYear && addMonth(e.target.value);
+      }
+      if (e.target.value === prevYear) {
+        setYear(prevYear);
+      }
+      if (e.target.value === nextYear) {
+        setYear(nextYear);
+      }
+      if (e.target.value === year.toString()) {
+        addMonth(null);
+      }
     }
   };
-  //console.log(month);
+
   return (
     <div className='datemenu'>
       <ul>
         <button
           onClick={onClick}
           className='btn-Datemenu'
-          value='2018'
-          name='2018'
+          value={prevYear}
+          name={prevYear}
         >
           {' '}
-          {presetContext.year === '2018' ? (
-            <strong className='text-dark'>{'2018 >'}</strong>
+          {year === { prevYear } ? (
+            <strong className='text-dark'>{`<`}</strong>
           ) : (
-            '2018 >'
+            `<`
+          )}
+        </button>
+      </ul>
+      <ul>
+        <button
+          onClick={onClick}
+          className='btn-Datemenu'
+          value={year}
+          name={year}
+        >
+          {month === { year } ? (
+            <strong className='text-dark'>{` ${year}`}</strong>
+          ) : (
+            ` ${year}`
           )}
         </button>
       </ul>
@@ -212,13 +240,13 @@ const Datemenu = () => {
         <button
           onClick={onClick}
           className='btn-Datemenu'
-          value='2019'
-          name='2019'
+          value={nextYear}
+          name={nextYear}
         >
-          {month === '2019' ? (
-            <strong className='text-dark'>{'< 2019'}</strong>
+          {month === { nextYear } ? (
+            <strong className='text-dark'>{`>`}</strong>
           ) : (
-            '< 2019'
+            `>`
           )}
         </button>
       </ul>

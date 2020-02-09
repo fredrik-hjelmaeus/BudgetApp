@@ -96,7 +96,7 @@ const PresetItem = ({ preset }) => {
     cancelEdit();
     calcSum(_id, null);
   };
-
+  //console.log(preset.year);
   return (
     <div className='monthitem'>
       <div className='namebutton'>

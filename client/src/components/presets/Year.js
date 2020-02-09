@@ -41,7 +41,8 @@ const Year = () => {
   useEffect(() => {
     presets && presetContext.calcSum(9, null, 'init');
     presets && calcCategoryByYear();
-    presets && calcYearsum();
+    presets && year === null && calcYearsum('2019');
+    presets && year !== null && calcYearsum(year);
     presets && calcSavings();
     presets && calcCapital();
     presets && calcCategorySumOnlyByYear();
@@ -66,7 +67,7 @@ const Year = () => {
         'December'
       ]);
     // eslint-disable-next-line
-  }, [presets !== null]);
+  }, [presets, year]);
 
   return (
     <Fragment>
