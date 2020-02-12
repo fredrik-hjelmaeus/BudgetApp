@@ -53,33 +53,33 @@ const PresetState = props => {
     sum: null,
     edit: null,
     error: null,
-    month: null,
-    filtered: null,
-    MonthSum: null,
-    AllMonthSum: [],
-    PosMonthSum: null,
-    NegMonthSum: null,
-    filteredmonthandposnum: null,
-    filteredmonthandnegnum: null,
-    categorymonthsum: [],
-    categoryyearsum: [],
-    year: null,
-    yearsum: null,
-    savings: null,
-    capital: null,
-    purchasemonth: null,
-    categorysumonlybyyear: null,
-    categorynameonlybyyear: null,
-    categorynameonlyposnumbyyear: null,
-    categorynameonlynegnumbyyear: null,
-    categorysumonlyposnumbyyear: null,
-    categorysumonlynegnumbyyear: null,
-    piggybanks: [],
-    monthsavings: null,
-    monthsavingspresets: null,
-    monthpiggysavings: null,
-    SumPiggybanksMonth: 0,
-    MonthBalance: null
+    month: null, // year implemented. Only indirect affects
+    filtered: null, // not used atm
+    MonthSum: null, // year implemented
+    AllMonthSum: [], // year implemented
+    PosMonthSum: null, // gets data from filteredmonthandnegnum
+    NegMonthSum: null, // gets data from filteredmonthandposnum
+    filteredmonthandposnum: null, // year implemented
+    filteredmonthandnegnum: null, // year implemented
+    categorymonthsum: [], // year implemented
+    categoryyearsum: [], // year implemented
+    year: null, // year implemented. needs more strict control of datatype. it changes between string and number
+    yearsum: null, // year implemented
+    savings: null, // year not used
+    capital: null, // year not used
+    categorysumonlybyyear: null, // year implemented  but NOT used atm.
+    categorynameonlybyyear: null, // year implemented  but NOT used atm.
+    categorynameonlyposnumbyyear: null, // year implemented
+    categorynameonlynegnumbyyear: null, // year implemented
+    categorysumonlyposnumbyyear: null, // year implemented
+    categorysumonlynegnumbyyear: null, // year implemented
+    piggybanks: [], // year implemented
+    monthsavings: null, // year implemented
+    monthsavingspresets: null, // year implemented
+    monthpiggysavings: null, // year implemented no legacy
+    SumPiggybanksMonth: 0, // year implemented
+    MonthBalance: null, // year implemented
+    purchases: null // year independent
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -194,8 +194,9 @@ const PresetState = props => {
     dispatch({ type: FILTER_PRESETS, payload: month });
   };
 
-  // Filter out all presets with positive numbers and provided month
+  // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = month => {
+    //console.log(state.year);
     dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
   };
 
@@ -262,16 +263,30 @@ const PresetState = props => {
       let presetArray = [];
       //håller uträknade summan
       let TotalMonthSum = 0;
-      state.presets.map(preset => {
-        if (
-          preset.month === month &&
-          preset.type !== 'savings' &&
-          preset.type !== 'capital' &&
-          preset.type !== 'purchase'
-        )
-          presetArray.push(parseFloat(preset.number));
-      });
-
+      if (state.year === '2019' || state.year === 2019) {
+        state.presets.map(preset => {
+          if (
+            preset.year === undefined ||
+            (preset.year == '2019' &&
+              preset.month === month &&
+              preset.type !== 'savings' &&
+              preset.type !== 'capital' &&
+              preset.type !== 'purchase')
+          )
+            presetArray.push(parseFloat(preset.number));
+        });
+      } else {
+        state.presets.map(preset => {
+          if (
+            preset.year == state.year &&
+            preset.month === month &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.type !== 'purchase'
+          )
+            presetArray.push(parseFloat(preset.number));
+        });
+      }
       // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
       if (presetArray.length !== 0) {
         TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
@@ -290,15 +305,30 @@ const PresetState = props => {
     let presetArray = [];
     //håller uträknade summan
     let TotalMonthSum = 0;
-    state.presets.map(preset => {
-      if (
-        preset.month === month &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        preset.type !== 'purchase'
-      )
-        presetArray.push(parseFloat(preset.number));
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        if (
+          preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.month === month &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.type !== 'purchase')
+        )
+          presetArray.push(parseFloat(preset.number));
+      });
+    } else {
+      state.presets.map(preset => {
+        if (
+          preset.year == state.year &&
+          preset.month === month &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          preset.type !== 'purchase'
+        )
+          presetArray.push(parseFloat(preset.number));
+      });
+    }
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
@@ -374,15 +404,30 @@ const PresetState = props => {
       let CatAndSumList = [];
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
-      state.presets.map(preset => {
-        preset.type !== null &&
-          preset.type !== 'purchase' &&
-          preset.type !== 'savings' &&
-          preset.type !== 'capital' &&
-          preset.month === month &&
-          preset.category === UniqueCatThisMonth[i] &&
-          presetByCatArray.push(preset.number);
-      }); // end inner loop
+      if (state.year === '2019' || state.year === 2019) {
+        state.presets.map(preset => {
+          preset.year === undefined ||
+            (preset.year == '2019' &&
+              preset.type !== null &&
+              preset.type !== 'purchase' &&
+              preset.type !== 'savings' &&
+              preset.type !== 'capital' &&
+              preset.month === month &&
+              preset.category === UniqueCatThisMonth[i] &&
+              presetByCatArray.push(preset.number));
+        }); // end inner loop
+      } else {
+        state.presets.map(preset => {
+          preset.year == state.year &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.month === month &&
+            preset.category === UniqueCatThisMonth[i] &&
+            presetByCatArray.push(preset.number);
+        }); // end inner loop
+      }
       SumOfCat = presetByCatArray.reduce((a, b) => a + b, 0);
       let cat = UniqueCatThisMonth[i];
 
@@ -391,7 +436,7 @@ const PresetState = props => {
         SumOfCat,
         cat
       };
-      MajorArray.push(CatAndSumList);
+      SumOfCat !== 0 && MajorArray.push(CatAndSumList);
     }
     dispatch({ type: CATEGORYMONTHSUM, payload: MajorArray });
   };
@@ -400,13 +445,26 @@ const PresetState = props => {
   const calcCategoryByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -419,17 +477,30 @@ const PresetState = props => {
       let CatAndSumList = [];
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
-      state.presets.map(preset => {
-        preset.type !== null &&
-          preset.type !== 'purchase' &&
-          preset.type !== 'savings' &&
-          preset.type !== 'capital' &&
-          preset.category === UniqueCatThisMonth[i] &&
-          presetByCatArray.push(preset.number);
-      }); // end inner loop
+      if (state.year === '2019' || state.year === 2019) {
+        state.presets.map(preset => {
+          preset.year === undefined ||
+            (preset.year == '2019' &&
+              preset.type !== null &&
+              preset.type !== 'purchase' &&
+              preset.type !== 'savings' &&
+              preset.type !== 'capital' &&
+              preset.category === UniqueCatThisMonth[i] &&
+              presetByCatArray.push(preset.number));
+        }); // end inner loop
+      } else {
+        state.presets.map(preset => {
+          preset.year == state.year &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.category === UniqueCatThisMonth[i] &&
+            presetByCatArray.push(preset.number);
+        }); // end inner loop
+      }
       SumOfCat = presetByCatArray.reduce((a, b) => a + b, 0);
       let cat = UniqueCatThisMonth[i];
-
       CatAndSumList = {
         id: i,
         SumOfCat,
@@ -444,13 +515,26 @@ const PresetState = props => {
   const calcCategorySumOnlyByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -480,14 +564,28 @@ const PresetState = props => {
   const calcCategorySumOnlyPosNumByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        preset.number > 0 &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.number > 0 &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          preset.number > 0 &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -499,15 +597,30 @@ const PresetState = props => {
       let SumOfCat;
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
-      state.presets.map(preset => {
-        preset.type !== null &&
-          preset.type !== 'purchase' &&
-          preset.type !== 'savings' &&
-          preset.type !== 'capital' &&
-          preset.number > 0 &&
-          preset.category === UniqueCatThisMonth[i] &&
-          presetByCatArray.push(preset.number);
-      }); // end inner loop
+      if (state.year === '2019' || state.year === 2019) {
+        state.presets.map(preset => {
+          preset.year === undefined ||
+            (preset.year == '2019' &&
+              preset.type !== null &&
+              preset.type !== 'purchase' &&
+              preset.type !== 'savings' &&
+              preset.type !== 'capital' &&
+              preset.number > 0 &&
+              preset.category === UniqueCatThisMonth[i] &&
+              presetByCatArray.push(preset.number));
+        }); // end inner loop
+      } else {
+        state.presets.map(preset => {
+          preset.year == state.year &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.number > 0 &&
+            preset.category === UniqueCatThisMonth[i] &&
+            presetByCatArray.push(preset.number);
+        }); // end inner loop
+      }
       SumOfCat = presetByCatArray.reduce((a, b) => a + b, 0);
       MajorArray.push(SumOfCat);
     }
@@ -518,14 +631,28 @@ const PresetState = props => {
   const calcCategorySumOnlyNegNumByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        preset.number < 0 &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.number < 0 &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          preset.number < 0 &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -537,15 +664,30 @@ const PresetState = props => {
       let SumOfCat;
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
-      state.presets.map(preset => {
-        preset.type !== null &&
-          preset.type !== 'purchase' &&
-          preset.type !== 'savings' &&
-          preset.type !== 'capital' &&
-          preset.number < 0 &&
-          preset.category === UniqueCatThisMonth[i] &&
-          presetByCatArray.push(preset.number);
-      }); // end inner loop
+      if (state.year === '2019' || state.year === 2019) {
+        state.presets.map(preset => {
+          preset.year === undefined ||
+            (preset.year == '2019' &&
+              preset.type !== null &&
+              preset.type !== 'purchase' &&
+              preset.type !== 'savings' &&
+              preset.type !== 'capital' &&
+              preset.number < 0 &&
+              preset.category === UniqueCatThisMonth[i] &&
+              presetByCatArray.push(preset.number));
+        }); // end inner loop
+      } else {
+        state.presets.map(preset => {
+          preset.year == state.year &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.number < 0 &&
+            preset.category === UniqueCatThisMonth[i] &&
+            presetByCatArray.push(preset.number);
+        }); // end inner loop
+      }
       SumOfCat = presetByCatArray.reduce((a, b) => a + b, 0);
       MajorArray.push(Math.abs(SumOfCat));
     }
@@ -556,13 +698,26 @@ const PresetState = props => {
   const setCategoryNameOnlyByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -574,14 +729,28 @@ const PresetState = props => {
   const setCategoryNameOnlyPosNumByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        preset.number > 0 &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.number > 0 &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          preset.number > 0 &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -596,14 +765,28 @@ const PresetState = props => {
   const setCategoryNameOnlyNegNumByYear = () => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map(preset => {
-      preset.type !== null &&
-        preset.type !== 'purchase' &&
-        preset.type !== 'savings' &&
-        preset.type !== 'capital' &&
-        preset.number < 0 &&
-        categoriesArray.push(preset.category);
-    });
+    if (state.year === '2019' || state.year === 2019) {
+      state.presets.map(preset => {
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type !== null &&
+            preset.type !== 'purchase' &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.number < 0 &&
+            categoriesArray.push(preset.category));
+      });
+    } else {
+      state.presets.map(preset => {
+        preset.year == state.year &&
+          preset.type !== null &&
+          preset.type !== 'purchase' &&
+          preset.type !== 'savings' &&
+          preset.type !== 'capital' &&
+          preset.number < 0 &&
+          categoriesArray.push(preset.category);
+      });
+    }
     let UniqueCatThisMonth = categoriesArray.filter(function(item, i, ar) {
       return ar.indexOf(item) === i;
     });
@@ -619,30 +802,28 @@ const PresetState = props => {
     let numberArray = [];
     if (year === '2019' || year === 2019) {
       state.presets.map(preset => {
-        preset.year === undefined &&
-        preset.type !== null &&
-        preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
-        preset.type !== 'savings' && // då de las in före .type las till i backend.
-          preset.type !== 'capital' &&
-          numberArray.push(parseFloat(preset.number));
-        console.log('2019 calling');
+        preset.year === undefined ||
+          (preset.year == '2019' &&
+          preset.type !== null &&
+          preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+          preset.type !== 'savings' && // då de las in före .type las till i backend.
+            preset.type !== 'capital' &&
+            numberArray.push(parseFloat(preset.number)));
       });
     } else {
       state.presets.map(preset => {
-        preset.year === state.year &&
+        preset.year == state.year &&
         preset.type !== null &&
         preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
         preset.type !== 'savings' && // då de las in före .type las till i backend.
           preset.type !== 'capital' &&
           numberArray.push(parseFloat(preset.number));
-        console.log(`${state.year} called`);
       });
     }
 
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (numberArray.length !== 0) {
       const TotalSum = numberArray.reduce((a, b) => a + b, 0);
-      console.log(TotalSum);
       dispatch({ type: YEARSUM, payload: TotalSum });
     } else dispatch({ type: YEARSUM, payload: 0 });
   };
@@ -662,7 +843,7 @@ const PresetState = props => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALCSAVINGS, payload: TotalMonthSum });
     } else {
-      console.log('no savings to calculate ');
+      console.log('no savings to calculate on this user ');
     }
   };
 
@@ -672,10 +853,26 @@ const PresetState = props => {
     let presetArray = [];
     //håller uträknade summan
     let TotalMonthSum = 0;
-    state.presets.map(preset => {
-      if (preset.type === 'savings' && preset.month === state.month)
-        presetArray.push(parseFloat(preset.number));
-    });
+    if (state.year === 2019 || state.year === '2019') {
+      state.presets.map(preset => {
+        if (
+          preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type === 'savings' &&
+            preset.month === state.month)
+        )
+          presetArray.push(parseFloat(preset.number));
+      });
+    } else {
+      state.presets.map(preset => {
+        if (
+          preset.year == state.year &&
+          preset.type === 'savings' &&
+          preset.month === state.month
+        )
+          presetArray.push(parseFloat(preset.number));
+      });
+    }
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
@@ -696,7 +893,24 @@ const PresetState = props => {
 
   // Get presets with savings added in this month and purchases with piggybanksavings added in this month
   const getMonthSavings = month => {
-    dispatch({ type: GET_MONTHSAVINGS, payload: month });
+    if (state.year === '2019' || state.year === 2019) {
+      const filter = state.presets.filter(
+        preset =>
+          preset.year === undefined ||
+          (preset.year == '2019' &&
+            preset.type === 'savings' &&
+            preset.month === month)
+      );
+      dispatch({ type: GET_MONTHSAVINGS, payload: filter });
+    } else {
+      const filter = state.presets.filter(
+        preset =>
+          preset.year == state.year &&
+          preset.type === 'savings' &&
+          preset.month === month
+      );
+      dispatch({ type: GET_MONTHSAVINGS, payload: filter });
+    }
   };
 
   // Get presets with piggybank-savings added this month
@@ -718,6 +932,7 @@ const PresetState = props => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALCCAPITAL, payload: TotalMonthSum });
     } else {
+      dispatch({ type: CALCCAPITAL, payload: 0 });
       // console.log('no capital to calculate ');
     }
   };

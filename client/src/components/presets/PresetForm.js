@@ -13,7 +13,8 @@ const PresetForm = () => {
     cancelEdit,
     sendEdit,
     calcSum,
-    month
+    month,
+    year
   } = presetContext;
   const { setAlert } = alertContext;
 
@@ -25,9 +26,10 @@ const PresetForm = () => {
         name: '',
         number: '',
         month,
+        year,
         category,
         type: 'overhead',
-        piggybank: [{ month, savedAmount: 0 }]
+        piggybank: [{ month, year, savedAmount: 0 }]
       });
     } // eslint-disable-next-line
   }, [edit, month, presets]);
@@ -39,9 +41,10 @@ const PresetForm = () => {
       name: '',
       number: '',
       month,
+      year,
       category: 'Select an category',
       type: 'overhead',
-      piggybank: [{ month, savedAmount: '' }]
+      piggybank: [{ month, year, savedAmount: '' }]
     },
     [presetContext, edit]
   );
@@ -78,6 +81,7 @@ const PresetForm = () => {
         name: '',
         number: '',
         month,
+        year,
         category,
         type: 'overhead'
       });

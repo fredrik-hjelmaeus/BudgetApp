@@ -43,12 +43,13 @@ router.post(
     }
     //validering avklarad
 
-    const { name, number, month, category, type, piggybank } = req.body;
+    const { name, number, month, year, category, type, piggybank } = req.body;
     try {
       const newPreset = new Preset({
         name,
         number,
         month,
+        year,
         category,
         type,
         piggybank,

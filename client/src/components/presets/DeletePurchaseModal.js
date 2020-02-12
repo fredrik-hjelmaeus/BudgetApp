@@ -28,9 +28,10 @@ const DeletePurchaseModal = ({ Item }) => {
         name: Item.name,
         number: newSaving.savedAmount,
         month: newSaving.month,
+        year: newSaving.year,
         category: Item.category,
         type: 'savings', //switch type from purchase to savings)
-        piggybank: [{ month, savedAmount: '' }]
+        piggybank: [{ month, year: '2019', savedAmount: '' }]
       })
     );
     deletePreset(Item._id);
