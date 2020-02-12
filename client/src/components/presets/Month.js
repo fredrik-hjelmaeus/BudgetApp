@@ -53,7 +53,6 @@ const Month = () => {
           <Sum />
           {(monthsavings !== null && <MonthSavingsSummary />) ||
             (monthpiggysavings !== null && <MonthSavingsSummary />)}
-
           <MonthSummary />
         </div>
       </div>

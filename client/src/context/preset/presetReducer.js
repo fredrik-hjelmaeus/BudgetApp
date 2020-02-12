@@ -97,9 +97,7 @@ export default (state, action) => {
     case GET_MONTHSAVINGS:
       return {
         ...state,
-        monthsavingspresets: state.presets.filter(
-          preset => preset.type === 'savings' && preset.month === action.payload
-        )
+        monthsavingspresets: action.payload
       };
     case GET_MONTHPIGGYSAVINGS:
       return {
@@ -111,7 +109,9 @@ export default (state, action) => {
           )
           .map(preset =>
             preset.piggybank.filter(
-              piggybank => piggybank.month === action.payload
+              piggybank =>
+                piggybank.month === action.payload &&
+                piggybank.year == state.year
             )
           )
       };
@@ -253,22 +253,22 @@ export default (state, action) => {
             preset.number > 0 &&
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
-            preset.type !== 'purchase'
+            preset.type !== 'purchase' &&
+            preset.year == state.year // multiple datatypes
         )
       };
     case FILTER_NEGNUMANDMONTH:
       return {
         ...state,
-        filteredmonthandnegnum: state.presets
-          .reverse()
-          .filter(
-            preset =>
-              preset.month === action.payload &&
-              preset.number < 0 &&
-              preset.type !== 'savings' &&
-              preset.type !== 'capital' &&
-              preset.type !== 'purchase'
-          )
+        filteredmonthandnegnum: state.presets.reverse().filter(
+          preset =>
+            preset.month === action.payload &&
+            preset.number < 0 &&
+            preset.type !== 'savings' &&
+            preset.type !== 'capital' &&
+            preset.type !== 'purchase' &&
+            preset.year == state.year // multiple datatypes
+        )
       };
     case FILTER_PRESETS:
       return {

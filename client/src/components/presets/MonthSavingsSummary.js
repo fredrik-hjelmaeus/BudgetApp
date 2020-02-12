@@ -8,11 +8,20 @@ const MonthSavingsSummary = () => {
     presets,
     monthsavingspresets,
     setTotalOfAllPiggybanksThisMonth,
-    month
+    month,
+    year
   } = presetContext;
 
+  // filters out presets that is not this active year. Also special fix to for legacy when no preset.year was set. All old presets in database is set to 2019
+  const yearpresets =
+    year === '2019' || year === 2019
+      ? presets.filter(
+          preset => preset.year === undefined || preset.year == '2019'
+        )
+      : presets.filter(preset => preset.year == year);
+
   // filters out presets that is type purchase and has piggybank savings
-  const monthpurchasewithpiggybank = presets.filter(
+  const monthpurchasewithpiggybank = yearpresets.filter(
     preset => preset.type === 'purchase' && preset.piggybank.length !== 0
   );
 
@@ -67,7 +76,6 @@ const MonthSavingsSummary = () => {
     );
     return MyArray.map(Item => Item);
   };
-
   // If no piggybankdeposit exist the total will be zero. If that is the case, don't render this component at all
   if (
     TotalOfAllPiggybanksThisMonth !== 0 ||

@@ -17,6 +17,10 @@ const PresetSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  year: {
+    type: Number,
+    required: false
+  },
   category: {
     type: String,
     required: true
@@ -30,6 +34,10 @@ const PresetSchema = mongoose.Schema({
       {
         month: {
           type: String,
+          required: false
+        },
+        year: {
+          type: Number,
           required: false
         },
         savedAmount: {

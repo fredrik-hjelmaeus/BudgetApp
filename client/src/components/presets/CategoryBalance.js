@@ -9,15 +9,15 @@ const CategoryBalance = () => {
     month,
     categorymonthsum,
     presets,
-    calcCategoryByMonth
+    calcCategoryByMonth,
+    year
   } = presetContext;
 
   useEffect(() => {
     if (month !== null && presets !== null) {
       calcCategoryByMonth(month);
     } // eslint-disable-next-line
-  }, [month, presets]);
-
+  }, [month, presets, year]);
   return (
     <div className='categorybalance'>
       <h4 className='all-center text-gray'>Balance By Category</h4>

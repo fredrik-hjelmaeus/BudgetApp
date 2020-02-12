@@ -84,6 +84,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     name: Item.name,
     number: Item.number,
     month: Item.month,
+    year: Item.year,
     category: Item.category,
     type: Item.type,
     piggybank: Item.piggybank
@@ -114,6 +115,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
                 ? newPiggybankArray.push({
                     _id: piggybank._id,
                     month: piggybank.month,
+                    year: piggybank.year,
                     savedAmount: piggybank.savedAmount
                   })
                 : null
@@ -127,6 +129,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       name: Item.name,
       number: Item.number,
       month: Item.month,
+      year: Item.year,
       category: Item.category,
       type: Item.type,
       piggybank: newPiggybankArray

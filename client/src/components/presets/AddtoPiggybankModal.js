@@ -24,6 +24,7 @@ const AddtoPiggybankModal = ({ Item }) => {
     name: Item.name,
     number: Item.number,
     month: Item.month,
+    year: Item.year,
     category: Item.category,
     type: 'purchase',
     piggybank: Item.piggybank
@@ -68,6 +69,7 @@ const AddtoPiggybankModal = ({ Item }) => {
   const onSubmit = () => {
     addtoPiggybanks({
       month: presetContext.month,
+      year: presetContext.year,
       savedAmount: parseFloat(piggybank.number)
     });
   };
@@ -85,6 +87,7 @@ const AddtoPiggybankModal = ({ Item }) => {
         name: Item.name,
         number: Item.number,
         month: Item.month,
+        year: Item.year,
         category: Item.category,
         type: 'purchase',
         piggybank: presetContext.piggybanks
