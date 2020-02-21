@@ -12,16 +12,8 @@ const MonthSavingsSummary = () => {
     year
   } = presetContext;
 
-  // filters out presets that is not this active year. Also special fix to for legacy when no preset.year was set. All old presets in database is set to 2019
-  const yearpresets =
-    year === '2019' || year === 2019
-      ? presets.filter(
-          preset => preset.year === undefined || preset.year == '2019'
-        )
-      : presets.filter(preset => preset.year == year);
-
   // filters out presets that is type purchase and has piggybank savings
-  const monthpurchasewithpiggybank = yearpresets.filter(
+  const monthpurchasewithpiggybank = presets.filter(
     preset => preset.type === 'purchase' && preset.piggybank.length !== 0
   );
 
@@ -29,7 +21,9 @@ const MonthSavingsSummary = () => {
   const filteroutbymonth = monthpurchasewithpiggybank.map(purchase =>
     purchase.piggybank.filter(
       piggybank =>
-        piggybank.month === presetContext.month && piggybank.savedAmount !== 0
+        piggybank.month === presetContext.month &&
+        piggybank.savedAmount !== 0 &&
+        piggybank.year == year
     )
   );
 
@@ -49,7 +43,7 @@ const MonthSavingsSummary = () => {
   useEffect(() => {
     setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
     // eslint-disable-next-line
-  }, [month, presets]);
+  }, [month, presets, year]);
 
   const createSavingsItem = () => {
     let i;

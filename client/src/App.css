@@ -1208,6 +1208,28 @@ table th {
   margin-bottom: 1rem;
 }
 
+.specialorder :nth-child(1) {
+  order: 0;
+}
+.specialorder :nth-child(2) {
+  order: 1;
+}
+.specialorder :nth-child(3) {
+  order: 2;
+}
+.specialorder :nth-child(4) {
+  order: 3;
+}
+.specialorder :nth-child(5) {
+  order: 4;
+}
+.specialorder :nth-child(6) {
+  order: 5;
+}
+.specialorder :nth-child(7) {
+  order: 6;
+}
+
 /* Navbar */
 
 .navbar {

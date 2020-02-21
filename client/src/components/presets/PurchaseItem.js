@@ -44,6 +44,7 @@ const PurchaseItem = ({ Item }) => {
     name: Item.name,
     number: Math.abs(Item.number + (Item.number - Item.piggybank)) * -1,
     month: Item.month,
+    year: Item.year,
     category: Item.category,
     type: 'overhead',
     piggybank: 0
@@ -53,6 +54,7 @@ const PurchaseItem = ({ Item }) => {
     name: Item.name,
     number: Math.abs(Item.number),
     month: Item.month,
+    year: Item.year,
     category: Item.category,
     type: 'overhead',
     piggybank: 0
