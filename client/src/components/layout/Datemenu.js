@@ -1,15 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
-import DateItem from './DateItem';
+import DateItemMobile from './DateItemMobile';
+import DateItemWeb from './DateItemWeb';
 
 const Datemenu = () => {
   const presetContext = useContext(PresetContext);
   const { year, setYear, addMonth, month } = presetContext;
 
-  const [LocalMonth, setLocalMonth] = useState(null);
-  const [prevYear, setPrevYear] = useState(null);
-  const [nextYear, setNextYear] = useState(null);
-  const [DateList, setDateList] = useState([
+  //const [LocalMonth, setLocalMonth] = useState(null);
+  /*  const [prevYear, setPrevYear] = useState(null);
+  const [nextYear, setNextYear] = useState(null); */
+  /* const [DateList, setDateList] = useState([
     'year',
     'January',
     'February',
@@ -23,32 +24,31 @@ const Datemenu = () => {
     'October',
     'November',
     'December'
-  ]);
+  ]); */
   const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth
   });
 
   useEffect(() => {
-    year === null && setYear('2019');
-    year === null && setLocalMonth('2019');
-
-    month !== null && setLocalMonth(month);
+    // year === null && setYear('2019');
+    // year === null && setLocalMonth('2019');
+    // month !== null && setLocalMonth(month);
+    // LocalMonth === null && setLocalMonth('2019');
     //year === '2019' && setLocalMonth(year);
-    LocalMonth === null && setLocalMonth('2019');
-    year !== null && setPrevYear(parseInt(year - 1).toString());
-    year !== null && setNextYear((parseInt(year) + parseInt(1)).toString());
+    /* year !== null && setPrevYear(parseInt(year - 1).toString());
+    year !== null && setNextYear((parseInt(year) + parseInt(1)).toString()); */
   }, [
     year,
     setYear,
-    setLocalMonth,
-    setNextYear,
-    setPrevYear,
-    month,
-    LocalMonth
+    // setLocalMonth,
+    // setNextYear,
+    // setPrevYear,
+    month
+    // LocalMonth
   ]);
 
-  const onClick = e => {
+  /* const onClick = e => {
     if (e.target.value !== undefined) {
       if (isNaN(e.target.value)) {
         // month pressed
@@ -88,8 +88,8 @@ const Datemenu = () => {
         }
       }
     }
-  };
-  const adjustDateList = () => {
+  }; */
+  /* const adjustDateList = () => {
     console.log(DateList.length);
     let newDateList = DateList;
     console.log(`initial: ${newDateList}`);
@@ -99,7 +99,7 @@ const Datemenu = () => {
     console.log(`filteroutnulls: ${cleanedDateList}`);
     const activeIndex = cleanedDateList.indexOf(LocalMonth);
     console.log(`activeIndex: ${activeIndex}`);
-    console.log(`LocalMonth: ${LocalMonth}`);
+    //console.log(`LocalMonth: ${LocalMonth}`);
     let i;
     let shiftedObj;
     const shiftLeftDateList = (arr, objIndex) => {
@@ -145,7 +145,7 @@ const Datemenu = () => {
     console.log(`smallDateList after 2nd push: ${smallDateList}`);
 
     setDateList(smallDateList);
-  };
+  }; */
 
   useEffect(() => {
     const debouncedHandleResize = debounce(function handleResize() {
@@ -153,25 +153,6 @@ const Datemenu = () => {
         height: window.innerHeight,
         width: window.innerWidth
       });
-      if (window.innerWidth < 700) {
-        DateList.length > 6 && adjustDateList();
-      } else {
-        setDateList([
-          'year',
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December'
-        ]);
-      }
     }, 1000);
 
     window.addEventListener('resize', debouncedHandleResize);
@@ -196,7 +177,7 @@ const Datemenu = () => {
     //console.log('Mobile');
     /* The viewport is less than, or equal to, 700 pixels wide */
 
-    const createDateItems = () => {
+    /*  const createDateItems = () => {
       let i;
       let MyArray = [];
       for (i = 0; i < 5; i++) {
@@ -227,10 +208,11 @@ const Datemenu = () => {
         }
       }
       return MyArray.map(Item => Item);
-    };
+    }; */
 
     return (
-      <div className='datemenu specialorder'>
+      {
+        /* <div className='datemenu specialorder'>
         <ul>
           <button
             onClick={onClick}
@@ -261,14 +243,16 @@ const Datemenu = () => {
             )}
           </button>
         </ul>
-      </div>
+      </div> */
+      },
+      (<DateItemMobile />)
     );
   } else {
     // console.log('Web');
     /* The viewport is greater than 700 pixels wide */
 
     return (
-      <div className='datemenu'>
+      /*   <div className='datemenu'>
         <ul>
           <button
             onClick={onClick}
@@ -488,6 +472,8 @@ const Datemenu = () => {
           </button>
         </ul>
       </div>
+    ); */
+      <DateItemWeb />
     );
   }
 };

@@ -30,6 +30,12 @@ body {
   padding-bottom: 20vh;
 }
 
+@media (max-width: 700px) {
+  body {
+    background-color: var(--light-color);
+  }
+}
+
 a {
   color: var(--primary-color);
   text-decoration: none;
@@ -354,6 +360,26 @@ img {
 .btn-Datemenu:focus,
 .btn-Datemenu:hover {
   color: var(--dark-color);
+}
+
+@media (max-width: 700px) {
+  .btn-Datemenu {
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+.btn-Datemenu-mobilefocus {
+  color: #fff;
+  background: var(--dark-color);
+  border: var(--dark-color);
+  font-weight: bold;
+  font-size: 1rem;
+  outline: none;
+  border-radius: 0.5rem;
+  padding: 0.0625rem 1.25rem;
+  margin: 0;
+  justify-self: center;
 }
 
 .btn-link {
@@ -963,13 +989,25 @@ input::placeholder {
   padding: 2rem 9.5rem 2rem 3rem;
   margin: 0;
 }
+@media (max-width: 700px) {
+  .yearGridleft {
+    bosrder: red 1px solid;
+    padding: 0rem 3rem 0rem 2rem;
+  }
+}
 
 .yearGridleft h1 {
   font-size: 67px;
   margin-bottom: 16px;
   font-weight: Semibold;
 }
-
+@media (max-width: 700px) {
+  .yearGridleft h1 {
+    font-size: 62px;
+    font-weight: 500;
+    margin-bottom: 0px;
+  }
+}
 .yearGridleft h4 {
   font-size: 20px;
   margin-bottom: 15rem;
@@ -1204,8 +1242,26 @@ table th {
   padding: 0.7rem 2rem;
   z-index: 1;
   width: 100%;
+  borfder: 1px solid green;
   opacity: 1;
   margin-bottom: 1rem;
+}
+@media (max-width: 700px) {
+  .datemenu {
+    display: grid;
+    grid-template-columns: 1rem 100px auto 100px 1rem;
+    justify-items: center;
+    padding: 0;
+    margin-bottom: 0;
+  }
+  .prev {
+    justify-self: start;
+    borfder: 1px solid red;
+  }
+  .next {
+    justify-self: end;
+    borfder: 1px solid blue;
+  }
 }
 
 .specialorder :nth-child(1) {
@@ -1288,7 +1344,7 @@ table th {
 }
 
 /* Iphone 6/7/8 */
-@media (max-width: 780px) {
+@media (max-width: 700px) {
   .navbar {
     display: flex;
     align-items: center;
@@ -1386,7 +1442,7 @@ table th {
   opacity: 0.8;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 700px) {
   .footer__cols {
     display: none;
     display: flex;
