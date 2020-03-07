@@ -8,6 +8,8 @@ import Expense from './Expense';
 import Income from './Income';
 import YearCategoryBalance from './YearCategoryBalance';
 import YearGridLeft from './YearGridLeft';
+import YearSummaryMenu from './YearSummaryMenu';
+import YearTitle from './YearTitle';
 
 const Year = () => {
   const presetContext = useContext(PresetContext);
@@ -73,7 +75,10 @@ const Year = () => {
     <Fragment>
       <Datemenu />
       <div className='grid-2'>
-        <YearGridLeft />
+        <div>
+          <YearTitle />
+          <YearSummaryMenu />
+        </div>
         <div>
           {yearsummary === 'savings' && <Savings />}
           {yearsummary === 'expense' && <Expense />}

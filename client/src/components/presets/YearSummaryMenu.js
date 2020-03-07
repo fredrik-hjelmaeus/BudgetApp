@@ -18,11 +18,6 @@ const YearSummaryMenu = () => {
 
   return (
     <div className='card bg-light yearGridleft'>
-      <h1 className='x-large'>{year}</h1>
-      <h4>
-        Yearly summary and comparison analysis with last year. Here you can also
-        see differences in income/costs over the year.
-      </h4>
       <span>
         <button
           value='balance'
