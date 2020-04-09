@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import DateItemMobile from './DateItemMobile';
 import DateItemWeb from './DateItemWeb';
+import CssContext from '../../context/css/cssContext';
 
 const Datemenu = () => {
-  const [dimensions, setDimensions] = useState({
+  const cssContext = useContext(CssContext);
+  const { dimensions, setDimensions } = cssContext;
+  /*  const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth
-  });
+  }); */
   useEffect(() => {
     const debouncedHandleResize = debounce(function handleResize() {
-      setDimensions({
+      /* setDimensions({
         height: window.innerHeight,
         width: window.innerWidth
-      });
+      }); */
+      setDimensions();
     }, 1000);
 
     window.addEventListener('resize', debouncedHandleResize);

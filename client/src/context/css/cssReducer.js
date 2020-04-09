@@ -2,7 +2,8 @@ import {
   HIDE_NAVBAR,
   TOGGLE_MODAL,
   SET_YEARSUMMARY,
-  SET_MODAL_PROPS
+  SET_MODAL_PROPS,
+  SET_DIMENSIONS
 } from '../types';
 
 export default (state, action) => {
@@ -26,6 +27,14 @@ export default (state, action) => {
       return {
         ...state,
         yearsummary: action.payload
+      };
+    case SET_DIMENSIONS:
+      return {
+        ...state,
+        dimensions: {
+          height: window.innerHeight,
+          width: window.innerWidth
+        }
       };
     default:
       return state;

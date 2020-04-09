@@ -982,43 +982,43 @@ input::placeholder {
   margin-top: 2rem;
 }
 
-/* YearGridLeft */
-.yearGridleft {
+/* yearTitle */
+.yearTitle {
   border: none;
   color: var(--primary-color);
   padding: 2rem 9.5rem 2rem 3rem;
   margin: 0;
 }
 @media (max-width: 700px) {
-  .yearGridleft {
-    bosrder: red 1px solid;
+  .yearTitle {
+    bordser: red 1px solid;
     padding: 0rem 3rem 0rem 2rem;
   }
 }
 
-.yearGridleft h1 {
+.yearTitle h1 {
   font-size: 67px;
   margin-bottom: 16px;
   font-weight: Semibold;
 }
 @media (max-width: 700px) {
-  .yearGridleft h1 {
+  .yearTitle h1 {
     font-size: 62px;
     font-weight: 500;
     margin-bottom: 0px;
   }
 }
-.yearGridleft h4 {
+.yearTitle h4 {
   font-size: 20px;
   margin-bottom: 15rem;
 }
 
-.yearGridleft span {
+.yearTitle span {
   display: flex;
   align-items: flex-start;
 }
 
-.yearGridleft button {
+.yearTitle button {
   text-align: left;
   font-weight: bold;
   font-size: 20px;
@@ -1030,6 +1030,85 @@ input::placeholder {
   padding-right: 1rem;
 }
 
+/* yearSummaryMenu */
+.yearSummaryMenu {
+  border: none;
+  color: var(--primary-color);
+  padding: 2rem 9.5rem 2rem 3rem;
+  margin: 0;
+}
+@media (max-width: 700px) {
+  .yearSummaryMenu {
+    bordder: red 1px solid;
+    padding: 0rem 3rem 0rem 2rem;
+  }
+}
+
+.yearSummaryMenu h1 {
+  font-size: 67px;
+  margin-bottom: 16px;
+  font-weight: Semibold;
+}
+@media (max-width: 700px) {
+  .yearSummaryMenu h1 {
+    font-size: 62px;
+    font-weight: 500;
+    margin-bottom: 0px;
+  }
+}
+.yearSummaryMenu h4 {
+  font-size: 20px;
+  margin-bottom: 15rem;
+}
+
+.yearSummaryMenu span {
+  display: flex;
+  align-items: flex-start;
+}
+
+.yearSummaryMenu button {
+  text-align: left;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 1.3rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  padding-right: 1rem;
+}
+
+.YearSummaryMenuMinimizedButtons {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .balance,
+  .expense,
+  .income,
+  .savings {
+    display: none;
+  }
+  .YearSummaryMenuMinimizedButtonsContainer {
+    margin: auto;
+    padding-bottom: 2rem;
+    width: 40%;
+  }
+  .YearSummaryMenuMinimizedButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  .YearSummaryMenuMinimizedButtons > button {
+    border: 1px solid red;
+    margin: auto;
+    padding: 1rem;
+  }
+  .YearSummaryMinimizedButtonRectangle {
+    background-color: #000;
+    width: 6px;
+    height: 6px;
+  }
+}
 /* Logo */
 
 .Logo {
@@ -1232,6 +1311,26 @@ table th {
   padding: 14px;
   outline: none;
 }
+
+/* Swipe Pages */
+.page1 {
+  position: absolute;
+  top: 0;
+  /*  left: 0;*/
+  width: 100vw;
+  height: 100vh;
+  background-color: red;
+}
+
+.page2 {
+  position: absolute;
+  top: 0;
+  /* left: 100%;*/
+  width: 100vw;
+  height: 100vh;
+  background-color: yellow;
+}
+
 /* Datemenu */
 
 .datemenu {

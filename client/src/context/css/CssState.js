@@ -5,7 +5,8 @@ import {
   HIDE_NAVBAR,
   TOGGLE_MODAL,
   SET_YEARSUMMARY,
-  SET_MODAL_PROPS
+  SET_MODAL_PROPS,
+  SET_DIMENSIONS
 } from '../types';
 
 const CssState = props => {
@@ -13,7 +14,11 @@ const CssState = props => {
     navbar: true,
     modal: '',
     modalprops: null,
-    yearsummary: 'balance'
+    yearsummary: 'balance',
+    dimensions: {
+      height: window.innerHeight,
+      width: window.innerWidth
+    }
   };
 
   const [state, dispatch] = useReducer(cssReducer, initialState);
@@ -34,6 +39,11 @@ const CssState = props => {
     dispatch({ type: SET_YEARSUMMARY, payload: yearsummary });
   };
 
+  // Set dimensions
+  const setDimensions = () => {
+    dispatch({ type: SET_DIMENSIONS });
+  };
+
   return (
     <CssContext.Provider
       value={{
@@ -41,10 +51,12 @@ const CssState = props => {
         modal: state.modal,
         modalprops: state.modalprops,
         yearsummary: state.yearsummary,
+        dimensions: state.dimensions,
         toggleNavbar,
         toggleModal,
         setYearSummary,
-        setModalprops
+        setModalprops,
+        setDimensions
       }}
     >
       {props.children}
