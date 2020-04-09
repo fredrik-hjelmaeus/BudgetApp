@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
@@ -32,7 +32,7 @@ const Year = () => {
     calcAllMonthSum
   } = presetContext;
 
-  const { yearsummary } = cssContext;
+  const { yearsummary, dimensions } = cssContext;
   // loads presets from database when year-variable is updated
   useEffect(() => {
     getPresets();
@@ -71,13 +71,77 @@ const Year = () => {
     // eslint-disable-next-line
   }, [presets, year]);
 
+  const [cssp2display, setCssp2display] = useState('none');
+  const [startingX, setStartingX] = useState('');
+  const [movingX, setMovingX] = useState('');
+
+  let change;
+  let cssLeftChange = 0;
+  let cssPage2LeftChange = '100%';
+  //let cssp2display;
+  const onTouchStart = e => {
+    setStartingX(e.touches[0].clientX);
+    setCssp2display('block');
+    // console.log(`startingX:${startingX}`);
+  };
+
+  const onTouchMove = e => {
+    setMovingX(e.touches[0].clientX);
+    change = parseFloat(startingX) - parseFloat(movingX);
+    cssLeftChange = `-${change}px`;
+    const ScreenW = window.screen.width;
+    const page2change = parseFloat(ScreenW) - parseFloat(change);
+    const cssPage2LeftChange = `${page2change}px`;
+    e.preventDefault();
+    if (change < 0) {
+      return;
+    }
+    console.log(movingX);
+  };
+
+  const onTouchEnd = e => {
+    change = parseFloat(startingX) - parseFloat(e.changedTouches[0].clientX);
+
+    const threshold = window.screen.width / 3;
+    if (change < threshold) {
+      setCssp2display('none');
+      cssLeftChange = 0;
+      cssPage2LeftChange = '100%';
+    } else {
+      setCssp2display('block');
+      cssLeftChange = '-100%';
+      cssPage2LeftChange = '0';
+    }
+    console.log(`startingX:${startingX}`);
+    console.log(`Change:${change}`);
+    // console.log(`threshold: ${window.screen.width / 3}`);
+    console.log(`changedtouches: ${e.changedTouches[0].clientX}`);
+    console.log(e.changedTouches[0].clientX);
+  };
+
   return (
     <Fragment>
-      <Datemenu />
+      <div
+        className='page1'
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        style={{ left: cssLeftChange }}
+      >
+        Page1
+      </div>
+      <div
+        className='page2'
+        style={{ left: cssPage2LeftChange, display: cssp2display }}
+      >
+        Page2
+      </div>
+
+      {/*    <Datemenu />
       <div className='grid-2'>
         <div>
           <YearTitle />
-          <YearSummaryMenu />
+          {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
         <div>
           {yearsummary === 'savings' && <Savings />}
@@ -85,8 +149,9 @@ const Year = () => {
           {yearsummary === 'balance' && <YearBalance />}
           {yearsummary === 'category' && <YearCategoryBalance />}
           {yearsummary === 'income' && <Income />}
+          {dimensions.width < 700 && <YearSummaryMenu />}
         </div>
-      </div>
+      </div> */}
     </Fragment>
   );
 };

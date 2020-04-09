@@ -1,23 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import CssContext from '../../context/css/cssContext';
 import PresetContext from '../../context/preset/presetContext';
 const YearSummaryMenu = () => {
   const cssContext = useContext(CssContext);
   const presetContext = useContext(PresetContext);
-  const { year } = presetContext;
   const { yearsummary, setYearSummary } = cssContext;
 
-  // sets css color when button is pressed
+  useEffect(() => {
+    yearsummary === undefined && console.log('error');
+  }, [yearsummary]);
+  // sets css color when button is pressed and creates class for unselected that is used in css to hide buttons that ar not active in mobile-size
   const textcolor = input =>
-    yearsummary === input ? 'text-dark' : 'text-gray';
+    yearsummary === input ? `text-dark` : `text-gray ${input}`;
+
+  // sets css color depending on active tab
+  const fillcolor = input => (yearsummary === input ? '#2b2b2b' : '#8c8c8c');
 
   // sets contextvariable setYearSummary so right grid on year is switched
   const onClick = e => {
+    console.log(e.target.value);
     setYearSummary(e.target.value);
   };
 
   return (
-    <div className='card bg-light yearGridleft'>
+    <div className='card bg-light yearSummaryMenu'>
       <span>
         <button
           value='balance'
@@ -84,6 +90,31 @@ const YearSummaryMenu = () => {
           Savings Summary
         </button>
       </span>
+      {/*Mobile Buttons */}
+      <div className='YearSummaryMenuMinimizedButtonsContainer'>
+        <div className='YearSummaryMenuMinimizedButtons '>
+          <button
+            value='balance'
+            className='YearSummaryMinimizedButtonRectangle'
+            onClick={onClick}
+          ></button>
+          <button
+            value='expense'
+            className='YearSummaryMinimizedButtonRectangle'
+            onClick={onClick}
+          ></button>
+          <button
+            value='income'
+            className='YearSummaryMinimizedButtonRectangle'
+            onClick={onClick}
+          ></button>
+          <button
+            value='savings'
+            className='YearSummaryMinimizedButtonRectangle'
+            onClick={onClick}
+          ></button>
+        </div>
+      </div>
     </div>
   );
 };
