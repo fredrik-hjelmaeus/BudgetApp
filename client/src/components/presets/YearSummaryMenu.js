@@ -10,20 +10,20 @@ const YearSummaryMenu = () => {
     yearsummary === undefined && console.log('error');
   }, [yearsummary]);
   // sets css color when button is pressed and creates class for unselected that is used in css to hide buttons that ar not active in mobile-size
-  const textcolor = input =>
+  const textcolor = (input) =>
     yearsummary === input ? `text-dark` : `text-gray ${input}`;
 
   // sets css color depending on active tab
-  const fillcolor = input => (yearsummary === input ? '#2b2b2b' : '#8c8c8c');
+  const fillcolor = (input) => (yearsummary === input ? '#2b2b2b' : '#8c8c8c');
 
   // sets contextvariable setYearSummary so right grid on year is switched
-  const onClick = e => {
+  const onClick = (e) => {
     console.log(e.target.value);
     setYearSummary(e.target.value);
   };
 
   return (
-    <div className='card bg-light yearSummaryMenu'>
+    <div className='container card bg-light yearSummaryMenu '>
       <span>
         <button
           value='balance'
