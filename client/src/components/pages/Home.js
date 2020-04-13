@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, Fragment } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import AuthContext from '../../context/auth/authContext';
 import Month from '../presets/Month';
@@ -21,9 +21,7 @@ const Home = () => {
     // eslint-disable-next-line
   }, []);
 
-  return (
-    <div className='container'>{month === null ? <Year /> : <Month />}</div>
-  );
+  return <Fragment>{month === null ? <Year /> : <Month />}</Fragment>;
 };
 
 export default Home;

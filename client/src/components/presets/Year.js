@@ -71,34 +71,49 @@ const Year = () => {
     // eslint-disable-next-line
   }, [presets, year]);
 
+  //Swipe Dev that is failed atm /* in row signifies parts that were active
+
+  /*   
   const [cssp1display, setCssp1display] = useState('block');
   const [cssp2display, setCssp2display] = useState('none');
+  const [cssPage1width, setCssPage1width] = useState('100vw');
+  const [cssPage2width, setCssPage2width] = useState('100vw');
   const [startingX, setStartingX] = useState('');
-  const [movingX, setMovingX] = useState('');
+  const [movingX, setMovingX] = useState(''); 
+*/
 
-  let change;
+  /*   let change;
   let cssLeftChange = 0;
-  let cssPage2LeftChange = '100%';
+  let cssPage2LeftChange = '100%'; 
+*/
   //let cssp2display;
-  const onTouchStart = (e) => {
+
+  /* const onTouchStart = (e) => {
     setStartingX(e.touches[0].clientX);
     setCssp2display('block');
     // console.log(`startingX:${startingX}`);
-  };
+  }; 
+*/
 
-  const onTouchMove = (e) => {
+  /*   const onTouchMove = (e) => {
     setMovingX(e.touches[0].clientX);
-    change = parseFloat(startingX) - parseFloat(movingX);
-    cssLeftChange = `-${change}px`;
-    const ScreenW = window.screen.width;
-    const page2change = parseFloat(ScreenW) - parseFloat(change);
-    const cssPage2LeftChange = `${page2change}px`;
+    //change = parseFloat(startingX) - parseFloat(movingX);
+
+    //cssLeftChange = `-${change}px`;
+    // const ScreenW = window.screen.width;
+
+    //const page2change = parseFloat(ScreenW) - parseFloat(change);
+    // cssPage2LeftChange = `${page2change}px`;
+    //console.log(change);
     e.preventDefault();
-    if (change < 0) {
+     if (change < 0) {
       return;
-    }
-    //console.log(movingX);
-  };
+    } 
+    console.log(movingX);
+  }; 
+*/
+
+  /*  
   // screenX = 2474-2194 = 280     touchend = 2474-screenX * (100/224)
   //screen width 375     touchstart = startingX * (100/375)
   const onTouchEnd = (e) => {
@@ -107,10 +122,10 @@ const Year = () => {
     let touchend = parseFloat(2474) - parseFloat(e.changedTouches[0].screenX);
     touchend = touchend * (100 / 280);
     touchend = parseFloat(100) - parseFloat(touchend);
-    console.log(`touchend: ${touchend} %`);
+    //console.log(`touchend: ${touchend} %`);
 
     let touchstart = parseFloat(startingX) * parseFloat(100 / 375);
-    console.log(`touchstart: ${touchstart} %`);
+    //console.log(`touchstart: ${touchstart} %`);
 
     //percentchange
     let change = parseFloat(touchstart) - parseFloat(touchend);
@@ -132,34 +147,44 @@ const Year = () => {
       cssPage2LeftChange = '0';
     }
     // console.log(`startingX:${startingX}`);
-    console.log(`Change:${change}`);
+    // console.log(`Change:${change}`);
     //console.log(`threshold: ${window.screen.width / 3}`);
     //console.log(`changedtouches: ${e.changedTouches[0].clientX}`);
     //console.log(e.changedTouches[0].clientX);
     // console.log(movingX);
-  };
+  }; 
+*/
 
   return (
     <Fragment>
+      {/*
       <div
         className='page1'
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
-        style={{ left: cssLeftChange, display: cssp1display }}
+        style={{
+          left: cssLeftChange,
+          display: cssp1display,
+          width: cssPage1width,
+        }}
       >
         Page1
       </div>
       <div
         className='page2'
-        style={{ left: cssPage2LeftChange, display: cssp2display }}
+        style={{
+          left: cssPage2LeftChange,
+          display: cssp2display,
+          width: cssPage2width,
+        }}
       >
         Page2
-      </div>
+      </div> */}
 
-      {/*    <Datemenu />
+      <Datemenu />
       <div className='grid-2'>
-        <div>
+        <div className='container'>
           <YearTitle />
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
@@ -171,7 +196,7 @@ const Year = () => {
           {yearsummary === 'income' && <Income />}
           {dimensions.width < 700 && <YearSummaryMenu />}
         </div>
-      </div> */}
+      </div>
     </Fragment>
   );
 };

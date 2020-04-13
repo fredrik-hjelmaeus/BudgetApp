@@ -5,7 +5,7 @@ const YearTitle = () => {
   const { year } = presetContext;
 
   return (
-    <div className='card bg-light yearTitle'>
+    <div className='bg-light yearTitle '>
       <h1 className='x-large'>{year}</h1>
       <h4>
         Yearly summary and comparison analysis with last year. Here you can also
