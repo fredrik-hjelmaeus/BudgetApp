@@ -196,6 +196,18 @@ img {
   border: 1px solid var(--gray-color);
 }
 
+.expense__card {
+  background: #ffffff;
+  max-width: 555px;
+  height: auto;
+  margin: auto;
+  margin-top: 20vh;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+  border: 1px solid var(--gray-color);
+}
+
 .yearbalance__card {
   background: #ffffff;
   max-width: 555px;
@@ -211,6 +223,17 @@ img {
   .yearbalance__card {
     background: #ffffff;
     max-width: 100vw;
+    height: auto;
+    margin: auto;
+    margin-top: 0;
+    overflow: hidden;
+    padding: 1rem;
+    position: relative;
+    border: 1px solid var(--gray-color);
+  }
+  .expense__card {
+    background: #ffffff;
+    max-width: 90vw;
     height: auto;
     margin: auto;
     margin-top: 0;
@@ -1184,12 +1207,13 @@ input::placeholder {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
   .YearSummaryMenuMinimizedButtons > button {
-    border: 1px solid red;
+    bodrder: 1px solid red;
+
     margin: auto;
-    padding: 1rem;
+    padding: 0rem;
   }
+
   .YearSummaryMinimizedButtonRectangle {
-    background-color: #000;
     width: 6px;
     height: 6px;
   }
@@ -1302,6 +1326,14 @@ table th {
   top: 134px;
   left: 137px;
   font-size: 20px;
+}
+@media (max-width: 700px) {
+  .donuttitle {
+    position: absolute; /* relative to .card_yeargridrigth*/
+    top: 95px;
+    left: 70px;
+    font-size: 16px;
+  }
 }
 
 /* Modal */

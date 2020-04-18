@@ -92,25 +92,45 @@ const YearSummaryMenu = () => {
       </span>
       {/*Mobile Buttons */}
       <div className='YearSummaryMenuMinimizedButtonsContainer'>
-        <div className='YearSummaryMenuMinimizedButtons '>
+        <div className='YearSummaryMenuMinimizedButtons'>
           <button
             value='balance'
             className='YearSummaryMinimizedButtonRectangle'
+            style={
+              yearsummary === 'balance'
+                ? { backgroundColor: '#000000' }
+                : { backgroundColor: '#8c8c8c' }
+            }
             onClick={onClick}
           ></button>
           <button
             value='expense'
             className='YearSummaryMinimizedButtonRectangle'
+            style={
+              yearsummary === 'expense'
+                ? { backgroundColor: '#000000' }
+                : { backgroundColor: '#8c8c8c' }
+            }
             onClick={onClick}
           ></button>
           <button
             value='income'
             className='YearSummaryMinimizedButtonRectangle'
+            style={
+              yearsummary === 'income'
+                ? { backgroundColor: '#000000' }
+                : { backgroundColor: '#8c8c8c' }
+            }
             onClick={onClick}
           ></button>
           <button
             value='savings'
             className='YearSummaryMinimizedButtonRectangle'
+            style={
+              yearsummary === 'savings'
+                ? { backgroundColor: '#000000' }
+                : { backgroundColor: '#8c8c8c' }
+            }
             onClick={onClick}
           ></button>
         </div>

@@ -68,7 +68,7 @@ const Navbar = ({ title, icon }) => {
                 width: '66px',
                 padding: '0',
                 position: 'relative',
-                top: '0.75rem'
+                top: '0.75rem',
               }}
             />{' '}
             <span className='navbar__title'> {title}</span>
@@ -82,12 +82,12 @@ const Navbar = ({ title, icon }) => {
 
 Navbar.propTypes = {
   title: PropTypes.string.isRequired,
-  icon: PropTypes.string
+  icon: PropTypes.string,
 };
 
 Navbar.defaultProps = {
   title: 'Budget App',
-  icon: 'fas fa-money-bill-wave-alt'
+  icon: 'fas fa-money-bill-wave-alt',
 };
 
 export default Navbar;
