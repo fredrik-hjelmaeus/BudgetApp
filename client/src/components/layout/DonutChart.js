@@ -1,41 +1,50 @@
-import React, { useEffect, Fragment, useState } from 'react';
+import React, { useEffect, Fragment, useState, useContext } from 'react';
 import Chart from 'react-apexcharts';
+import CssContext from '../../context/css/cssContext';
 
 const DonutChart = ({ sums, names, colors }) => {
+  const cssContext = useContext(CssContext);
+  const { dimensions } = cssContext;
   useEffect(() => {
     sums &&
       names &&
       setOptions({
         chart: {
           toolbar: {
-            show: false
+            show: false,
           },
           sparkline: {
-            enabled: true
+            enabled: true,
           },
-          background: '#fff'
+          background: '#fff',
         },
         labels: names,
         legend: {
           show: true,
-          fontSize: '10px'
+          fontSize: '10px',
         },
         colors,
         dataLabels: {
-          enabled: true
-        }
+          enabled: true,
+        },
       });
     sums && names && setSeries(sums);
-  }, [sums, names, colors]);
+  }, [sums, names, colors, dimensions]);
 
   // console.log(categorysumonlyposnumbyyear, categorynameonlyposnumbyyear);
   const [options, setOptions] = useState({});
+
   const [series, setSeries] = useState([]);
 
   return (
     <Fragment>
       {' '}
-      <Chart options={options} series={series} type='donut' height='305px' />
+      <Chart
+        options={options}
+        series={series}
+        type='donut'
+        height={dimensions.width > 700 ? '305px' : '205px'}
+      />
     </Fragment>
   );
 };
