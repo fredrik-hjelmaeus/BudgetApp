@@ -6,7 +6,7 @@ const Expense = () => {
   const presetContext = useContext(PresetContext);
   const {
     categorysumonlyposnumbyyear,
-    categorynameonlyposnumbyyear
+    categorynameonlyposnumbyyear,
   } = presetContext;
 
   const YearExpense = categorysumonlyposnumbyyear.reduce((a, b) => a + b, 0);
@@ -34,12 +34,12 @@ const Expense = () => {
     '#76ed98',
     '#76edc2',
     '#67cec3',
-    '#6ec5d2'
+    '#6ec5d2',
   ];
 
   return (
     <div className='year-bg'>
-      <div className='card_yeargridrigth bold'>
+      <div className='expense__card bold'>
         <div style={{ margin: '0 0 1rem 0' }}>
           <DonutChart
             sums={categorysumonlyposnumbyyear}

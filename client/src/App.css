@@ -179,6 +179,9 @@ img {
 }
 
 .card-piggy {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
   border: #ccc 2px solid;
   margin: 0.5rem 0;
@@ -206,6 +209,7 @@ img {
   padding: 1rem;
   position: relative;
   border: 1px solid var(--gray-color);
+  font-weight: bold;
 }
 
 .yearbalance__card {
@@ -241,6 +245,35 @@ img {
     padding: 1rem;
     position: relative;
     border: 1px solid var(--gray-color);
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+/* Savings */
+.savings__piggyiconandtitle {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 2rem;
+  margin: 0.5rem;
+  white-space: nowrap;
+}
+.savings__piggyicon {
+  padding: 0 0.5rem;
+}
+@media (max-width: 700px) {
+  .savings__piggyiconandtitle {
+    padding: 0 2rem;
+    margin: 0.5rem;
+  }
+  .savings__piggyicon {
+    width: 37px;
+    padding: 0rem 0.5rem;
   }
 }
 

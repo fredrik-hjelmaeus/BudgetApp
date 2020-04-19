@@ -38,7 +38,7 @@ const Expense = () => {
   const yearmonthavg = parseInt(parseFloat(YearExpense / 12));
   return (
     <div className='year-bg'>
-      <div className='expense__card bold'>
+      <div className='expense__card'>
         <div style={{ margin: '0 0 1rem 0' }}>
           <DonutChart
             sums={categorysumonlynegnumbyyear}
