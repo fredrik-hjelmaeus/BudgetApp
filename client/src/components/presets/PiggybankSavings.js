@@ -13,7 +13,7 @@ const PiggybankSavings = () => {
   return (
     <Fragment>
       {purchases &&
-        purchases.map(purchase => (
+        purchases.map((purchase) => (
           <PiggyBankSavingItem key={purchase._id} purchase={purchase} />
         ))}
     </Fragment>

@@ -7,7 +7,7 @@ const Savings = () => {
   const presetContext = useContext(PresetContext);
   return (
     <div className='year-bg'>
-      <div className='card_yeargridrigth bold'>
+      <div className='expense__card bold'>
         <div className='flexcolumn '>
           <div className='flexrow-2 borderdivider'>
             <div>General Savings: </div>
@@ -22,9 +22,9 @@ const Savings = () => {
               {presetContext.capital}
             </div>
           </div>
-          <div className='flexrow-2 all-center px-2 m '>
+          <div className='flexrow-2 savings__piggyiconandtitle'>
             <div>
-              <img src={piggyicon} alt='' className='px' />{' '}
+              <img src={piggyicon} alt='' className='savings__piggyicon' />{' '}
             </div>{' '}
             <div>Piggybank Purchase Savings</div>
           </div>
