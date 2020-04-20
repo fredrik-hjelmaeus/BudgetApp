@@ -26,7 +26,7 @@ const Month = () => {
     monthsavings,
     getMonthSavings,
     getMonthPiggySavings,
-    monthpiggysavings
+    monthpiggysavings,
   } = presetContext;
 
   useEffect(() => {
@@ -44,12 +44,19 @@ const Month = () => {
       {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
       <Datemenu />
       <div className='monthgrid'>
-        <div>
+        <div className='monthgrid__presetformOrder'>
           <PresetForm />
+        </div>
+
+        <div className='monthgrid__CategoryBalanceOrder'>
           <CategoryBalance />
+        </div>
+
+        <div className='monthgrid__PurchasesOrder'>
           {MonthSum !== null && MonthSum > 0 && <Purchases />}
         </div>
-        <div className='bgmonthright'>
+
+        <div className='bgmonthright monthgrid__sums'>
           <Sum />
           {(monthsavings !== null && <MonthSavingsSummary />) ||
             (monthpiggysavings !== null && <MonthSavingsSummary />)}
