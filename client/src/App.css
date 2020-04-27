@@ -815,11 +815,22 @@ input::placeholder {
   min-height: 500px;
   padding: 2rem;
 }
-
 .presetformclosed {
   background: var(--light-color);
   border: 1px solid var(--gray-color);
   padding: 2rem;
+}
+@media (max-width: 700px) {
+  .presetform {
+    border: none;
+    min-height: 200px;
+    padding: 2rem;
+  }
+  .presetformclosed {
+    background: var(--light-color);
+    border: none;
+    padding: 2rem;
+  }
 }
 
 .presetformspan {
@@ -915,7 +926,7 @@ input::placeholder {
   width: 100%;
   background: var(--gray-color);
   padding: 0.7rem;
-  border: 2px solid var(--light-color);
+  border: 2px solid #747272;
   border-radius: 4px;
 }
 

@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const Preset = require('../models/Preset');
 const auth = require('../middleware/auth');
+const csvtojson = require('../middleware/csvtojson');
 
 // @route   GET api/userpreset
 // @desc    Get all user presets
@@ -11,7 +12,7 @@ const auth = require('../middleware/auth');
 router.get('/', auth, async (req, res) => {
   try {
     const presets = await Preset.find({ user: req.user.id }).sort({
-      number: -1
+      number: -1,
     });
     res.json(presets);
   } catch (err) {
@@ -28,13 +29,9 @@ router.post(
   [
     auth,
     [
-      check('name', 'Name is required')
-        .not()
-        .isEmpty(),
-      check('number', 'Number is required')
-        .not()
-        .isEmpty()
-    ]
+      check('name', 'Name is required').not().isEmpty(),
+      check('number', 'Number is required').not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -53,7 +50,7 @@ router.post(
         category,
         type,
         piggybank,
-        user: req.user.id
+        user: req.user.id,
       });
 
       const preset = await newPreset.save();
@@ -125,5 +122,52 @@ router.delete('/:id', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// @route   POST api/userpreset/upload
+// @desc    Add new presets with csv file
+// @access  Private
+router.post(
+  '/upload',
+  [
+    auth,
+    csvtojson,
+    /*     [
+      check('name', 'Name is required')
+        .not()
+        .isEmpty(),
+      check('number', 'Number is required')
+        .not()
+        .isEmpty()
+    ] */
+  ],
+  async (req, res) => {
+    /*     const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    //validering avklarad */
+
+    const { name, number, month, year, category, type, piggybank } = req.body;
+    try {
+      const newPreset = new Preset({
+        name,
+        number,
+        month,
+        year,
+        category,
+        type,
+        piggybank,
+        user: req.user.id,
+      });
+
+      const preset = await newPreset.save();
+
+      res.json(preset);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
 
 module.exports = router;

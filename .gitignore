@@ -1,4 +1,5 @@
 node_modules/
+_data/
 
 /client/build
 
@@ -12,7 +13,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-PS.mockup.psd
+PS_mockup.psd
 pallette1.JPG
 moodboardforslag.JPG
 cssproblem453476.JPG
+updatepresets.js
+users.json
+seeder.js
+presetitems.json
