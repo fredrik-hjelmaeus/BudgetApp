@@ -2,18 +2,20 @@ const express = require('express');
 const connectDB = require('./config/db');
 const app = express();
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 // Connect Database
 connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(fileUpload());
 
 // Define Routes
-
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/userpreset', require('./routes/userpreset'));
+app.use('/api/userpreset/upload', require('./routes/upload'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

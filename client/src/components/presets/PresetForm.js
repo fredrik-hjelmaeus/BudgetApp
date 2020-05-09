@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useContext, useEffect } from 'react';
+import React, {
+  Fragment,
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import AlertContext from '../../context/alert/alertContext';
 
@@ -14,7 +20,8 @@ const PresetForm = () => {
     sendEdit,
     calcSum,
     month,
-    year
+    year,
+    uploadCSV,
   } = presetContext;
   const { setAlert } = alertContext;
 
@@ -29,7 +36,7 @@ const PresetForm = () => {
         year,
         category,
         type: 'overhead',
-        piggybank: [{ month, year, savedAmount: 0 }]
+        piggybank: [{ month, year, savedAmount: 0 }],
       });
     } // eslint-disable-next-line
   }, [edit, month, presets]);
@@ -44,18 +51,42 @@ const PresetForm = () => {
       year,
       category: 'Select an category',
       type: 'overhead',
-      piggybank: [{ month, year, savedAmount: '' }]
+      piggybank: [{ month, year, savedAmount: '' }],
     },
     [presetContext, edit]
   );
-  const selectChange = e => {
-    setPreset({ ...preset, category: e.target.value });
-  };
-  const onChange = e => {
+
+  const onChange = (e) => {
     setPreset({ ...preset, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = e => {
+  const [selectedFile, setSelectedFile] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState('');
+
+  const selectChange = (e) => {
+    setPreset({ ...preset, category: e.target.value });
+  };
+
+  useEffect(() => {
+    selectedFile !== '' && sendFile();
+  }, [selectedFile]);
+
+  // Ref
+  const inputRef = useRef();
+
+  const sendFile = () => {
+    const formData = new FormData();
+    formData.append('file', selectedFile, selectedFileName);
+    console.log(selectedFile);
+    uploadCSV(formData);
+  };
+
+  const onFileChange = (e) => {
+    setSelectedFileName(e.target.files[0].name);
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const onSubmit = (e) => {
     e.preventDefault();
     if (preset.category !== 'Select an category') {
       if (edit === null) {
@@ -83,7 +114,7 @@ const PresetForm = () => {
         month,
         year,
         category,
-        type: 'overhead'
+        type: 'overhead',
       });
     } else {
       setAlert('Please select an category', 'danger');
@@ -215,53 +246,75 @@ const PresetForm = () => {
               </option>
             </select>
           </span>
-          <h5 className='text-gray'>Add to</h5>
-          <span className='grid-2 my-1'>
-            <label className='presetformtypecheckboxcontainer'>
-              Overhead
+          <div className='presetform__optionsfield'>
+            <div className='presetform__addTofields'>
+              <h5 className='text-gray'>Add to</h5>
+              <span className='grid-2 my-1'>
+                <label className='presetformtypecheckboxcontainer'>
+                  Overhead
+                  <input
+                    type='checkbox'
+                    name='type'
+                    value='overhead'
+                    checked={preset.type === 'overhead'}
+                    onChange={onChange}
+                  />
+                  <span className='presetformcheckbox'></span>
+                </label>
+                <label className='presetformtypecheckboxcontainer'>
+                  Purchase
+                  <input
+                    type='checkbox'
+                    name='type'
+                    value='purchase'
+                    checked={preset.type === 'purchase'}
+                    onChange={onChange}
+                  />
+                  <span className='presetformcheckbox'></span>
+                </label>
+                <label className='presetformtypecheckboxcontainer'>
+                  Savings
+                  <input
+                    type='checkbox'
+                    name='type'
+                    value='savings'
+                    checked={preset.type === 'savings'}
+                    onChange={onChange}
+                  />
+                  <span className='presetformcheckbox'></span>
+                </label>
+                <label className='presetformtypecheckboxcontainer'>
+                  Capital
+                  <input
+                    type='checkbox'
+                    name='type'
+                    value='capital'
+                    checked={preset.type === 'capital'}
+                    onChange={onChange}
+                  />{' '}
+                  <span className='presetformcheckbox'></span>
+                </label>
+              </span>
+            </div>
+            <div>
               <input
-                type='checkbox'
-                name='type'
-                value='overhead'
-                checked={preset.type === 'overhead'}
-                onChange={onChange}
+                style={{ display: 'none' }}
+                type='file'
+                name='csvFile'
+                onChange={onFileChange}
+                ref={inputRef}
               />
-              <span className='presetformcheckbox'></span>
-            </label>
-            <label className='presetformtypecheckboxcontainer'>
-              Purchase
-              <input
-                type='checkbox'
-                name='type'
-                value='purchase'
-                checked={preset.type === 'purchase'}
-                onChange={onChange}
-              />
-              <span className='presetformcheckbox'></span>
-            </label>
-            <label className='presetformtypecheckboxcontainer'>
-              Savings
-              <input
-                type='checkbox'
-                name='type'
-                value='savings'
-                checked={preset.type === 'savings'}
-                onChange={onChange}
-              />
-              <span className='presetformcheckbox'></span>
-            </label>
-            <label className='presetformtypecheckboxcontainer'>
-              Capital
-              <input
-                type='checkbox'
-                name='type'
-                value='capital'
-                checked={preset.type === 'capital'}
-                onChange={onChange}
-              />{' '}
-              <span className='presetformcheckbox'></span>
-            </label>
-          </span>
+              <button
+                className='btn presetform__upload'
+                onClick={() => {
+                  inputRef.current.click();
+                }}
+              >
+                {' '}
+                Upload CSV-file
+              </button>
+            </div>
+          </div>
 
           <div>
             <input
