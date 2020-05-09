@@ -127,10 +127,10 @@ router.delete('/:id', auth, async (req, res) => {
 // @desc    Add new presets with csv file
 // @access  Private
 router.post(
-  '/upload',
+  '/',
   [
-    auth,
     csvtojson,
+
     /*     [
       check('name', 'Name is required')
         .not()
@@ -146,10 +146,20 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     //validering avklarad */
+    /*     if (!req.files) {
+      return res.status(500).send('No File Uploaded');
+    }
+    const file = req.files.file;
+    console.log(file.mimetype === 'text/csv'); */
 
-    const { name, number, month, year, category, type, piggybank } = req.body;
+    //Make sure the file is a csv-file
+    /*  if (file.mimetype !== 'text/csv') {
+      console.log('File must be of filetype csv!');
+    } */
+    console.log(req.newpresets);
+    //const { name, number, month, year, category, type, piggybank } = req.body;
     try {
-      const newPreset = new Preset({
+      /*  const newPreset = new Preset({
         name,
         number,
         month,
@@ -160,9 +170,9 @@ router.post(
         user: req.user.id,
       });
 
-      const preset = await newPreset.save();
+      const preset = await newPreset.save(); */
 
-      res.json(preset);
+      res.json('msg:happy');
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

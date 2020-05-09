@@ -411,6 +411,12 @@ img {
   grid-gap: 1rem;
 }
 
+.grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 0.25rem;
+}
+
 .btn {
   display: inline-block;
   background: var(--light-color);
@@ -650,6 +656,29 @@ input {
   margin-top: 1rem;
   color: var(--gray-color);
   font-size: 14px;
+}
+.form__inputOn {
+  display: block;
+}
+.form__inputOFF {
+  display: none;
+}
+.numinput {
+  font-size: 17px !important;
+  borsder: 1px solid red !important;
+  display: none;
+  color: blue;
+  padding: 0 !important;
+  marsgin: 0 !important;
+  margin: 2px 10px !important;
+  background: none !important;
+  text-decoration: none !important;
+  border: none !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  align-items: flex-end !important;
+  text-align: center;
 }
 
 input[type='text'],
@@ -918,6 +947,28 @@ input::placeholder {
 .presetformselectcategory select {
   margin-bottom: 3rem;
 }
+.categorydropdown {
+  bosrder: 1px solid red;
+  wisdth: 300px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.categorydropdown__select {
+  backgsround-color: var(--light-color);
+  font-size: 14px;
+  width: 100px;
+  height: 37px;
+  background-color: var(--danger-color);
+  position: relative;
+  z-index: 10 !important;
+  padding: 0;
+  margin: auto;
+}
+
+.categorydropdown__option {
+  backgrounsd-color: var(--light-color);
+}
 
 .btn-presetformadd {
   display: block;
@@ -929,7 +980,47 @@ input::placeholder {
   border: 2px solid #747272;
   border-radius: 4px;
 }
-
+.presetform__optionsfield {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  column-gap: 1.25rem;
+  padding: 0;
+  margin: 0;
+  bodrder: 1px solid red;
+}
+@media (max-width: 700px) {
+  .presetform__optionsfield {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.25rem;
+  }
+}
+.presetform__upload {
+  display: block;
+  color: var(--gray-color);
+  font-weight: 500;
+  background: var(--light-color);
+  padding: 0.3rem;
+  font-size: 14px;
+  margin: 0;
+  border: 1px solid var(--gray-color);
+  border-radius: 4px;
+  align-self: center;
+  outline: none;
+}
+@media (max-width: 700px) {
+  .presetform__upload {
+    display: block;
+    color: var(--gray-color);
+    font-weight: 500;
+    background: var(--light-color);
+    padding: 0.3rem;
+    font-size: 14px;
+    margin: 0;
+    border: 1px solid var(--gray-color);
+    border-radius: 4px;
+    align-self: start;
+  }
+}
 /* CategoryBalance , Balance by Category*/
 .categorybalance {
   background: var(--light-color);
@@ -1522,6 +1613,65 @@ table th {
   outline: none;
 }
 
+/* Create presets from CSV modal */
+.modal-csvpresets {
+  display: block; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 150px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+.modal-csvpresets__card {
+  background-color: var(--light-color);
+  box-shadow: 0px 3px 6px #2b2b2b;
+  margin: auto;
+  padding: 20px 40px;
+  border: 1px solid #000000;
+  width: 70%;
+  hesight: 80%;
+  font-size: 14px;
+}
+.modal-csvpresets__grid {
+  display: grid;
+  grid-template-columns: 6fr 2fr 2fr 2fr 1fr;
+  border-bottom: 1px solid var(--gray-color);
+}
+.modal-csvpresets__item {
+  borrder: 0.1px solid red;
+  background: transparent;
+  padding: 0.25rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  marsgin: auto;
+  aligsn-self: start;
+  justifsy-self: left;
+}
+.modal-csvpresets__btn__addtobudget {
+  display: block;
+  color: var(--light-color);
+  font-weight: bold !important;
+  width: 50%;
+  background: var(--gray-color);
+  padding: 0.7rem 1rem;
+  border: 2px solid #747272;
+  border-radius: 4px;
+  margin: auto;
+  margin-top: 1rem;
+}
+.modal-csvpresets__deletebtnadjust {
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+  overflow: hidden;
+}
+
 /* Swipe Pages !inactive!*/
 .page1 {
   position: absolute;
@@ -2015,4 +2165,94 @@ input[type='range']:focus::-ms-fill-lower {
 
 .horizontally-stacked-slider > input[type='range'] {
   flex: 1;
+}
+
+/* Dropdown */
+
+/* Dropdown Button */
+.dropbtn {
+  outline: none;
+  background-color: var(--orange-color);
+  color: var(--primary-color);
+  padding: 2px;
+  white-space: nowrap;
+  font-size: 16px;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+}
+.dropbtn__afterchosencategory {
+  outline: none;
+  background-color: var(--success-color);
+  color: var(--primary-color);
+  padding: 2px;
+  white-space: nowrap;
+  font-size: 16px;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+}
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--light-color);
+  msin-width: 40px;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+
+.dropdown-content button {
+  outline: none;
+  border: none;
+  border-bottom: solid 1px var(--primary-color);
+  color: black;
+  padding: 0;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+  background-color: var(--light-color);
+}
+
+/* Change color of dropdown links on hover */
+
+.dropdown-content button:hover {
+  background-color: var(--gray-color);
+  border-radius: 4px;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: var(--orange-color);
+}
+
+.markgraydelete {
+  color: var(--gray-color);
+  border-color: var(--light-color);
+  background: none;
+  background-color: none;
+}
+.disable__hover {
+  pointer-events: none;
+}
+.dropdown__categoryicon__grayedout {
+  filter: invert(67%) sepia(0%) saturate(771%) hue-rotate(151deg)
+    brightness(83%) contrast(84%);
+  opacity: 0.5;
+}
+.dropdown__categoryicon {
+  filter: none;
+  opacity: none;
 }
