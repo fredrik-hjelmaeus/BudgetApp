@@ -56,3 +56,7 @@ export const SUM_PIGGYBANKS_MONTH = 'SUM_PIGGYBANKS_MONTH';
 export const CALC_MONTH_BALANCE = 'CALC_MONTH_BALANCE';
 export const SET_DIMENSIONS = 'SET_DIMENSIONS';
 export const UPLOAD_CSV = 'UPLOAD_CSV';
+export const UPDATE_CSV = 'UPDATE_CSV';
+export const SUBMIT_CSV = 'SUBMIT_CSV';
+export const CLEAR_CSV = 'CLEAR_CSV';
+export const REMOVE_CSV = 'REMOVE_CSV';

@@ -79,6 +79,8 @@ const PresetForm = () => {
     formData.append('file', selectedFile, selectedFileName);
     console.log(selectedFile);
     uploadCSV(formData);
+    setSelectedFile('');
+    setSelectedFileName('');
   };
 
   const onFileChange = (e) => {

@@ -34,25 +34,28 @@ import {
 
 const CsvPresetItem = ({ Item }) => {
   const presetContext = useContext(PresetContext);
-  const { month, year } = presetContext;
-  const { number, name } = Item;
-  //const [category, setCategory] = useState('Not defined');
+  const {
+    month,
+    year,
+    doSubmitCsv,
+    updateCsvPresets,
+    addPreset,
+    removeCSV,
+  } = presetContext;
+  const { id, number, name } = Item;
 
   //local preset used to update preset via function presetContext.sendEdit
   const [localpreset, setlocalPreset] = useState({
-    name: '',
-    number: '',
+    id: id,
+    name: name,
+    number: number,
     month,
     year,
     category: 'Select Category',
     type: 'overhead',
     piggybank: [{ month, year, savedAmount: '' }],
+    markdelete: false,
   });
-
-  // setting the local preset
-  const onLocalChange = (e) => {
-    setlocalPreset({ ...localpreset, [e.target.name]: e.target.value });
-  };
 
   const onBlur = () => {
     //console.log(localpreset);
@@ -80,12 +83,12 @@ const CsvPresetItem = ({ Item }) => {
 
   const onClick = (e) => {
     //setInputChange(e.target.value);
-    console.log(e.target.name);
+    //  console.log(e.target.name);
     setInputMode(e.target.name);
     //setEdit(preset);
   };
   const onDropdownClick = (e) => {
-    console.log(e.target.name);
+    // console.log(e.target.name);
     setlocalPreset({ ...localpreset, ['category']: e.target.name });
     setInputMode('');
   };
@@ -148,39 +151,60 @@ const CsvPresetItem = ({ Item }) => {
 
   // state to handle deletebutton-hover
   const [DelbtnColor, setDelbtnColor] = useState(false);
-  // state to handle markdelete
-  const [DeleteItem, setDeleteItem] = useState(false);
+
   //on delete button hover
   const onHover = () => {
-    console.log('hover');
+    //console.log('hover');
     setDelbtnColor(true);
   };
   //on delete button stop hover
   const stopHover = () => {
-    console.log('stophover');
+    // console.log('stophover');
     setDelbtnColor(false);
   };
   const onDelete = () => {
-    console.log('delete');
-    setDeleteItem(!DeleteItem);
-    //deletePreset(_id);
-    // cancelEdit();
-    // calcSum(_id, null);
+    setlocalPreset({ ...localpreset, markdelete: !localpreset.markdelete });
   };
+
+  const addToDB = () => {
+    addPreset({
+      name: name,
+      number: parseFloat(number),
+      month: month,
+      year: year,
+      category: localpreset.category,
+      type: localpreset.type,
+      piggybank: [{ month, year, savedAmount: '' }],
+    });
+    removeCSV(localpreset);
+  };
+
+  useEffect(() => {
+    console.log(doSubmitCsv);
+    doSubmitCsv === 'step1' &&
+      (localpreset.category !== 'Select Category'
+        ? updateCsvPresets(localpreset)
+        : console.log(`Not valid `));
+    doSubmitCsv === 'submit' &&
+      (localpreset.category !== 'Select Category' &&
+      localpreset.markdelete !== true
+        ? addToDB()
+        : console.log(`No add `));
+  }, [doSubmitCsv]);
 
   return (
     <Fragment>
       {/* name */}
       <div
         className={
-          DeleteItem
+          localpreset.markdelete
             ? 'modal-csvpresets__grid markgraydelete'
             : 'modal-csvpresets__grid'
         }
       >
         <div
           className={
-            DeleteItem
+            localpreset.markdelete
               ? 'btn-form modal-csvpresets__item markgraydelete disable__hover'
               : 'text-primary btn-form modal-csvpresets__item'
           }
@@ -190,7 +214,7 @@ const CsvPresetItem = ({ Item }) => {
         {/* number */}
         <div
           className={
-            DeleteItem
+            localpreset.markdelete
               ? 'btn-form modal-csvpresets__item markgraydelete disable__hover'
               : parseFloat(number) > 0
               ? 'text-success btn-form modal-csvpresets__item'
@@ -203,7 +227,7 @@ const CsvPresetItem = ({ Item }) => {
         {/* monthyear */}
         <div
           className={
-            DeleteItem
+            localpreset.markdelete
               ? 'btn-form modal-csvpresets__item disable__hover'
               : 'btn-form modal-csvpresets__item'
           }
@@ -212,14 +236,18 @@ const CsvPresetItem = ({ Item }) => {
         </div>
 
         {/* category */}
-        <div className={DeleteItem ? 'dropdown disable__hover' : 'dropdown'}>
+        <div
+          className={
+            localpreset.markdelete ? 'dropdown disable__hover' : 'dropdown'
+          }
+        >
           <button
             className={
               localpreset.category === 'Select Category'
-                ? DeleteItem
+                ? localpreset.markdelete
                   ? 'dropbtn markgraydelete disable__hover'
                   : 'dropbtn'
-                : DeleteItem
+                : localpreset.markdelete
                 ? 'dropbtn__afterchosencategory markgraydelete disable__hover'
                 : 'dropbtn__afterchosencategory'
             }
@@ -237,7 +265,7 @@ const CsvPresetItem = ({ Item }) => {
                 name='edit category'
                 onClick={onClick}
                 className={
-                  DeleteItem
+                  localpreset.markdelete
                     ? 'dropdown__categoryicon__grayedout'
                     : 'dropdown__categoryicon'
                 }
@@ -246,7 +274,7 @@ const CsvPresetItem = ({ Item }) => {
           </button>
           <div
             className={
-              DeleteItem
+              localpreset.markdelete
                 ? 'dropdown-content markgraydelete disable__hover'
                 : 'dropdown-content'
             }
@@ -333,7 +361,7 @@ const CsvPresetItem = ({ Item }) => {
             onMouseLeave={stopHover}
             onClick={onDelete}
           >
-            {DeleteItem === true ? (
+            {localpreset.markdelete === true ? (
               DelbtnColor === true ? (
                 <AddSVG color='var(--success-color)' />
               ) : (
