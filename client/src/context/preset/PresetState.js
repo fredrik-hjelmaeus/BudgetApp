@@ -46,6 +46,10 @@ import {
   SUM_PIGGYBANKS_MONTH,
   CALC_MONTH_BALANCE,
   UPLOAD_CSV,
+  UPDATE_CSV,
+  SUBMIT_CSV,
+  CLEAR_CSV,
+  REMOVE_CSV,
 } from '../types';
 
 const PresetState = (props) => {
@@ -82,6 +86,7 @@ const PresetState = (props) => {
     MonthBalance: null, // year implemented
     purchases: null, // year independent
     csvpresets: null, // used to store values from csv-file in stagingarea
+    doSubmitCsv: '',
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -181,6 +186,20 @@ const PresetState = (props) => {
     }
   };
 
+  //Update CSV
+  const updateCsvPresets = (preset) => {
+    dispatch({ type: UPDATE_CSV, payload: preset });
+  };
+
+  //Remove CSV
+  const removeCSV = (preset) => {
+    dispatch({ type: REMOVE_CSV, payload: preset.id });
+  };
+
+  // Clear CSV
+  const clearCsv = () => {
+    dispatch({ type: CLEAR_CSV });
+  };
   // Add month-val coming from Datemenu
   const addMonth = (month) => {
     dispatch({ type: ADD_MONTH, payload: month });
@@ -977,6 +996,10 @@ const PresetState = (props) => {
   const setTotalOfAllPiggybanksThisMonth = (Sum) => {
     dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
   };
+
+  const submitCsvItems = (string) => {
+    dispatch({ type: SUBMIT_CSV, payload: string });
+  };
   return (
     <PresetContext.Provider
       value={{
@@ -1011,6 +1034,7 @@ const PresetState = (props) => {
         SumPiggybanksMonth: state.SumPiggybanksMonth,
         MonthBalance: state.MonthBalance,
         csvpresets: state.csvpresets,
+        doSubmitCsv: state.doSubmitCsv,
         addPreset,
         calcSum,
         deletePreset,
@@ -1053,6 +1077,10 @@ const PresetState = (props) => {
         setTotalOfAllPiggybanksThisMonth,
         calcMonthBalance,
         uploadCSV,
+        submitCsvItems,
+        updateCsvPresets,
+        clearCsv,
+        removeCSV,
       }}
     >
       {props.children}

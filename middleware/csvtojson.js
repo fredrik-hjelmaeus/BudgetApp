@@ -1,5 +1,6 @@
 const csv = require('csvtojson');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = function (req, res, next) {
   //return res.status(200).json({ msg: 'Successful response' });
@@ -36,9 +37,14 @@ module.exports = function (req, res, next) {
           .status(400)
           .send('CSV does not contain valid Nordea-values!');
       }
+
       // Push new values to array
       source.map((preset) =>
-        newpresets.push({ number: preset.Belopp, name: preset.Rubrik })
+        newpresets.push({
+          number: preset.Belopp,
+          name: preset.Rubrik,
+          id: uuidv4(),
+        })
       );
       if (newpresets.length === 0) {
         deleteFile(`${__dirname}/${file.name}`);
