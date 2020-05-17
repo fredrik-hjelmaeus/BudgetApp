@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import piggyicon from '../layout/images/piggybank.svg';
@@ -24,14 +24,14 @@ import {
   Studentloan,
   Electricalbill,
   Travel,
-  Car
+  Car,
 } from '../layout/images/index';
 
 const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const presetContext = useContext(PresetContext);
-  const { presets, deletePreset, month, sendEdit } = presetContext;
+  const { presets, deletePreset, month } = presetContext;
   const { name, number, category } = Item;
-  const getCategoryIcon = category => {
+  const getCategoryIcon = (category) => {
     switch (category) {
       case 'Commute':
         return Commute;
@@ -87,7 +87,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     year: Item.year,
     category: Item.category,
     type: Item.type,
-    piggybank: Item.piggybank
+    piggybank: Item.piggybank,
   });
   // state to handle deletebutton-hover
   const [DelbtnColor, setDelbtnColor] = useState(false);
@@ -105,18 +105,18 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   };
 
   // console.log(preset.piggybank.length);
-  const testPiggybank = Item => {
+  const testPiggybank = (Item) => {
     let newPiggybankArray = [];
     presets &&
-      presets.map(preset =>
+      presets.map((preset) =>
         preset._id === Item._id
-          ? Item.piggybank.filter(piggybank =>
+          ? Item.piggybank.filter((piggybank) =>
               piggybank.month !== month
                 ? newPiggybankArray.push({
                     _id: piggybank._id,
                     month: piggybank.month,
                     year: piggybank.year,
-                    savedAmount: piggybank.savedAmount
+                    savedAmount: piggybank.savedAmount,
                   })
                 : null
             )
@@ -132,7 +132,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       year: Item.year,
       category: Item.category,
       type: Item.type,
-      piggybank: newPiggybankArray
+      piggybank: newPiggybankArray,
     });
   };
   /*  useEffect(() => {

@@ -6,12 +6,12 @@ const MonthSummary = () => {
   return (
     <div>
       <div className='card_monthright bold'>
-        <div className='grid-2'>
-          <div>
+        <div className='monthsummary__grid-2'>
+          <div className='grid-2__column'>
             <h3 className='all-center text-gray underline'>Income</h3>
             <PresetFilter />
           </div>
-          <div>
+          <div className='grid-2__column'>
             <h3 className='all-center text-gray underline'>Expenses</h3>
             <PresetNegativeFilter />
           </div>

@@ -20,10 +20,6 @@ const CsvPresetCreateModal = () => {
       (item) => item.category && item.markdelete === false
     );
     setValidCsv(checkcsv);
-    //console.log(presetContext.presets.length);
-    //console.log(checkcsv);
-    //console.log(csvpresets.length - checkcsv.length);
-    //console.log(csvpresets.length);
 
     checkcsv.length !== 0 && checkcsv.length !== csvpresets.length
       ? setPrompt(true)
@@ -55,6 +51,12 @@ const CsvPresetCreateModal = () => {
             onClick={onClick}
           >
             ADD TO BUDGET
+          </button>
+          <button
+            className='btn modal-csvpresets__btn__addtobudget all-center'
+            onClick={() => clearCsv()}
+          >
+            Cancel
           </button>
         </div>
       </div>

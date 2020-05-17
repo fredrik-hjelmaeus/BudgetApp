@@ -144,7 +144,7 @@ const PresetState = (props) => {
         'Content-Type': 'application/json',
       },
     };
-    console.log(preset);
+
     try {
       const res = await axios.put(
         `/api/userpreset/${preset._id}`,
@@ -237,7 +237,6 @@ const PresetState = (props) => {
 
   // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = (month) => {
-    //console.log(state.year);
     dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
   };
 
@@ -335,7 +334,6 @@ const PresetState = (props) => {
       } else {
         TotalMonthSum = 0;
         dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
-        //console.log(`no presets to calculate in this month ${month}`);
       }
     });
   };
@@ -375,7 +373,6 @@ const PresetState = (props) => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: MONTHSUM, payload: TotalMonthSum });
     } else {
-      //console.log('No presets to calculate monthsum on this month');
       TotalMonthSum = 0;
       dispatch({ type: MONTHSUM, payload: TotalMonthSum });
     }
@@ -396,7 +393,6 @@ const PresetState = (props) => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: POSMONTHSUM, payload: TotalMonthSum });
     } else {
-      //console.log('no objects to calculate in this month');
       dispatch({ type: POSMONTHSUM, payload: 0 });
     }
   };
@@ -416,7 +412,6 @@ const PresetState = (props) => {
       negnum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: NEGMONTHSUM, payload: negnum });
     } else {
-      //console.log('no objects to calculate in this month');
       dispatch({ type: NEGMONTHSUM, payload: 0 });
     }
   };
@@ -883,7 +878,7 @@ const PresetState = (props) => {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALCSAVINGS, payload: TotalMonthSum });
     } else {
-      console.log('no savings to calculate on this user ');
+      // console.log('no savings to calculate on this user ');
     }
   };
 
@@ -917,10 +912,10 @@ const PresetState = (props) => {
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALC_MONTH_SAVINGS, payload: TotalMonthSum });
-      console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
+      //console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
     } else {
       dispatch({ type: CALC_MONTH_SAVINGS, payload: null });
-      console.log(`no monthsavings to calculate in ${state.month} `);
+      //console.log(`no monthsavings to calculate in ${state.month} `);
     }
   };
 

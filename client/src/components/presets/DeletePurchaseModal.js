@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
@@ -12,7 +12,7 @@ const DeletePurchaseModal = ({ Item }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
-  const onClick = e => {
+  const onClick = (e) => {
     toggleModal('');
   };
 
@@ -20,10 +20,10 @@ const DeletePurchaseModal = ({ Item }) => {
   // for every piggybank that is not savedAmount 0,convert to new preset type savings at the month piggybankitem was registred. Then delete purchasepreset
   const onDelete = () => {
     const FilteredPiggybanks = Item.piggybank.filter(
-      piggybank => piggybank.savedAmount !== 0
+      (piggybank) => piggybank.savedAmount !== 0
     );
 
-    FilteredPiggybanks.map(newSaving =>
+    FilteredPiggybanks.map((newSaving) =>
       addPreset({
         name: Item.name,
         number: newSaving.savedAmount,
@@ -31,7 +31,7 @@ const DeletePurchaseModal = ({ Item }) => {
         year: newSaving.year,
         category: Item.category,
         type: 'savings', //switch type from purchase to savings)
-        piggybank: [{ month, year: '2019', savedAmount: '' }]
+        piggybank: [{ month, year: '2019', savedAmount: '' }],
       })
     );
     deletePreset(Item._id);

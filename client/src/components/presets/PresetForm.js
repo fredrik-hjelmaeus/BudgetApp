@@ -69,6 +69,8 @@ const PresetForm = () => {
 
   useEffect(() => {
     selectedFile !== '' && sendFile();
+    setSelectedFile('');
+    setSelectedFileName('');
   }, [selectedFile]);
 
   // Ref
@@ -77,7 +79,6 @@ const PresetForm = () => {
   const sendFile = () => {
     const formData = new FormData();
     formData.append('file', selectedFile, selectedFileName);
-    console.log(selectedFile);
     uploadCSV(formData);
     setSelectedFile('');
     setSelectedFileName('');
@@ -86,6 +87,7 @@ const PresetForm = () => {
   const onFileChange = (e) => {
     setSelectedFileName(e.target.files[0].name);
     setSelectedFile(e.target.files[0]);
+    e.target.value = null; // resets value so same file can trigger onchange again.
   };
 
   const onSubmit = (e) => {
