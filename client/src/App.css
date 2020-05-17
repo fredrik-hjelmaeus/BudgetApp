@@ -30,7 +30,7 @@ body {
   padding-bottom: 20vh;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   body {
     background-color: var(--light-color);
   }
@@ -61,7 +61,7 @@ img {
   padding: 0 2rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .container {
     max-width: none;
     width: 90vw;
@@ -223,7 +223,7 @@ img {
   position: relative;
   border: 1px solid var(--gray-color);
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearbalance__card {
     background: #ffffff;
     max-width: 100vw;
@@ -266,7 +266,7 @@ img {
 .savings__piggyicon {
   padding: 0 0.5rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .savings__piggyiconandtitle {
     padding: 0 2rem;
     margin: 0.5rem;
@@ -391,6 +391,24 @@ img {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 0rem;
+  borsder: 1px solid green;
+  position: relative;
+  overflow: hidden;
+}
+
+.monthsummary__grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0rem;
+  borsder: 1px solid green;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+  .monthsummary__grid-2 {
+    grid-template-columns: 1fr;
+  }
 }
 
 .grid-special {
@@ -460,7 +478,7 @@ img {
   color: var(--dark-color);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .btn-Datemenu {
     font-size: 1rem;
     margin: 0;
@@ -608,7 +626,7 @@ img {
 .chartmonth {
   font-size: 16px;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .chartmonth {
     font-size: 12px;
   }
@@ -617,7 +635,7 @@ img {
 .chartmonth__textpadding {
   padding: 0 1rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .chartmonth__textpadding {
     padding: 0 0.5rem;
   }
@@ -625,7 +643,7 @@ img {
 .chartsummarytext {
   font-size: 1rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .chartsummarytext {
     font-size: 11px;
   }
@@ -710,7 +728,7 @@ input::placeholder {
 /* Month */
 .monthgrid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 400px 2fr;
   grid-gap: 0rem;
 }
 
@@ -728,7 +746,7 @@ input::placeholder {
 .monthgrid__PurchasesOrder {
   order: 3;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .monthgrid {
     display: grid;
     grid-template-columns: 1fr;
@@ -751,13 +769,15 @@ input::placeholder {
 }
 
 .monthitem {
+  wisdth: 300px;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-end;
   margin: 5px 10px;
   border-bottom: 1px solid var(--light-color);
+  bosrder: 1px solid red;
 }
 
 .card_monthright {
@@ -772,7 +792,7 @@ input::placeholder {
   position: relative;
   border: 1px solid var(--gray-color);
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .card_monthright {
     background: #ffffff;
     max-width: 90%;
@@ -819,8 +839,8 @@ input::placeholder {
   margin: 0;
   padding: 0px 5px;
   margin: 1px 6px;
-  flex-wrap: nowrap;
-  overflow: hidden;
+
+  bordser: 1px solid red;
 }
 
 .bgmonthright {
@@ -831,7 +851,10 @@ input::placeholder {
 
 .namebutton {
   flex: 2;
-  max-width: 50% !important;
+  msax-width: 50% !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .presetformtitle {
@@ -849,7 +872,7 @@ input::placeholder {
   border: 1px solid var(--gray-color);
   padding: 2rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .presetform {
     border: none;
     min-height: 200px;
@@ -988,7 +1011,7 @@ input::placeholder {
   margin: 0;
   bodrder: 1px solid red;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .presetform__optionsfield {
     grid-template-columns: 1fr 1fr;
     column-gap: 1.25rem;
@@ -1007,7 +1030,7 @@ input::placeholder {
   align-self: center;
   outline: none;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .presetform__upload {
     display: block;
     color: var(--gray-color);
@@ -1258,7 +1281,7 @@ input::placeholder {
   padding: 2rem 9.5rem 2rem 3rem;
   margin: 0;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearTitle {
     bdorder: blue 1px solid;
     width: 100vw;
@@ -1271,7 +1294,7 @@ input::placeholder {
   margin-bottom: 16px;
   font-weight: Semibold;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearTitle h1 {
     font-size: 62px;
     font-weight: 500;
@@ -1282,7 +1305,7 @@ input::placeholder {
   font-size: 20px;
   margin-bottom: 15rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearTitle h4 {
     font-size: 18px;
     bdorder: 1px red solid;
@@ -1315,7 +1338,7 @@ input::placeholder {
   padding: 2rem 9.5rem 2rem 3rem;
   margin: 0;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearSummaryMenu {
     font-size: 11rem;
     bordder: red 1px solid;
@@ -1328,7 +1351,7 @@ input::placeholder {
   margin-bottom: 16px;
   font-weight: Semibold;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearSummaryMenu h1 {
     font-size: 62px;
     font-weight: 500;
@@ -1356,7 +1379,7 @@ input::placeholder {
   outline: none;
   padding-right: 1rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .yearSummaryMenu button {
     text-align: left;
     font-weight: bold;
@@ -1374,7 +1397,7 @@ input::placeholder {
   display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .balance,
   .expense,
   .income,
@@ -1511,7 +1534,7 @@ table th {
   left: 137px;
   font-size: 20px;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .donuttitle {
     position: absolute; /* relative to .card_yeargridrigth*/
     top: 95px;
@@ -1719,7 +1742,7 @@ table th {
   opacity: 1;
   margin-bottom: 1rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .datemenu {
     display: grid;
     grid-template-columns: 1rem 100px auto 100px 1rem;
@@ -1819,7 +1842,7 @@ table th {
 }
 
 /* Iphone 6/7/8 */
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .navbar {
     display: flex;
     align-items: center;
@@ -1917,7 +1940,7 @@ table th {
   opacity: 0.8;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .footer__cols {
     display: none;
     display: flex;
@@ -1957,7 +1980,7 @@ table th {
   position: relative;
   overflow-y: hidden;
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .year-bg {
     borer: 1px solid red;
     width: 100vw;
@@ -1967,14 +1990,14 @@ table th {
 }
 
 /* Mobile Styles */
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .hide-sm {
     display: none;
   }
 
   .grid-2,
   .grid-3,
-  .grid-4 {
+  .monthsummary__grid-2 .grid-4 {
     grid-template-columns: 1fr;
   }
 
@@ -2191,8 +2214,12 @@ input[type='range']:focus::-ms-fill-lower {
   padding: 2px;
   white-space: nowrap;
   font-size: 16px;
+  border: none;
   border: 2px solid var(--primary-color);
   border-radius: 4px;
+}
+.dropbtn__noborder {
+  border: none !important;
 }
 .dropbtn__afterchosencategory {
   outline: none;
@@ -2269,4 +2296,13 @@ input[type='range']:focus::-ms-fill-lower {
 .dropdown__categoryicon {
   filter: none;
   opacity: none;
+}
+
+.grid-2__column {
+  bordser: 1px solid blue;
+  overflow: visible;
+  masx-width: 350px;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }

@@ -1,21 +1,19 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 const CsvPrompt = ({ setPrompt, validCsv }) => {
   const presetContext = useContext(PresetContext);
   const { submitCsvItems, csvpresets } = presetContext;
   const onClick = (e) => {
-    e.target.name === 'cancel' && setPrompt(false);
+    if (e.target.name === 'cancel') {
+      setPrompt(false);
+      submitCsvItems('');
+    }
     if (e.target.name === 'add') {
       submitCsvItems('submit');
     }
     e.target.name === 'add' && console.log('yes');
   };
 
-  /* useEffect(() => {
-  
-    setPrompt(false);
-    clearCsv();
-  }, [submitCsvItems]); */
   return (
     <div id='myModal' className='modal-csvprompt' style={{ display: 'block' }}>
       <div className='modal-csvpresets__card'>

@@ -1,9 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import CssContext from '../../context/css/cssContext';
-import PresetContext from '../../context/preset/presetContext';
 const YearSummaryMenu = () => {
   const cssContext = useContext(CssContext);
-  const presetContext = useContext(PresetContext);
   const { yearsummary, setYearSummary } = cssContext;
 
   useEffect(() => {
