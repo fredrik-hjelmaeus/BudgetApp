@@ -126,7 +126,6 @@ const PresetItem = ({ preset }) => {
             }
             type='text'
             value={localpreset.name}
-            defaultValue={name}
             onChange={onLocalChange}
             onBlur={onBlur}
             ref={inputNameRef}
@@ -159,7 +158,6 @@ const PresetItem = ({ preset }) => {
           }
           type='text'
           value={localpreset.number}
-          defaultValue={number}
           onChange={onLocalChange}
           onBlur={onBlur}
           ref={inputNumRef}
