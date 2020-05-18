@@ -24,7 +24,7 @@ const DateItemMobile = () => {
     'September',
     'October',
     'November',
-    'December'
+    'December',
   ]);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const DateItemMobile = () => {
     if (DateList.length > 6) {
       newDateList.splice(0, 1, yearInput);
 
-      cleanedDateList = newDateList.filter(item => item !== null);
+      cleanedDateList = newDateList.filter((item) => item !== null);
     }
 
     month === null
@@ -89,7 +89,7 @@ const DateItemMobile = () => {
     setDateList(smallDateList);
   };
 
-  const onClick = e => {
+  const onClick = (e) => {
     if (e.target.value !== undefined) {
       // previous arrow pressed
       // reset Datelist
@@ -107,7 +107,7 @@ const DateItemMobile = () => {
           'September',
           'October',
           'November',
-          'December'
+          'December',
         ]);
         // when first item in datelist is december,change year
         DateList[0] === 'December' && setYear(parseInt(year - 1));
@@ -136,7 +136,7 @@ const DateItemMobile = () => {
           'September',
           'October',
           'November',
-          'December'
+          'December',
         ]);
         // If last menu-item is not localyear+1 then make last item active and handle it as a month
         if (DateList[2] != LocalYear + 1) {
@@ -183,9 +183,10 @@ const DateItemMobile = () => {
           </ul>
         );
       }
+      console.log(DateList[i]);
     }
     // return jsx
-    return MyArray.map(Item => Item);
+    return MyArray.map((Item) => Item);
   };
 
   return (

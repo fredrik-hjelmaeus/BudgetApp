@@ -16,7 +16,7 @@ const Sum = () => {
     sum,
     SumPiggybanksMonth,
     MonthBalance,
-    calcMonthBalance
+    calcMonthBalance,
   } = presetContext;
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Sum = () => {
     filteredmonthandnegnum,
     monthsavings,
     MonthSum,
-    SumPiggybanksMonth
+    SumPiggybanksMonth,
   ]);
 
   return (
@@ -80,11 +80,7 @@ const Sum = () => {
         {/* Account Balance */}
         <div className='text-gray'>
           Account Balance:
-          <span
-            className={
-              presetContext.PosMonthSum > 0 ? 'text-success' : 'text-danger'
-            }
-          >
+          <span className={sum > 0 ? 'text-success' : 'text-danger'}>
             {sum}{' '}
           </span>
         </div>
