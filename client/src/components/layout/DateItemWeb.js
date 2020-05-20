@@ -55,7 +55,7 @@ const DateItemWeb = () => {
           name={prevYear}
         >
           {' '}
-          {year == prevYear ? (
+          {parseInt(year) === prevYear || year === prevYear ? (
             <strong className='text-dark'>{`<`}</strong>
           ) : (
             `<`

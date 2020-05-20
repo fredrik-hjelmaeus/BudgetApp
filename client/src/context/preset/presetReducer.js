@@ -145,7 +145,7 @@ export default (state, action) => {
             preset.piggybank.filter(
               (piggybank) =>
                 piggybank.month === action.payload &&
-                piggybank.year == state.year
+                piggybank.year === parseInt(state.year)
             )
           ),
       };

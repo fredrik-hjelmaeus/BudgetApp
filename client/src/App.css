@@ -1840,7 +1840,27 @@ table th {
   position: relative;
   bottom: 0.35rem;
 }
+/*  Large screen   */
+@media (min-width: 1700px) {
+  .navbar__inside {
+    justify-content: space-between;
+    max-width: none;
+  }
+}
+/*  Ipad  */
+@media (min-width: 800px) and (max-width: 900px) {
+  .navbar__inside {
+    align-items: center;
 
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    margin: 0;
+    borsder: 1px solid green;
+  }
+}
 /* Iphone 6/7/8 */
 @media (max-width: 800px) {
   .navbar {

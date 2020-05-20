@@ -12,7 +12,7 @@ const PresetFilter = () => {
     loading,
     presets,
     filterOutNegativeNumsAndMonth,
-    filterOutPositiveNumsAndMonth
+    filterOutPositiveNumsAndMonth,
   } = presetContext;
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const PresetFilter = () => {
     <Fragment>
       {filteredmonthandposnum && !loading ? (
         <TransitionGroup>
-          {filteredmonthandposnum.map(preset => (
+          {filteredmonthandposnum.map((preset) => (
             <CSSTransition key={preset._id} timeout={250} classNames='item'>
               <PresetItem preset={preset} />
             </CSSTransition>

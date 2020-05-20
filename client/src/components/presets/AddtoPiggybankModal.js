@@ -11,7 +11,7 @@ const AddtoPiggybankModal = ({ Item }) => {
     sendEdit,
     setActivePiggybank,
     addtoPiggybanks,
-    MonthBalance
+    MonthBalance,
   } = presetContext;
 
   // Css: modal context
@@ -27,13 +27,13 @@ const AddtoPiggybankModal = ({ Item }) => {
     year: Item.year,
     category: Item.category,
     type: 'purchase',
-    piggybank: Item.piggybank
+    piggybank: Item.piggybank,
   });
 
   let AmountToSave; //init startvalue
 
   // store only savedAmounts in an array
-  const savedAmounts = Item.piggybank.map(item => item.savedAmount);
+  const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
   // sift through savedAmounts and count totalsum
   const SumOfPiggybanks = savedAmounts.reduce(
     (a, b) => parseFloat(a) + parseFloat(b),
@@ -58,10 +58,10 @@ const AddtoPiggybankModal = ({ Item }) => {
   }, []);
 
   // sets value from amount to save slider
-  const onChange = e => {
+  const onChange = (e) => {
     setPiggybank({
       ...piggybank,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -70,7 +70,7 @@ const AddtoPiggybankModal = ({ Item }) => {
     addtoPiggybanks({
       month: presetContext.month,
       year: presetContext.year,
-      savedAmount: parseFloat(piggybank.number)
+      savedAmount: parseFloat(piggybank.number),
     });
   };
 
@@ -90,13 +90,14 @@ const AddtoPiggybankModal = ({ Item }) => {
         year: Item.year,
         category: Item.category,
         type: 'purchase',
-        piggybank: presetContext.piggybanks
+        piggybank: presetContext.piggybanks,
       });
     } // eslint-disable-next-line
   }, [presetContext.piggybanks, modalprops.piggybank.length]);
 
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
-  const sendMyEdit = async preset => {
+  const sendMyEdit = async (preset) => {
+    console.log(presetContext.month);
     await sendEdit(preset);
     toggleModal('');
     setActivePiggybank([]);
@@ -114,7 +115,7 @@ const AddtoPiggybankModal = ({ Item }) => {
   }, [preset]);
 
   // Close modal
-  const onClick = e => {
+  const onClick = (e) => {
     toggleModal('');
   };
 

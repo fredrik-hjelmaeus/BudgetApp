@@ -10,7 +10,7 @@ const Purchases = () => {
     presets,
     calcMonthBalance,
     MonthBalance,
-    piggybanks
+    piggybanks,
   } = presetContext;
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const Purchases = () => {
       <h4 className='all-center text-gray'>Purchases</h4>
 
       {purchases &&
-        purchases.map(Item => <PurchaseItem Item={Item} key={Item._id} />)}
+        purchases.map((Item) => <PurchaseItem Item={Item} key={Item._id} />)}
     </div>
   );
 };

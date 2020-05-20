@@ -9,30 +9,31 @@ const MonthSavingsSummary = () => {
     monthsavingspresets,
     setTotalOfAllPiggybanksThisMonth,
     month,
-    year
+    year,
   } = presetContext;
 
   // filters out presets that is type purchase and has piggybank savings
   const monthpurchasewithpiggybank = presets.filter(
-    preset => preset.type === 'purchase' && preset.piggybank.length !== 0
+    (preset) => preset.type === 'purchase' && preset.piggybank.length !== 0
   );
 
   // filters out piggybankvalues made in active month
-  const filteroutbymonth = monthpurchasewithpiggybank.map(purchase =>
+  const filteroutbymonth = monthpurchasewithpiggybank.map((purchase) =>
     purchase.piggybank.filter(
-      piggybank =>
-        piggybank.month === presetContext.month &&
-        piggybank.savedAmount !== 0 &&
-        piggybank.year == year
+      (piggybank) =>
+        (piggybank.month === presetContext.month &&
+          piggybank.savedAmount !== 0 &&
+          piggybank.year === parseInt(year)) ||
+        piggybank.year === year
     )
   );
 
   // store only savedAmounts in an array
-  const savedAmounts = filteroutbymonth.map(first =>
-    first.map(second => second.savedAmount)
+  const savedAmounts = filteroutbymonth.map((first) =>
+    first.map((second) => second.savedAmount)
   );
   // sift through savedAmounts and count totalsum
-  const SumOfAllPiggyBanksByMonthByPreset = savedAmounts.map(inner =>
+  const SumOfAllPiggyBanksByMonthByPreset = savedAmounts.map((inner) =>
     inner.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
   );
   const TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset.reduce(
@@ -59,7 +60,7 @@ const MonthSavingsSummary = () => {
         );
       }
     }
-    monthsavingspresets.map(preset =>
+    monthsavingspresets.map((preset) =>
       MyArray.push(
         <MonthSavingsItem
           Item={preset}
@@ -68,7 +69,7 @@ const MonthSavingsSummary = () => {
         />
       )
     );
-    return MyArray.map(Item => Item);
+    return MyArray.map((Item) => Item);
   };
   // If no piggybankdeposit exist the total will be zero. If that is the case, don't render this component at all
   if (

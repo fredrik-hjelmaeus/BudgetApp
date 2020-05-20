@@ -10,7 +10,7 @@ const CategoryBalance = () => {
     categorymonthsum,
     presets,
     calcCategoryByMonth,
-    year
+    year,
   } = presetContext;
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const CategoryBalance = () => {
   return (
     <div className='categorybalance'>
       <h4 className='all-center text-gray'>Balance By Category</h4>
-      {categorymonthsum.map(catsumitem => (
+      {categorymonthsum.map((catsumitem) => (
         <SumByCategoryItem catsumitem={catsumitem} key={catsumitem.id} />
       ))}
     </div>
