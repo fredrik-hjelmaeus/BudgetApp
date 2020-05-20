@@ -183,7 +183,6 @@ const DateItemMobile = () => {
           </ul>
         );
       }
-      console.log(DateList[i]);
     }
     // return jsx
     return MyArray.map((Item) => Item);

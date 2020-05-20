@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
-import TrashiconSVG from '../layout/images/TrashiconSVG';
 import PiggybankSVG from '../layout/images/PiggybankSVG';
+import TrashDeleteButton from './TrashDeleteButton';
 
 const PurchaseItem = ({ Item }) => {
   const presetContext = useContext(PresetContext);
@@ -15,7 +15,7 @@ const PurchaseItem = ({ Item }) => {
 
   const calcPiggybankSum = () => {
     // store only savedAmounts in an array
-    const savedAmounts = Item.piggybank.map(item => item.savedAmount);
+    const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
     // sift through savedAmounts and count totalsum
     const SumOfPiggybanks = savedAmounts.reduce(
       (a, b) => parseFloat(a) + parseFloat(b),
@@ -47,7 +47,7 @@ const PurchaseItem = ({ Item }) => {
     year: Item.year,
     category: Item.category,
     type: 'overhead',
-    piggybank: 0
+    piggybank: 0,
   });
   const [incomepreset] = useState({
     _id: Item._id,
@@ -57,7 +57,7 @@ const PurchaseItem = ({ Item }) => {
     year: Item.year,
     category: Item.category,
     type: 'overhead',
-    piggybank: 0
+    piggybank: 0,
   });
 
   const onBuy = () => {
@@ -101,7 +101,7 @@ const PurchaseItem = ({ Item }) => {
   };
 
   // display of piggybankicon
-  const onPiggybank = MonthsLeftBeforePurchase => {
+  const onPiggybank = (MonthsLeftBeforePurchase) => {
     switch (MonthsLeftBeforePurchase) {
       case 0:
         return null;
@@ -174,21 +174,12 @@ const PurchaseItem = ({ Item }) => {
             {`${MonthsLeftBeforePurchase} months`}
           </button>
         )}
-
-        <button
-          className='btn-trashicon'
-          onClick={onDelete}
-          onMouseEnter={onTrashHover}
-          onMouseLeave={stopTrashHover}
-          value='trashicon'
-          name='trashicon'
-        >
-          {TrashHover === true ? (
-            <TrashiconSVG fill='red' />
-          ) : (
-            <TrashiconSVG fill='var(--gray-color)' />
-          )}
-        </button>
+        <TrashDeleteButton
+          onDelete={onDelete}
+          onTrashHover={onTrashHover}
+          stopTrashHover={stopTrashHover}
+          TrashHover={TrashHover}
+        />
       </span>
     </div>
   );

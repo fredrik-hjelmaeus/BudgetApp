@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import piggyicon from '../layout/images/piggybank.svg';
@@ -29,7 +29,7 @@ import {
 
 const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const presetContext = useContext(PresetContext);
-  const { presets, deletePreset, month } = presetContext;
+  const { presets, deletePreset, month, sendEdit } = presetContext;
   const { name, number, category } = Item;
   const getCategoryIcon = (category) => {
     switch (category) {
@@ -111,7 +111,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       presets.map((preset) =>
         preset._id === Item._id
           ? Item.piggybank.filter((piggybank) =>
-              piggybank.month !== month
+              piggybank.month !== month || piggybank.savedAmount === 0
                 ? newPiggybankArray.push({
                     _id: piggybank._id,
                     month: piggybank.month,
@@ -122,7 +122,8 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
             )
           : null
       );
-    //console.log(newPiggybankArray.length);
+    //console.log(newPiggybankArray);
+
     setPreset({
       ...preset,
       _id: Item._id,
@@ -135,10 +136,12 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       piggybank: newPiggybankArray,
     });
   };
-  /*  useEffect(() => {
+  useEffect(() => {
     preset.piggybank.length !== Item.piggybank.length && sendEdit(preset);
-  });
- */
+    // console.log(Item.piggybank.length);
+    //console.log(preset.piggybank.length);
+  }, [preset]);
+
   return (
     <div className='monthitem'>
       <div className='namebutton'>

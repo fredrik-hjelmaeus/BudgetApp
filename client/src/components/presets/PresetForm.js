@@ -38,7 +38,8 @@ const PresetForm = () => {
         type: 'overhead',
         piggybank: [{ month, year, savedAmount: 0 }],
       });
-    } // eslint-disable-next-line
+    }
+    // eslint-disable-next-line
   }, [edit, month, presets]);
 
   const [expand, setExpand] = useState(false);

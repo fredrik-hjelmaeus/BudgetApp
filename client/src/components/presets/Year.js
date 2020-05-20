@@ -67,6 +67,7 @@ const Year = () => {
         'November',
         'December',
       ]);
+    console.log('this ran');
     // eslint-disable-next-line
   }, [presets, year]);
 

@@ -93,6 +93,7 @@ const PresetState = (props) => {
 
   // Get Presets
   const getPresets = async () => {
+    console.log('getPreset');
     try {
       const res = await axios.get('/api/userpreset');
       dispatch({ type: GET_PRESETS, payload: res.data });
@@ -111,6 +112,7 @@ const PresetState = (props) => {
         'Content-Type': 'application/json',
       },
     };
+    console.log('addPreset');
     try {
       const res = await axios.post('/api/userpreset', preset, config);
       dispatch({ type: ADD_PRESET, payload: res.data });
@@ -161,8 +163,8 @@ const PresetState = (props) => {
     //Recalc ALL
     resetSums();
     preset.type !== 'purchase' && calcSum(preset._id, preset.number, 'edit');
-    filterOutPositiveNumsAndMonth(preset.month);
-    filterOutNegativeNumsAndMonth(preset.month);
+    filterOutPositiveNumsAndMonth(state.month);
+    filterOutNegativeNumsAndMonth(state.month);
   };
 
   // Upload CSV
@@ -307,7 +309,8 @@ const PresetState = (props) => {
         state.presets.map((preset) => {
           if (
             preset.year === undefined ||
-            (preset.year == '2019' &&
+            preset.year === '2019' ||
+            (preset.year === 2019 &&
               preset.month === month &&
               preset.type !== 'savings' &&
               preset.type !== 'capital' &&
