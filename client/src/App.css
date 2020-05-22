@@ -899,6 +899,7 @@ input::placeholder {
   border: 1px solid var(--gray-color);
   min-height: 500px;
   padding: 2rem;
+  -webkit-appearance: none;
 }
 .presetformclosed {
   background: var(--light-color);
@@ -999,9 +1000,13 @@ input::placeholder {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-
+.presetformselectcategory {
+  bsorder: 1px solid red;
+  -webkit-appearance: none;
+}
 .presetformselectcategory select {
   margin-bottom: 3rem;
+  -webkit-appearance: none;
 }
 .categorydropdown {
   bosrder: 1px solid red;
