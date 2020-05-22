@@ -37,7 +37,7 @@ const Sum = () => {
 
   return (
     <Fragment>
-      <div className='card_top_monthright bold grid-3 no-wrap'>
+      <div className='card_top_monthright bold Sum__grid no-wrap'>
         {/* Income Month */}
         <div className='text-gray'>
           Month Income:{'    '}

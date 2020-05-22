@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import PresetContext from '../../context/preset/presetContext';
 import PresetFilter from '../presets/PresetFilter';
 import PresetNegativeFilter from '../presets/PresetNegativeFilter';
 
 const MonthSummary = () => {
+  const presetContext = useContext(PresetContext);
+  const { getPresets } = presetContext;
+  useEffect(() => {
+    getPresets();
+    // eslint-disable-next-line
+  }, []);
   return (
     <div>
       <div className='card_monthright bold'>

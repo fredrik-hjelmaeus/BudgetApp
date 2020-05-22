@@ -19,6 +19,7 @@ const CsvPresetItem = ({ Item }) => {
     updateCsvPresets,
     addPreset,
     removeCSV,
+    csvpresets,
   } = presetContext;
   const { id, number, name } = Item;
 
@@ -69,12 +70,10 @@ const CsvPresetItem = ({ Item }) => {
 
   //on delete button hover
   const onHover = () => {
-    //console.log('hover');
     setDelbtnColor(true);
   };
   //on delete button stop hover
   const stopHover = () => {
-    // console.log('stophover');
     setDelbtnColor(false);
   };
   const onDelete = () => {
@@ -91,20 +90,22 @@ const CsvPresetItem = ({ Item }) => {
       type: localpreset.type,
       piggybank: [{ month, year, savedAmount: '' }],
     });
+    //console.log(localpreset.id);
+    //const test = csvpresets.filter((preset) => preset.id === localpreset.id);
+    //console.log(test);
+    //console.log(csvpresets);
     removeCSV(localpreset);
   };
 
   useEffect(() => {
-    console.log(doSubmitCsv);
     doSubmitCsv === 'step1' &&
-      (localpreset.category !== 'Select Category'
-        ? updateCsvPresets(localpreset)
-        : console.log(`Not valid `));
+      localpreset.category !== 'Select Category' &&
+      updateCsvPresets(localpreset);
+
     doSubmitCsv === 'submit' &&
-      (localpreset.category !== 'Select Category' &&
-      localpreset.markdelete !== true
-        ? addToDB()
-        : console.log(`No add `));
+      localpreset.category !== 'Select Category' &&
+      localpreset.markdelete !== true &&
+      addToDB();
   }, [doSubmitCsv]);
 
   return (

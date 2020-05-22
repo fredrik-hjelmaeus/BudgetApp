@@ -7,10 +7,14 @@ import React, {
 } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
+import CheckBoxField from './CheckBoxField';
+import SelectField from './SelectField';
 
 const PresetForm = () => {
   const alertContext = useContext(AlertContext);
   const presetContext = useContext(PresetContext);
+  const authContext = useContext(AuthContext);
 
   const {
     presets,
@@ -22,9 +26,10 @@ const PresetForm = () => {
     month,
     year,
     uploadCSV,
+    error,
   } = presetContext;
   const { setAlert } = alertContext;
-
+  const { clearErrors } = authContext;
   useEffect(() => {
     if (edit !== null) {
       setPreset(edit);
@@ -73,6 +78,21 @@ const PresetForm = () => {
     setSelectedFile('');
     setSelectedFileName('');
   }, [selectedFile]);
+
+  useEffect(() => {
+    if (error === 'No values recognised!') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    if (error === 'CSV does not contain valid Nordea-values!') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    if (error === 'Wrong filetype, only accepts csv!') {
+      setAlert(error, 'danger');
+      clearErrors();
+    } // eslint-disable-next-line
+  }, [error]);
 
   // Ref
   const inputRef = useRef();
@@ -168,139 +188,9 @@ const PresetForm = () => {
               onChange={onChange}
             />
           </span>
-          <span className='presetformselectcategory'>
-            <select
-              onChange={selectChange}
-              className='text-dark'
-              value={category}
-            >
-              <option name='Select an category' value='Select an category'>
-                Select an category
-              </option>
-              <option name='Commute' value='Commute'>
-                Commute
-              </option>
-              <option name='Car' value='Car'>
-                Car
-              </option>
-              <option name='Travel' value='Travel'>
-                Travel
-              </option>
-              <option name='Food' value='Food'>
-                Food
-              </option>
-              <option name='Housing' value='Housing'>
-                Housing
-              </option>
-              <option name='Insurance' value='Insurance'>
-                Insurance
-              </option>
-              <option name='Child benefit' value='Child benefit'>
-                Child benefit
-              </option>
-              <option name='Childcare' value='Childcare'>
-                Childcare
-              </option>
-              <option name='Salary' value='Salary'>
-                Salary
-              </option>
-              <option name='Sport Activities' value='Sport Activities'>
-                Sport Activities
-              </option>
-              <option name='Clothing' value='Clothing'>
-                Clothing
-              </option>
-              <option
-                name='Entertainment Electronics'
-                value='Entertainment Electronics'
-              >
-                Entertainment Electronics
-              </option>
-              <option
-                name='Entertainment Subscriptions'
-                value='Entertainment Subscriptions'
-              >
-                Entertainment Subscriptions
-              </option>
-              <option name='Entertainment Hobby' value='Entertainment Hobby'>
-                Entertainment Hobby
-              </option>
-              <option name='Phone' value='Phone'>
-                Phone
-              </option>
-              <option name='Internet' value='Internet'>
-                Internet
-              </option>
-              <option name='Computer' value='Computer'>
-                Computer
-              </option>
-              <option name='Giving' value='Giving'>
-                Giving
-              </option>
-              <option name='Student loan' value='Student loan'>
-                Student loan
-              </option>
-              <option name='Electrical bill' value='Electrical bill'>
-                Electrical bill
-              </option>
-              <option name='Reminderfees' value='Reminderfees'>
-                Reminderfees
-              </option>
-              <option name='Bank fee' value='Bank fee'>
-                Bank fee
-              </option>
-            </select>
-          </span>
+          <SelectField selectChange={selectChange} category={category} />
           <div className='presetform__optionsfield'>
-            <div className='presetform__addTofields'>
-              <h5 className='text-gray'>Add to</h5>
-              <span className='grid-2 my-1'>
-                <label className='presetformtypecheckboxcontainer'>
-                  Overhead
-                  <input
-                    type='checkbox'
-                    name='type'
-                    value='overhead'
-                    checked={preset.type === 'overhead'}
-                    onChange={onChange}
-                  />
-                  <span className='presetformcheckbox'></span>
-                </label>
-                <label className='presetformtypecheckboxcontainer'>
-                  Purchase
-                  <input
-                    type='checkbox'
-                    name='type'
-                    value='purchase'
-                    checked={preset.type === 'purchase'}
-                    onChange={onChange}
-                  />
-                  <span className='presetformcheckbox'></span>
-                </label>
-                <label className='presetformtypecheckboxcontainer'>
-                  Savings
-                  <input
-                    type='checkbox'
-                    name='type'
-                    value='savings'
-                    checked={preset.type === 'savings'}
-                    onChange={onChange}
-                  />
-                  <span className='presetformcheckbox'></span>
-                </label>
-                <label className='presetformtypecheckboxcontainer'>
-                  Capital
-                  <input
-                    type='checkbox'
-                    name='type'
-                    value='capital'
-                    checked={preset.type === 'capital'}
-                    onChange={onChange}
-                  />{' '}
-                  <span className='presetformcheckbox'></span>
-                </label>
-              </span>
-            </div>
+            <CheckBoxField preset={preset} onChange={onChange} />
             <div>
               <input
                 style={{ display: 'none' }}
@@ -310,6 +200,7 @@ const PresetForm = () => {
                 ref={inputRef}
               />
               <button
+                type='button'
                 className='btn presetform__upload'
                 onClick={() => {
                   inputRef.current.click();

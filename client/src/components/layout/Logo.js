@@ -9,7 +9,7 @@ const Logo = () => (
         alt='loading...'
         style={{ width: '66px', margin: 'auto ' }}
       />
-      <div className='all-center px-1'>Budget App</div>
+      <div className='all-center Logo__text'>Budget App</div>
     </h1>
   </div>
 );
