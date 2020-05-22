@@ -10,6 +10,7 @@ const CsvPrompt = ({ setPrompt, validCsv }) => {
     }
     if (e.target.name === 'add') {
       submitCsvItems('submit');
+      console.log('submitcsvitems ran');
     }
     e.target.name === 'add' && console.log('yes');
   };

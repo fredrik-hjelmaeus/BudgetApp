@@ -27,11 +27,26 @@ const DonutChart = ({ sums, names, colors }) => {
         dataLabels: {
           enabled: true,
         },
+        plotOptions: {
+          pie: {
+            donut: {
+              labels: {
+                show: true,
+                name: {
+                  show: true,
+                },
+                value: { show: true },
+                total: {
+                  show: true,
+                },
+              },
+            },
+          },
+        },
       });
     sums && names && setSeries(sums);
   }, [sums, names, colors, dimensions]);
 
-  // console.log(categorysumonlyposnumbyyear, categorynameonlyposnumbyyear);
   const [options, setOptions] = useState({});
 
   const [series, setSeries] = useState([]);

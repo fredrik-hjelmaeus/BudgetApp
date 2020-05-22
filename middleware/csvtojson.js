@@ -30,7 +30,7 @@ module.exports = function (req, res, next) {
     .fromFile(`${__dirname}/${file.name}`)
     .then((source) => {
       // Check for new Nordea-csv
-      if (source[0].Belopp === undefined) {
+      if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
         console.log('invalid nordea file deleted');
         deleteFile(`${__dirname}/${file.name}`);
         return res

@@ -101,7 +101,7 @@ export default (state, action) => {
       return {
         ...state,
         csvpresets: state.csvpresets.filter(
-          (preset) => preset.id === action.payload
+          (preset) => preset.id === action.payload.id
         ),
       };
     case CLEAR_CSV:
@@ -290,22 +290,23 @@ export default (state, action) => {
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
             preset.type !== 'purchase' &&
-            preset.year == state.year // multiple datatypes
+            parseInt(preset.year) === parseInt(state.year) // multiple datatypes
         ),
       };
     case FILTER_NEGNUMANDMONTH:
       return {
         ...state,
-        filteredmonthandnegnum: state.presets.reverse().filter(
+        filteredmonthandnegnum: state.presets.filter(
           (preset) =>
             preset.month === action.payload &&
             preset.number < 0 &&
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
             preset.type !== 'purchase' &&
-            preset.year == state.year // multiple datatypes
+            parseInt(preset.year) === parseInt(state.year) // multiple datatypes
         ),
       };
+
     case FILTER_PRESETS:
       return {
         ...state,

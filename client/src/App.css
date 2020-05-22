@@ -446,6 +446,7 @@ img {
   margin-right: 0.5rem;
   transition: opacity 0.2s ease-in;
   outline: none;
+  -webkit-appearance: none;
 }
 
 .btn-form {
@@ -652,6 +653,38 @@ img {
 .barchart {
   padding: 2rem 0 1rem 0;
   margin: 0;
+}
+
+/* Sum Component */
+.Sum__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+}
+@media (max-width: 1100px) {
+  .Sum__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 900px) {
+  .Sum__grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 800px) {
+  .Sum__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .Sum__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 500px) {
+  .Sum__grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Forms */
@@ -1451,7 +1484,26 @@ input::placeholder {
   color: white;
   font-size: 3.25rem;
 }
-
+.Logo__text {
+  padding: 0 1rem;
+}
+/* Iphone X */
+@media (max-width: 375px) {
+  .Logo {
+    max-width: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .Logo__card {
+    width: 100%;
+    bosrder: 1px solid red;
+    font-size: 3rem;
+  }
+  .Logo__text {
+    padding: 0;
+  }
+}
 /* Landing Page */
 
 .Landing {
@@ -1509,6 +1561,21 @@ input::placeholder {
   color: var(--primary-color);
   border: #ccc solid 1px;
 }
+/* Iphone X */
+@media (max-width: 375px) {
+  .Landing {
+    bosrder: 1px solid red;
+    width: 100%;
+  }
+  .Landing__textarea {
+    bosrder: 1px solid red;
+  }
+  .Landing__showcase {
+    width: 100%;
+    overflow: hidden;
+    bordser: 1px solid green;
+  }
+}
 
 /*##################### */
 
@@ -1529,14 +1596,14 @@ table th {
 
 /* DonutChart  */
 .donuttitle {
-  position: absolute; /* relative to .card_yeargridrigth*/
+  position: relative; /* relative to .card_yeargridrigth*/
   top: 134px;
   left: 137px;
   font-size: 20px;
 }
 @media (max-width: 800px) {
   .donuttitle {
-    position: absolute; /* relative to .card_yeargridrigth*/
+    position: relative; /* relative to .card_yeargridrigth*/
     top: 95px;
     left: 70px;
     font-size: 16px;

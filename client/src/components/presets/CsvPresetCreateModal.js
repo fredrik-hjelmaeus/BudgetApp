@@ -21,11 +21,13 @@ const CsvPresetCreateModal = () => {
     );
     setValidCsv(checkcsv);
 
-    checkcsv.length !== 0 && checkcsv.length !== csvpresets.length
-      ? setPrompt(true)
-      : submitCsvItems('submit');
+    if (checkcsv.length !== 0 && checkcsv.length !== csvpresets.length) {
+      setPrompt(true);
+    } else {
+      submitCsvItems('submit');
+    }
 
-    if (csvpresets.length === 0) {
+    if (csvpresets.length <= 1) {
       clearCsv();
       setPrompt(false);
     }

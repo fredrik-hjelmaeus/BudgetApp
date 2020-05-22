@@ -93,7 +93,6 @@ const PresetState = (props) => {
 
   // Get Presets
   const getPresets = async () => {
-    console.log('getPreset');
     try {
       const res = await axios.get('/api/userpreset');
       dispatch({ type: GET_PRESETS, payload: res.data });
@@ -112,7 +111,7 @@ const PresetState = (props) => {
         'Content-Type': 'application/json',
       },
     };
-    console.log('addPreset');
+
     try {
       const res = await axios.post('/api/userpreset', preset, config);
       dispatch({ type: ADD_PRESET, payload: res.data });
@@ -177,25 +176,24 @@ const PresetState = (props) => {
     try {
       const res = await axios.post('/api/userpreset/upload', formData, config);
 
-      console.log(res.data);
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
-      console.log(err.response.data);
       dispatch({
         type: CONTACT_ERROR,
-        payload: err.response.data.msg,
+        payload: err.response.data,
       });
     }
   };
 
   //Update CSV
   const updateCsvPresets = (preset) => {
+    //console.log('updatecsv');
     dispatch({ type: UPDATE_CSV, payload: preset });
   };
 
   //Remove CSV
   const removeCSV = (preset) => {
-    dispatch({ type: REMOVE_CSV, payload: preset.id });
+    dispatch({ type: REMOVE_CSV, payload: preset });
   };
 
   // Clear CSV
