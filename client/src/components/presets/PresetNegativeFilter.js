@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import PresetItem from './PresetItem';
 import Spinner from '../layout/Spinner';

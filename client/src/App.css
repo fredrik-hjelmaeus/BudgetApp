@@ -2038,7 +2038,7 @@ table th {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
-    align-items: start;
+    align-items: flex-start;
     bosrder: solid 1px green;
   }
 

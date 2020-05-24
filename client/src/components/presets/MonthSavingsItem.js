@@ -122,7 +122,6 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
             )
           : null
       );
-    //console.log(newPiggybankArray);
 
     setPreset({
       ...preset,
@@ -136,10 +135,11 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       piggybank: newPiggybankArray,
     });
   };
+
   useEffect(() => {
+    //breaks add to piggybank that is added in same month if you add dependencies. 2nd piggybankitem wont get added.
     preset.piggybank.length !== Item.piggybank.length && sendEdit(preset);
-    // console.log(Item.piggybank.length);
-    //console.log(preset.piggybank.length);
+    //eslint-disable-next-line
   }, [preset]);
 
   return (

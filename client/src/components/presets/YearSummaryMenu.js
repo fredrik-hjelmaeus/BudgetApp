@@ -11,12 +11,8 @@ const YearSummaryMenu = () => {
   const textcolor = (input) =>
     yearsummary === input ? `text-dark` : `text-gray ${input}`;
 
-  // sets css color depending on active tab
-  const fillcolor = (input) => (yearsummary === input ? '#2b2b2b' : '#8c8c8c');
-
   // sets contextvariable setYearSummary so right grid on year is switched
   const onClick = (e) => {
-    console.log(e.target.value);
     setYearSummary(e.target.value);
   };
 

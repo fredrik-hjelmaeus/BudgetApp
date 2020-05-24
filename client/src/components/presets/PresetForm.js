@@ -74,12 +74,6 @@ const PresetForm = () => {
   };
 
   useEffect(() => {
-    selectedFile !== '' && sendFile();
-    setSelectedFile('');
-    setSelectedFileName('');
-  }, [selectedFile]);
-
-  useEffect(() => {
     if (error === 'No values recognised!') {
       setAlert(error, 'danger');
       clearErrors();
@@ -96,14 +90,6 @@ const PresetForm = () => {
 
   // Ref
   const inputRef = useRef();
-
-  const sendFile = () => {
-    const formData = new FormData();
-    formData.append('file', selectedFile, selectedFileName);
-    uploadCSV(formData);
-    setSelectedFile('');
-    setSelectedFileName('');
-  };
 
   const onFileChange = (e) => {
     setSelectedFileName(e.target.files[0].name);
@@ -155,6 +141,21 @@ const PresetForm = () => {
   };
 
   const { name, number, category } = preset;
+
+  useEffect(() => {
+    const sendFile = () => {
+      const formData = new FormData();
+      formData.append('file', selectedFile, selectedFileName);
+      uploadCSV(formData);
+      setSelectedFile('');
+      setSelectedFileName('');
+    };
+    if (selectedFile !== '') {
+      sendFile();
+      setSelectedFile('');
+      setSelectedFileName('');
+    }
+  }, [selectedFile, selectedFileName, uploadCSV]);
 
   return (
     <Fragment>

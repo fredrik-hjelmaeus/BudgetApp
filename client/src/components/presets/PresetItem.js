@@ -32,6 +32,9 @@ const PresetItem = ({ preset }) => {
     [edit]
   );
 
+  // state to activate input mode
+  const [InputMode, setInputMode] = useState('');
+
   // setting the local preset
   const onLocalChange = (e) => {
     setlocalPreset({ ...localpreset, [e.target.name]: e.target.value });
@@ -41,7 +44,7 @@ const PresetItem = ({ preset }) => {
     if (edit !== null) {
       InputMode === 'edit category' && setlocalPreset(edit);
     }
-  }, [edit]);
+  }, [edit, InputMode]);
 
   // state to handle deletebutton-hover
   const [DelbtnColor, setDelbtnColor] = useState(false);
@@ -58,8 +61,6 @@ const PresetItem = ({ preset }) => {
     cancelEdit();
     calcSum(_id, null);
   };
-  // state to activate input mode
-  const [InputMode, setInputMode] = useState('');
 
   // input change is finished and sent
   const onBlur = () => {
@@ -82,17 +83,21 @@ const PresetItem = ({ preset }) => {
   // implementation of dropdownmenu for categoryselection
 
   useEffect(() => {
-    inputNumRef.current.focus();
-    inputNameRef.current.focus();
-    InputMode === 'categorychanged' && console.log(localpreset);
+    InputMode === 'number' && inputNumRef.current.focus();
+    InputMode === 'name' && inputNameRef.current.focus();
+
     InputMode === 'categorychanged' && setEdit(localpreset);
     InputMode === 'categorychanged' && setInputMode('');
-    InputMode === '' && edit !== null && sendEdit(localpreset);
+    if (InputMode === '' && edit !== null) {
+      sendEdit(localpreset);
+      cancelEdit();
+    }
     InputMode === 'category' && inputCategoryRef.current.focus();
+    // eslint-disable-next-line
   }, [InputMode]);
 
   const onDropdownClick = (e) => {
-    setlocalPreset({ ...localpreset, ['category']: e.target.name });
+    setlocalPreset({ ...localpreset, category: e.target.name });
     setInputMode('categorychanged');
   };
 

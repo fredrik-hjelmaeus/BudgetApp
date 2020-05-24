@@ -31,7 +31,8 @@ const CsvPresetCreateModal = () => {
       clearCsv();
       setPrompt(false);
     }
-  }, [csvpresets]);
+    //eslint-disable-next-line
+  }, [csvpresets]); //breaks if you add clearCsv and submitCsvItems
 
   return (
     <Fragment>

@@ -27,15 +27,6 @@ const DateItemMobile = () => {
     'December',
   ]);
 
-  useEffect(() => {
-    year === null && setYear(2019);
-    year === null && setLocalMonth(2019);
-    LocalMonth === null && year !== null && setLocalMonth(parseInt(year));
-    month !== null && setLocalMonth(month);
-    year !== null && setLocalYear(parseInt(year));
-    DateList.length > 6 && LocalMonth !== null && adjustDateList();
-  }, [year, month, LocalMonth, LocalYear, addMonth]);
-
   const adjustDateList = () => {
     // shows previous year in the menu if december
     const yearInput =
@@ -187,6 +178,24 @@ const DateItemMobile = () => {
     // return jsx
     return MyArray.map((Item) => Item);
   };
+
+  useEffect(() => {
+    year === null && setYear(2019);
+    year === null && setLocalMonth(2019);
+    LocalMonth === null && year !== null && setLocalMonth(parseInt(year));
+    month !== null && setLocalMonth(month);
+    year !== null && setLocalYear(parseInt(year));
+    DateList.length > 6 && LocalMonth !== null && adjustDateList();
+  }, [
+    year,
+    month,
+    LocalMonth,
+    LocalYear,
+    addMonth,
+    setYear,
+    DateList,
+    adjustDateList,
+  ]);
 
   return (
     <div className='datemenu specialorder '>

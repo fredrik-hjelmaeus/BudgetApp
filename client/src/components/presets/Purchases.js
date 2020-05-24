@@ -15,7 +15,7 @@ const Purchases = () => {
 
   useEffect(() => {
     MonthBalance === null || (piggybanks === [] && calcMonthBalance());
-  }, [sendEdit, presets]);
+  }, [sendEdit, presets, calcMonthBalance, MonthBalance, piggybanks]);
 
   return (
     <div className='categorybalance'>
