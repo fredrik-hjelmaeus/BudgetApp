@@ -9,7 +9,14 @@ const PurchaseItem = ({ Item }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops, modal } = cssContext;
 
-  const { setEdit, MonthBalance, sendEdit, addPreset } = presetContext;
+  const {
+    setEdit,
+    MonthBalance,
+    sendEdit,
+    addPreset,
+    month,
+    year,
+  } = presetContext;
 
   const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState('');
 
@@ -42,12 +49,12 @@ const PurchaseItem = ({ Item }) => {
   const [expensepreset] = useState({
     _id: Item._id,
     name: Item.name,
-    number: Math.abs(Item.number + (Item.number - Item.piggybank)) * -1,
+    number: Item.number * -1,
     month: Item.month,
     year: Item.year,
     category: Item.category,
     type: 'overhead',
-    piggybank: 0,
+    piggybank: [{ month, year, savedAmount: '' }],
   });
   const [incomepreset] = useState({
     _id: Item._id,
@@ -57,7 +64,7 @@ const PurchaseItem = ({ Item }) => {
     year: Item.year,
     category: Item.category,
     type: 'overhead',
-    piggybank: 0,
+    piggybank: [{ month, year, savedAmount: '' }],
   });
 
   const onBuy = () => {

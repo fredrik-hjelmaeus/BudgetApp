@@ -6,8 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import PresetContext from '../../context/preset/presetContext';
-import DeleteSVG from '../layout/images/DeleteSVG';
-import AddSVG from '../layout/images/AddSVG';
+import DeleteButton from './DeleteButton';
 import DropdownMenu from './DropdownMenu';
 
 const CsvPresetItem = ({ Item }) => {
@@ -19,7 +18,6 @@ const CsvPresetItem = ({ Item }) => {
     updateCsvPresets,
     addPreset,
     removeCSV,
-    csvpresets,
   } = presetContext;
   const { id, number, name } = Item;
 
@@ -45,9 +43,9 @@ const CsvPresetItem = ({ Item }) => {
 
   useEffect(() => {
     InputMode === 'edit category' &&
-      setlocalPreset({ ...localpreset, ['category']: 'Select Category' });
+      setlocalPreset({ ...localpreset, category: 'Select Category' });
     InputMode === 'category' && inputCategoryRef.current.focus();
-  }, [InputMode]);
+  }, [InputMode, localpreset]);
 
   // calls onBlur when category is selected
   useEffect(() => {
@@ -58,7 +56,7 @@ const CsvPresetItem = ({ Item }) => {
     setInputMode(e.target.name);
   };
   const onDropdownClick = (e) => {
-    setlocalPreset({ ...localpreset, ['category']: e.target.name });
+    setlocalPreset({ ...localpreset, category: e.target.name });
     setInputMode('');
   };
 
@@ -90,10 +88,6 @@ const CsvPresetItem = ({ Item }) => {
       type: localpreset.type,
       piggybank: [{ month, year, savedAmount: '' }],
     });
-    //console.log(localpreset.id);
-    //const test = csvpresets.filter((preset) => preset.id === localpreset.id);
-    //console.log(test);
-    //console.log(csvpresets);
     removeCSV(localpreset);
   };
 
@@ -162,26 +156,14 @@ const CsvPresetItem = ({ Item }) => {
 
         {/* delete */}
         <div className='btn-form modal-csvpresets__item'>
-          <button
-            className='btn text-primary modal-csvpresets__deletebtnadjust'
-            value='delbtn'
+          <DeleteButton
             name={name}
-            onMouseEnter={onHover}
-            onMouseLeave={stopHover}
-            onClick={onDelete}
-          >
-            {localpreset.markdelete === true ? (
-              DelbtnColor === true ? (
-                <AddSVG color='var(--success-color)' />
-              ) : (
-                <AddSVG color='var(--primary-color)' />
-              )
-            ) : DelbtnColor === true ? (
-              <DeleteSVG fill='var(--danger-color)' />
-            ) : (
-              <DeleteSVG fill='var(--primary-color)' />
-            )}
-          </button>
+            onHover={onHover}
+            stopHover={stopHover}
+            localpreset={localpreset}
+            onDelete={onDelete}
+            DelbtnColor={DelbtnColor}
+          />
         </div>
       </div>
     </Fragment>

@@ -15,7 +15,7 @@ const DateItemWeb = () => {
     LocalMonth === null && setLocalMonth(year);
     year !== null && setPrevYear(parseInt(year - 1).toString());
     year !== null && setNextYear((parseInt(year) + parseInt(1)).toString());
-  }, [month, year, LocalMonth, prevYear, nextYear]);
+  }, [month, year, LocalMonth, prevYear, nextYear, setYear]);
 
   const onClick = (e) => {
     if (e.target.value !== undefined) {
