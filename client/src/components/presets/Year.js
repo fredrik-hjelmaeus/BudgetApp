@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
+import GuideContext from '../../context/guide/guideContext';
 import Savings from './Savings';
 import YearBalance from './YearBalance';
 import Expense from './Expense';
@@ -9,10 +10,12 @@ import Income from './Income';
 import YearCategoryBalance from './YearCategoryBalance';
 import YearSummaryMenu from './YearSummaryMenu';
 import YearTitle from './YearTitle';
+import GuideModal from '../guide/GuideModal';
 
 const Year = () => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
+  const guideContext = useContext(GuideContext);
 
   const {
     getPresets,
@@ -32,6 +35,9 @@ const Year = () => {
   } = presetContext;
 
   const { yearsummary, dimensions } = cssContext;
+  const { setGuide, guide } = guideContext;
+  //console.log(guide);
+  //console.log(presets);
   // loads presets from database when year-variable is updated
   useEffect(() => {
     getPresets();
@@ -40,6 +46,7 @@ const Year = () => {
 
   // calculates initial account balance if and when presets is defined.
   useEffect(() => {
+    presets && presets.length === 0 ? setGuide('1') : setGuide(null);
     presets && presetContext.calcSum(9, null, 'init');
     presets && calcCategoryByYear();
     presets && year === null && calcYearsum('2019');
@@ -74,6 +81,7 @@ const Year = () => {
   return (
     <Fragment>
       <Datemenu />
+      {guide && <GuideModal />}
       <div className='grid-2'>
         <div className='container'>
           <YearTitle />

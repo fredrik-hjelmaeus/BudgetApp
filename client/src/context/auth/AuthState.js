@@ -11,16 +11,16 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
 } from '../types';
 
-const AuthState = props => {
+const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
     user: null,
-    error: null
+    error: null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -37,18 +37,18 @@ const AuthState = props => {
 
       dispatch({
         type: USER_LOADED,
-        payload: res.data
+        payload: res.data,
       });
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
     }
   };
   // Register User
-  const register = async formData => {
+  const register = async (formData) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
 
     try {
@@ -56,23 +56,24 @@ const AuthState = props => {
 
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data
+        payload: res.data,
       });
 
       loadUser();
     } catch (err) {
       dispatch({
         type: REGISTER_FAIL,
-        payload: err.response.data.msg
+        payload: err.response.data.msg,
       });
     }
   };
   // Login User
-  const login = async formData => {
+  const login = async (formData) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'My_User-Agent': 'react',
+      },
     };
 
     try {
@@ -80,14 +81,14 @@ const AuthState = props => {
 
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.data
+        payload: res.data,
       });
 
       loadUser();
     } catch (err) {
       dispatch({
         type: LOGIN_FAIL,
-        payload: err.response.data.msg
+        payload: err.response.data.msg,
       });
     }
   };
@@ -108,7 +109,7 @@ const AuthState = props => {
         login,
         logout,
         clearErrors,
-        loadUser
+        loadUser,
       }}
     >
       {props.children}

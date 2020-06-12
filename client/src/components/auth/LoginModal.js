@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import CssContext from '../../context/css/cssContext';
 import personicon from '../layout/person.svg';
 
-export const LoginModal = props => {
+export const LoginModal = (props) => {
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
@@ -15,7 +15,7 @@ export const LoginModal = props => {
 
   const [user, setUser] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   useEffect(() => {
@@ -31,16 +31,16 @@ export const LoginModal = props => {
 
   const { email, password } = user;
 
-  const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
       setAlert('Please fill in all fields', 'danger');
     } else {
       login({
         email,
-        password
+        password,
       });
     }
   };
@@ -49,7 +49,7 @@ export const LoginModal = props => {
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
-  const onClick = e => {
+  const onClick = (e) => {
     toggleModal(e.target.value);
   };
   // modal activates, onClick deactivates modal, valid loginsubmit redirects by backend

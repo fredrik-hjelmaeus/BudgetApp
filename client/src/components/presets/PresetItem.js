@@ -59,7 +59,7 @@ const PresetItem = ({ preset }) => {
   const onDelete = () => {
     deletePreset(_id);
     cancelEdit();
-    calcSum(_id, null);
+    calcSum();
   };
 
   // input change is finished and sent

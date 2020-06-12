@@ -151,6 +151,7 @@ const DateItemMobile = () => {
         MyArray.push(
           <ul>
             <button
+              key={DateList[i]}
               onClick={onClick}
               className='btn-Datemenu'
               value={i === 0 ? 'prev' : 'next'}
@@ -164,6 +165,7 @@ const DateItemMobile = () => {
         MyArray.push(
           <ul>
             <button
+              key={DateList[i]}
               onClick={onClick}
               className='btn-Datemenu-mobilefocus'
               value={DateList[i]}

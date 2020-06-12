@@ -237,6 +237,8 @@ const PresetState = (props) => {
 
   // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = (month) => {
+    //console.log(state.year);
+    //console.log(state.presets);
     dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
   };
 
@@ -255,43 +257,24 @@ const PresetState = (props) => {
   };
 
   // Calculate Sum of presets
-  const calcSum = (id, presetnum, type) => {
+  const calcSum = () => {
     let presetArray = [];
-    let counter = 0;
     let TotalSum = 0;
 
-    if (presetnum === null) {
-      // calc when delete preset
-      state.presets.map((preset) => {
-        if (preset._id !== id && preset.type !== 'purchase')
-          presetArray.push(parseFloat(preset.number));
-      });
-    } else if (type === 'add') {
-      // calc when add new preset
-      state.presets.map((preset) => {
-        preset.type !== 'purchase' &&
-          presetArray.push(parseFloat(preset.number));
-        counter++;
-        if (counter === presetArray.length && preset.type !== 'purchase') {
-          presetArray.push(parseFloat(presetnum));
-        }
-      });
-    } else {
-      // calc when edit preset
-      state.presets.map((preset) => {
-        if (preset._id !== id && preset.type !== 'purchase')
-          presetArray.push(parseFloat(preset.number));
-      });
-      presetArray.push(parseFloat(presetnum));
-    }
-    // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
-    if (presetArray.length !== 0) {
-      TotalSum = presetArray.reduce((a, b) => a + b, 0);
-      dispatch({ type: SUM, payload: TotalSum });
-    } else {
-      TotalSum = presetnum;
-      dispatch({ type: SUM, payload: TotalSum });
-    }
+    const dispatchSum = (presetArray) => {
+      // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
+      if (presetArray.length !== 0) {
+        TotalSum = presetArray.reduce((a, b) => a + b, 0);
+        dispatch({ type: SUM, payload: TotalSum });
+      } else {
+        dispatch({ type: SUM, payload: 0 });
+      }
+    };
+
+    state.presets.map((preset) => {
+      preset.type !== 'purchase' && presetArray.push(parseFloat(preset.number));
+    });
+    dispatchSum(presetArray);
   };
 
   // Calc _ALL_ months sum
@@ -991,6 +974,7 @@ const PresetState = (props) => {
 
   const setTotalOfAllPiggybanksThisMonth = (Sum) => {
     dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
+    //console.log('ran');
   };
 
   const submitCsvItems = (string) => {

@@ -5,7 +5,7 @@ import CssContext from '../../context/css/cssContext';
 import { withRouter } from 'react-router-dom';
 import personicon from '../layout/person.svg';
 
-const RegisterModal = props => {
+const RegisterModal = (props) => {
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
@@ -27,14 +27,14 @@ const RegisterModal = props => {
     name: '',
     email: '',
     password: '',
-    password2: ''
+    password2: '',
   });
 
   const { name, email, password, password2 } = user;
 
-  const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     if (name === '' || email === '' || password === '') {
       setAlert('Please enter all fields', 'danger');
     } else if (password !== password2) {
@@ -44,7 +44,7 @@ const RegisterModal = props => {
       register({
         name,
         email,
-        password
+        password,
       });
     }
   };
@@ -53,12 +53,12 @@ const RegisterModal = props => {
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
-  const onClick = e => {
+  const onClick = (e) => {
     toggleModal('');
   };
 
   return (
-    <div id='myModal' class='modal-register' style={{ display: 'block' }}>
+    <div id='myModal' className='modal-register' style={{ display: 'block' }}>
       <div className='modal-content-register'>
         <span>
           <button className='closebtn' value='close' onClick={onClick}></button>

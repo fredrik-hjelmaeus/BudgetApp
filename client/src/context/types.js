@@ -60,3 +60,4 @@ export const UPDATE_CSV = 'UPDATE_CSV';
 export const SUBMIT_CSV = 'SUBMIT_CSV';
 export const CLEAR_CSV = 'CLEAR_CSV';
 export const REMOVE_CSV = 'REMOVE_CSV';
+export const SET_GUIDE = 'SET_GUIDE';

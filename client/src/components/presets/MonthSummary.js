@@ -5,11 +5,12 @@ import PresetNegativeFilter from '../presets/PresetNegativeFilter';
 
 const MonthSummary = () => {
   const presetContext = useContext(PresetContext);
-  const { getPresets } = presetContext;
+  const { getPresets, presets } = presetContext;
   useEffect(() => {
-    getPresets();
+    presets && getPresets();
     // eslint-disable-next-line
   }, []);
+
   return (
     <div>
       <div className='card_monthright bold'>

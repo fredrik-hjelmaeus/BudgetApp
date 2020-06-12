@@ -690,9 +690,10 @@ img {
 /* Forms */
 input {
   margin: 1.5rem 0;
-
   color: var(--dark-color);
   background: var(--success-color);
+  filter: none;
+  background-color: var(--success-color);
 }
 
 .form-container {
@@ -707,7 +708,9 @@ input {
   margin-top: 1rem;
   color: var(--gray-color);
   font-size: 14px;
+  background-color: red;
 }
+
 .form__inputOn {
   display: block;
 }
@@ -1800,8 +1803,84 @@ table th {
   background-color: yellow;
 }
 
-/* Datemenu */
+/* Guide */
+.guide__modal {
+  display: block; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 150px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+.guide__card {
+  background-color: var(--light-color);
+  box-shadow: 0px 3px 6px #2b2b2b;
+  margin: auto;
+  padding: 20px 40px;
+  border: 1px solid #000000;
+  width: 70%;
+  hesight: 80%;
+  font-size: 14px;
+}
+.guide__title {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.guide__datemenustep {
+  background-color: var(--light-color);
+  box-shadow: 0px 3px 6px #2b2b2b;
+  margin: 100px auto;
+  padding: 20px 40px;
+  border: 3px solid var(--orange-color);
+  width: 70%;
+  hesight: 80%;
+  font-size: 14px;
+  z-index: 4;
+}
+.guide__arrowicon {
+  background-color: transparent;
+  position: fixed;
+  z-index: 5;
+  margin: 30px 50%;
+}
+.guide__overlay {
+  position: absolute; /* Stay in place */
+  z-index: 5; /* Sit on top */
+  right: 0;
+  left: 10%;
+  top: 0%;
+  bottom: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
 
+/* Datemenu */
+.datemenu__guide {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--light-color);
+  padding: 0.7rem 2rem;
+  z-index: 3;
+  position: fixed;
+  width: 100%;
+  border: 3px solid var(--orange-color);
+  opacity: 1;
+  margin-bottom: 1rem;
+}
 .datemenu {
   display: flex;
   justify-content: space-between;

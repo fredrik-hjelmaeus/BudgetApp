@@ -1,9 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
+import GuideContext from '../../context/guide/guideContext';
 
 const DateItemWeb = () => {
   const presetContext = useContext(PresetContext);
+  const guideContext = useContext(GuideContext);
   const { year, setYear, addMonth, month } = presetContext;
+  const { guide } = guideContext;
   const [prevYear, setPrevYear] = useState(null);
   const [nextYear, setNextYear] = useState(null);
   const [LocalMonth, setLocalMonth] = useState(null);
@@ -25,13 +28,13 @@ const DateItemWeb = () => {
         setLocalMonth(e.target.value);
       } else {
         // previous year arrow pressed
-        if (e.target.value == prevYear) {
+        if (e.target.value.toString() === prevYear.toString()) {
           setYear(prevYear);
           addMonth(null);
           setLocalMonth(e.target.value);
         }
         // next year arrow pressed
-        if (e.target.value == nextYear) {
+        if (e.target.value.toString() === nextYear.toString()) {
           setYear(nextYear);
           addMonth(null);
           setLocalMonth(e.target.value);
@@ -46,7 +49,11 @@ const DateItemWeb = () => {
   };
 
   return (
-    <div className='datemenu'>
+    <div
+      className={
+        guide === '2' || guide === '3' ? 'datemenu__guide' : 'datemenu'
+      }
+    >
       <ul>
         <button
           onClick={onClick}
@@ -69,7 +76,7 @@ const DateItemWeb = () => {
           value={year}
           name={year}
         >
-          {LocalMonth == year ? (
+          {LocalMonth && year && LocalMonth.toString() === year.toString() ? (
             <strong className='text-dark'>{` ${year}`}</strong>
           ) : (
             ` ${year}`
@@ -79,7 +86,9 @@ const DateItemWeb = () => {
       <ul>
         <button
           onClick={onClick}
-          className='btn-Datemenu'
+          className={
+            guide === '3' ? 'btn-Datemenu guide__overlay' : 'btn-Datemenu'
+          }
           value='January'
           name='January'
         >
@@ -258,7 +267,9 @@ const DateItemWeb = () => {
           value={nextYear}
           name={nextYear}
         >
-          {LocalMonth == { nextYear } ? (
+          {LocalMonth &&
+          nextYear &&
+          LocalMonth.toString() === nextYear.toString() ? (
             <strong className='text-dark'>{`>`}</strong>
           ) : (
             `>`
