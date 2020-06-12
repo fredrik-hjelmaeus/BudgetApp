@@ -100,6 +100,7 @@ const CsvPresetItem = ({ Item }) => {
       localpreset.category !== 'Select Category' &&
       localpreset.markdelete !== true &&
       addToDB();
+    //eslint-disable-next-line
   }, [doSubmitCsv]);
 
   return (

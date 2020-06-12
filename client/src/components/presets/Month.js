@@ -32,7 +32,7 @@ const Month = () => {
   } = presetContext;
 
   useEffect(() => {
-    presets && calcSum(9, null, 'init');
+    presets && calcSum();
     presets && setPurchase();
     presets && calcMonthSum(month);
     presets && calcMonthSavings();
@@ -40,6 +40,7 @@ const Month = () => {
     presets && getMonthPiggySavings();
     // eslint-disable-next-line
   }, [presets, month]);
+
   return (
     <Fragment>
       {csvpresets && <CsvPresetCreateModal />}

@@ -103,7 +103,7 @@ const PresetForm = () => {
       if (edit === null) {
         addPreset(preset);
         if (preset.name !== '' || preset.number !== '') {
-          calcSum(preset.id, preset.number, 'add');
+          calcSum();
         }
       } else {
         if (
@@ -112,6 +112,7 @@ const PresetForm = () => {
           preset.category !== 'Select an category'
         ) {
           sendEdit(preset);
+          calcSum();
         }
         cancelEdit();
       }

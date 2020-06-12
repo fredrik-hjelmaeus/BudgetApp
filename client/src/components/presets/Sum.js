@@ -17,6 +17,7 @@ const Sum = () => {
     SumPiggybanksMonth,
     MonthBalance,
     calcMonthBalance,
+    calcSum,
   } = presetContext;
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const Sum = () => {
       calcPosMonth(filteredmonthandposnum);
       calcNegMonth(filteredmonthandnegnum);
       calcMonthBalance();
+      calcSum();
     } // eslint-disable-next-line
   }, [
     month,

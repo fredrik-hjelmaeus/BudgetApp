@@ -45,6 +45,7 @@ import {
   SUBMIT_CSV,
   CLEAR_CSV,
   REMOVE_CSV,
+  LOGOUT,
 } from '../types';
 
 export default (state, action) => {
@@ -55,6 +56,7 @@ export default (state, action) => {
         presets: action.payload,
         loading: false,
       };
+    case LOGOUT:
     case CLEAR_PRESETS:
       return {
         ...state,
@@ -62,6 +64,8 @@ export default (state, action) => {
         error: null,
         edit: null,
         sum: null,
+        year: '2019',
+        month: null,
       };
     case CLEAR_FILTER:
       return {
@@ -290,7 +294,7 @@ export default (state, action) => {
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
             preset.type !== 'purchase' &&
-            parseInt(preset.year) === parseInt(state.year) // multiple datatypes
+            preset.year.toString() === state.year.toString() // multiple datatypes
         ),
       };
     case FILTER_NEGNUMANDMONTH:
@@ -303,7 +307,7 @@ export default (state, action) => {
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
             preset.type !== 'purchase' &&
-            parseInt(preset.year) === parseInt(state.year) // multiple datatypes
+            preset.year.toString() === state.year.toString() // multiple datatypes
         ),
       };
 

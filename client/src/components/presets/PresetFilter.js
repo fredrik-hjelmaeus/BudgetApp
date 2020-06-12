@@ -15,6 +15,7 @@ const PresetFilter = () => {
     filterOutPositiveNumsAndMonth,
   } = presetContext;
 
+  //console.log(filteredmonthandposnum);
   useEffect(() => {
     if (month !== null && presets !== null) {
       filterOutPositiveNumsAndMonth(month);

@@ -14,6 +14,7 @@ import PresetState from './context/preset/PresetState';
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 import CssState from './context/css/CssState';
+import GuideState from './context/guide/GuideState';
 import setAuthToken from './utils/setAuthToken';
 
 if (localStorage.token) {
@@ -26,20 +27,22 @@ const App = () => {
       <PresetState>
         <AlertState>
           <CssState>
-            <Router>
-              <Fragment>
-                <Navbar />
-                <div>
-                  <Alerts />
-                  <Switch>
-                    <PrivateRoute exact path='/' component={Home} />
-                    <Route exact path='/about' component={About} />
-                    <Route exact path='/Landing' component={Landing} />
-                  </Switch>
-                </div>
-                <Footer />
-              </Fragment>
-            </Router>
+            <GuideState>
+              <Router>
+                <Fragment>
+                  <Navbar />
+                  <div>
+                    <Alerts />
+                    <Switch>
+                      <PrivateRoute exact path='/' component={Home} />
+                      <Route exact path='/about' component={About} />
+                      <Route exact path='/Landing' component={Landing} />
+                    </Switch>
+                  </div>
+                  <Footer />
+                </Fragment>
+              </Router>
+            </GuideState>
           </CssState>
         </AlertState>
       </PresetState>
