@@ -27,10 +27,7 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 router.post(
   '/',
-  [
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Password is required').exists(),
-  ],
+  [check('email', 'Please include a valid email').isEmail(), check('password', 'Password is required').exists()],
   async (req, res) => {
     const myAgent = req.header('my_user-agent');
     console.log(myAgent);
