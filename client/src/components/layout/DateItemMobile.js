@@ -29,8 +29,7 @@ const DateItemMobile = () => {
 
   const adjustDateList = () => {
     // shows previous year in the menu if december
-    const yearInput =
-      month === 'December' ? parseInt(LocalYear) + 1 : parseInt(year);
+    const yearInput = month === 'December' ? parseInt(LocalYear) + 1 : parseInt(year);
 
     let cleanedDateList = [];
     let activeIndex;
@@ -44,9 +43,7 @@ const DateItemMobile = () => {
       cleanedDateList = newDateList.filter((item) => item !== null);
     }
 
-    month === null
-      ? (activeIndex = cleanedDateList.indexOf(LocalMonth))
-      : (activeIndex = cleanedDateList.indexOf(LocalMonth));
+    month === null ? (activeIndex = cleanedDateList.indexOf(LocalMonth)) : (activeIndex = cleanedDateList.indexOf(LocalMonth));
     let i;
     let shiftedObj;
     const shiftLeftDateList = (arr, objIndex) => {
@@ -150,13 +147,7 @@ const DateItemMobile = () => {
       if (i !== 1) {
         MyArray.push(
           <ul>
-            <button
-              key={DateList[i]}
-              onClick={onClick}
-              className='btn-Datemenu'
-              value={i === 0 ? 'prev' : 'next'}
-              name={DateList[i]}
-            >
+            <button key={DateList[i]} onClick={onClick} className='btn-Datemenu' value={i === 0 ? 'prev' : 'next'} name={DateList[i]}>
               {DateList[i]}
             </button>
           </ul>
@@ -164,13 +155,7 @@ const DateItemMobile = () => {
       } else {
         MyArray.push(
           <ul>
-            <button
-              key={DateList[i]}
-              onClick={onClick}
-              className='btn-Datemenu-mobilefocus'
-              value={DateList[i]}
-              name={DateList[i]}
-            >
+            <button key={DateList[i]} onClick={onClick} className='btn-Datemenu-mobilefocus' value={DateList[i]} name={DateList[i]}>
               {DateList[i]}
             </button>
           </ul>
@@ -188,43 +173,20 @@ const DateItemMobile = () => {
     month !== null && setLocalMonth(month);
     year !== null && setLocalYear(parseInt(year));
     DateList.length > 6 && LocalMonth !== null && adjustDateList();
-  }, [
-    year,
-    month,
-    LocalMonth,
-    LocalYear,
-    addMonth,
-    setYear,
-    DateList,
-    adjustDateList,
-  ]);
+  }, [year, month, LocalMonth, LocalYear, addMonth, setYear, DateList, adjustDateList]);
 
   return (
     <div className='datemenu specialorder '>
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu prev'
-          value='prev'
-          name='prev'
-        >
+        <button onClick={onClick} className='btn-Datemenu prev' value='prev' name='prev'>
           {' '}
           {year == 'prev' ? <strong className='text-dark'>{`<`}</strong> : `<`}
         </button>
       </ul>
       {createDateItems()}
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu next'
-          value='next'
-          name='next'
-        >
-          {LocalMonth == 'next' ? (
-            <strong className='text-dark'>{`>`}</strong>
-          ) : (
-            `>`
-          )}
+        <button onClick={onClick} className='btn-Datemenu next' value='next' name='next'>
+          {LocalMonth == 'next' ? <strong className='text-dark'>{`>`}</strong> : `>`}
         </button>
       </ul>
     </div>

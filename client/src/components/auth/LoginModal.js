@@ -69,37 +69,15 @@ export const LoginModal = (props) => {
           <div className='form-container'>
             <form onSubmit={onSubmit}>
               <div className='form-text'>
-                <input
-                  type='email'
-                  placeholder='Email Address'
-                  name='email'
-                  value={email}
-                  onChange={onChange}
-                  required
-                />
+                <input type='email' placeholder='Email Address' name='email' value={email} onChange={onChange} required />
               </div>
               <div className='form-text'>
-                <input
-                  placeholder='Password'
-                  type='password'
-                  name='password'
-                  value={password}
-                  onChange={onChange}
-                  required
-                />
+                <input placeholder='Password' type='password' name='password' value={password} onChange={onChange} required />
               </div>
 
-              <input
-                type='submit'
-                value='LOGIN'
-                className='btn btn-dark btn-block btn-login'
-              />
+              <input type='submit' value='LOGIN' className='btn btn-dark btn-block btn-login' />
             </form>
-            <button
-              className='btn btn-outline btn-block'
-              value='register'
-              onClick={onClick}
-            >
+            <button className='btn btn-outline btn-block' value='register' onClick={onClick}>
               Register
             </button>
           </div>

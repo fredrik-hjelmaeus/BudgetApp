@@ -97,16 +97,12 @@ export default (state, action) => {
     case UPDATE_CSV:
       return {
         ...state,
-        csvpresets: state.csvpresets.map((preset) =>
-          preset.id === action.payload.id ? action.payload : preset
-        ),
+        csvpresets: state.csvpresets.map((preset) => (preset.id === action.payload.id ? action.payload : preset)),
       };
     case REMOVE_CSV:
       return {
         ...state,
-        csvpresets: state.csvpresets.filter(
-          (preset) => preset.id === action.payload.id
-        ),
+        csvpresets: state.csvpresets.filter((preset) => preset.id === action.payload.id),
       };
     case CLEAR_CSV:
       return {
@@ -141,16 +137,9 @@ export default (state, action) => {
       return {
         ...state,
         monthpiggysavings: state.presets
-          .filter(
-            (preset) =>
-              preset.type === 'purchase' && preset.piggybank.length !== 0
-          )
+          .filter((preset) => preset.type === 'purchase' && preset.piggybank.length !== 0)
           .map((preset) =>
-            preset.piggybank.filter(
-              (piggybank) =>
-                piggybank.month === action.payload &&
-                piggybank.year === parseInt(state.year)
-            )
+            preset.piggybank.filter((piggybank) => piggybank.month === action.payload && piggybank.year === parseInt(state.year))
           ),
       };
     case SUM_PIGGYBANKS_MONTH:
@@ -271,17 +260,13 @@ export default (state, action) => {
     case SEND_EDIT:
       return {
         ...state,
-        presets: state.presets.map((preset) =>
-          preset._id === action.payload._id ? action.payload : preset
-        ),
+        presets: state.presets.map((preset) => (preset._id === action.payload._id ? action.payload : preset)),
         loading: false,
       };
     case DELETE_PRESET:
       return {
         ...state,
-        presets: state.presets.filter(
-          (preset) => preset._id !== action.payload
-        ),
+        presets: state.presets.filter((preset) => preset._id !== action.payload),
         loading: false,
       };
     case FILTER_POSNUMANDMONTH:
@@ -314,9 +299,7 @@ export default (state, action) => {
     case FILTER_PRESETS:
       return {
         ...state,
-        filtered: state.presets.filter(
-          (preset) => preset.month === action.payload
-        ),
+        filtered: state.presets.filter((preset) => preset.month === action.payload),
       };
     case EDIT_PRESET:
       return {

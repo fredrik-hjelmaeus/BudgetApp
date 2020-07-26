@@ -14,7 +14,7 @@ const GuideModal = () => {
   };
   const nextStep = () => {
     //if guide reach last number,finish and exit guide by null,else increment guide by 1
-    guide === '3' ? setGuide(null) : setGuide((parseInt(guide) + 1).toString());
+    guide === '4' ? setGuide(null) : setGuide((parseInt(guide) + 1).toString());
   };
   return (
     <div className='guide__modal'>
@@ -22,10 +22,7 @@ const GuideModal = () => {
         <div className='guide__card'>
           <h1 className='guide__title'>Budget App Guide</h1>
           <h3>Welcome {isAuthenticated && user.name}!</h3>
-          <p>
-            To be able to properly use this App i suggest following this quick
-            guide of all the features available.
-          </p>
+          <p>To be able to properly use this App i suggest following this quick guide of all the features available.</p>
           <button onClick={onExit}>Decline</button>
           <button onClick={nextStep}>Start Guide</button>
         </div>
@@ -36,10 +33,7 @@ const GuideModal = () => {
             <ArrowSVG fill='orange' color='green' height='64' width='64' />
           </div>
           <div className='guide__datemenustep'>
-            <div>
-              {' '}
-              This is the datemenu. Here you navigate in your timeline.
-            </div>
+            <div> This is the datemenu. Here you navigate in your timeline.</div>
             <div>
               {' '}
               <button onClick={onExit}>Exit Guide</button>
@@ -54,10 +48,7 @@ const GuideModal = () => {
             <ArrowSVG fill='red' color='green' height='64' width='64' />
           </div>
           <div className='guide__datemenustep'>
-            <div>
-              Under year you will find a statistic summary for all values added
-              regarding to that year
-            </div>
+            <div>Under year you will find a statistic summary for all values added regarding to that year</div>
             <div>
               <button onClick={onExit}>Exit Guide</button>
               <button onClick={nextStep}>Next</button>

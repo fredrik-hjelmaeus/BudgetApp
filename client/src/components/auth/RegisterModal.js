@@ -72,35 +72,14 @@ const RegisterModal = (props) => {
         <div className='form-container'>
           <form onSubmit={onSubmit}>
             <div className='form-text'>
-              <input
-                type='name'
-                placeholder='Name'
-                name='name'
-                value={name}
-                onChange={onChange}
-                required
-              />
+              <input type='name' placeholder='Name' name='name' value={name} onChange={onChange} required />
             </div>
 
             <div className='form-text'>
-              <input
-                type='email'
-                placeholder='Email Address'
-                name='email'
-                value={email}
-                onChange={onChange}
-                required
-              />
+              <input type='email' placeholder='Email Address' name='email' value={email} onChange={onChange} required />
             </div>
             <div className='form-text'>
-              <input
-                placeholder='Password'
-                type='password'
-                name='password'
-                value={password}
-                onChange={onChange}
-                required
-              />
+              <input placeholder='Password' type='password' name='password' value={password} onChange={onChange} required />
             </div>
             <div className='form-text'>
               <input
@@ -114,11 +93,7 @@ const RegisterModal = (props) => {
               />
             </div>
 
-            <button
-              type='submit'
-              className='btn btn-dark btn-block my-1'
-              value='register'
-            >
+            <button type='submit' className='btn btn-dark btn-block my-1' value='register'>
               Register
             </button>
           </form>
