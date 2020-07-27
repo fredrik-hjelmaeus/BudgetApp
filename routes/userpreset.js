@@ -31,6 +31,9 @@ router.post(
     [
       check('name', 'Name is required').not().isEmpty(),
       check('number', 'Number is required').not().isEmpty(),
+      check('month', 'Month is required').not().isEmpty(),
+      check('category', 'Category is required').not().isEmpty(),
+      check('type', 'Type is required').not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -87,11 +90,7 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(401).json({ msg: 'Not authorized' });
     }
 
-    preset = await Preset.findByIdAndUpdate(
-      req.params.id,
-      { $set: presetFields },
-      { new: true }
-    );
+    preset = await Preset.findByIdAndUpdate(req.params.id, { $set: presetFields }, { new: true });
 
     res.json(preset);
   } catch (err) {

@@ -3,55 +3,56 @@ const mongoose = require('mongoose');
 const PresetSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users'
+    ref: 'users',
+    required: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   number: {
     type: Number,
-    required: true
+    required: true,
   },
   month: {
     type: String,
-    required: true
+    required: true,
   },
   year: {
     type: Number,
-    required: false
+    required: false,
   },
   category: {
     type: String,
-    required: true
+    required: true,
   },
   type: {
     type: String,
-    required: true
+    required: true,
   },
   piggybank: {
     type: [
       {
         month: {
           type: String,
-          required: false
+          required: false,
         },
         year: {
           type: Number,
-          required: false
+          required: false,
         },
         savedAmount: {
           type: Number,
-          required: false
-        }
-      }
+          required: false,
+        },
+      },
     ],
-    required: false
+    required: false,
   },
   date: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model('preset', PresetSchema);
