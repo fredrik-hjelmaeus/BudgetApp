@@ -9,6 +9,7 @@ import Landing from './components/pages/Landing';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Alerts from './components/layout/Alerts';
+import ResetPassword from './components/auth/ResetPassword';
 
 import PresetState from './context/preset/PresetState';
 import AuthState from './context/auth/AuthState';
@@ -32,11 +33,11 @@ const App = () => {
                 <Fragment>
                   <Navbar />
                   <div>
-                    <Alerts />
                     <Switch>
                       <PrivateRoute exact path='/' component={Home} />
                       <Route exact path='/about' component={About} />
                       <Route exact path='/Landing' component={Landing} />
+                      <Route path='/resetpassword/:id' component={ResetPassword} />
                     </Switch>
                   </div>
                   <Footer />
