@@ -61,3 +61,5 @@ export const SUBMIT_CSV = 'SUBMIT_CSV';
 export const CLEAR_CSV = 'CLEAR_CSV';
 export const REMOVE_CSV = 'REMOVE_CSV';
 export const SET_GUIDE = 'SET_GUIDE';
+export const FORGOT_FAIL = 'FORGOT_FAIL';
+export const FORGOT_SUCCESS = 'FORGOT_SUCCESS';

@@ -4,6 +4,7 @@ import Logo from '../layout/Logo';
 
 import LoginModal from '../auth/LoginModal';
 import RegisterModal from '../auth/RegisterModal';
+import ForgotPassword from '../auth/ForgotPassword';
 
 const Landing = () => {
   const cssContext = useContext(CssContext);
@@ -14,7 +15,7 @@ const Landing = () => {
     // eslint-disable-next-line
   }, []);
 
-  const onClick = e => {
+  const onClick = (e) => {
     toggleModal(e.target.value);
   };
 
@@ -22,6 +23,7 @@ const Landing = () => {
     <div className='Landing__showcase'>
       {modal === 'login' && <LoginModal />}
       {modal === 'register' && <RegisterModal />}
+      {modal === 'forgot' && <ForgotPassword />}
       {modal === '' && (
         <div className='Landing'>
           <Logo />
@@ -35,20 +37,12 @@ const Landing = () => {
           </div>
           <div>
             {' '}
-            <button
-              className='Landing__btn__white all-center'
-              value='login'
-              onClick={onClick}
-            >
+            <button className='Landing__btn__white all-center' value='login' onClick={onClick}>
               LOGIN
             </button>
           </div>
           <div>
-            <button
-              className='Landing__btn__black all-center'
-              value='register'
-              onClick={onClick}
-            >
+            <button className='Landing__btn__black all-center' value='register' onClick={onClick}>
               Register
             </button>
           </div>

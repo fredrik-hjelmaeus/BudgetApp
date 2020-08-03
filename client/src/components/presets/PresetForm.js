@@ -1,33 +1,17 @@
-import React, {
-  Fragment,
-  useState,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { Fragment, useState, useContext, useEffect, useRef } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
 import CheckBoxField from './CheckBoxField';
 import SelectField from './SelectField';
+import Alerts from '../layout/Alerts';
 
 const PresetForm = () => {
   const alertContext = useContext(AlertContext);
   const presetContext = useContext(PresetContext);
   const authContext = useContext(AuthContext);
 
-  const {
-    presets,
-    addPreset,
-    edit,
-    cancelEdit,
-    sendEdit,
-    calcSum,
-    month,
-    year,
-    uploadCSV,
-    error,
-  } = presetContext;
+  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year, uploadCSV, error } = presetContext;
   const { setAlert } = alertContext;
   const { clearErrors } = authContext;
   useEffect(() => {
@@ -106,11 +90,7 @@ const PresetForm = () => {
           calcSum();
         }
       } else {
-        if (
-          preset.name !== '' ||
-          preset.number !== '' ||
-          preset.category !== 'Select an category'
-        ) {
+        if (preset.name !== '' || preset.number !== '' || preset.category !== 'Select an category') {
           sendEdit(preset);
           calcSum();
         }
@@ -118,6 +98,7 @@ const PresetForm = () => {
       }
       if (preset.name === '' || preset.number === '') {
         setAlert('Please fill in both fields', 'danger');
+        return;
       }
 
       setPreset({
@@ -160,47 +141,20 @@ const PresetForm = () => {
 
   return (
     <Fragment>
-      {expand === true && (
-        <button
-          className='btn closebtn mt-1'
-          value='close'
-          onClick={toggleExpand}
-        ></button>
-      )}
+      {expand === true && <button className='btn closebtn mt-1' value='close' onClick={toggleExpand}></button>}
       {expand === true && (
         <form onSubmit={onSubmit} className='presetform'>
-          <h2 className='text-primary all-center presetformtitle'>
-            {edit === null ? 'ADD TO BUDGET' : 'EDIT VALUE'}
-          </h2>
+          <Alerts />
+          <h2 className='text-primary all-center presetformtitle'>{edit === null ? 'ADD TO BUDGET' : 'EDIT VALUE'}</h2>
           <span className='presetformspan'>
-            <input
-              className='presetformname'
-              type='text'
-              placeholder='Name'
-              name='name'
-              value={name}
-              onChange={onChange}
-            />
-            <input
-              className='presetformnumber'
-              type='text'
-              placeholder='Number'
-              name='number'
-              value={number}
-              onChange={onChange}
-            />
+            <input className='presetformname' type='text' placeholder='Name' name='name' value={name} onChange={onChange} />
+            <input className='presetformnumber' type='text' placeholder='Number' name='number' value={number} onChange={onChange} />
           </span>
           <SelectField selectChange={selectChange} category={category} />
           <div className='presetform__optionsfield'>
             <CheckBoxField preset={preset} onChange={onChange} />
             <div>
-              <input
-                style={{ display: 'none' }}
-                type='file'
-                name='csvFile'
-                onChange={onFileChange}
-                ref={inputRef}
-              />
+              <input style={{ display: 'none' }} type='file' name='csvFile' onChange={onFileChange} ref={inputRef} />
               <button
                 type='button'
                 className='btn presetform__upload'
@@ -215,11 +169,7 @@ const PresetForm = () => {
           </div>
 
           <div>
-            <input
-              type='submit'
-              value={edit === null ? 'ADD TO BUDGET' : 'UPDATE'}
-              className='btn btn-presetformadd'
-            />
+            <input type='submit' value={edit === null ? 'ADD TO BUDGET' : 'UPDATE'} className='btn btn-presetformadd' />
           </div>
           {edit && (
             <div>

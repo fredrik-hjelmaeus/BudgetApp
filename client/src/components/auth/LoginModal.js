@@ -4,6 +4,7 @@ import AlertContext from '../../context/alert/alertContext';
 import { withRouter } from 'react-router-dom';
 import CssContext from '../../context/css/cssContext';
 import personicon from '../layout/person.svg';
+import Alerts from '../layout/Alerts';
 
 export const LoginModal = (props) => {
   // Authentication
@@ -67,6 +68,7 @@ export const LoginModal = (props) => {
           </div>
 
           <div className='form-container'>
+            <Alerts />
             <form onSubmit={onSubmit}>
               <div className='form-text'>
                 <input type='email' placeholder='Email Address' name='email' value={email} onChange={onChange} required />
@@ -79,6 +81,9 @@ export const LoginModal = (props) => {
             </form>
             <button className='btn btn-outline btn-block' value='register' onClick={onClick}>
               Register
+            </button>
+            <button value='forgot' onClick={onClick}>
+              Forgot Password
             </button>
           </div>
         </div>
