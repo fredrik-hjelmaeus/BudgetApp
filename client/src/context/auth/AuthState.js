@@ -3,7 +3,18 @@ import axios from 'axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
 import setAuthToken from '../../utils/setAuthToken';
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS } from '../types';
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT,
+  CLEAR_ERRORS,
+  FORGOT_FAIL,
+  FORGOT_SUCCESS,
+} from '../types';
 
 const AuthState = (props) => {
   const initialState = {
@@ -12,6 +23,7 @@ const AuthState = (props) => {
     loading: true,
     user: null,
     error: null,
+    mailsentmsg: null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -89,6 +101,53 @@ const AuthState = (props) => {
   // Clear Errors
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
 
+  //Forgot Password
+  const forgotPassword = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'My_User-Agent': 'react',
+      },
+    };
+
+    try {
+      const res = await axios.post('/api/auth/forgotpassword', formData, config); //endpoint/url
+
+      dispatch({
+        type: FORGOT_SUCCESS,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: FORGOT_FAIL,
+        payload: err.res.data,
+      });
+    }
+  };
+
+  //Reset Password
+  const resetPassword = async (formData) => {
+    const { token } = formData;
+    // console.log(password);
+    // console.log(token);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
+      console.log('success');
+    } catch (err) {
+      /*  dispatch({
+        type: FORGOT_FAIL,
+        payload: err.res.data,
+      }); */
+      console.log(err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -97,11 +156,14 @@ const AuthState = (props) => {
         loading: state.loading,
         user: state.user,
         error: state.error,
+        mailsentmsg: state.mailsentmsg,
         register,
         login,
         logout,
         clearErrors,
         loadUser,
+        forgotPassword,
+        resetPassword,
       }}
     >
       {props.children}

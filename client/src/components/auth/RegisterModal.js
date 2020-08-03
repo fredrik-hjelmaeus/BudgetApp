@@ -4,6 +4,7 @@ import AuthContext from '../../context/auth/authContext';
 import CssContext from '../../context/css/cssContext';
 import { withRouter } from 'react-router-dom';
 import personicon from '../layout/person.svg';
+import Alerts from '../layout/Alerts';
 
 const RegisterModal = (props) => {
   const alertContext = useContext(AlertContext);
@@ -14,6 +15,7 @@ const RegisterModal = (props) => {
 
   useEffect(() => {
     if (isAuthenticated) {
+      console.log('ran');
       props.history.push('/');
     }
 
@@ -35,12 +37,12 @@ const RegisterModal = (props) => {
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
+    e.preventDefault();
     if (name === '' || email === '' || password === '') {
       setAlert('Please enter all fields', 'danger');
     } else if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      e.preventDefault();
       register({
         name,
         email,
@@ -54,6 +56,7 @@ const RegisterModal = (props) => {
   const { toggleModal } = cssContext;
 
   const onClick = (e) => {
+    console.log('togglemodalran');
     toggleModal('');
   };
 
@@ -70,6 +73,7 @@ const RegisterModal = (props) => {
         </div>
 
         <div className='form-container'>
+          <Alerts />
           <form onSubmit={onSubmit}>
             <div className='form-text'>
               <input type='name' placeholder='Name' name='name' value={name} onChange={onChange} required />

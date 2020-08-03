@@ -104,8 +104,9 @@ router.post('/forgotpassword', async (req, res) => {
 
     // Create reset url
     const resetUrl = `${req.protocol}://${req.get('host')}/api/auth/forgotpassword/${resetToken}`;
+    const resetUrlTwo = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
 
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
+    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please follow this link to create new password: \n\n ${resetUrlTwo}`;
     try {
       await sendEmail({
         email: user.email,
@@ -124,7 +125,7 @@ router.post('/forgotpassword', async (req, res) => {
       return res.status(500).json({ data: 'Email could not be sent' });
     }
 
-    res.status(200).json({ msg: 'Email sent, check your mailbox', data: user });
+    // res.status(200).json({ msg: 'Email sent, check your mailbox', data: user });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -135,6 +136,8 @@ router.post('/forgotpassword', async (req, res) => {
 // @route         PUT /api/auth/resetpassword/:resettoken
 // @access        Public
 router.put('/resetpassword/:resettoken', async (req, res) => {
+  // console.log(req.params.resettoken);
+  console.log(req.body.password);
   try {
     // Get hashed token
     const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
