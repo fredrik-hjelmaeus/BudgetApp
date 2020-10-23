@@ -11,6 +11,7 @@ import YearCategoryBalance from './YearCategoryBalance';
 import YearSummaryMenu from './YearSummaryMenu';
 import YearTitle from './YearTitle';
 import GuideModal from '../guide/GuideModal';
+import UserProfileModal from '../auth/UserProfileModal';
 
 const Year = () => {
   const presetContext = useContext(PresetContext);
@@ -34,7 +35,7 @@ const Year = () => {
     calcAllMonthSum,
   } = presetContext;
 
-  const { yearsummary, dimensions } = cssContext;
+  const { yearsummary, dimensions, modal } = cssContext;
   const { setGuide, guide } = guideContext;
   //console.log(guide);
   //console.log(presets);
@@ -80,6 +81,7 @@ const Year = () => {
 
   return (
     <Fragment>
+      {modal === 'profile' && <UserProfileModal />}
       <Datemenu />
       {guide && <GuideModal />}
       <div className='grid-2'>

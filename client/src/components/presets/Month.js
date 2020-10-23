@@ -11,6 +11,7 @@ import MonthSummary from './MonthSummary';
 import CategoryBalance from './CategoryBalance';
 import Sum from '../presets/Sum';
 import MonthSavingsSummary from '../presets/MonthSavingsSummary';
+import UserProfileModal from '../auth/UserProfileModal';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
@@ -43,6 +44,7 @@ const Month = () => {
 
   return (
     <Fragment>
+      {modal === 'profile' && <UserProfileModal />}
       {csvpresets && <CsvPresetCreateModal />}
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
       {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
@@ -56,14 +58,11 @@ const Month = () => {
           <CategoryBalance />
         </div>
 
-        <div className='monthgrid__PurchasesOrder'>
-          {MonthSum !== null && MonthSum > 0 && <Purchases />}
-        </div>
+        <div className='monthgrid__PurchasesOrder'>{MonthSum !== null && MonthSum > 0 && <Purchases />}</div>
 
         <div className='bgmonthright monthgrid__sums'>
           <Sum />
-          {(monthsavings !== null && <MonthSavingsSummary />) ||
-            (monthpiggysavings !== null && <MonthSavingsSummary />)}
+          {(monthsavings !== null && <MonthSavingsSummary />) || (monthpiggysavings !== null && <MonthSavingsSummary />)}
           <MonthSummary />
         </div>
       </div>

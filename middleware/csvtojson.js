@@ -12,32 +12,48 @@ module.exports = function (req, res, next) {
   }
   const file = req.files.file;
 
+  let bank = 'nordea';
+  let deLimit = { delimiter: [';', ';;', ';;;'] };
   //file comes in as mimetype 'application/octet-stream' so mimetypecheck wont work
   // Check filename to check if it is a csv-file
-  if (!file.name.endsWith('csv')) {
+
+  if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
+    if (file.name.endsWith('txt')) {
+      deLimit = { delimiter: [',', ',,', ',,,'] };
+      bank = 'handelsbanken';
+    }
+  } else {
     return res.status(400).send('Wrong filetype, only accepts csv!');
   }
   //Make sure the file is a csv-file
   /* if (file.mimetype !== 'text/csv') {
     return res.status(400).send('Wrong filetype, only accepts csv!');
   } */
-  //console.log(file);
+  //console.log(deLimit);
   file.mv(`${__dirname}/${file.name}`);
-
   let newpresets = [];
 
-  csv({ delimiter: [';', ';;', ';;;'] })
+  csv(deLimit)
     .fromFile(`${__dirname}/${file.name}`)
     .then((source) => {
-      // Check for new Nordea-csv
-      if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
-        console.log('invalid nordea file deleted');
-        deleteFile(`${__dirname}/${file.name}`);
-        return res
-          .status(400)
-          .send('CSV does not contain valid Nordea-values!');
+      //console.log(source);
+      if (bank === 'nordea') {
+        // Check for new Nordea-csv
+        if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
+          console.log('invalid nordea file deleted');
+          deleteFile(`${__dirname}/${file.name}`);
+          return res.status(400).send('CSV does not contain valid Nordea-values!');
+        }
+      } else {
+        // console.log(Object.keys(source));
+        console.log(typeof Object.keys(source[0])[6], typeof Object.keys(source[0])[7]);
+        // Check for Handelsbanken-txt-csv
+        if (typeof Object.keys(source[0])[6] !== 'string' || typeof Object.keys(source[0])[7] !== 'string') {
+          console.log('invalid handelsbanken txt-file deleted');
+          deleteFile(`${__dirname}/${file.name}`);
+          return res.status(400).send('TXT/CSV does not contain valid Handelsbanken-values!');
+        }
       }
-
       // Push new values to array
       source.map((preset) =>
         newpresets.push({
