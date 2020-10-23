@@ -6,14 +6,7 @@ import DropdownMenu from './DropdownMenu';
 const PresetItem = ({ preset }) => {
   const presetContext = useContext(PresetContext);
 
-  const {
-    deletePreset,
-    setEdit,
-    cancelEdit,
-    calcSum,
-    edit,
-    sendEdit,
-  } = presetContext;
+  const { deletePreset, setEdit, cancelEdit, calcSum, edit, sendEdit } = presetContext;
 
   const { _id, name, number, category, month, year, savedAmount } = preset;
 
@@ -110,25 +103,15 @@ const PresetItem = ({ preset }) => {
         <h4>
           <button
             onClick={onClick}
-            className={
-              number > 0 ? ' text-primary btn-form ' : ' text-primary btn-form '
-            }
-            style={
-              InputMode === 'name' ? { display: 'none' } : { display: 'block' }
-            }
+            className={number > 0 ? ' text-primary btn-form ' : ' text-primary btn-form '}
+            style={InputMode === 'name' ? { display: 'none' } : { display: 'block' }}
             name='name'
           >
             {name}
           </button>
           <input
-            className={
-              number > 0
-                ? 'text-success btn-form numinput'
-                : 'text-danger btn-form numinput'
-            }
-            style={
-              InputMode === 'name' ? { display: 'block' } : { display: 'none' }
-            }
+            className={number > 0 ? 'text-success btn-form numinput' : 'text-danger btn-form numinput'}
+            style={InputMode === 'name' ? { display: 'block' } : { display: 'none' }}
             type='text'
             value={localpreset.name}
             onChange={onLocalChange}
@@ -142,25 +125,15 @@ const PresetItem = ({ preset }) => {
       <div>
         <button
           onClick={onClick}
-          style={
-            InputMode === 'number' ? { display: 'none' } : { display: 'block' }
-          }
-          className={
-            number > 0 ? 'text-success btn-form' : 'text-danger btn-form'
-          }
+          style={InputMode === 'number' ? { display: 'none' } : { display: 'block' }}
+          className={number > 0 ? 'text-success btn-form' : 'text-danger btn-form'}
           name='number'
         >
           {number}
         </button>
         <input
-          className={
-            number > 0
-              ? 'text-success btn-form numinput'
-              : 'text-danger btn-form numinput'
-          }
-          style={
-            InputMode === 'number' ? { display: 'block' } : { display: 'none' }
-          }
+          className={number > 0 ? 'text-success btn-form numinput' : 'text-danger btn-form numinput'}
+          style={InputMode === 'number' ? { display: 'block' } : { display: 'none' }}
           type='text'
           value={localpreset.number}
           onChange={onLocalChange}
@@ -170,12 +143,7 @@ const PresetItem = ({ preset }) => {
         />
       </div>
       {/* category */}
-      <DropdownMenu
-        onDropdownClick={onDropdownClick}
-        localpreset={localpreset}
-        onClick={onTestClick}
-        category={category}
-      />
+      <DropdownMenu onDropdownClick={onDropdownClick} localpreset={localpreset} onClick={onTestClick} category={category} />
       {/* deletebutton */}
       <div>
         <button
@@ -186,11 +154,7 @@ const PresetItem = ({ preset }) => {
           onMouseLeave={stopHover}
           onClick={onDelete}
         >
-          {DelbtnColor === true ? (
-            <DeleteSVG fill='var(--danger-color)' />
-          ) : (
-            <DeleteSVG fill='var(--light-color)' />
-          )}
+          {DelbtnColor === true ? <DeleteSVG fill='var(--danger-color)' /> : <DeleteSVG fill='var(--light-color)' />}
         </button>
       </div>
     </div>

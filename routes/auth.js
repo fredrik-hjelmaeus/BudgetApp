@@ -29,11 +29,13 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 router.post(
   '/',
+
   [check('email', 'Please include a valid email').isEmail(), check('password', 'Password is required').exists()],
   async (req, res) => {
     const myAgent = req.header('my_user-agent');
     console.log(myAgent);
     const errors = validationResult(req);
+    //console.log(errors);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -42,15 +44,15 @@ router.post(
 
     try {
       let user = await User.findOne({ email });
-
+      console.log(user);
       if (!user) {
-        return res.status(400).json({ msg: 'Invalid Credentials' });
+        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ msg: 'Invalid Credentials' });
+        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       const payload = {
@@ -76,6 +78,7 @@ router.post(
       } else {
         jwt.sign(payload, config.get('jwtSecret'), (err, token) => {
           if (err) throw err;
+          console.log(token);
           res.json({ token });
         });
       }
@@ -89,12 +92,19 @@ router.post(
 // @route   POST api/auth/forgotpassword
 // @desc    Forgot password
 // @access  Public
-router.post('/forgotpassword', async (req, res) => {
+router.post('/forgotpassword', [check('email', 'Please include a valid email').isEmail()], async (req, res) => {
+  //validate : check if a valid mail syntax was used
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(404).json({ data: 'There is no user with that email' });
+      return res.status(404).json({ errors: [{ msg: 'There is no user with that email' }] });
     }
 
     // Get reset token
@@ -104,7 +114,10 @@ router.post('/forgotpassword', async (req, res) => {
 
     // Create reset url
     const resetUrl = `${req.protocol}://${req.get('host')}/api/auth/forgotpassword/${resetToken}`;
-    const resetUrlTwo = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
+    const resetUrlTwo =
+      config.get('resetpasswordURL') === 'development'
+        ? `https://dry-eyrie-55051.herokuapp.com/resetpassword/${resetToken}`
+        : `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
 
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please follow this link to create new password: \n\n ${resetUrlTwo}`;
     try {
@@ -136,8 +149,6 @@ router.post('/forgotpassword', async (req, res) => {
 // @route         PUT /api/auth/resetpassword/:resettoken
 // @access        Public
 router.put('/resetpassword/:resettoken', async (req, res) => {
-  // console.log(req.params.resettoken);
-  console.log(req.body.password);
   try {
     // Get hashed token
     const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
@@ -162,5 +173,79 @@ router.put('/resetpassword/:resettoken', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// @desc          Update user details
+// @route         PUT /api/auth/updatedetails
+// @access        Private
+router.put('/updatedetails', auth, [check('email', 'Please include a valid email').isEmail()], async (req, res) => {
+  //validering
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    // extract information from request
+    const fieldsToUpdate = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+
+    // make sure new requested email is not already in use
+    const emailInUse = await User.findOne({ email: req.body.email });
+    // if it exist a user with that email and it's not the id of the authenticated user ,cancel change
+    if (emailInUse && emailInUse.id !== req.user.id) {
+      return res.status(401).json({ errors: [{ msg: 'This email is already in use' }] });
+    }
+
+    // update user
+    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({ success: true, data: user, msg: 'Successfully updated profile' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @desc          Update password
+// @route         PUT /api/auth/updatepassword
+// @access        Private
+router.put(
+  '/updatepassword',
+  [check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })],
+  auth,
+  async (req, res) => {
+    //validering
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const user = await User.findById(req.user.id).select('+password');
+
+      // Check current password
+      if (!(await bcrypt.compare(req.body.currentPassword, user.password))) {
+        return res.status(401).json({ errors: [{ msg: 'Password is incorrect' }] });
+      }
+
+      // Set/Encrypt new password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+
+      await user.save();
+      res.status(200).json({ msg: 'Password Updated' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
 
 module.exports = router;

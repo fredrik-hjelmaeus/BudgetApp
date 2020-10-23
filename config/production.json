@@ -6,5 +6,6 @@
   "SMTP_EMAIL": "48bc41b140f371",
   "SMTP_PASSWORD": "c860e30b194a89",
   "FROM_EMAIL": "noreply@budgetapp.io",
-  "FROM_NAME": "BudgetApp"
+  "FROM_NAME": "BudgetApp",
+  "resetpasswordURL": "production"
 }

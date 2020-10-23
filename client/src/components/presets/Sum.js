@@ -27,15 +27,7 @@ const Sum = () => {
       calcMonthBalance();
       calcSum();
     } // eslint-disable-next-line
-  }, [
-    month,
-    presets,
-    filteredmonthandposnum,
-    filteredmonthandnegnum,
-    monthsavings,
-    MonthSum,
-    SumPiggybanksMonth,
-  ]);
+  }, [month, presets, filteredmonthandposnum, filteredmonthandnegnum, monthsavings, MonthSum, SumPiggybanksMonth]);
 
   return (
     <Fragment>
@@ -43,63 +35,34 @@ const Sum = () => {
         {/* Income Month */}
         <div className='text-gray'>
           Month Income:{'    '}
-          <span
-            className={
-              presetContext.PosMonthSum > 0 ? 'text-success ' : 'text-gray '
-            }
-          >
-            {presetContext.PosMonthSum}
-          </span>
+          <span className={presetContext.PosMonthSum > 0 ? 'text-success ' : 'text-gray '}>{presetContext.PosMonthSum}</span>
         </div>
         {/* Surplus Month */}
         <div>
-          <span
-            className={
-              presetContext.MonthSum > 0 ? 'text-primary' : 'text-primary'
-            }
-          >
+          <span className={presetContext.MonthSum > 0 ? 'text-primary' : 'text-primary'}>
             {presetContext.MonthSum > 0 ? 'Month Surplus:' : 'Balance Month:'}
           </span>
-          <span
-            className={
-              presetContext.MonthSum > 0 ? 'text-success' : 'text-danger'
-            }
-          >
-            {presetContext.MonthSum}
-          </span>
+          <span className={presetContext.MonthSum > 0 ? 'text-success' : 'text-danger'}>{presetContext.MonthSum}</span>
         </div>
         {/* Expenses Month */}
         <div className='text-gray'>
           Month Expenses:{'    '}
-          <span
-            className={
-              presetContext.NegMonthSum > 0 ? 'text-success' : 'text-danger'
-            }
-          >
-            {presetContext.NegMonthSum}
-          </span>
+          <span className={presetContext.NegMonthSum > 0 ? 'text-success' : 'text-danger'}>{presetContext.NegMonthSum}</span>
         </div>
         {/* Account Balance */}
         <div className='text-gray'>
           Account Balance:
-          <span className={sum > 0 ? 'text-success' : 'text-danger'}>
-            {sum}{' '}
-          </span>
+          <span className={sum > 0 ? 'text-success' : 'text-danger'}>{sum} </span>
         </div>
         {/* Month Balance */}
         <div>
           Month Balance:
-          <span className={MonthBalance > 0 ? 'text-success' : 'text-danger'}>
-            {MonthBalance}
-          </span>
+          <span className={MonthBalance > 0 ? 'text-success' : 'text-danger'}>{MonthBalance}</span>
         </div>
         {/*  Savings Month*/}
         <div>
           Month Savings:
-          <span className={'text-orange'}>
-            {' '}
-            {monthsavings + SumPiggybanksMonth}
-          </span>
+          <span className={'text-orange'}> {monthsavings + SumPiggybanksMonth}</span>
         </div>
       </div>
     </Fragment>

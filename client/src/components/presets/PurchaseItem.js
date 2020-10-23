@@ -9,14 +9,7 @@ const PurchaseItem = ({ Item }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops, modal } = cssContext;
 
-  const {
-    setEdit,
-    MonthBalance,
-    sendEdit,
-    addPreset,
-    month,
-    year,
-  } = presetContext;
+  const { setEdit, MonthBalance, sendEdit, addPreset, month, year } = presetContext;
 
   const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState('');
 
@@ -24,16 +17,11 @@ const PurchaseItem = ({ Item }) => {
     // store only savedAmounts in an array
     const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
     // sift through savedAmounts and count totalsum
-    const SumOfPiggybanks = savedAmounts.reduce(
-      (a, b) => parseFloat(a) + parseFloat(b),
-      0
-    );
+    const SumOfPiggybanks = savedAmounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
     const ItemAfterPiggy = Item.number - SumOfPiggybanks;
     let MonthsLeft;
     MonthBalance > 0 && MonthBalance !== null
-      ? (MonthsLeft = parseInt(
-          parseFloat(ItemAfterPiggy) / parseFloat(MonthBalance)
-        ))
+      ? (MonthsLeft = parseInt(parseFloat(ItemAfterPiggy) / parseFloat(MonthBalance)))
       : (MonthsLeft = '+50');
 
     setMonthsLeftBeforePurchase(MonthsLeft);
@@ -134,19 +122,12 @@ const PurchaseItem = ({ Item }) => {
   return (
     <div className='card-categorybalance bg-white'>
       <span className='text-gray purchasegrid'>
-        <button
-          onClick={() => setEdit(Item)}
-          className={'purchasetitlebtn no-wrap text-gray'}
-        >
+        <button onClick={() => setEdit(Item)} className={'purchasetitlebtn no-wrap text-gray'}>
           {Item.name}
         </button>
         <button
           onClick={() => setEdit(Item)}
-          className={
-            MonthBalance > 0
-              ? 'purchasenumberbtn no-wrap text-danger bold'
-              : 'purchasenumberbtn no-wrap text-danger bold'
-          }
+          className={MonthBalance > 0 ? 'purchasenumberbtn no-wrap text-danger bold' : 'purchasenumberbtn no-wrap text-danger bold'}
         >
           {Item.number}
         </button>
@@ -170,23 +151,11 @@ const PurchaseItem = ({ Item }) => {
             1 Month
           </button>
         ) : (
-          <button
-            className={
-              MonthBalance > 0
-                ? 'btn-moremonthsleft'
-                : 'btn-moremonthsleftNoHoverConnection'
-            }
-            onClick={onSave}
-          >
+          <button className={MonthBalance > 0 ? 'btn-moremonthsleft' : 'btn-moremonthsleftNoHoverConnection'} onClick={onSave}>
             {`${MonthsLeftBeforePurchase} months`}
           </button>
         )}
-        <TrashDeleteButton
-          onDelete={onDelete}
-          onTrashHover={onTrashHover}
-          stopTrashHover={stopTrashHover}
-          TrashHover={TrashHover}
-        />
+        <TrashDeleteButton onDelete={onDelete} onTrashHover={onTrashHover} stopTrashHover={stopTrashHover} TrashHover={TrashHover} />
       </span>
     </div>
   );

@@ -21,6 +21,7 @@ router.post(
     const myAgent = req.header('my_user-agent');
     console.log(myAgent);
     const errors = validationResult(req);
+    //console.log(errors);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -34,7 +35,7 @@ router.post(
 
       // om user existerar rapportera errormsg
       if (user) {
-        return res.status(400).json({ msg: 'User already exists' });
+        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
 
       //om user mail inte existerar , Skapa ny user

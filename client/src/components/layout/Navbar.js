@@ -15,30 +15,26 @@ const Navbar = ({ title, icon }) => {
 
   const { isAuthenticated, logout, user } = authContext;
   const { clearPresets } = presetContext;
+  const { toggleModal } = cssContext;
 
   const onLogout = () => {
     logout();
     clearPresets();
   };
+  const onUserClick = (e) => {
+    toggleModal('profile');
+  };
   const authLinks = (
     <Fragment>
       <li className='navbar__username navbar__titlenudge'>
-        <img
-          src={personicon}
-          alt='img'
-          style={{ width: '16px' }}
-          className='inverted'
-        ></img>
-        {'  '}
-        {user && user.name.toUpperCase()}
+        <img src={personicon} alt='img' style={{ width: '16px' }} className='inverted'></img>
+        <button className='btn-user' onClick={onUserClick}>
+          {user && user.name.toUpperCase()}
+        </button>
       </li>
       <li>
         <a onClick={onLogout} href='#!'>
-          <img
-            src={logouticon}
-            alt='img'
-            style={{ width: '24px', position: 'relative', bottom: '0.1rem' }}
-          ></img>
+          <img src={logouticon} alt='img' style={{ width: '24px', position: 'relative', bottom: '0.1rem' }}></img>
         </a>
       </li>
     </Fragment>

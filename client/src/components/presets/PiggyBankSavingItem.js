@@ -9,18 +9,11 @@ const PiggyBankSavingItem = ({ purchase }) => {
   const { name, number, piggybank } = purchase;
 
   /* Look witch year it is and filter out years above this year  */
-  const filterpiggybanks = piggybank.filter(
-    (item) => item.year && item.year <= year
-  );
+  const filterpiggybanks = piggybank.filter((item) => item.year && item.year <= year);
   /*take the filtered yearlist and create a var for the sums saved */
-  const sumoffilteredpiggybanks = filterpiggybanks.map(
-    (item) => item.savedAmount
-  );
+  const sumoffilteredpiggybanks = filterpiggybanks.map((item) => item.savedAmount);
   /* sum up the amounts */
-  const totalsum = sumoffilteredpiggybanks.reduce(
-    (a, b) => parseFloat(a) + parseFloat(b),
-    0
-  );
+  const totalsum = sumoffilteredpiggybanks.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
 
   return (
     <div className='card-piggy'>

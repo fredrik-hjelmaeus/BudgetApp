@@ -147,11 +147,7 @@ const PresetState = (props) => {
     };
 
     try {
-      const res = await axios.put(
-        `/api/userpreset/${preset._id}`,
-        preset,
-        config
-      );
+      const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err) {
       dispatch({
@@ -854,8 +850,7 @@ const PresetState = (props) => {
     //håller uträknade summan
     let TotalMonthSum = 0;
     state.presets.map((preset) => {
-      if (preset.type === 'savings')
-        presetArray.push(parseFloat(preset.number));
+      if (preset.type === 'savings') presetArray.push(parseFloat(preset.number));
     });
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
@@ -874,21 +869,12 @@ const PresetState = (props) => {
     let TotalMonthSum = 0;
     if (state.year === 2019 || state.year === '2019') {
       state.presets.map((preset) => {
-        if (
-          preset.year === undefined ||
-          (preset.year == '2019' &&
-            preset.type === 'savings' &&
-            preset.month === state.month)
-        )
+        if (preset.year === undefined || (preset.year == '2019' && preset.type === 'savings' && preset.month === state.month))
           presetArray.push(parseFloat(preset.number));
       });
     } else {
       state.presets.map((preset) => {
-        if (
-          preset.year == state.year &&
-          preset.type === 'savings' &&
-          preset.month === state.month
-        )
+        if (preset.year == state.year && preset.type === 'savings' && preset.month === state.month)
           presetArray.push(parseFloat(preset.number));
       });
     }
@@ -905,8 +891,7 @@ const PresetState = (props) => {
 
   // calc month balance
   const calcMonthBalance = () => {
-    const totalsum =
-      state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
+    const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
     dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
   };
 
@@ -914,20 +899,11 @@ const PresetState = (props) => {
   const getMonthSavings = (month) => {
     if (state.year === '2019' || state.year === 2019) {
       const filter = state.presets.filter(
-        (preset) =>
-          preset.year === undefined ||
-          (preset.year == '2019' &&
-            preset.type === 'savings' &&
-            preset.month === month)
+        (preset) => preset.year === undefined || (preset.year == '2019' && preset.type === 'savings' && preset.month === month)
       );
       dispatch({ type: GET_MONTHSAVINGS, payload: filter });
     } else {
-      const filter = state.presets.filter(
-        (preset) =>
-          preset.year == state.year &&
-          preset.type === 'savings' &&
-          preset.month === month
-      );
+      const filter = state.presets.filter((preset) => preset.year == state.year && preset.type === 'savings' && preset.month === month);
       dispatch({ type: GET_MONTHSAVINGS, payload: filter });
     }
   };
@@ -943,8 +919,7 @@ const PresetState = (props) => {
     //håller uträknade summan
     let TotalMonthSum = 0;
     state.presets.map((preset) => {
-      if (preset.type === 'capital')
-        presetArray.push(parseFloat(preset.number));
+      if (preset.type === 'capital') presetArray.push(parseFloat(preset.number));
     });
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
