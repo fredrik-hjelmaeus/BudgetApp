@@ -4,13 +4,7 @@ import MonthSavingsItem from './MonthSavingsItem';
 
 const MonthSavingsSummary = () => {
   const presetContext = useContext(PresetContext);
-  const {
-    presets,
-    monthsavingspresets,
-    setTotalOfAllPiggybanksThisMonth,
-    month,
-    year,
-  } = presetContext;
+  const { presets, monthsavingspresets, setTotalOfAllPiggybanksThisMonth, month, year } = presetContext;
 
   const [localPiggy, setLocalPiggy] = useState(null);
 
@@ -23,9 +17,7 @@ const MonthSavingsSummary = () => {
 
     const calcPiggySavings = () => {
       // filters out presets that is type purchase and has piggybank savings
-      monthpurchasewithpiggybank = presets.filter(
-        (preset) => preset.type === 'purchase' && preset.piggybank.length !== 0
-      );
+      monthpurchasewithpiggybank = presets.filter((preset) => preset.type === 'purchase' && preset.piggybank.length !== 0);
 
       // filters out piggybankvalues made in active month
       filteroutbymonth = monthpurchasewithpiggybank.map((purchase) =>
@@ -38,17 +30,10 @@ const MonthSavingsSummary = () => {
       );
 
       // store only savedAmounts in an array
-      savedAmounts = filteroutbymonth.map((first) =>
-        first.map((second) => second.savedAmount)
-      );
+      savedAmounts = filteroutbymonth.map((first) => first.map((second) => second.savedAmount));
       // sift through savedAmounts and count totalsum
-      SumOfAllPiggyBanksByMonthByPreset = savedAmounts.map((inner) =>
-        inner.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
-      );
-      TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset.reduce(
-        (a, b) => parseFloat(a) + parseFloat(b),
-        0
-      );
+      SumOfAllPiggyBanksByMonthByPreset = savedAmounts.map((inner) => inner.reduce((a, b) => parseFloat(a) + parseFloat(b), 0));
+      TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
     };
     if (presets) {
       calcPiggySavings();
@@ -72,9 +57,7 @@ const MonthSavingsSummary = () => {
     if (presets) {
       setLocalPiggy(createSavingsItem());
     }
-    TotalOfAllPiggybanksThisMonth &&
-      TotalOfAllPiggybanksThisMonth !== 0 &&
-      setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
+    TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0 && setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
     // eslint-disable-next-line
   }, [month, presets, year]);
 
@@ -83,26 +66,14 @@ const MonthSavingsSummary = () => {
     return (
       <div className='card_monthright_surplussavings bold'>
         <div>
-          <h3 className='all-center text-gray underline'>
-            Month Surplus put to Savings
-          </h3>
+          <h3 className='all-center text-gray underline'>Month Surplus put to Savings</h3>
         </div>
         {monthsavingspresets.map((preset) => (
-          <MonthSavingsItem
-            Item={preset}
-            SumOfPreset={preset.number}
-            key={preset._id}
-          />
+          <MonthSavingsItem Item={preset} SumOfPreset={preset.number} key={preset._id} />
         ))}
         {localPiggy &&
           localPiggy.length !== 0 &&
-          localPiggy.map((piggy) => (
-            <MonthSavingsItem
-              Item={piggy.Item}
-              SumOfPreset={piggy.SumOfPreset}
-              key={piggy._id}
-            />
-          ))}
+          localPiggy.map((piggy) => <MonthSavingsItem Item={piggy.Item} SumOfPreset={piggy.SumOfPreset} key={piggy._id} />)}
       </div>
     );
   } else return null;

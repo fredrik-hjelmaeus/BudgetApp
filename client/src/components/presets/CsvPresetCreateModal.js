@@ -15,10 +15,11 @@ const CsvPresetCreateModal = () => {
     submitCsvItems('step1');
   };
   useEffect(() => {
-    //check for valid csv to add
-    const checkcsv = csvpresets.filter(
-      (item) => item.category && item.markdelete === false
-    );
+    //check for valid csv to add by filter out all with not valid cat and markdel set to true
+    const checkcsv = csvpresets.filter((item) => item.category && item.markdelete === false);
+    const test = csvpresets.filter((item) => item.category);
+    console.log(csvpresets);
+    //console.log(checkcsv);
     setValidCsv(checkcsv);
 
     if (checkcsv.length !== 0 && checkcsv.length !== csvpresets.length) {
@@ -37,11 +38,7 @@ const CsvPresetCreateModal = () => {
   return (
     <Fragment>
       {Prompt && <CsvPrompt setPrompt={setPrompt} validCsv={validCsv} />}
-      <div
-        id='myModal'
-        className='modal-csvpresets'
-        style={{ display: 'block' }}
-      >
+      <div id='myModal' className='modal-csvpresets' style={{ display: 'block' }}>
         <div className='modal-csvpresets__card'>
           <h1 className='all-center m-1'>Create Transactions</h1>
 
@@ -49,16 +46,10 @@ const CsvPresetCreateModal = () => {
             <CsvPresetItem Item={item} key={item.id} />
           ))}
 
-          <button
-            className='btn modal-csvpresets__btn__addtobudget all-center'
-            onClick={onClick}
-          >
+          <button className='btn modal-csvpresets__btn__addtobudget all-center' onClick={onClick}>
             ADD TO BUDGET
           </button>
-          <button
-            className='btn modal-csvpresets__btn__addtobudget all-center'
-            onClick={() => clearCsv()}
-          >
+          <button className='btn modal-csvpresets__btn__addtobudget all-center' onClick={() => clearCsv()}>
             Cancel
           </button>
         </div>

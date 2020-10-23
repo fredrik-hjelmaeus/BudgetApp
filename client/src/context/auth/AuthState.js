@@ -14,6 +14,8 @@ import {
   CLEAR_ERRORS,
   FORGOT_FAIL,
   FORGOT_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_DETAILS_FAIL,
 } from '../types';
 
 const AuthState = (props) => {
@@ -46,6 +48,7 @@ const AuthState = (props) => {
       dispatch({ type: AUTH_ERROR });
     }
   };
+
   // Register User
   const register = async (formData) => {
     const config = {
@@ -118,10 +121,11 @@ const AuthState = (props) => {
         payload: res.data,
       });
     } catch (err) {
-      dispatch({
+      console.log(err);
+      /*  dispatch({
         type: FORGOT_FAIL,
-        payload: err.res.data,
-      });
+        payload: err,
+      }); */
     }
   };
 
@@ -148,6 +152,44 @@ const AuthState = (props) => {
     }
   };
 
+  //update userdetails
+  const updateDetails = async (formData) => {
+    console.log(formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const res = await axios.put('/api/auth/updatedetails', formData, config);
+      console.log('success');
+      loadUser();
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: UPDATE_DETAILS_FAIL,
+        payload: err.response.data.msg,
+      });
+    }
+  };
+
+  //update Password
+  const updatePassword = async (formData) => {
+    console.log(formData);
+    const config = {
+      'Content-Type': 'application/json',
+    };
+    try {
+      const res = await axios.put('/api/auth/updatepassword', formData, config);
+      console.log('success');
+    } catch (err) {
+      dispatch({
+        type: UPDATE_PASSWORD_FAIL,
+        payload: err.response.data.msg,
+      });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -164,6 +206,8 @@ const AuthState = (props) => {
         loadUser,
         forgotPassword,
         resetPassword,
+        updateDetails,
+        updatePassword,
       }}
     >
       {props.children}

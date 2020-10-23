@@ -4,10 +4,7 @@ import PresetContext from '../../context/preset/presetContext';
 
 const Expense = () => {
   const presetContext = useContext(PresetContext);
-  const {
-    categorysumonlynegnumbyyear,
-    categorynameonlynegnumbyyear,
-  } = presetContext;
+  const { categorysumonlynegnumbyyear, categorynameonlynegnumbyyear } = presetContext;
 
   const YearExpense = categorysumonlynegnumbyyear.reduce((a, b) => a + b, 0);
   //colors set here so expense and income can have different colors in their chart
@@ -40,11 +37,7 @@ const Expense = () => {
     <div className='year-bg'>
       <div className='expense__card'>
         <div style={{ margin: '0 0 1rem 0' }}>
-          <DonutChart
-            sums={categorysumonlynegnumbyyear}
-            names={categorynameonlynegnumbyyear}
-            colors={colors}
-          />
+          <DonutChart sums={categorysumonlynegnumbyyear} names={categorynameonlynegnumbyyear} colors={colors} />
         </div>
         <div className='donuttitle'>Expenses</div>
         <div className='flexrow'>

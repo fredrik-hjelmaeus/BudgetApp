@@ -9,6 +9,8 @@ import {
   CLEAR_ERRORS,
   FORGOT_FAIL,
   FORGOT_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_DETAILS_FAIL,
 } from '../types';
 
 export default (state, action) => {
@@ -56,6 +58,12 @@ export default (state, action) => {
       return {
         ...state,
         mailsentmsg: null,
+      };
+    case UPDATE_PASSWORD_FAIL:
+    case UPDATE_DETAILS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
       };
 
     default:
