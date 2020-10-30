@@ -103,6 +103,7 @@ router.put('/:id', auth, async (req, res) => {
 // @desc    Delete preset
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
+  console.log(req.params.id);
   try {
     let preset = await Preset.findById(req.params.id);
 

@@ -36,7 +36,6 @@ module.exports = function (req, res, next) {
   csv(deLimit)
     .fromFile(`${__dirname}/${file.name}`)
     .then((source) => {
-      //console.log(source);
       if (bank === 'nordea') {
         // Check for new Nordea-csv
         if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
@@ -45,23 +44,36 @@ module.exports = function (req, res, next) {
           return res.status(400).send('CSV does not contain valid Nordea-values!');
         }
       } else {
-        // console.log(Object.keys(source));
-        console.log(typeof Object.keys(source[0])[6], typeof Object.keys(source[0])[7]);
-        // Check for Handelsbanken-txt-csv
+        //  console.log(Object.keys(source[0])[6], Object.keys(source[0])[7]);
+        // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
         if (typeof Object.keys(source[0])[6] !== 'string' || typeof Object.keys(source[0])[7] !== 'string') {
           console.log('invalid handelsbanken txt-file deleted');
           deleteFile(`${__dirname}/${file.name}`);
           return res.status(400).send('TXT/CSV does not contain valid Handelsbanken-values!');
         }
       }
+
       // Push new values to array
-      source.map((preset) =>
-        newpresets.push({
-          number: preset.Belopp,
-          name: preset.Rubrik,
-          id: uuidv4(),
-        })
-      );
+      if (bank === 'nordea') {
+        source.map((preset) =>
+          newpresets.push({
+            number: preset.Belopp,
+            name: preset.Rubrik,
+            id: uuidv4(),
+          })
+        );
+      }
+      if (bank === 'handelsbanken') {
+        console.log(source.map((preset) => Object.keys(preset)[6]));
+        /*     source.map((preset) =>
+          newpresets.push({
+            number: preset.Belopp,
+            name: preset.Rubrik,
+            id: uuidv4(),
+          })
+        ); */
+      }
+
       if (newpresets.length === 0) {
         deleteFile(`${__dirname}/${file.name}`);
         return res.status(400).send('No values recognised!');
