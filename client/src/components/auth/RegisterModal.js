@@ -68,7 +68,7 @@ const RegisterModal = (props) => {
         </span>
 
         <div className='modalloginheader'>
-          <img src={personicon} alt='img'></img>
+          <img src={personicon} alt='img' className='modalloginicon'></img>
           <h1>Account Register</h1>
         </div>
 
