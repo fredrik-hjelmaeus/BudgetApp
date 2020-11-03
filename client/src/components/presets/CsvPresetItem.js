@@ -1,24 +1,11 @@
-import React, {
-  Fragment,
-  useContext,
-  useState,
-  useRef,
-  useEffect,
-} from 'react';
+import React, { Fragment, useContext, useState, useRef, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import DeleteButton from './DeleteButton';
 import DropdownMenu from './DropdownMenu';
 
 const CsvPresetItem = ({ Item }) => {
   const presetContext = useContext(PresetContext);
-  const {
-    month,
-    year,
-    doSubmitCsv,
-    updateCsvPresets,
-    addPreset,
-    removeCSV,
-  } = presetContext;
+  const { month, year, doSubmitCsv, updateCsvPresets, addPreset, removeCSV } = presetContext;
   const { id, number, name } = Item;
 
   //local preset used to update preset via function presetContext.sendEdit
@@ -42,8 +29,7 @@ const CsvPresetItem = ({ Item }) => {
   const [InputMode, setInputMode] = useState('');
 
   useEffect(() => {
-    InputMode === 'edit category' &&
-      setlocalPreset({ ...localpreset, category: 'Select Category' });
+    InputMode === 'edit category' && setlocalPreset({ ...localpreset, category: 'Select Category' });
     InputMode === 'category' && inputCategoryRef.current.focus();
   }, [InputMode, localpreset]);
 
@@ -92,27 +78,16 @@ const CsvPresetItem = ({ Item }) => {
   };
 
   useEffect(() => {
-    doSubmitCsv === 'step1' &&
-      localpreset.category !== 'Select Category' &&
-      updateCsvPresets(localpreset);
+    doSubmitCsv === 'step1' && localpreset.category !== 'Select Category' && updateCsvPresets(localpreset);
 
-    doSubmitCsv === 'submit' &&
-      localpreset.category !== 'Select Category' &&
-      localpreset.markdelete !== true &&
-      addToDB();
+    doSubmitCsv === 'submit' && localpreset.category !== 'Select Category' && localpreset.markdelete !== true && addToDB();
     //eslint-disable-next-line
   }, [doSubmitCsv]);
 
   return (
     <Fragment>
       {/* name */}
-      <div
-        className={
-          localpreset.markdelete
-            ? 'modal-csvpresets__grid markgraydelete'
-            : 'modal-csvpresets__grid'
-        }
-      >
+      <div className={localpreset.markdelete ? 'modal-csvpresets__grid markgraydelete' : 'modal-csvpresets__grid'}>
         <div
           className={
             localpreset.markdelete
@@ -139,8 +114,8 @@ const CsvPresetItem = ({ Item }) => {
         <div
           className={
             localpreset.markdelete
-              ? 'btn-form modal-csvpresets__item disable__hover'
-              : 'btn-form modal-csvpresets__item'
+              ? 'btn-form modal-csvpresets__item csvpresets__item__monthyear disable__hover'
+              : 'btn-form modal-csvpresets__item csvpresets__item__monthyear'
           }
         >
           {month}/{year}
@@ -148,12 +123,7 @@ const CsvPresetItem = ({ Item }) => {
 
         {/* category */}
 
-        <DropdownMenu
-          onDropdownClick={onDropdownClick}
-          localpreset={localpreset}
-          onClick={onClick}
-          category={localpreset.category}
-        />
+        <DropdownMenu onDropdownClick={onDropdownClick} localpreset={localpreset} onClick={onClick} category={localpreset.category} />
 
         {/* delete */}
         <div className='btn-form modal-csvpresets__item'>

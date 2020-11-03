@@ -49,7 +49,10 @@ const CsvPresetCreateModal = () => {
           <button className='btn modal-csvpresets__btn__addtobudget all-center' onClick={onClick}>
             ADD TO BUDGET
           </button>
-          <button className='btn modal-csvpresets__btn__addtobudget all-center' onClick={() => clearCsv()}>
+          <button
+            className='btn modal-csvpresets__btn__addtobudget modal-csvpresets__btn__addtobudget__cancel all-center'
+            onClick={() => clearCsv()}
+          >
             Cancel
           </button>
         </div>

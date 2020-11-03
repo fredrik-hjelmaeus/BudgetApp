@@ -63,8 +63,8 @@ export const LoginModal = (props) => {
           </span>
 
           <div className='modalloginheader'>
-            <img src={personicon} alt='img'></img>
-            <h1>Account Login</h1>
+            <img src={personicon} alt='img' className='modalloginicon'></img>
+            <h1> Account Login</h1>
           </div>
 
           <div className='form-container'>
@@ -82,7 +82,7 @@ export const LoginModal = (props) => {
             <button className='btn btn-outline btn-block' value='register' onClick={onClick}>
               Register
             </button>
-            <button value='forgot' onClick={onClick}>
+            <button value='forgot' className='btn btn-block modallogin__forgotpassword' onClick={onClick}>
               Forgot Password
             </button>
           </div>
