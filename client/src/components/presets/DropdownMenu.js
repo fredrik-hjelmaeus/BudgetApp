@@ -78,22 +78,13 @@ const getCategoryIcon = (category) => {
 const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
   // localpreset.markdelete !== undefined && console.log(localpreset.markdelete);
   return (
-    <div
-      className={
-        localpreset.markdelete === false
-          ? 'dropdown'
-          : localpreset.markdelete
-          ? 'dropdown disable__hover'
-          : 'dropdown'
-      }
-    >
+    <div className={localpreset.markdelete === false ? 'dropdown' : localpreset.markdelete ? 'dropdown disable__hover' : 'dropdown'}>
       {/* category */}
       <button
         onClick={onClick}
         // onMouseEnter={onClick}
         className={
-          localpreset.category === 'Select Category' ||
-          localpreset.category === 'Select an category'
+          localpreset.category === 'Select Category' || localpreset.category === 'Select an category'
             ? localpreset.markdelete
               ? 'dropbtn markgraydelete disable__hover'
               : 'dropbtn'
@@ -123,22 +114,12 @@ const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
             onClick={onClick}
             //onMouseEnter={onClick}
             //onMouseLeave={stopHover}
-            className={
-              localpreset.markdelete
-                ? 'dropdown__categoryicon__grayedout'
-                : 'dropdown__categoryicon'
-            }
+            className={localpreset.markdelete ? 'dropdown__categoryicon__grayedout' : 'dropdown__categoryicon'}
           />
         )}
       </button>
 
-      <div
-        className={
-          localpreset.markdelete
-            ? 'dropdown-content markgraydelete disable__hover'
-            : 'dropdown-content'
-        }
-      >
+      <div className={localpreset.markdelete ? 'dropdown-content markgraydelete disable__hover' : 'dropdown-content'}>
         <button name='Commute' onClick={onDropdownClick}>
           Commute
         </button>

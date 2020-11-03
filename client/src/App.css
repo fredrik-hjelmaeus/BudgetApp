@@ -509,14 +509,14 @@ img {
 .btn-block {
   display: block;
   width: 100%;
-
   padding: 0.7rem;
   border: 2px solid var(--gray-color);
   border-radius: 4px;
 }
 
 .btn-login {
-  margin-top: 72px;
+  /* margin-top: 72px; */
+  margin-top: auto;
 }
 
 .btn-sm {
@@ -1677,6 +1677,7 @@ table th {
   margin: auto;
   padding: 20px;
   border: 1px solid #000000;
+  border-radius: 8px;
   width: 461px;
   height: 489px;
   font-size: 14px;
@@ -1694,6 +1695,7 @@ table th {
   margin: auto;
   padding: 20px;
   border: 1px solid #000000;
+  border-radius: 8px;
   width: 461px;
   height: 489px;
   font-size: 14px;
@@ -1702,6 +1704,7 @@ table th {
 .modal-content-register {
   display: block;
   margin-top: 1rem;
+  padding-top: 3rem;
   color: var(--dark-color);
   font-size: 14px;
 }
@@ -1721,6 +1724,31 @@ table th {
 .modalloginheader {
   display: flex;
   justify-content: center;
+}
+.modalloginicon {
+  margin-right: 15px;
+  padding-right: 1px;
+}
+.modallogin__forgotpassword {
+  border: none;
+  padding: 0 auto;
+  background: none;
+  font-size: 14px;
+}
+
+.ForgotMailInput__text {
+  text-align: 'center';
+  padding: 25px;
+}
+
+.modallogin__container {
+  display: flex;
+  flex-direction: column;
+  /* max-width: 90%; */
+  align-items: center;
+  margin: 0rem 1rem 1rem 1rem;
+  overflow: hidden;
+  padding: 0 0.5rem;
 }
 
 .closebtn {
@@ -1753,14 +1781,43 @@ table th {
   margin: auto;
   padding: 20px 40px;
   border: 1px solid #000000;
+  border-radius: 8px;
   width: 70%;
   hesight: 80%;
   font-size: 14px;
 }
+@media (max-width: 800px) {
+  .modal-csvpresets__card {
+    background-color: var(--light-color);
+    box-shadow: 0px 3px 6px #2b2b2b;
+    margin: auto;
+    padding: 20px 10px;
+    border: 1px solid #000000;
+    border-radius: 8px 8px 0px 0px;
+    width: 100%;
+    hesight: 80%;
+    font-size: 14px;
+  }
+}
+.modal-csvpresets__card__flex {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  width: 50%;
+}
+.modal-csvpresets__flex {
+  flex: 1;
+}
+
 .modal-csvpresets__grid {
   display: grid;
   grid-template-columns: 6fr 2fr 2fr 2fr 1fr;
   border-bottom: 1px solid var(--gray-color);
+}
+@media (max-width: 800px) {
+  .modal-csvpresets__grid {
+    grid-template-columns: 3fr 2fr 2fr 1fr;
+  }
 }
 .modal-csvpresets__item {
   borrder: 0.1px solid red;
@@ -1773,12 +1830,36 @@ table th {
   aligsn-self: start;
   justifsy-self: left;
 }
+
+@media (max-width: 800px) {
+  .csvpresets__item__monthyear {
+    display: none;
+  }
+}
 .modal-csvpresets__btn__addtobudget {
   display: block;
   color: var(--light-color);
   font-weight: bold !important;
   width: 50%;
   background: var(--gray-color);
+  padding: 0.7rem 1rem;
+  border: 2px solid #747272;
+  border-radius: 4px;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.modal-csvpresets__btn__addtobudget__cancel {
+  background: var(--light-color);
+  color: var(--gray-color);
+}
+
+.modal-csvpresets__btn__goback {
+  display: block;
+  color: var(--dark-color);
+  font-weight: bold !important;
+  width: 50%;
+  background: var(--light-color);
   padding: 0.7rem 1rem;
   border: 2px solid #747272;
   border-radius: 4px;
@@ -2410,6 +2491,14 @@ input[type='range']:focus::-ms-fill-lower {
   border: 2px solid var(--primary-color);
   border-radius: 4px;
 }
+@media (max-width: 800px) {
+  .dropbtn {
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .dropbtn__noborder {
   border: none !important;
 }

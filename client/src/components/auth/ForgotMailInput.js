@@ -3,8 +3,8 @@ import React from 'react';
 function ForgotMailInput({ email, onChange, onClick, onSubmit }) {
   return (
     <React.Fragment>
-      <div>Enter the email you use for your BudgetApp account</div>
       <div className='form-container'>
+        <div className='ForgotMailInput__text'>Enter the email you use for your BudgetApp account</div>
         <form onSubmit={onSubmit}>
           <div className='form-text'>
             <input type='email' placeholder='Email Address' name='email' value={email} onChange={onChange} required />
