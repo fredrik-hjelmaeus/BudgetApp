@@ -14,9 +14,8 @@ module.exports = function (req, res, next) {
 
   let bank = 'nordea';
   let deLimit = { delimiter: [';', ';;', ';;;'] };
-  //file comes in as mimetype 'application/octet-stream' so mimetypecheck wont work
-  // Check filename to check if it is a csv-file
 
+  // Check filename to check if it is a csv-file
   if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
     if (file.name.endsWith('txt')) {
       deLimit = { delimiter: [',', ',,', ',,,'] };
@@ -25,6 +24,11 @@ module.exports = function (req, res, next) {
   } else {
     return res.status(400).send('Wrong filetype, only accepts csv!');
   }
+
+  // swedbank delimiter
+  deLimit = { delimiter: [',', ',,', ',,,'] };
+  bank = 'swedbank';
+  //file comes in as mimetype 'application/octet-stream' so mimetypecheck wont work
   //Make sure the file is a csv-file
   /* if (file.mimetype !== 'text/csv') {
     return res.status(400).send('Wrong filetype, only accepts csv!');
@@ -36,6 +40,15 @@ module.exports = function (req, res, next) {
   csv(deLimit)
     .fromFile(`${__dirname}/${file.name}`)
     .then((source) => {
+      if (bank === 'swedbank') {
+        const belopp = JSON.stringify(source[1]).split(',')[10];
+        const beskrivning = JSON.stringify(source[1]).split(',')[9];
+        if (typeof belopp !== 'string' || typeof beskrivning !== 'string') {
+          return res.status(400).send('CSV does not contain valid Swedbank-values!');
+        }
+        //console.log(JSON.stringify(source[1]).split(',')[10]);
+        console.log(typeof belopp, typeof beskrivning);
+      }
       if (bank === 'nordea') {
         // Check for new Nordea-csv
         if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {

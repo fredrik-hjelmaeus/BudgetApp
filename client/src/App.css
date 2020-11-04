@@ -1805,6 +1805,15 @@ table th {
   height: 50%;
   width: 50%;
 }
+@media (max-width: 800px) {
+  .modal-csvpresets__card__flex {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    border-radius: 8px;
+  }
+}
 .modal-csvpresets__flex {
   flex: 1;
 }
