@@ -41,13 +41,14 @@ module.exports = function (req, res, next) {
     .fromFile(`${__dirname}/${file.name}`)
     .then((source) => {
       if (bank === 'swedbank') {
+        // here we need to check source[1] as fields with citation "" may have , in them.
         const belopp = JSON.stringify(source[1]).split(',')[10];
         const beskrivning = JSON.stringify(source[1]).split(',')[9];
         if (typeof belopp !== 'string' || typeof beskrivning !== 'string') {
+          console.log('invalid swedbank file deleted');
+          deleteFile(`${__dirname}/${file.name}`);
           return res.status(400).send('CSV does not contain valid Swedbank-values!');
         }
-        //console.log(JSON.stringify(source[1]).split(',')[10]);
-        console.log(typeof belopp, typeof beskrivning);
       }
       if (bank === 'nordea') {
         // Check for new Nordea-csv
@@ -56,8 +57,8 @@ module.exports = function (req, res, next) {
           deleteFile(`${__dirname}/${file.name}`);
           return res.status(400).send('CSV does not contain valid Nordea-values!');
         }
-      } else {
-        //  console.log(Object.keys(source[0])[6], Object.keys(source[0])[7]);
+      }
+      if (bank === 'handelsbanken') {
         // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
         if (typeof Object.keys(source[0])[6] !== 'string' || typeof Object.keys(source[0])[7] !== 'string') {
           console.log('invalid handelsbanken txt-file deleted');
@@ -77,7 +78,7 @@ module.exports = function (req, res, next) {
         );
       }
       if (bank === 'handelsbanken') {
-        console.log(source.map((preset) => Object.keys(preset)[6]));
+        // console.log(source);
         /*     source.map((preset) =>
           newpresets.push({
             number: preset.Belopp,
@@ -85,6 +86,15 @@ module.exports = function (req, res, next) {
             id: uuidv4(),
           })
         ); */
+      }
+      if (bank === 'swedbank') {
+        source.slice(1).map((row) =>
+          newpresets.push({
+            number: JSON.stringify(row).split(',')[10],
+            name: JSON.stringify(row).split(',')[9],
+            id: uuidv4(),
+          })
+        );
       }
 
       if (newpresets.length === 0) {
