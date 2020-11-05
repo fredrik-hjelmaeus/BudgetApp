@@ -12,6 +12,7 @@ module.exports = function (req, res, next) {
   }
   const file = req.files.file;
 
+  //nordea
   let bank = 'nordea';
   let deLimit = { delimiter: [';', ';;', ';;;'] };
 
@@ -28,6 +29,9 @@ module.exports = function (req, res, next) {
   // swedbank delimiter
   deLimit = { delimiter: [',', ',,', ',,,'] };
   bank = 'swedbank';
+
+  bank = 'default';
+  deLimit = '';
   //file comes in as mimetype 'application/octet-stream' so mimetypecheck wont work
   //Make sure the file is a csv-file
   /* if (file.mimetype !== 'text/csv') {
@@ -92,6 +96,15 @@ module.exports = function (req, res, next) {
           newpresets.push({
             number: JSON.stringify(row).split(',')[10],
             name: JSON.stringify(row).split(',')[9],
+            id: uuidv4(),
+          })
+        );
+      }
+      if (bank === 'default') {
+        console.log(source.map((row) => row));
+        source.map((row) =>
+          newpresets.push({
+            row,
             id: uuidv4(),
           })
         );
