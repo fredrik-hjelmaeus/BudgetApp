@@ -1,5 +1,8 @@
 node_modules/
 _data/
+config/default.json
+config/production.json
+
 
 /client/build
 
@@ -21,4 +24,5 @@ updatepresets.js
 users.json
 seeder.js
 presetitems.json
+
 
