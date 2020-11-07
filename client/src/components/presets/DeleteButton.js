@@ -2,14 +2,7 @@ import React from 'react';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import AddSVG from '../layout/images/AddSVG';
 
-const DeleteButton = ({
-  name,
-  onDelete,
-  onHover,
-  stopHover,
-  localpreset,
-  DelbtnColor,
-}) => {
+const DeleteButton = ({ name, onDelete, onHover, stopHover, localpreset, DelbtnColor }) => {
   return (
     <button
       className='btn text-primary modal-csvpresets__deletebtnadjust'

@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState, useRef, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
-import DeleteButton from './DeleteButton';
-import DropdownMenu from './DropdownMenu';
+import DeleteButton from '../presets/DeleteButton';
+import DropdownMenu from '../presets/DropdownMenu';
 
 const CsvPresetItem = ({ Item }) => {
   const presetContext = useContext(PresetContext);
