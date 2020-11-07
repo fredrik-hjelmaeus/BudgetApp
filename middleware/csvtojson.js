@@ -11,9 +11,24 @@ module.exports = function (req, res, next) {
   let filetype;
   let deLimit;
 
-  // Check if an object was provided in the formdata
+  // Check if an object was provided in the formdata and set that objectname as filetype
   if (Object.getOwnPropertyNames(req.files)) {
     filetype = Object.getOwnPropertyNames(req.files)[0];
+  }
+  console.log(filetype);
+  const file = req.files[filetype];
+  console.log(file);
+  console.log(file.name.endsWith);
+  // Check fileextension
+  if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
+    if (file.name.endsWith('txt') && filetype !== 'handelsbanken') {
+      return res.status(400).send('Wrong filetype, only accepts csv!');
+    }
+    if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
+      return res.status(400).send('Wrong filetype, only accepts txt!');
+    }
+  } else {
+    return res.status(400).send('Wrong filetype, only accepts csv!');
   }
 
   // Check what filetype-button the user pressed,set deLimit and return file
@@ -27,30 +42,13 @@ module.exports = function (req, res, next) {
         return { delimiter: [',', ',,', ',,,'] };
       case 'handelsbanken':
         return { delimiter: [',', ',,', ',,,'] };
-
       default:
         console.log('default');
         break;
     }
   }
-
-  const file = req.files[filetype];
-
   //set delimiter
   deLimit = setDelimiter(filetype);
-
-  // Check filename to check if it is a csv-file
-  /*  if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
-    if (file.name.endsWith('txt')) {
-      deLimit = { delimiter: [',', ',,', ',,,'] };
- 
-    }
-  } else {
-    return res.status(400).send('Wrong filetype, only accepts csv!');
-  } */
-
-  // swedbank delimiter
-  // deLimit = { delimiter: [',', ',,', ',,,'] };
 
   //file comes in as mimetype 'application/octet-stream' so mimetypecheck wont work
   /* if (file.mimetype !== 'text/csv') {
