@@ -3,48 +3,67 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 module.exports = function (req, res, next) {
-  //return res.status(200).json({ msg: 'Successful response' });
-  //console.log(test.csv);
-  // console.log(req.files.foo);
-
+  // Check if file was provided in the formdata
   if (!req.files) {
     return res.status(400).send('No File Uploaded');
   }
-  const file = req.files.file;
 
-  //nordea
-  let bank = 'nordea';
-  let deLimit = { delimiter: [';', ';;', ';;;'] };
+  let filetype;
+  let deLimit;
+
+  // Check if an object was provided in the formdata
+  if (Object.getOwnPropertyNames(req.files)) {
+    filetype = Object.getOwnPropertyNames(req.files)[0];
+  }
+
+  // Check what filetype-button the user pressed,set deLimit and return file
+  function setDelimiter(type) {
+    switch (type) {
+      case 'RFC4180':
+        return {};
+      case 'nordea':
+        return { delimiter: [';', ';;', ';;;'] };
+      case 'swedbank':
+        return { delimiter: [',', ',,', ',,,'] };
+      case 'handelsbanken':
+        return { delimiter: [',', ',,', ',,,'] };
+
+      default:
+        console.log('default');
+        break;
+    }
+  }
+
+  const file = req.files[filetype];
+
+  //set delimiter
+  deLimit = setDelimiter(filetype);
 
   // Check filename to check if it is a csv-file
-  if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
+  /*  if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
     if (file.name.endsWith('txt')) {
       deLimit = { delimiter: [',', ',,', ',,,'] };
-      bank = 'handelsbanken';
+ 
     }
   } else {
     return res.status(400).send('Wrong filetype, only accepts csv!');
-  }
+  } */
 
   // swedbank delimiter
-  deLimit = { delimiter: [',', ',,', ',,,'] };
-  bank = 'swedbank';
+  // deLimit = { delimiter: [',', ',,', ',,,'] };
 
-  bank = 'default';
-  deLimit = '';
   //file comes in as mimetype 'application/octet-stream' so mimetypecheck wont work
-  //Make sure the file is a csv-file
   /* if (file.mimetype !== 'text/csv') {
     return res.status(400).send('Wrong filetype, only accepts csv!');
   } */
-  //console.log(deLimit);
+
   file.mv(`${__dirname}/${file.name}`);
   let newpresets = [];
 
   csv(deLimit)
     .fromFile(`${__dirname}/${file.name}`)
     .then((source) => {
-      if (bank === 'swedbank') {
+      if (filetype === 'swedbank') {
         // here we need to check source[1] as fields with citation "" may have , in them.
         const belopp = JSON.stringify(source[1]).split(',')[10];
         const beskrivning = JSON.stringify(source[1]).split(',')[9];
@@ -54,7 +73,7 @@ module.exports = function (req, res, next) {
           return res.status(400).send('CSV does not contain valid Swedbank-values!');
         }
       }
-      if (bank === 'nordea') {
+      if (filetype === 'nordea') {
         // Check for new Nordea-csv
         if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
           console.log('invalid nordea file deleted');
@@ -62,7 +81,7 @@ module.exports = function (req, res, next) {
           return res.status(400).send('CSV does not contain valid Nordea-values!');
         }
       }
-      if (bank === 'handelsbanken') {
+      if (filetype === 'handelsbanken') {
         // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
         if (typeof Object.keys(source[0])[6] !== 'string' || typeof Object.keys(source[0])[7] !== 'string') {
           console.log('invalid handelsbanken txt-file deleted');
@@ -72,7 +91,7 @@ module.exports = function (req, res, next) {
       }
 
       // Push new values to array
-      if (bank === 'nordea') {
+      if (filetype === 'nordea') {
         source.map((preset) =>
           newpresets.push({
             number: preset.Belopp,
@@ -81,7 +100,7 @@ module.exports = function (req, res, next) {
           })
         );
       }
-      if (bank === 'handelsbanken') {
+      if (filetype === 'handelsbanken') {
         // console.log(source);
         /*     source.map((preset) =>
           newpresets.push({
@@ -91,7 +110,7 @@ module.exports = function (req, res, next) {
           })
         ); */
       }
-      if (bank === 'swedbank') {
+      if (filetype === 'swedbank') {
         source.slice(1).map((row) =>
           newpresets.push({
             number: JSON.stringify(row).split(',')[10],
@@ -100,7 +119,7 @@ module.exports = function (req, res, next) {
           })
         );
       }
-      if (bank === 'default') {
+      if (filetype === 'RFC4180') {
         console.log(source.map((row) => row));
         source.map((row) =>
           newpresets.push({

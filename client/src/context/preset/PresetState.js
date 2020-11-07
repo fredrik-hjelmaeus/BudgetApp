@@ -819,18 +819,18 @@ const PresetState = (props) => {
       state.presets.map((preset) => {
         preset.year === undefined ||
           (preset.year == '2019' &&
-          preset.type !== null &&
-          preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
-          preset.type !== 'savings' && // då de las in före .type las till i backend.
+            preset.type !== null &&
+            preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+            preset.type !== 'savings' && // då de las in före .type las till i backend.
             preset.type !== 'capital' &&
             numberArray.push(parseFloat(preset.number)));
       });
     } else {
       state.presets.map((preset) => {
         preset.year == state.year &&
-        preset.type !== null &&
-        preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
-        preset.type !== 'savings' && // då de las in före .type las till i backend.
+          preset.type !== null &&
+          preset.type !== 'purchase' && // måste ha NOT eftersom det finns vissa värden i databasen som saknar preset.type helt
+          preset.type !== 'savings' && // då de las in före .type las till i backend.
           preset.type !== 'capital' &&
           numberArray.push(parseFloat(preset.number));
       });

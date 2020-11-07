@@ -2,6 +2,7 @@ import React, { Fragment, useState, useContext, useEffect, useRef } from 'react'
 import PresetContext from '../../context/preset/presetContext';
 import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
+import CssContext from '../../context/css/cssContext';
 import CheckBoxField from './CheckBoxField';
 import SelectField from './SelectField';
 import Alerts from '../layout/Alerts';
@@ -10,10 +11,13 @@ const PresetForm = () => {
   const alertContext = useContext(AlertContext);
   const presetContext = useContext(PresetContext);
   const authContext = useContext(AuthContext);
+  const cssContext = useContext(CssContext);
 
   const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year, uploadCSV, error } = presetContext;
   const { setAlert } = alertContext;
   const { clearErrors } = authContext;
+  const { toggleModal } = cssContext;
+
   useEffect(() => {
     if (edit !== null) {
       setPreset(edit);
@@ -52,6 +56,7 @@ const PresetForm = () => {
 
   const [selectedFile, setSelectedFile] = useState('');
   const [selectedFileName, setSelectedFileName] = useState('');
+  const [format, setFormat] = useState('RFC4180');
 
   const selectChange = (e) => {
     setPreset({ ...preset, category: e.target.value });
@@ -127,7 +132,7 @@ const PresetForm = () => {
   useEffect(() => {
     const sendFile = () => {
       const formData = new FormData();
-      formData.append('file', selectedFile, selectedFileName);
+      formData.append('nordea', selectedFile, selectedFileName);
       uploadCSV(formData);
       setSelectedFile('');
       setSelectedFileName('');
@@ -159,6 +164,7 @@ const PresetForm = () => {
                 type='button'
                 className='btn presetform__upload'
                 onClick={() => {
+                  //   toggleModal('SelectFile');
                   inputRef.current.click();
                 }}
               >

@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import PresetForm from '../presets/PresetForm';
 import DeletePurchaseModal from './DeletePurchaseModal';
 import AddtoPiggybankModal from './AddtoPiggybankModal';
-import CsvPresetCreateModal from './CsvPresetCreateModal';
+import CsvPresetCreateModal from '../csv/CsvPresetCreateModal';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
@@ -12,6 +12,7 @@ import CategoryBalance from './CategoryBalance';
 import Sum from '../presets/Sum';
 import MonthSavingsSummary from '../presets/MonthSavingsSummary';
 import UserProfileModal from '../auth/UserProfileModal';
+import SelectFile from '../csv/SelectFile';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
@@ -44,6 +45,7 @@ const Month = () => {
 
   return (
     <Fragment>
+      {modal === 'SelectFile' && <SelectFile />}
       {modal === 'profile' && <UserProfileModal />}
       {csvpresets && <CsvPresetCreateModal />}
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
