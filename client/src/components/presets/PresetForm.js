@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useContext, useEffect, useRef } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import AlertContext from '../../context/alert/alertContext';
-import AuthContext from '../../context/auth/authContext';
 import CssContext from '../../context/css/cssContext';
 import CheckBoxField from './CheckBoxField';
 import SelectField from './SelectField';
@@ -10,12 +9,10 @@ import Alerts from '../layout/Alerts';
 const PresetForm = () => {
   const alertContext = useContext(AlertContext);
   const presetContext = useContext(PresetContext);
-  const authContext = useContext(AuthContext);
   const cssContext = useContext(CssContext);
 
-  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year, uploadCSV, error } = presetContext;
+  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year } = presetContext;
   const { setAlert } = alertContext;
-  const { clearErrors } = authContext;
   const { toggleModal } = cssContext;
 
   useEffect(() => {
@@ -54,36 +51,8 @@ const PresetForm = () => {
     setPreset({ ...preset, [e.target.name]: e.target.value });
   };
 
-  const [selectedFile, setSelectedFile] = useState('');
-  const [selectedFileName, setSelectedFileName] = useState('');
-  const [format, setFormat] = useState('RFC4180');
-
   const selectChange = (e) => {
     setPreset({ ...preset, category: e.target.value });
-  };
-
-  useEffect(() => {
-    if (error === 'No values recognised!') {
-      setAlert(error, 'danger');
-      clearErrors();
-    }
-    if (error === 'CSV does not contain valid Nordea-values!') {
-      setAlert(error, 'danger');
-      clearErrors();
-    }
-    if (error === 'Wrong filetype, only accepts csv!') {
-      setAlert(error, 'danger');
-      clearErrors();
-    } // eslint-disable-next-line
-  }, [error]);
-
-  // Ref
-  const inputRef = useRef();
-
-  const onFileChange = (e) => {
-    setSelectedFileName(e.target.files[0].name);
-    setSelectedFile(e.target.files[0]);
-    e.target.value = null; // resets value so same file can trigger onchange again.
   };
 
   const onSubmit = (e) => {
@@ -129,21 +98,6 @@ const PresetForm = () => {
 
   const { name, number, category } = preset;
 
-  useEffect(() => {
-    const sendFile = () => {
-      const formData = new FormData();
-      formData.append('nordea', selectedFile, selectedFileName);
-      uploadCSV(formData);
-      setSelectedFile('');
-      setSelectedFileName('');
-    };
-    if (selectedFile !== '') {
-      sendFile();
-      setSelectedFile('');
-      setSelectedFileName('');
-    }
-  }, [selectedFile, selectedFileName, uploadCSV]);
-
   return (
     <Fragment>
       {expand === true && <button className='btn closebtn mt-1' value='close' onClick={toggleExpand}></button>}
@@ -159,13 +113,11 @@ const PresetForm = () => {
           <div className='presetform__optionsfield'>
             <CheckBoxField preset={preset} onChange={onChange} />
             <div>
-              <input style={{ display: 'none' }} type='file' name='csvFile' onChange={onFileChange} ref={inputRef} />
               <button
                 type='button'
                 className='btn presetform__upload'
                 onClick={() => {
-                  //   toggleModal('SelectFile');
-                  inputRef.current.click();
+                  toggleModal('SelectFile');
                 }}
               >
                 {' '}
