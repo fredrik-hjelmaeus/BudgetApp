@@ -13,6 +13,7 @@ import Sum from '../presets/Sum';
 import MonthSavingsSummary from '../presets/MonthSavingsSummary';
 import UserProfileModal from '../auth/UserProfileModal';
 import SelectFile from '../csv/SelectFile';
+import SelectCSVfields from '../csv/SelectCSVfields';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
@@ -46,8 +47,9 @@ const Month = () => {
   return (
     <Fragment>
       {modal === 'SelectFile' && <SelectFile />}
+      {modal === 'SelectCSVfields' && <SelectCSVfields />}
       {modal === 'profile' && <UserProfileModal />}
-      {csvpresets && <CsvPresetCreateModal />}
+      {csvpresets && modal === '' && <CsvPresetCreateModal />}
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
       {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
       <Datemenu />
