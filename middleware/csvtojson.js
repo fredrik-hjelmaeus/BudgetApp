@@ -118,10 +118,10 @@ module.exports = function (req, res, next) {
         );
       }
       if (filetype === 'RFC4180') {
-        console.log(source.map((row) => row));
+        console.log(source.map((row) => Object.entries(row)));
         source.map((row) =>
           newpresets.push({
-            row,
+            row: Object.entries(row),
             id: uuidv4(),
           })
         );
