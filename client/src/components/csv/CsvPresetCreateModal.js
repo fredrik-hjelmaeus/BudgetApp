@@ -4,22 +4,25 @@ import CsvPresetItem from './CsvPresetItem';
 import CsvPrompt from './CsvPrompt';
 
 const CsvPresetCreateModal = () => {
+  // context
   const presetContext = useContext(PresetContext);
   const { csvpresets, submitCsvItems, clearCsv } = presetContext;
 
+  // state
   const [Prompt, setPrompt] = useState(false);
   const [validCsv, setValidCsv] = useState(null);
 
+  // logic
   const onClick = () => {
     // Run ContextApi fn that run fn in csvpresetitems that check for valid categories
     submitCsvItems('step1');
   };
+
+  //useEffect
   useEffect(() => {
     //check for valid csv to add by filter out all with not valid cat and markdel set to true
     const checkcsv = csvpresets.filter((item) => item.category && item.markdelete === false);
-    const test = csvpresets.filter((item) => item.category);
-    console.log(csvpresets);
-    //console.log(checkcsv);
+
     setValidCsv(checkcsv);
 
     if (checkcsv.length !== 0 && checkcsv.length !== csvpresets.length) {
@@ -35,6 +38,7 @@ const CsvPresetCreateModal = () => {
     //eslint-disable-next-line
   }, [csvpresets]); //breaks if you add clearCsv and submitCsvItems
 
+  // jsx
   return (
     <Fragment>
       {Prompt && <CsvPrompt setPrompt={setPrompt} validCsv={validCsv} />}

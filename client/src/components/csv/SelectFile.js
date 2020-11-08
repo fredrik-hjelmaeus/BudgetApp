@@ -4,6 +4,7 @@ import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import CssContext from '../../context/css/cssContext';
 import Alerts from '../layout/Alerts';
+
 const SelectFile = () => {
   //context
   const alertContext = React.useContext(AlertContext);
@@ -14,18 +15,22 @@ const SelectFile = () => {
   const { setAlert } = alertContext;
   const { clearErrors } = authContext;
   const { uploadCSV, error, csvpresets } = presetContext;
+
   //state
   const [selectedFile, setSelectedFile] = React.useState('');
   const [selectedFileName, setSelectedFileName] = React.useState('');
   const [format, setFormat] = React.useState('RFC4180');
+
   // Ref
   const inputRef = React.useRef();
+
   //logic
   const onFileChange = (e) => {
     setSelectedFileName(e.target.files[0].name);
     setSelectedFile(e.target.files[0]);
     e.target.value = null; // resets value so same file can trigger onchange again.
   };
+
   //useeffect listen for alerts from csvtojson-backend-middleware
   React.useEffect(() => {
     if (error === 'No values recognised!') {
@@ -41,6 +46,7 @@ const SelectFile = () => {
       clearErrors();
     } // eslint-disable-next-line
   }, [error]);
+
   //useeffect run uploadCSV when file is selected
   React.useEffect(() => {
     const sendFile = () => {
@@ -56,16 +62,27 @@ const SelectFile = () => {
       setSelectedFileName('');
     }
   }, [selectedFile, selectedFileName, uploadCSV]);
+
   // detect if the uploadCSV resulted in valid csvs and then close this modal to give room for csvpresetcreatemodal
   React.useEffect(() => {
-    csvpresets && toggleModal('');
+    if (format !== 'RFC4180') {
+      csvpresets && toggleModal('');
+    } else {
+      csvpresets && toggleModal('SelectCSVfields');
+    }
   }, [csvpresets]);
+
+  //jsx
   return (
     <div id='myModal' className='modal-csvprompt' style={{ display: 'block' }}>
+      {/* card */}
       <div className='modal-csvpresets__card modal-csvpresets__card__flex'>
         Select File Type
+        {/* alert */}
         <Alerts />
+        {/* Input */}
         <input style={{ display: 'none' }} type='file' name='csvFile' onChange={onFileChange} ref={inputRef} />
+        {/* Buttons */}
         <button
           type='button'
           className='btn presetform__upload'
