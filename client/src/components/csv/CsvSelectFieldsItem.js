@@ -3,14 +3,16 @@ import PresetContext from '../../context/preset/presetContext';
 import DeleteButton from '../presets/DeleteButton';
 import DropdownMenu from '../presets/DropdownMenu';
 import CsvRows from './CsvRows';
-const CsvSelectFieldsItem = ({ rowItem }) => {
+import FirstCsvRow from './FirstCsvRow';
+const CsvSelectFieldsItem = ({ header, rowItem }) => {
   //console.log(Object.keys(Item.row));
   //  console.log(Object.entries(row).map((key) => key));
   const presetContext = useContext(PresetContext);
   const { month, year, doSubmitCsv, updateCsvPresets, addPreset, removeCSV } = presetContext;
   const { row } = rowItem;
-  console.log(row.length);
-  console.log(row);
+  // console.log(row.length);
+  //console.log('rowitem');
+  //console.log(Object.keys(row));
   //console.log(Object.keys(row).map((r) => r));
   // console.log(Object.keys(row));
   //console.log(row);
@@ -32,12 +34,27 @@ const CsvSelectFieldsItem = ({ rowItem }) => {
     ); */
   // console.log(row[key]);
   //  }
-  return (
-    <div>
-      {row.map((col) => (
-        <CsvRows col={col} />
-      ))}
-    </div>
+  return header ? (
+    <React.Fragment>
+      <div className='flexrow__csvrow'>
+        {Object.keys(row).map((col) => (
+          <FirstCsvRow col={col} />
+        ))}
+      </div>
+    </React.Fragment>
+  ) : (
+    <React.Fragment>
+      <div className='flexrow__csvrow'>
+        {Object.keys(row).map((col) => (
+          <CsvRows col={col} row={row} />
+        ))}
+      </div>
+    </React.Fragment>
+    /*     <div className='flexrow__csvrow'>
+     {row.map((col) => (
+       <CsvRows col={col[1]} />
+     ))}
+   </div> */
   );
 };
 export default CsvSelectFieldsItem;

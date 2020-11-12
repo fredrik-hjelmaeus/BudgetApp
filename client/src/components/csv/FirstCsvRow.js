@@ -1,9 +1,9 @@
 import React from 'react';
 
-function CsvRows({ col, row }) {
+function CsvRows({ col }) {
   return (
     <button className=' csvrows__flex'>
-      {row[col]}
+      {col}
       {/*  {col[1]} */}
     </button>
   );

@@ -6,7 +6,7 @@ const SelectCSVfields = () => {
   // context
   const presetContext = useContext(PresetContext);
   const { csvpresets, submitCsvItems, clearCsv } = presetContext;
-
+  console.log(csvpresets);
   // state
   // console.log(csvpresets.map((c) => c));
   // logic
@@ -18,6 +18,8 @@ const SelectCSVfields = () => {
         <div className='modal-csvpresets__card'>
           <h1 className='all-center m-1'>Select CSV fields</h1>
           <p>This app needs the description field and the fields that hold the values</p>
+
+          <CsvSelectFieldsItem rowItem={csvpresets[0]} key={0} header={true} />
 
           {csvpresets.map((rowItem) => (
             <CsvSelectFieldsItem rowItem={rowItem} key={rowItem.id} />

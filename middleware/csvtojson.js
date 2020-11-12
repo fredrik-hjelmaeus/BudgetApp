@@ -118,13 +118,20 @@ module.exports = function (req, res, next) {
         );
       }
       if (filetype === 'RFC4180') {
-        console.log(source.map((row) => Object.entries(row)));
+        //console.log(source.map((row) => Object.entries(row)));
+        console.log(source.map((row) => row));
         source.map((row) =>
+          newpresets.push({
+            row,
+            id: uuidv4(),
+          })
+        );
+        /*     source.map((row) =>
           newpresets.push({
             row: Object.entries(row),
             id: uuidv4(),
           })
-        );
+        ); */
       }
 
       if (newpresets.length === 0) {
