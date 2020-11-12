@@ -380,6 +380,17 @@ img {
   align-items: center;
 }
 
+.flexrow__csvrow {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-evenly; */
+}
+
+.csvrows__flex {
+  flex-grow: 1;
+  /*  flex-basis: 80px; */ /*set the initial length*/
+}
+
 .flexrow-piggycard {
   display: flex;
   flex-direction: row;
