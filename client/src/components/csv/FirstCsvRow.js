@@ -1,8 +1,8 @@
 import React from 'react';
 
-function CsvRows({ col }) {
+function CsvRows({ col, fieldSelect }) {
   return (
-    <button className=' csvrows__flex'>
+    <button className='csvrows__flex' onClick={fieldSelect} value={col}>
       {col}
       {/*  {col[1]} */}
     </button>
