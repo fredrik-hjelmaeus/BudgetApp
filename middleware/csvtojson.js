@@ -119,7 +119,7 @@ module.exports = function (req, res, next) {
       }
       if (filetype === 'RFC4180') {
         //console.log(source.map((row) => Object.entries(row)));
-        console.log(source.map((row) => row));
+        //console.log(source.map((row) => row));
         source.map((row) =>
           newpresets.push({
             row,
