@@ -4,7 +4,7 @@ import DeleteButton from '../presets/DeleteButton';
 import DropdownMenu from '../presets/DropdownMenu';
 import CsvRows from './CsvRows';
 import FirstCsvRow from './FirstCsvRow';
-const CsvSelectFieldsItem = ({ header, rowItem }) => {
+const CsvSelectFieldsItem = ({ header, rowItem, fieldSelect }) => {
   //console.log(Object.keys(Item.row));
   //  console.log(Object.entries(row).map((key) => key));
   const presetContext = useContext(PresetContext);
@@ -38,7 +38,7 @@ const CsvSelectFieldsItem = ({ header, rowItem }) => {
     <React.Fragment>
       <div className='flexrow__csvrow'>
         {Object.keys(row).map((col) => (
-          <FirstCsvRow col={col} />
+          <FirstCsvRow col={col} fieldSelect={fieldSelect} />
         ))}
       </div>
     </React.Fragment>

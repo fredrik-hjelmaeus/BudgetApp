@@ -6,21 +6,60 @@ const SelectCSVfields = () => {
   // context
   const presetContext = useContext(PresetContext);
   const { csvpresets, submitCsvItems, clearCsv } = presetContext;
-  console.log(csvpresets);
+  // console.log(csvpresets);
   // state
-  // console.log(csvpresets.map((c) => c));
+  const [selectPhase, setSelectPhase] = useState('description');
+  const [fields, setFields] = useState({ description: '', value: '', category: '' });
+  const [phaseInstruction, setPhaseInstruction] = useState('Please select the description field');
   // logic
   const onClick = () => {};
+  // when a field is selected
+  const fieldSelect = (e) => {
+    if (selectPhase === 'description') {
+      setFields({ ...fields, description: e.target.value });
+      setSelectPhase('value');
+      setPhaseInstruction('Please select the value field');
+    }
+    if (selectPhase === 'value') {
+      setFields({ ...fields, value: e.target.value });
+      setSelectPhase('category');
+      setPhaseInstruction('If category field exist,please select it. Otherwise,press');
+    }
+    if (selectPhase === 'category') {
+      console.log('ran');
+      setFields({ ...fields, category: e.target.value });
+      setSelectPhase('completed');
+      // send to backend
+    }
+    //setlocalPreset({ ...localpreset, category: 'Select Category' });
+    //setFields(...fields, (fields[selectPhase] = e.target.value));
+    //console.log(e.target.value);
+  };
+  const onSkip = () => {
+    setSelectPhase('completed');
+  };
+  console.log(fields);
   // jsx
   return (
     <Fragment>
       <div id='myModal' className='modal-csvpresets' style={{ display: 'block' }}>
         <div className='modal-csvpresets__card'>
+          {/* Title */}
           <h1 className='all-center m-1'>Select CSV fields</h1>
-          <p>This app needs the description field and the fields that hold the values</p>
+          {/* description/instruction */}
+          <p>
+            {phaseInstruction}
+            {selectPhase === 'category' && (
+              <button className='btn' onClick={onSkip}>
+                Skip
+              </button>
+            )}
+          </p>
 
-          <CsvSelectFieldsItem rowItem={csvpresets[0]} key={0} header={true} />
+          {/* Header-field constructed from CSV */}
+          <CsvSelectFieldsItem rowItem={csvpresets[0]} key={0} header={true} fieldSelect={fieldSelect} />
 
+          {/* csv-list */}
           {csvpresets.map((rowItem) => (
             <CsvSelectFieldsItem rowItem={rowItem} key={rowItem.id} />
           ))}
