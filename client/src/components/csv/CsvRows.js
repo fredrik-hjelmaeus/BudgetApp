@@ -1,12 +1,7 @@
 import React from 'react';
 
 function CsvRows({ col, row }) {
-  return (
-    <button className=' csvrows__flex'>
-      {row[col]}
-      {/*  {col[1]} */}
-    </button>
-  );
+  return <button className=' csvrows__flex'>{row[col]}</button>;
 }
 
 export default CsvRows;
