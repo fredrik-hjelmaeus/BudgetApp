@@ -9,17 +9,12 @@ const SelectCSVfields = () => {
   const { csvpresets, submitCsvItems, clearCsv, updateCsvPresets } = presetContext;
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
-  // console.log(csvpresets);
+
   // state
   const [selectPhase, setSelectPhase] = useState('description');
-  const [fields, setFields] = useState({ description: '', value: '', category: '' });
+  const [fields, setFields] = useState({ description: '', value: '' });
   const [phaseInstruction, setPhaseInstruction] = useState('Please select the description field');
-  const [newPreset, setNewPreset] = useState({
-    id: '',
-    name: '',
-    number: '',
-    category: '',
-  });
+
   // logic
   const onClick = () => {};
   // when a field is selected
@@ -29,40 +24,26 @@ const SelectCSVfields = () => {
       setSelectPhase('value');
       setPhaseInstruction('Please select the value field');
     }
+
     if (selectPhase === 'value') {
       setFields({ ...fields, value: e.target.value });
-      setSelectPhase('category');
-      setPhaseInstruction('If category field exist,please select it. Otherwise,press');
-    }
-    if (selectPhase === 'category') {
-      setFields({ ...fields, category: e.target.value });
-      setSelectPhase('completed');
-      // Preparing data
-
-      // create new object with the fields we want to update csvpresets with
-
-      csvpresets.map((preset) =>
-        updateCsvPresets({
-          id: preset.id,
-          name: preset.row[fields.description],
-          number: preset.row[fields.value],
-          category: preset.row[fields.category],
-        })
-      );
-      // console.log(arr);
-      /*   newpresets.push({
-        number: JSON.stringify(row).split(',')[10],
-        name: JSON.stringify(row).split(',')[9],
-        id: uuidv4(),
-      }) */
-      // Moving on to CsvPresetCreateModal / Create Transactions
-      toggleModal('');
+      updateAndExit(e.target.value);
     }
   };
-  const onSkip = () => {
-    setSelectPhase('completed');
+
+  const updateAndExit = (fieldValue) => {
+    // Preparing data
+    csvpresets.map((preset) =>
+      updateCsvPresets({
+        id: preset.id,
+        name: preset.row[fields.description],
+        number: preset.row[fieldValue],
+      })
+    );
+    // Moving on to CsvPresetCreateModal / Create Transactions
+    toggleModal('');
   };
-  //console.log(csvpresets);
+
   // jsx
   return (
     <Fragment>
@@ -71,14 +52,7 @@ const SelectCSVfields = () => {
           {/* Title */}
           <h1 className='all-center m-1'>Select CSV fields</h1>
           {/* description/instruction */}
-          <p>
-            {phaseInstruction}
-            {selectPhase === 'category' && (
-              <button className='btn' onClick={onSkip}>
-                Skip
-              </button>
-            )}
-          </p>
+          <p>{phaseInstruction}</p>
 
           {/* Header-field constructed from CSV */}
           <CsvSelectFieldsItem rowItem={csvpresets[0]} key={0} header={true} fieldSelect={fieldSelect} />
