@@ -380,16 +380,64 @@ img {
   align-items: center;
 }
 
-.flexrow__csvrow {
-  display: flex;
-  flex-direction: row;
-  /* justify-content: space-evenly; */
+/* CsvSelectFields  START*/
+.CsvSelectFieldsItem__modal-csvpresets__card {
+  background-color: var(--light-color);
+  box-shadow: 0px 3px 6px #2b2b2b;
+  margin: auto;
+  padding: 20px 40px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  width: 80%;
+  hesight: 80%;
+  font-size: 14px;
+}
+@media (max-width: 800px) {
+  .CsvSelectFieldsItem__modal-csvpresets__card {
+    background-color: var(--light-color);
+    box-shadow: 0px 3px 6px #2b2b2b;
+    margin: auto;
+    padding: 20px 10px;
+    border: 1px solid #000000;
+    border-radius: 8px 8px 0px 0px;
+    width: 100%;
+    hesight: 80%;
+    font-size: 14px;
+  }
 }
 
-.csvrows__flex {
+.CsvSelectFieldsItem__flexrow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.CsvRows__item {
+  flex-basis: 40px;
+  max-width: 100px;
   flex-grow: 1;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   /*  flex-basis: 80px; */ /*set the initial length*/
 }
+
+.CsvRows__item:hover {
+  overflow: visible;
+  width: auto;
+  max-width: 300px;
+  /*  max-width: 100px; */
+  /*   white-space: normal;
+  
+  position: absolute;
+  background-color: #fff; */
+}
+/* #data:hover+div {
+  margin-top:20px;
+} */
+
+/* CsvSelectFields  END*/
 
 .flexrow-piggycard {
   display: flex;
