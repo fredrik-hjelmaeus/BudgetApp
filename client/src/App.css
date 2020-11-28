@@ -1093,6 +1093,7 @@ input::placeholder {
   margin-bottom: 3rem;
   -webkit-appearance: none;
 }
+
 .categorydropdown {
   bosrder: 1px solid red;
   wisdth: 300px;
@@ -1113,7 +1114,7 @@ input::placeholder {
 }
 
 .categorydropdown__option {
-  backgrounsd-color: var(--light-color);
+  backgsround-color: var(--orange-color);
 }
 
 .btn-presetformadd {
@@ -1167,6 +1168,95 @@ input::placeholder {
     align-self: start;
   }
 }
+/* SelectFile */
+.selectfile__card {
+  background-color: var(--light-color);
+  box-shadow: 0px 3px 6px #2b2b2b;
+  margin: auto;
+  padding: 20px 40px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  width: 70%;
+  hesight: 80%;
+  font-size: 14px;
+}
+@media (max-width: 800px) {
+  .selectfile__card {
+    background-color: var(--light-color);
+    box-shadow: 0px 3px 6px #2b2b2b;
+    margin: auto;
+    padding: 20px 10px;
+    border: 1px solid #000000;
+    border-radius: 8px 8px 0px 0px;
+    width: 100%;
+    hesight: 80%;
+    font-size: 14px;
+  }
+}
+.selectfile__card__flex {
+  display: flex;
+  flex-direction: column;
+
+  width: 50%;
+  padding: 50px;
+}
+@media (max-width: 800px) {
+  .selectfile__card__flex {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding: 40px;
+    border-radius: 8px;
+  }
+}
+.selectfile__upload {
+  display: block;
+  color: var(--light-color);
+  font-weight: 500;
+  background: var(--primary-color);
+  padding: 0.3rem;
+  font-size: 18px;
+  margin: 0;
+  border: 1px solid var(--gray-color);
+  border-radius: 4px;
+  align-self: center;
+  outline: none;
+}
+@media (max-width: 800px) {
+  .selectfile__upload {
+    display: block;
+    color: var(--light-color);
+    font-weight: 500;
+    background: var(--primary-color);
+    padding: 0.3rem;
+    font-size: 16px;
+    margin: 0;
+    border: 1px solid var(--gray-color);
+    border-radius: 4px;
+    align-self: center;
+  }
+}
+.selectfile__cancel {
+  margin-top: 0.5rem;
+  background: var(--light-color);
+  color: var(--primary-color);
+  padding: 0.2rem;
+}
+/* SelectSupportedFileFormat */
+.selectsupportedfileformat {
+  -webkit-appearance: none;
+  padding: 5px 0px;
+}
+.selectsupportedfileformat select {
+  margin-bottom: 3rem;
+  /* -webkit-appearance: none; */
+}
+
+.selectsupportedfileformat__select:hover {
+  background-color: var(--light-color);
+  opacity: 0.7;
+}
+
 /* CategoryBalance , Balance by Category*/
 .categorybalance {
   background: var(--light-color);

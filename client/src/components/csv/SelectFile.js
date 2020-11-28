@@ -4,6 +4,7 @@ import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import CssContext from '../../context/css/cssContext';
 import Alerts from '../layout/Alerts';
+import SelectSupportedFileFormat from './SelectSupportedFileFormat';
 
 const SelectFile = () => {
   //context
@@ -29,6 +30,10 @@ const SelectFile = () => {
     setSelectedFileName(e.target.files[0].name);
     setSelectedFile(e.target.files[0]);
     e.target.value = null; // resets value so same file can trigger onchange again.
+  };
+
+  const selectChange = (e) => {
+    setFormat(e.target.value);
   };
 
   //useeffect listen for alerts from csvtojson-backend-middleware
@@ -76,52 +81,34 @@ const SelectFile = () => {
   return (
     <div id='myModal' className='modal-csvprompt' style={{ display: 'block' }}>
       {/* card */}
-      <div className='modal-csvpresets__card modal-csvpresets__card__flex'>
-        Select File Type
+      <div className='selectfile__card selectfile__card__flex'>
+        <h2>Select one of the supported file formats</h2>
+        <p className='py-1 px list li'>For a default csv-formatting, choose RFC4180</p>
         {/* alert */}
         <Alerts />
         {/* Input */}
         <input style={{ display: 'none' }} type='file' name='csvFile' onChange={onFileChange} ref={inputRef} />
+        {/* Select File Format */}
+        <SelectSupportedFileFormat selectChange={selectChange} format={format} />
         {/* Buttons */}
         <button
           type='button'
-          className='btn presetform__upload'
+          className='btn selectfile__upload all-center'
           onClick={() => {
-            setFormat('RFC4180');
             inputRef.current.click();
           }}
         >
-          RFC4180
+          Upload
         </button>
         <button
           type='button'
-          className='btn presetform__upload'
+          className='btn selectfile__upload selectfile__cancel all-center'
+          /* className='btn modal-csvpresets__btn__addtobudget modal-csvpresets__btn__addtobudget__cancel ' */
           onClick={() => {
-            setFormat('nordea');
-            inputRef.current.click();
+            toggleModal('');
           }}
         >
-          Nordea
-        </button>
-        <button
-          type='button'
-          className='btn presetform__upload'
-          onClick={() => {
-            setFormat('swedbank');
-            inputRef.current.click();
-          }}
-        >
-          Swedbank
-        </button>
-        <button
-          type='button'
-          className='btn presetform__upload'
-          onClick={() => {
-            setFormat('handelsbanken');
-            inputRef.current.click();
-          }}
-        >
-          Handelsbanken
+          Cancel
         </button>
       </div>
     </div>

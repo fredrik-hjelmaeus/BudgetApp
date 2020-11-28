@@ -40,7 +40,7 @@ const PresetForm = () => {
       number: '',
       month,
       year,
-      category: 'Select an category',
+      category: 'Select an category ^',
       type: 'overhead',
       piggybank: [{ month, year, savedAmount: '' }],
     },
