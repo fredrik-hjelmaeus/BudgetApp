@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, Fragment } from 'react';
+import React, { useContext, useState, Fragment } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import CsvSelectFieldsItem from './CsvSelectFieldsItem';
 import CssContext from '../../context/css/cssContext';
@@ -6,14 +6,13 @@ import CssContext from '../../context/css/cssContext';
 const SelectCSVfields = () => {
   // context
   const presetContext = useContext(PresetContext);
-  const { csvpresets, submitCsvItems, clearCsv, updateCsvPresets } = presetContext;
+  const { csvpresets, clearCsv, updateCsvPresets } = presetContext;
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
   // state
   const [selectPhase, setSelectPhase] = useState('description');
   const [fields, setFields] = useState({ description: '', value: '' });
-  //const [phaseInstruction, setPhaseInstruction] = useState('description');
 
   // logic
   const onClick = () => {};
@@ -23,7 +22,6 @@ const SelectCSVfields = () => {
     if (selectPhase === 'description') {
       setFields({ ...fields, description: e.target.value });
       setSelectPhase('value');
-      // setPhaseInstruction('Please select the value field');
     }
 
     if (selectPhase === 'value') {
