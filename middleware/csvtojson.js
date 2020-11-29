@@ -1,6 +1,7 @@
 const csv = require('csvtojson');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const ofxConvert = require('../utils/ofxConvert');
 
 module.exports = function (req, res, next) {
   // Check if file was provided in the formdata
@@ -18,19 +19,24 @@ module.exports = function (req, res, next) {
   console.log(filetype);
   const file = req.files[filetype];
   console.log(file);
-  console.log(file.name.endsWith);
+  console.log(file.name.endsWith('ofx'));
   // Check fileextension
-  if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
-    if (file.name.endsWith('txt') && filetype !== 'handelsbanken') {
+  //ofx
+  if (file.name.endsWith('ofx') && filetype === 'ofx') {
+    console.log('ofx it is');
+  } else {
+    // csv and txt
+    if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
+      if (file.name.endsWith('txt') && filetype !== 'handelsbanken') {
+        return res.status(400).send('Wrong filetype, only accepts csv!');
+      }
+      if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
+        return res.status(400).send('Wrong filetype, only accepts txt!');
+      }
+    } else {
       return res.status(400).send('Wrong filetype, only accepts csv!');
     }
-    if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
-      return res.status(400).send('Wrong filetype, only accepts txt!');
-    }
-  } else {
-    return res.status(400).send('Wrong filetype, only accepts csv!');
   }
-
   // Check what filetype-button the user pressed,set deLimit and return file
   function setDelimiter(type) {
     switch (type) {
@@ -57,6 +63,11 @@ module.exports = function (req, res, next) {
 
   file.mv(`${__dirname}/${file.name}`);
   let newpresets = [];
+
+  if (file.name.endsWith('ofx') && filetype === 'ofx') {
+    const ofxValues = ofxConvert(`${__dirname}/${file.name}`);
+    console.log(ofxValues);
+  }
 
   csv(deLimit)
     .fromFile(`${__dirname}/${file.name}`)

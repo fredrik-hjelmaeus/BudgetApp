@@ -3,6 +3,11 @@ _data/
 config/default.json
 config/production.json
 
+*.JPG
+*.psd
+*.tif
+*.png
+.gitignore
 
 /client/build
 

@@ -7,6 +7,9 @@ const SelectSupportedFileFormat = ({ selectChange, format }) => {
         <option name='RFC4180' value='RFC4180' className='selectsupportedfileformat__option'>
           RFC4180
         </option>
+        <option name='ofx' value='ofx' className='selectsupportedfileformat__option'>
+          OFX
+        </option>
         <option name='nordea' value='nordea' className='selectsupportedfileformat__option'>
           Nordea
         </option>
