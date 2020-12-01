@@ -8,11 +8,12 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
 
     console.log('MongoDB Connected...');
   } catch (err) {
+    console.log('no connection to mongodb could be established');
     console.error(err.message);
     process.exit(1);
   }
