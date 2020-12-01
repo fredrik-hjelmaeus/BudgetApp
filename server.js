@@ -17,23 +17,23 @@ app.use(express.json({ extended: false }));
 app.use(fileUpload());
 
 // Sanitize data
-app.use(mongoSanitize());
+//app.use(mongoSanitize());
 
 // Set security headers
-app.use(helmet());
+//app.use(helmet());
 
 // Prevent XSS attacks
-app.use(xss());
+//app.use(xss());
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 mins
   max: 300, //num of request allowed
 });
-app.use(limiter);
+//app.use(limiter);
 
 // Prevent http param pollution
-app.use(hpp());
+//app.use(hpp());
 
 // Define Routes
 app.use('/api/users', require('./routes/users'));
