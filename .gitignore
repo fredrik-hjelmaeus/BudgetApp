@@ -1,8 +1,7 @@
 node_modules/
 _data/
-
-config/
-
+config/default.json
+config/production.json
 
 *.JPG
 *.psd
