@@ -17,7 +17,7 @@ app.use(express.json({ extended: false }));
 app.use(fileUpload());
 
 // Sanitize data
-app.use(mongoSanitize());
+//app.use(mongoSanitize());
 
 // Set security headers
 //app.use(helmet());
