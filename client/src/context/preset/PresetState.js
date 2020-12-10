@@ -10,7 +10,7 @@ import {
   SEND_EDIT,
   SUM,
   MONTHSUM,
-  CONTACT_ERROR,
+  PRESET_ERROR,
   CLEAR_PRESETS,
   GET_PRESETS,
   ADD_MONTH,
@@ -50,6 +50,7 @@ import {
   SUBMIT_CSV,
   CLEAR_CSV,
   REMOVE_CSV,
+  PRESET_CLEAR_ERRORS,
 } from '../types';
 
 const PresetState = (props) => {
@@ -98,7 +99,7 @@ const PresetState = (props) => {
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err) {
       dispatch({
-        type: CONTACT_ERROR,
+        type: PRESET_ERROR,
         payload: err.response.msg,
       });
     }
@@ -117,7 +118,7 @@ const PresetState = (props) => {
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err) {
       dispatch({
-        type: CONTACT_ERROR,
+        type: PRESET_ERROR,
         payload: err.response.msg,
       });
       console.log(err);
@@ -133,7 +134,7 @@ const PresetState = (props) => {
       });
     } catch (err) {
       dispatch({
-        type: CONTACT_ERROR,
+        type: PRESET_ERROR,
         payload: err.response.data.msg,
       });
     }
@@ -151,7 +152,7 @@ const PresetState = (props) => {
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err) {
       dispatch({
-        type: CONTACT_ERROR,
+        type: PRESET_ERROR,
         payload: err.response.msg,
       });
     }
@@ -175,7 +176,7 @@ const PresetState = (props) => {
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
       dispatch({
-        type: CONTACT_ERROR,
+        type: PRESET_ERROR,
         payload: err.response.data,
       });
     }
@@ -930,6 +931,9 @@ const PresetState = (props) => {
       // console.log('no capital to calculate ');
     }
   };
+  const clearPresetErrors = () => {
+    dispatch({ type: PRESET_CLEAR_ERRORS });
+  };
 
   const setActivePiggybank = (piggybank) => {
     dispatch({ type: SET_ACTIVE_PIGGYBANK, payload: piggybank });
@@ -1036,6 +1040,7 @@ const PresetState = (props) => {
         updateCsvPresets,
         clearCsv,
         removeCSV,
+        clearPresetErrors,
       }}
     >
       {props.children}

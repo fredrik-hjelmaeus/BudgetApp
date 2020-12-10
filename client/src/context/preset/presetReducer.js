@@ -6,7 +6,7 @@ import {
   CANCEL_EDIT,
   SEND_EDIT,
   SUM,
-  CONTACT_ERROR,
+  PRESET_ERROR,
   CLEAR_PRESETS,
   ADD_MONTH,
   FILTER_PRESETS,
@@ -46,6 +46,7 @@ import {
   CLEAR_CSV,
   REMOVE_CSV,
   LOGOUT,
+  PRESET_CLEAR_ERRORS,
 } from '../types';
 
 export default (state, action) => {
@@ -311,10 +312,15 @@ export default (state, action) => {
         ...state,
         edit: null,
       };
-    case CONTACT_ERROR:
+    case PRESET_ERROR:
       return {
         ...state,
         error: action.payload,
+      };
+    case PRESET_CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;

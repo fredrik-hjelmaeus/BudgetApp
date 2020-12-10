@@ -8,7 +8,7 @@ config/production.json
 *.tif
 *.png
 .gitignore
-
+misc/
 /client/build
 
 .DS_Store
