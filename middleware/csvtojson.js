@@ -28,12 +28,15 @@ module.exports = function (req, res, next) {
     // csv and txt
     if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
       if (file.name.endsWith('txt') && filetype !== 'handelsbanken') {
+        console.log('Wrong filetype, only accepts csv!(handelsbanken)');
         return res.status(400).send('Wrong filetype, only accepts csv!');
       }
       if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
+        console.log('Wrong filetype, only accepts txt!');
         return res.status(400).send('Wrong filetype, only accepts txt!');
       }
     } else {
+      console.log('Wrong filetype, only accepts csv!');
       return res.status(400).send('Wrong filetype, only accepts csv!');
     }
   }
@@ -66,8 +69,10 @@ module.exports = function (req, res, next) {
 
   // Push new values to array
   const pushData = (filetype, source) => {
+    console.log('FILETYPE:', filetype);
     //nordea
     if (filetype === 'nordea') {
+      console.log('NORDEA RAN');
       source.map((preset) =>
         newpresets.push({
           number: preset.Belopp,
@@ -180,6 +185,7 @@ module.exports = function (req, res, next) {
 
   const sendAndCleanup = () => {
     if (newpresets.length === 0) {
+      console.log('###########################################');
       deleteFile(`${__dirname}/${file.name}`);
       return res.status(400).send('No values recognised!');
     }
