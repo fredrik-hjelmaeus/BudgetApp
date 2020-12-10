@@ -1,6 +1,5 @@
 import React from 'react';
 import PresetContext from '../../context/preset/presetContext';
-import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import CssContext from '../../context/css/cssContext';
 import Alerts from '../layout/Alerts';
@@ -9,13 +8,11 @@ import SelectSupportedFileFormat from './SelectSupportedFileFormat';
 const SelectFile = () => {
   //context
   const alertContext = React.useContext(AlertContext);
-  const authContext = React.useContext(AuthContext);
   const presetContext = React.useContext(PresetContext);
   const cssContext = React.useContext(CssContext);
   const { toggleModal } = cssContext;
   const { setAlert } = alertContext;
-  const { clearErrors } = authContext;
-  const { uploadCSV, error, csvpresets } = presetContext;
+  const { uploadCSV, error, csvpresets, clearPresetErrors } = presetContext;
 
   //state
   const [selectedFile, setSelectedFile] = React.useState('');
@@ -40,15 +37,15 @@ const SelectFile = () => {
   React.useEffect(() => {
     if (error === 'No values recognised!') {
       setAlert(error, 'danger');
-      clearErrors();
+      clearPresetErrors();
     }
     if (error === 'CSV does not contain valid Nordea-values!') {
       setAlert(error, 'danger');
-      clearErrors();
+      clearPresetErrors();
     }
     if (error === 'Wrong filetype, only accepts csv!') {
       setAlert(error, 'danger');
-      clearErrors();
+      clearPresetErrors();
     } // eslint-disable-next-line
   }, [error]);
 
