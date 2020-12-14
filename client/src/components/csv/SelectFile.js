@@ -46,6 +46,14 @@ const SelectFile = () => {
     if (error === 'Wrong filetype, only accepts csv!') {
       setAlert(error, 'danger');
       clearPresetErrors();
+    }
+    if (error === 'CSV does not contain valid RFC4180-values!') {
+      setAlert(error, 'danger');
+      clearPresetErrors();
+    }
+    if (error === 'Invalid OFX file!') {
+      setAlert(error, 'danger');
+      clearPresetErrors();
     } // eslint-disable-next-line
   }, [error]);
 

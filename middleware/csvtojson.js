@@ -9,18 +9,18 @@ module.exports = function (req, res, next) {
     return res.status(400).send('No File Uploaded');
   }
 
-  let filetype;
   let deLimit;
 
   // Check if an object was provided in the formdata and set that objectname as filetype
-  if (Object.getOwnPropertyNames(req.files)) {
-    filetype = Object.getOwnPropertyNames(req.files)[0];
+  if (!Object.getOwnPropertyNames(req.files)) {
+    console.log('Invalid data,filetype or object not found');
+    return res.status(400).send('Invalid data');
   }
-  //console.log(filetype);
+  const filetype = Object.getOwnPropertyNames(req.files)[0];
   const file = req.files[filetype];
-  //console.log(file);
-  //console.log(file.name.endsWith('ofx'));
-  // Check fileextension
+
+  // Compare fileextension with provided filetype
+
   //ofx
   if (file.name.endsWith('ofx') && filetype === 'ofx') {
     console.log('ofx it is');
@@ -40,6 +40,8 @@ module.exports = function (req, res, next) {
       return res.status(400).send('Wrong filetype, only accepts csv!');
     }
   }
+  // csv
+
   // Check what filetype-button the user pressed,set deLimit and return file
   function setDelimiter(type) {
     switch (type) {
@@ -132,17 +134,31 @@ module.exports = function (req, res, next) {
   // if ofx convert with ofx else convert with csvtojson
   if (file.name.endsWith('ofx') && filetype === 'ofx') {
     let tempArr = [];
+    let validOfx = true;
     fs.readFile(`${__dirname}/${file.name}`, 'utf8', function (err, ofxData) {
       if (err) {
         throw err;
       }
-      const data = ofx.parse(ofxData);
 
-      data.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN.map((test) => {
-        const transaction = { description: test.TRNTYPE, value: test.TRNAMT };
-        tempArr.push(transaction);
-      });
+      try {
+        const data = ofx.parse(ofxData);
+        data.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN.map((field) => {
+          if (isNaN(field.TRNAMT)) {
+            validOfx = false;
+          }
 
+          const transaction = { description: field.TRNTYPE, value: field.TRNAMT };
+          tempArr.push(transaction);
+        });
+        if (!validOfx) {
+          deleteFile(`${__dirname}/${file.name}`);
+          return res.status(400).send('Invalid OFX file!');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      // console.log(tempArr);
       pushData(filetype, tempArr);
       sendAndCleanup();
     });
@@ -150,7 +166,9 @@ module.exports = function (req, res, next) {
     csv(deLimit)
       .fromFile(`${__dirname}/${file.name}`)
       .then((source) => {
-        console.log(source);
+        //console.log(source);
+
+        // Validation of data by filetype
         if (filetype === 'swedbank') {
           // here we need to check source[1] as fields with citation "" may have , in them.
           const belopp = JSON.stringify(source[1]).split(',')[10];
@@ -175,6 +193,27 @@ module.exports = function (req, res, next) {
             console.log('invalid handelsbanken txt-file deleted');
             deleteFile(`${__dirname}/${file.name}`);
             return res.status(400).send('TXT/CSV does not contain valid Handelsbanken-values!');
+          }
+        }
+        if (filetype === 'RFC4180') {
+          console.log('rfc check run');
+          let validRFC4180 = true;
+          let rowlength = 0;
+          source.map((row) => {
+            if (rowlength === 0) {
+              rowlength = Object.keys(row).length;
+            } else {
+              console.log('here');
+              if (Object.keys(row).length !== rowlength) {
+                console.log('there');
+                validRFC4180 = false;
+              }
+            }
+          });
+          if (!validRFC4180) {
+            console.log('this is working');
+            deleteFile(`${__dirname}/${file.name}`);
+            return res.status(400).send('CSV does not contain valid RFC4180-values!');
           }
         }
 
