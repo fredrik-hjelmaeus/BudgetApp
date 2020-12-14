@@ -24,6 +24,10 @@ export const LoginModal = (props) => {
       props.history.push('/');
     }
 
+    if (error === 'Please include a valid email') {
+      setAlert(error, 'danger');
+      clearErrors();
+    } // eslint-disable-next-line
     if (error === 'Invalid Credentials') {
       setAlert(error, 'danger');
       clearErrors();
