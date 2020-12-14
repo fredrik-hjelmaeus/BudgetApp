@@ -14,7 +14,7 @@ router.post(
   '/',
   [
     check('name', 'Please add name').not().isEmpty(),
-    check('email', 'Please include a valid').isEmail(),
+    check('email', 'Please include a valid Email').isEmail(),
     check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
   ],
   async (req, res) => {

@@ -18,7 +18,10 @@ const RegisterModal = (props) => {
       console.log('ran');
       props.history.push('/');
     }
-
+    if (error === 'Please include a valid Email') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
     if (error === 'User already exists') {
       setAlert(error, 'danger');
       clearErrors();

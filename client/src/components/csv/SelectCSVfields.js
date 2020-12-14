@@ -2,11 +2,14 @@ import React, { useContext, useState, Fragment } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import CsvSelectFieldsItem from './CsvSelectFieldsItem';
 import CssContext from '../../context/css/cssContext';
+import AlertContext from '../../context/alert/alertContext';
+import Alerts from '../../components/layout/Alerts';
 
 const SelectCSVfields = () => {
   // context
   const presetContext = useContext(PresetContext);
   const { csvpresets, clearCsv, updateCsvPresets } = presetContext;
+  const { setAlert } = useContext(AlertContext);
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
@@ -17,6 +20,13 @@ const SelectCSVfields = () => {
   // logic
   const onClick = () => {};
 
+  // validate selected value field by iterating csvpresets and make sure all fields is a number
+  const validateValueField = (field) => {
+    let isValid = true;
+    csvpresets.map((preset) => (isNaN(preset.row[field]) ? (isValid = false) : null));
+    return isValid;
+  };
+
   // when a field is selected
   const fieldSelect = (e) => {
     if (selectPhase === 'description') {
@@ -25,8 +35,12 @@ const SelectCSVfields = () => {
     }
 
     if (selectPhase === 'value') {
-      setFields({ ...fields, value: e.target.value });
-      updateAndExit(e.target.value);
+      if (!validateValueField(e.target.value)) {
+        setAlert('Please select a valid number field', 'danger');
+      } else {
+        setFields({ ...fields, value: e.target.value });
+        updateAndExit(e.target.value);
+      }
     }
   };
 
@@ -57,6 +71,8 @@ const SelectCSVfields = () => {
           {/* Title */}
           <h1 className='all-center m-1'>Select CSV fields</h1>
 
+          {/* Alert */}
+          <Alerts />
           {/* description/instruction */}
           <p>
             {selectPhase === 'description' && (
@@ -81,7 +97,7 @@ const SelectCSVfields = () => {
 
           {/* button add */}
           <button className='btn modal-csvpresets__btn__addtobudget all-center' onClick={onClick}>
-            ADD TO BUDGET
+            SUBMIT
           </button>
 
           {/* button cancel */}
