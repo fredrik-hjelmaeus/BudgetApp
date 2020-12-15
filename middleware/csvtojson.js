@@ -20,7 +20,6 @@ module.exports = function (req, res, next) {
   const file = req.files[filetype];
 
   // Compare fileextension with provided filetype
-
   //ofx
   if (file.name.endsWith('ofx') && filetype === 'ofx') {
     console.log('ofx it is');
@@ -31,13 +30,18 @@ module.exports = function (req, res, next) {
         console.log('Wrong filetype, only accepts csv!(handelsbanken)');
         return res.status(400).send('Wrong filetype, only accepts csv!');
       }
-      if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
+      /*     if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
         console.log('Wrong filetype, only accepts txt!');
         return res.status(400).send('Wrong filetype, only accepts txt!');
-      }
+      } */
     } else {
-      console.log('Wrong filetype, only accepts csv!');
-      return res.status(400).send('Wrong filetype, only accepts csv!');
+      if (filetype === 'ofx') {
+        console.log('Wrong filetype, only accepts ofx!');
+        return res.status(400).send('Wrong filetype, only accepts ofx!');
+      } else {
+        console.log('Wrong filetype, only accepts csv!');
+        return res.status(400).send('Wrong filetype, only accepts csv!');
+      }
     }
   }
   // csv
@@ -86,14 +90,15 @@ module.exports = function (req, res, next) {
 
     // handelsbanken
     if (filetype === 'handelsbanken') {
-      // console.log(source);
-      /*     source.map((preset) =>
+      console.log(source[1]);
+      /*       source.map((preset) =>
         newpresets.push({
-          number: preset.Belopp,
-          name: preset.Rubrik,
+          number: Object.keys(preset)[6],
+          name: Object.keys(preset)[7],
           id: uuidv4(),
         })
       ); */
+      //console.log(source.map((p) => Object.keys(p)));
     }
 
     // swedbank
@@ -132,7 +137,11 @@ module.exports = function (req, res, next) {
   };
 
   // if ofx convert with ofx else convert with csvtojson
-  if (file.name.endsWith('ofx') && filetype === 'ofx') {
+  if (filetype === 'ofx') {
+    if (!file.name.endsWith('ofx')) {
+      deleteFile(`${__dirname}/${file.name}`);
+      return res.status(400).send('Invalid OFX file!');
+    }
     let tempArr = [];
     let validOfx = true;
     fs.readFile(`${__dirname}/${file.name}`, 'utf8', function (err, ofxData) {
@@ -166,15 +175,24 @@ module.exports = function (req, res, next) {
     csv(deLimit)
       .fromFile(`${__dirname}/${file.name}`)
       .then((source) => {
-        //console.log(source);
+        console.log(Object.keys(source[0])[6]);
+        console.log(Object.keys(source[0])[7]);
 
         // Validation of data by filetype
         if (filetype === 'swedbank') {
+          console.log('swedbank csv ran');
+
           // here we need to check source[1] as fields with citation "" may have , in them.
           const belopp = JSON.stringify(source[1]).split(',')[10];
           const beskrivning = JSON.stringify(source[1]).split(',')[9];
+          console.log(isNaN(belopp), isNaN(beskrivning), belopp, beskrivning);
           if (typeof belopp !== 'string' || typeof beskrivning !== 'string') {
             console.log('invalid swedbank file deleted');
+            deleteFile(`${__dirname}/${file.name}`);
+            return res.status(400).send('CSV does not contain valid Swedbank-values!');
+          }
+          if (isNaN(belopp)) {
+            console.log('invalid swedbank number field');
             deleteFile(`${__dirname}/${file.name}`);
             return res.status(400).send('CSV does not contain valid Swedbank-values!');
           }
@@ -189,10 +207,15 @@ module.exports = function (req, res, next) {
         }
         if (filetype === 'handelsbanken') {
           // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
-          if (typeof Object.keys(source[0])[6] !== 'string' || typeof Object.keys(source[0])[7] !== 'string') {
-            console.log('invalid handelsbanken txt-file deleted');
+          const belopp = Object.keys(source[0])[6];
+          const beskrivning = Object.keys(source[0])[7];
+          if (typeof beskrivning !== 'string' || typeof belopp !== 'string') {
             deleteFile(`${__dirname}/${file.name}`);
-            return res.status(400).send('TXT/CSV does not contain valid Handelsbanken-values!');
+            return res.status(400).send('File does not contain valid Handelsbanken-values!');
+          }
+          if (isNaN(belopp)) {
+            deleteFile(`${__dirname}/${file.name}`);
+            return res.status(400).send('File does not contain valid Handelsbanken-values!');
           }
         }
         if (filetype === 'RFC4180') {

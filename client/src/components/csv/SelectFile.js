@@ -54,6 +54,18 @@ const SelectFile = () => {
     if (error === 'Invalid OFX file!') {
       setAlert(error, 'danger');
       clearPresetErrors();
+    }
+    if (error === 'Wrong filetype, only accepts ofx!') {
+      setAlert(error, 'danger');
+      clearPresetErrors();
+    }
+    if (error === 'CSV does not contain valid Swedbank-values!') {
+      setAlert(error, 'danger');
+      clearPresetErrors();
+    }
+    if (error === 'File does not contain valid Handelsbanken-values!') {
+      setAlert(error, 'danger');
+      clearPresetErrors();
     } // eslint-disable-next-line
   }, [error]);
 
