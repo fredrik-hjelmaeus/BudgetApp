@@ -90,15 +90,13 @@ module.exports = function (req, res, next) {
 
     // handelsbanken
     if (filetype === 'handelsbanken') {
-      console.log(source[1]);
-      /*       source.map((preset) =>
+      source.map((preset) =>
         newpresets.push({
-          number: Object.keys(preset)[6],
-          name: Object.keys(preset)[7],
+          number: Object.values(preset)[6][Object.values(preset)[6].length - 1],
+          name: Object.values(preset)[7],
           id: uuidv4(),
         })
-      ); */
-      //console.log(source.map((p) => Object.keys(p)));
+      );
     }
 
     // swedbank
@@ -175,17 +173,11 @@ module.exports = function (req, res, next) {
     csv(deLimit)
       .fromFile(`${__dirname}/${file.name}`)
       .then((source) => {
-        console.log(Object.keys(source[0])[6]);
-        console.log(Object.keys(source[0])[7]);
-
         // Validation of data by filetype
         if (filetype === 'swedbank') {
-          console.log('swedbank csv ran');
-
           // here we need to check source[1] as fields with citation "" may have , in them.
           const belopp = JSON.stringify(source[1]).split(',')[10];
           const beskrivning = JSON.stringify(source[1]).split(',')[9];
-          console.log(isNaN(belopp), isNaN(beskrivning), belopp, beskrivning);
           if (typeof belopp !== 'string' || typeof beskrivning !== 'string') {
             console.log('invalid swedbank file deleted');
             deleteFile(`${__dirname}/${file.name}`);
@@ -207,15 +199,19 @@ module.exports = function (req, res, next) {
         }
         if (filetype === 'handelsbanken') {
           // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
+
           const belopp = Object.keys(source[0])[6];
           const beskrivning = Object.keys(source[0])[7];
           if (typeof beskrivning !== 'string' || typeof belopp !== 'string') {
             deleteFile(`${__dirname}/${file.name}`);
             return res.status(400).send('File does not contain valid Handelsbanken-values!');
           }
-          if (isNaN(belopp)) {
-            deleteFile(`${__dirname}/${file.name}`);
-            return res.status(400).send('File does not contain valid Handelsbanken-values!');
+          // check all number fields and make sure they are numbers
+          for (const preset of source) {
+            if (isNaN(Object.values(preset)[6][Object.values(preset)[6].length - 1])) {
+              deleteFile(`${__dirname}/${file.name}`);
+              return res.status(400).send('File does not contain valid Handelsbanken-values!');
+            }
           }
         }
         if (filetype === 'RFC4180') {

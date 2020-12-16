@@ -66,7 +66,8 @@ const SelectFile = () => {
     if (error === 'File does not contain valid Handelsbanken-values!') {
       setAlert(error, 'danger');
       clearPresetErrors();
-    } // eslint-disable-next-line
+    }
+    // eslint-disable-next-line
   }, [error]);
 
   //useeffect run uploadCSV when file is selected
