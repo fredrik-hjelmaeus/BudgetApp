@@ -1,0 +1,14 @@
+<svg data-v-fde0c5aa="" xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 50 50" class="iconLeft">
+<!---->
+<defs data-v-fde0c5aa="">
+<linearGradient data-v-fde0c5aa="" gradientTransform="rotate(25)" id="f80fd576-1d8f-42b6-8826-c55dfb5f8ff8" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop data-v-fde0c5aa="" offset="0%" stop-color="#C17369" stop-opacity="1"></stop>
+<stop data-v-fde0c5aa="" offset="100%" stop-color="#A9B5A9" stop-opacity="1"></stop>
+</linearGradient>
+</defs>
+<g data-v-fde0c5aa="" id="2bfd90fe-b0fc-495b-99ea-07ee1c4e6943" stroke="none" fill="white"
+>
+<path d="M9.382 8.675h13.943v13.943L32 31.293V0H.707zM22.618 23.325H8.675V9.382L0 .707V32h31.293z">
+</path>
+</g>
+<!----></svg>
