@@ -7,7 +7,7 @@ const YearBalance = () => {
   const yearmonthavg = parseInt(parseFloat(presetContext.yearsum / 12));
 
   return (
-    <div className='year-bg'>
+    <div>
       <div className='container'>
         <div className='yearbalance__card bold'>
           <div className='flexrow chartmonth__textpadding'>

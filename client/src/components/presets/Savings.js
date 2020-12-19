@@ -6,7 +6,7 @@ import PiggybankSavings from './PiggybankSavings';
 const Savings = () => {
   const presetContext = useContext(PresetContext);
   return (
-    <div className='year-bg'>
+    <div>
       <div className='expense__card bold'>
         <div className='flexcolumn '>
           <div className='flexrow-2 borderdivider'>
