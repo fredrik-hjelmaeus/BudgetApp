@@ -38,7 +38,7 @@ const Expense = () => {
   ];
 
   return (
-    <div className='year-bg'>
+    <div>
       <div className='expense__card bold'>
         <div style={{ margin: '0 0 1rem 0' }}>
           <DonutChart

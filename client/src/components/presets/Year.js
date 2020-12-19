@@ -85,11 +85,11 @@ const Year = () => {
       <Datemenu />
       {guide && <GuideModal />}
       <div className='grid-2'>
-        <div className='container'>
+        <div className="container">
           <YearTitle />
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
-        <div>
+        <div className="year-bg">
           {yearsummary === 'savings' && <Savings />}
           {yearsummary === 'expense' && <Expense />}
           {yearsummary === 'balance' && <YearBalance />}
