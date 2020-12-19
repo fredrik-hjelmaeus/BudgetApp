@@ -1,6 +1,8 @@
 node_modules/
 _data/
 
+/config/production.json
+/config/default.json
 
 
 *.JPG
