@@ -1,0 +1,11 @@
+{
+  "mongoURI": "mongodb+srv://kirderfovane:golfbabe81@contactkeeper-sdlbd.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "golfbabe81",
+  "SMTP_HOST": "smtp.mailtrap.io",
+  "SMTP_PORT": "2525",
+  "SMTP_EMAIL": "c9a74cb93bc7ef",
+  "SMTP_PASSWORD": "7b1cd50a9954b7",
+  "FROM_EMAIL": "noreply@budgetapp.io",
+  "FROM_NAME": "BudgetApp",
+  "resetpasswordURL": "production"
+}
