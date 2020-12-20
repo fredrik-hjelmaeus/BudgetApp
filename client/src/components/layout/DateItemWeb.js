@@ -50,9 +50,12 @@ const DateItemWeb = () => {
 
   return (
     <div
-      className={
+    data-tooltip={guide !== '3' ? "This is the datemenu. Here you navigate in your timeline" : null}
+     /*  className={
         guide === '2' || guide === '3' ? 'datemenu__guide' : 'datemenu'
-      }
+      } */
+      className='datemenu'
+      
     >
       <ul>
         <button

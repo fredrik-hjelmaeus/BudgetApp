@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
 import ArrowSVG from '../layout/images/ArrowSVG';
+import Tooltip from './Tooltip'
 
 const GuideModal = () => {
   const authContext = useContext(AuthContext);
@@ -55,6 +56,9 @@ const GuideModal = () => {
             </div>
           </div>
         </React.Fragment>
+      )}
+       {guide === '4' && (
+        <Tooltip />
       )}
     </div>
   );
