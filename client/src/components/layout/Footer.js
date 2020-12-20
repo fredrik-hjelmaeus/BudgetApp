@@ -23,7 +23,7 @@ const Footer = () => {
         </li>
         <li></li>
 
-        <li className='footer__information'>INFORMATION</li>
+        <li className='footer__information' >INFORMATION</li>
         <li>
           <Link to='/about' className='footer__information_btn'>
             About
