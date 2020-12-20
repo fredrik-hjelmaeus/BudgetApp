@@ -11,6 +11,7 @@ import YearCategoryBalance from './YearCategoryBalance';
 import YearSummaryMenu from './YearSummaryMenu';
 import YearTitle from './YearTitle';
 import GuideModal from '../guide/GuideModal';
+import Tooltip from '../guide/Tooltip'
 import UserProfileModal from '../auth/UserProfileModal';
 
 const Year = () => {
@@ -79,11 +80,15 @@ const Year = () => {
     // eslint-disable-next-line
   }, [presets, year]);
 
+
+//if(guide) return <Tooltip />
+
   return (
     <Fragment>
       {modal === 'profile' && <UserProfileModal />}
       <Datemenu />
-      {guide && <GuideModal />}
+     {guide && <GuideModal />} 
+     
       <div className='grid-2'>
         <div className="container">
           <YearTitle />
