@@ -49,14 +49,14 @@ const DateItemWeb = () => {
   };
 
   return (
-    <div
-    data-tooltip={guide !== '3' ? "This is the datemenu. Here you navigate in your timeline" : null}
-     /*  className={
-        guide === '2' || guide === '3' ? 'datemenu__guide' : 'datemenu'
-      } */
-      className='datemenu'
-      
-    >
+    <div 
+    data-tooltip={guide === '2' ? "This is the datemenu. Here you navigate in your timeline" : null}
+    
+       className={
+        guide === '2' || guide === '3' ? 'datemenu' : 'datemenu guide__clip_2'
+      } 
+         >
+           
       <ul>
         <button
           onClick={onClick}
@@ -64,7 +64,7 @@ const DateItemWeb = () => {
           value={prevYear}
           name={prevYear}
         >
-          {' '}
+        
           {parseInt(year) === prevYear || year === prevYear ? (
             <strong className='text-dark'>{`<`}</strong>
           ) : (
@@ -75,7 +75,7 @@ const DateItemWeb = () => {
       <ul>
         <button
           onClick={onClick}
-          className='btn-Datemenu'
+          className='btn-Datemenu '
           value={year}
           name={year}
         >
@@ -90,7 +90,7 @@ const DateItemWeb = () => {
         <button
           onClick={onClick}
           className={
-            guide === '3' ? 'btn-Datemenu guide__overlay' : 'btn-Datemenu'
+            guide === '3' ? 'btn-Datemenu' : 'btn-Datemenu'
           }
           value='January'
           name='January'
