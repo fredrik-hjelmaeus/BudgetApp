@@ -65,7 +65,7 @@ export default (state, action) => {
         error: null,
         edit: null,
         sum: null,
-        year: '2019',
+        //year: '2019',
         month: null,
       };
     case CLEAR_FILTER:

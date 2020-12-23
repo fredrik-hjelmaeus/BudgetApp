@@ -11,7 +11,7 @@ import YearCategoryBalance from './YearCategoryBalance';
 import YearSummaryMenu from './YearSummaryMenu';
 import YearTitle from './YearTitle';
 import GuideModal from '../guide/GuideModal';
-import Tooltip from '../guide/Tooltip'
+import Tooltip from '../guide/Tooltip';
 import UserProfileModal from '../auth/UserProfileModal';
 
 const Year = () => {
@@ -37,7 +37,7 @@ const Year = () => {
   } = presetContext;
 
   const { yearsummary, dimensions, modal } = cssContext;
-  const { setGuide, guide } = guideContext;
+  const { setGuide, guide, exitedguide } = guideContext;
   //console.log(guide);
   //console.log(presets);
   // loads presets from database when year-variable is updated
@@ -48,7 +48,7 @@ const Year = () => {
 
   // calculates initial account balance if and when presets is defined.
   useEffect(() => {
-    presets && presets.length === 0 ? setGuide('1') : setGuide(null);
+    presets && presets.length === 0 && !exitedguide && setGuide('1');
     presets && presetContext.calcSum(9, null, 'init');
     presets && calcCategoryByYear();
     presets && year === null && calcYearsum('2019');
@@ -80,21 +80,18 @@ const Year = () => {
     // eslint-disable-next-line
   }, [presets, year]);
 
-
-
-
   return (
     <Fragment>
       {modal === 'profile' && <UserProfileModal />}
       <Datemenu />
-     {guide && <GuideModal />} 
-     
+      {guide && <GuideModal />}
+
       <div className='grid-2'>
-        <div className="container">
+        <div className='container'>
           <YearTitle />
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
-        <div className="year-bg">
+        <div className='year-bg'>
           {yearsummary === 'savings' && <Savings />}
           {yearsummary === 'expense' && <Expense />}
           {yearsummary === 'balance' && <YearBalance />}
