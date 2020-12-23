@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
-import ArrowSVG from '../layout/images/ArrowSVG';
 import Test from './Test';
 import GuideSteps from './GuideSteps';
 
