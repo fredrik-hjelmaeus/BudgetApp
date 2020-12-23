@@ -1,24 +1,36 @@
 import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
+import PresetContext from '../../context/preset/presetContext';
 import Test from './Test';
 import GuideSteps from './GuideSteps';
 
 const GuideModal = () => {
   const authContext = useContext(AuthContext);
   const guideContext = useContext(GuideContext);
-  const { guide, setGuide } = guideContext;
+  const { guide, setGuide, setUserExited, exitedguide } = guideContext;
+  const { getGuidePresets, clearPresets, presets, setYear, year, getPresets } = useContext(PresetContext);
   //authContext && console.log(authContext.user.name);
   const { isAuthenticated, user } = authContext;
 
   //return <Test />
   const onExit = () => {
+    console.log('wtf');
+    clearPresets();
     setGuide(null);
+    setUserExited(true);
+    getPresets();
   };
   const nextStep = () => {
+    year !== '2019' && setYear('2019');
+
+    console.log('ran');
     //if guide reach last number,finish and exit guide by null,else increment guide by 1
     guide === '15' ? setGuide(null) : setGuide((parseInt(guide) + 1).toString());
   };
+  React.useEffect(() => {
+    !isNaN(guide) && parseInt(guide) >= 2 && getGuidePresets();
+  }, [guide]);
 
   return (
     <div className='guide__modal'>

@@ -959,6 +959,25 @@ const PresetState = (props) => {
   const submitCsvItems = (string) => {
     dispatch({ type: SUBMIT_CSV, payload: string });
   };
+
+  // Get guidePresets
+  const getGuidePresets = async () => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const res = await axios.get('/api/guide', config);
+      dispatch({ type: GET_PRESETS, payload: res.data });
+    } catch (err) {
+      dispatch({
+        type: PRESET_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+
   return (
     <PresetContext.Provider
       value={{
@@ -1041,6 +1060,7 @@ const PresetState = (props) => {
         clearCsv,
         removeCSV,
         clearPresetErrors,
+        getGuidePresets,
       }}
     >
       {props.children}
