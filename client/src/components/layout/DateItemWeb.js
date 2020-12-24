@@ -49,33 +49,20 @@ const DateItemWeb = () => {
   };
 
   return (
-    <div 
-    data-tooltip={guide === '2' ? "This is the datemenu. Here you navigate in your timeline" : null}
-    
-       className={
-        guide === '2' || guide === '3' ? 'datemenu' : 'datemenu guide__clip_2'
-      } 
-         >
-           
+    <div
+      data-tooltip={guide === '2' ? 'This is the datemenu. Here you navigate in your timeline' : null}
+      className={guide === '2' || guide === '3' ? 'datemenu' : 'datemenu guide__clip_2'}
+    >
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value={prevYear}
-          name={prevYear}
-        >
-        
-          {parseInt(year) === prevYear || year === prevYear ? (
-            <strong className='text-dark'>{`<`}</strong>
-          ) : (
-            `<`
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value={prevYear} name={prevYear}>
+          {parseInt(year) === prevYear || year === prevYear ? <strong className='text-dark'>{`<`}</strong> : `<`}
         </button>
       </ul>
       <ul>
         <button
           onClick={onClick}
           className='btn-Datemenu '
+          data-tooltip={guide === '3' ? 'Here you navigate to Year' : null}
           value={year}
           name={year}
         >
@@ -87,196 +74,75 @@ const DateItemWeb = () => {
         </button>
       </ul>
       <ul>
-        <button
-          onClick={onClick}
-          className={
-            guide === '3' ? 'btn-Datemenu' : 'btn-Datemenu'
-          }
-          value='January'
-          name='January'
-        >
-          {LocalMonth === 'January' ? (
-            <strong className='text-dark'>January</strong>
-          ) : (
-            'January'
-          )}
+        <button onClick={onClick} className={guide === '3' ? 'btn-Datemenu' : 'btn-Datemenu'} value='January' name='January'>
+          {LocalMonth === 'January' ? <strong className='text-dark'>January</strong> : 'January'}
         </button>
       </ul>
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='February'
-          name='February'
-        >
-          {LocalMonth === 'February' ? (
-            <strong className='text-dark'>February</strong>
-          ) : (
-            'February'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='February' name='February'>
+          {LocalMonth === 'February' ? <strong className='text-dark'>February</strong> : 'February'}
         </button>
       </ul>
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='March'
-          name='March'
-        >
-          {LocalMonth === 'March' ? (
-            <strong className='text-dark'>March</strong>
-          ) : (
-            'March'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='March' name='March'>
+          {LocalMonth === 'March' ? <strong className='text-dark'>March</strong> : 'March'}
         </button>
       </ul>
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='April'
-          name='April'
-        >
-          {LocalMonth === 'April' ? (
-            <strong className='text-dark'>April</strong>
-          ) : (
-            'April'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='April' name='April'>
+          {LocalMonth === 'April' ? <strong className='text-dark'>April</strong> : 'April'}
         </button>
       </ul>
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='May'
-          name='May'
-        >
-          {LocalMonth === 'May' ? (
-            <strong className='text-dark'>May</strong>
-          ) : (
-            'May'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='May' name='May'>
+          {LocalMonth === 'May' ? <strong className='text-dark'>May</strong> : 'May'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='June'
-          name='June'
-        >
-          {LocalMonth === 'June' ? (
-            <strong className='text-dark'>June</strong>
-          ) : (
-            'June'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='June' name='June'>
+          {LocalMonth === 'June' ? <strong className='text-dark'>June</strong> : 'June'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='July'
-          name='July'
-        >
-          {LocalMonth === 'July' ? (
-            <strong className='text-dark'>July</strong>
-          ) : (
-            'July'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='July' name='July'>
+          {LocalMonth === 'July' ? <strong className='text-dark'>July</strong> : 'July'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='August'
-          name='August'
-        >
-          {LocalMonth === 'August' ? (
-            <strong className='text-dark'>August</strong>
-          ) : (
-            'August'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='August' name='August'>
+          {LocalMonth === 'August' ? <strong className='text-dark'>August</strong> : 'August'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='September'
-          name='September'
-        >
-          {LocalMonth === 'September' ? (
-            <strong className='text-dark'>September</strong>
-          ) : (
-            'September'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='September' name='September'>
+          {LocalMonth === 'September' ? <strong className='text-dark'>September</strong> : 'September'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='October'
-          name='October'
-        >
-          {LocalMonth === 'October' ? (
-            <strong className='text-dark'>October</strong>
-          ) : (
-            'October'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='October' name='October'>
+          {LocalMonth === 'October' ? <strong className='text-dark'>October</strong> : 'October'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='November'
-          name='November'
-        >
-          {LocalMonth === 'November' ? (
-            <strong className='text-dark'>November</strong>
-          ) : (
-            'November'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='November' name='November'>
+          {LocalMonth === 'November' ? <strong className='text-dark'>November</strong> : 'November'}
         </button>
       </ul>
       <ul>
         {' '}
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value='December'
-          name='December'
-        >
-          {LocalMonth === 'December' ? (
-            <strong className='text-dark'>December</strong>
-          ) : (
-            'December'
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value='December' name='December'>
+          {LocalMonth === 'December' ? <strong className='text-dark'>December</strong> : 'December'}
         </button>
       </ul>
       <ul>
-        <button
-          onClick={onClick}
-          className='btn-Datemenu'
-          value={nextYear}
-          name={nextYear}
-        >
-          {LocalMonth &&
-          nextYear &&
-          LocalMonth.toString() === nextYear.toString() ? (
-            <strong className='text-dark'>{`>`}</strong>
-          ) : (
-            `>`
-          )}
+        <button onClick={onClick} className='btn-Datemenu' value={nextYear} name={nextYear}>
+          {LocalMonth && nextYear && LocalMonth.toString() === nextYear.toString() ? <strong className='text-dark'>{`>`}</strong> : `>`}
         </button>
       </ul>
     </div>

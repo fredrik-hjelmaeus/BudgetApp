@@ -38,9 +38,15 @@ const GuideModal = () => {
         <div className='guide__card'>
           <h1 className='guide__title'>Budget App Guide</h1>
           <h3>Welcome {isAuthenticated && user.name}!</h3>
-          <p>To be able to properly use this App i suggest following this quick guided tour of all the features available.</p>
-          <button onClick={onExit}>Decline</button>
-          <button onClick={nextStep}>Start Guide</button>
+          <p>To be able to properly use this App we suggest following this quick guided tour of all the features.</p>
+          <div className='guide__btn__group'>
+            <button className='guide__btn__group__next' onClick={nextStep}>
+              Start Guide
+            </button>
+            <button className='guide__btn__group__exit' onClick={onExit}>
+              Decline
+            </button>
+          </div>
         </div>
       )}
       {guide === '2' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'Datemenu'} guide={guide} setGuide={setGuide} />}
