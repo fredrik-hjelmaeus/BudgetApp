@@ -38,17 +38,16 @@ const Year = () => {
 
   const { yearsummary, dimensions, modal } = cssContext;
   const { setGuide, guide, exitedguide } = guideContext;
-  //console.log(guide);
-  //console.log(presets);
+
   // loads presets from database when year-variable is updated
   useEffect(() => {
-    getPresets();
+    guide !== '13' && getPresets();
     // eslint-disable-next-line
   }, [year]);
 
   // calculates initial account balance if and when presets is defined.
   useEffect(() => {
-    presets && presets.length === 0 && !exitedguide && setGuide('1');
+    presets && presets.length === 0 && !exitedguide && guide !== '13' && setGuide('1');
     presets && presetContext.calcSum(9, null, 'init');
     presets && calcCategoryByYear();
     presets && year === null && calcYearsum('2019');

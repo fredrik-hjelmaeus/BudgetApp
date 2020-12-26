@@ -1,9 +1,13 @@
 import React from 'react';
 
-const SelectField = ({ selectChange, category }) => {
+const SelectField = ({ guide, selectChange, category }) => {
   return (
     <span className='presetformselectcategory'>
-      <select onChange={selectChange} className='text-dark' value={category}>
+      <select
+        onChange={selectChange}
+        className={guide === '6' ? 'text-dark guide__presetformselectcategory' : 'text-dark'}
+        value={category}
+      >
         <option name='Select an category' value='Select an category'>
           Select an category
         </option>
@@ -40,16 +44,10 @@ const SelectField = ({ selectChange, category }) => {
         <option name='Clothing' value='Clothing'>
           Clothing
         </option>
-        <option
-          name='Entertainment Electronics'
-          value='Entertainment Electronics'
-        >
+        <option name='Entertainment Electronics' value='Entertainment Electronics'>
           Entertainment Electronics
         </option>
-        <option
-          name='Entertainment Subscriptions'
-          value='Entertainment Subscriptions'
-        >
+        <option name='Entertainment Subscriptions' value='Entertainment Subscriptions'>
           Entertainment Subscriptions
         </option>
         <option name='Entertainment Hobby' value='Entertainment Hobby'>
