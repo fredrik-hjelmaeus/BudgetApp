@@ -19,6 +19,9 @@ const DotStepsMenu = ({ guide, setGuide }) => {
       <button value='11' onClick={onStepBtnClick} className={guide === '11' ? 'guide__dots guide__dots__active' : 'guide__dots'}></button>
       <button value='12' onClick={onStepBtnClick} className={guide === '12' ? 'guide__dots guide__dots__active' : 'guide__dots'}></button>
       <button value='13' onClick={onStepBtnClick} className={guide === '13' ? 'guide__dots guide__dots__active' : 'guide__dots'}></button>
+      <button value='14' onClick={onStepBtnClick} className={guide === '14' ? 'guide__dots guide__dots__active' : 'guide__dots'}></button>
+      <button value='15' onClick={onStepBtnClick} className={guide === '15' ? 'guide__dots guide__dots__active' : 'guide__dots'}></button>
+      <button value='16' onClick={onStepBtnClick} className={guide === '16' ? 'guide__dots guide__dots__active' : 'guide__dots'}></button>
     </div>
   );
 };

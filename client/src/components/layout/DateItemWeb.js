@@ -6,7 +6,7 @@ const DateItemWeb = () => {
   const presetContext = useContext(PresetContext);
   const guideContext = useContext(GuideContext);
   const { year, setYear, addMonth, month } = presetContext;
-  const { guide } = guideContext;
+  const { guide, setGuide } = guideContext;
   const [prevYear, setPrevYear] = useState(null);
   const [nextYear, setNextYear] = useState(null);
   const [LocalMonth, setLocalMonth] = useState(null);
@@ -43,16 +43,18 @@ const DateItemWeb = () => {
     }
     // year pressed
     if (e.target.value === year) {
-      addMonth(e.target.value);
-      setYear(e.target.value);
+      if (guide === '12') {
+        setYear('2019');
+        setGuide((parseInt(guide) + 1).toString());
+      } else {
+        addMonth(e.target.value);
+        setYear(e.target.value);
+      }
     }
   };
 
   return (
-    <div
-      data-tooltip={guide === '2' ? 'This is the datemenu. Here you navigate in your timeline' : null}
-      className={guide === '2' || guide === '3' ? 'datemenu' : 'datemenu guide__clip_2'}
-    >
+    <div data-tooltip={guide === '2' ? 'This is the datemenu. Here you navigate in your timeline' : null} className={'datemenu'}>
       <ul>
         <button onClick={onClick} className='btn-Datemenu' value={prevYear} name={prevYear}>
           {parseInt(year) === prevYear || year === prevYear ? <strong className='text-dark'>{`<`}</strong> : `<`}
@@ -61,8 +63,8 @@ const DateItemWeb = () => {
       <ul>
         <button
           onClick={onClick}
-          className='btn-Datemenu '
-          data-tooltip={guide === '3' ? 'Here you navigate to Year' : null}
+          className={guide === '3' || guide === '12' ? 'btn-Datemenu guide__step3and4' : 'btn-Datemenu'}
+          data-tooltip={guide === '3' || guide === '12' ? 'Here you navigate to Year' : null}
           value={year}
           name={year}
         >
@@ -74,7 +76,13 @@ const DateItemWeb = () => {
         </button>
       </ul>
       <ul>
-        <button onClick={onClick} className={guide === '3' ? 'btn-Datemenu' : 'btn-Datemenu'} value='January' name='January'>
+        <button
+          onClick={onClick}
+          className={guide === '4' ? 'btn-Datemenu guide__step3and4' : 'btn-Datemenu'}
+          data-tooltip={guide === '4' ? 'Here you navigate to Month by pressing any month' : null}
+          value='January'
+          name='January'
+        >
           {LocalMonth === 'January' ? <strong className='text-dark'>January</strong> : 'January'}
         </button>
       </ul>

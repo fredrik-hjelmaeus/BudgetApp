@@ -996,6 +996,7 @@ input::placeholder {
   border: 1px solid var(--gray-color);
   padding: 2rem;
 }
+
 @media (max-width: 800px) {
   .presetform {
     border: none;
@@ -1138,6 +1139,7 @@ input::placeholder {
   column-gap: 1.25rem;
   padding: 0;
   margin: 0;
+
   bodrder: 1px solid red;
 }
 @media (max-width: 800px) {
@@ -1294,7 +1296,13 @@ input::placeholder {
   grid-gap: 10px;
   align-items: center;
 }
-
+.purchase__month__field {
+  background: var(--light-color);
+  border: 1px solid var(--gray-color);
+  misn-height: 500px;
+  height: auto;
+  padding: 2rem;
+}
 .purchasetitlebtn {
   display: block;
   background: none;
@@ -2087,16 +2095,15 @@ table th {
 .guide__card {
   background-image: linear-gradient(30deg, rgba(219, 21, 64, 0.8), rgba(219, 132, 32, 0.8));
   /*  box-shadow: 0px 0px 24px rgba(0, 0, 0, 1); */
-  position: fixed;
+
   left: 50%;
   bottom: 40%;
 
-  z-index: 9999;
   color: rgb(255, 255, 255);
   box-shadow: 0px 3px 6px #2b2b2b;
   masrgin: auto;
   margin-left: calc(-50% / 3);
-  margin-bottom: calc(-40% / 3);
+  masrgin-bottom: calc(-50% / 2);
   padding: 20px 40px;
   border: 1px solid black;
   border-radius: 1rem;
@@ -2108,6 +2115,8 @@ table th {
   align-self: center;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  z-index: 25;
 }
 .guide__btn__group {
   display: flex;
@@ -2160,6 +2169,9 @@ table th {
   top: 4%;
   right: 6%;
 }
+.guide__text {
+  margin: 1rem;
+}
 .guide__dots {
   flex: 1;
   width: 8px;
@@ -2172,7 +2184,7 @@ table th {
   cursor: pointer;
 }
 .guide__dots:hover {
-  background: rgba(219, 132, 32, 0.8);
+  background: rgba(90, 52, 9, 0.8);
   outline: none;
 }
 .guide__dots:focus {
@@ -2182,7 +2194,7 @@ table th {
 .guide__dots__active {
   /*  right: 12%;
   opacity: 0.5; */
-  background: rgb(233, 91, 98);
+  background: rgb(51, 17, 17);
 }
 
 .guide__title {
@@ -2194,7 +2206,7 @@ table th {
   align-items: center;
   text-align: center;
 }
-.guide__datemenustep {
+.guisde__datemenustep {
   background-color: var(--light-color);
   box-shadow: 0px 3px 6px #2b2b2b;
   margin: 100px auto;
@@ -2212,46 +2224,45 @@ table th {
   z-index: 5;
   margin: 30px 50%;
 }
-.guide__overlay {
-  position: absolute; /* Stay in place */
-  z-index: 5; /* Sit on top */
-  right: 0;
-  left: 10%;
-  top: 0%;
-  bottom: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+.guide__presetformnumber::placeholder {
+  color: var(--orange-color) !important;
+  font-weight: 700;
 }
-.guisde__clip_1 {
-  position: absolute; /* Stay in place */
-  z-index: 5; /* Sit on top */
-  right: 0;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
-  -webkit-clip-path: polygon(0% 0%, 0% 100%, 25% 100%, 9% 11%, 28% 13%, 30% 29%, 11% 28%, 23% 100%, 100% 100%, 100% 0%);
-  clip-path: polygon(0% 0%, 0% 100%, 25% 100%, 9% 11%, 28% 13%, 30% 29%, 11% 28%, 23% 100%, 100% 100%, 100% 0%);
+.guide__presetformname::placeholder {
+  color: var(--orange-color) !important;
+  font-weight: 700;
 }
-.guidde__clip_2 {
-  position: relative; /* Stay in place */
-  z-index: 5000; /* Sit on top */
-  right: 0;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.6) !important; /* Black w/ opacity */
-  /*  -webkit-clip-path: polygon(0% 0%, 0% 100%, 55% 100%, 19% 11%, 28% 13%, 30% 29%, 11% 28%, 23% 100%, 100% 100%, 100% 0%); */
-  clip-path: polygon(0% 0%, 0% 100%, 3% 90%, 3% 10%, 10% 10%, 10% 10%, 10% 90%, 0% 100%, 100% 100%, 100% 0%);
+.guide__overheadtextcolor {
+  color: var(--orange-color) !important;
+  font-weight: 700;
+}
+.guide__presetformselectcategory {
+  color: var(--orange-color) !important;
+  font-weight: 700;
+}
+.guide__checkbox__text {
+  color: var(--orange-color) !important;
+  font-weight: 700;
+}
+.guide__checkbox__text input:checked ~ .presetformcheckbox {
+  background-color: var(--orange-color);
+  border: 1px solid var(--orange-color);
+}
+.guide__purchases {
+  position: relative;
+  z-index: 100;
+}
+.guide__expense {
+  position: relative;
+  z-index: 2;
+  background-color: var(--light-color);
+  border-radius: 1rem;
+  padding: 15px;
+}
+.guide__expense__card {
+  position: relative;
+  z-index: 5;
 }
 /* Datemenu */
 .datemenu__guide {
@@ -2267,6 +2278,7 @@ table th {
   opacity: 1;
   margin-bottom: 1rem;
 }
+
 .datemenu {
   display: flex;
   justify-content: space-between;
@@ -2275,10 +2287,39 @@ table th {
   padding: 0.7rem 2rem;
   z-index: 1;
   width: 100%;
-  borfder: 1px solid green;
+  bsorder: 1px solid black;
   opacity: 1;
   margin-bottom: 1rem;
 }
+.guide__step3and4 {
+  posistion: fixed !important;
+  lesft: 0;
+  stop: 0;
+  bsottom: 0;
+  risght: 0;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--light-color);
+  padding: 0rem 2rem;
+  border-radius: 12px;
+  z-index: 10;
+  width: 100%;
+  bsorder: 1px solid black;
+  opacity: 1;
+  masrgin-bottom: 1rem;
+}
+.guide__presetformclosed {
+  position: relative;
+  z-index: 100;
+  border-radius: 24px;
+}
+.guide__presetform {
+  position: relative;
+  z-index: 100;
+}
+
 @media (max-width: 800px) {
   .datemenu {
     display: grid;

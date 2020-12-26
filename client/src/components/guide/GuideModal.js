@@ -5,17 +5,17 @@ import PresetContext from '../../context/preset/presetContext';
 import Test from './Test';
 import GuideSteps from './GuideSteps';
 
+import { animateScroll } from 'react-scroll';
+
 const GuideModal = () => {
   const authContext = useContext(AuthContext);
   const guideContext = useContext(GuideContext);
   const { guide, setGuide, setUserExited, exitedguide } = guideContext;
-  const { getGuidePresets, clearPresets, presets, setYear, year, getPresets } = useContext(PresetContext);
+  const { getGuidePresets, clearPresets, presets, setYear, year, getPresets, addMonth } = useContext(PresetContext);
   //authContext && console.log(authContext.user.name);
   const { isAuthenticated, user } = authContext;
 
-  //return <Test />
   const onExit = () => {
-    console.log('wtf');
     clearPresets();
     setGuide(null);
     setUserExited(true);
@@ -23,10 +23,15 @@ const GuideModal = () => {
   };
   const nextStep = () => {
     year !== '2019' && setYear('2019');
-
-    console.log('ran');
+    guide === '3' && addMonth('January');
+    !isNaN(guide) && parseInt(guide) < 10 && animateScroll.scrollToTop(); // if guidestep less than 10 scroll to top
+    !isNaN(guide) && parseInt(guide) > 14 && animateScroll.scrollToTop(); // if guidestep less than 10 scroll to top
+    guide === '10' && animateScroll.scrollToBottom();
+    guide === '11' && animateScroll.scrollToTop();
+    guide === '12' && setYear('2019');
+    guide === '12' && animateScroll.scrollToTop();
     //if guide reach last number,finish and exit guide by null,else increment guide by 1
-    guide === '15' ? setGuide(null) : setGuide((parseInt(guide) + 1).toString());
+    guide === '16' ? setGuide(null) : setGuide((parseInt(guide) + 1).toString());
   };
   React.useEffect(() => {
     !isNaN(guide) && parseInt(guide) >= 2 && getGuidePresets();
@@ -49,7 +54,15 @@ const GuideModal = () => {
           </div>
         </div>
       )}
-      {guide === '2' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'Datemenu'} guide={guide} setGuide={setGuide} />}
+      {guide === '2' && (
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={'The date-menu is your main navigationpoint in the app. Here you navigate in your timeline'}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
       {guide === '3' && (
         <GuideSteps
           nextStep={nextStep}
@@ -71,23 +84,86 @@ const GuideModal = () => {
       )}
       {guide === '5' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget'} guide={guide} setGuide={setGuide} />}
       {guide === '6' && (
-        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Overhead/uploadCSV'} guide={guide} setGuide={setGuide} />
+        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Overhead'} guide={guide} setGuide={setGuide} />
       )}
       {guide === '7' && (
-        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Capital'} guide={guide} setGuide={setGuide} />
+        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Upload CSV'} guide={guide} setGuide={setGuide} />
       )}
       {guide === '8' && (
-        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Savings'} guide={guide} setGuide={setGuide} />
+        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Capital'} guide={guide} setGuide={setGuide} />
       )}
       {guide === '9' && (
-        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Purchase'} guide={guide} setGuide={setGuide} />
+        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Savings'} guide={guide} setGuide={setGuide} />
       )}
       {guide === '10' && (
-        <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add piggybank saving to purchase'} guide={guide} setGuide={setGuide} />
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={`You can make a purchase plan for things you wish to buy or do. Then, whenever you have a 
+          month surplus, you can add some amount to that planned purchase piggybank`}
+          guide={guide}
+          setGuide={setGuide}
+        />
       )}
-      {guide === '11' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'year income'} guide={guide} setGuide={setGuide} />}
-      {guide === '12' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'year expenses'} guide={guide} setGuide={setGuide} />}
-      {guide === '13' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'year savings'} guide={guide} setGuide={setGuide} />}
+      {guide === '11' && (
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={`if the month has sufficient month surplus your planned purchases becomes visible at the bottom of your month tab . 
+          Here you can delegate your monthly surplus into separate piggybanks for every purchase goal. 
+          You get feedback how many more monthly deposits of this months surplus you need to be able to finance it fully. 
+          When you have enough piggybank savings and your month surplus is enough an buy button will be shown and your purchase will 
+          then be booked into that months transactions.`}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
+      {guide === '12' && (
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={'To go back to year summary you press the year in the datemenu'}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
+      {guide === '13' && (
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={'Under expense summary you get a good overview of your expenditure during the year'}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
+      {guide === '14' && (
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={'Income summary gives you a chart representation of your income divided into categories'}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
+      {guide === '15' && (
+        <GuideSteps
+          nextStep={nextStep}
+          onExit={onExit}
+          text={`Savings summary gives you overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
+      {guide === '16' && (
+        <GuideSteps
+          nextStep={false}
+          onExit={onExit}
+          text={`Guide complete!. 
+            A good startingpoint now is to add your initial capital under month/add to budget, and from there you can then input your monthly transactions`}
+          guide={guide}
+          setGuide={setGuide}
+        />
+      )}
     </div>
   );
 };

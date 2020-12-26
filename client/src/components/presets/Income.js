@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import DonutChart from '../layout/DonutChart';
 import PresetContext from '../../context/preset/presetContext';
+import GuideContext from '../../context/guide/guideContext';
+import Scroll from 'react-scroll';
 
 const Expense = () => {
   const presetContext = useContext(PresetContext);
-  const {
-    categorysumonlyposnumbyyear,
-    categorynameonlyposnumbyyear,
-  } = presetContext;
+  const { categorysumonlyposnumbyyear, categorynameonlyposnumbyyear } = presetContext;
 
   const YearExpense = categorysumonlyposnumbyyear.reduce((a, b) => a + b, 0);
   const yearmonthavg = parseInt(parseFloat(YearExpense / 12));
@@ -37,15 +36,30 @@ const Expense = () => {
     '#6ec5d2',
   ];
 
+  // Scroll for guide
+  const { guide } = useContext(GuideContext);
+  const scroller = Scroll.scroller;
+  const Element = Scroll.Element;
+
+  const scrollToElement = () => {
+    scroller.scrollTo('myScrollToElement', {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+    });
+  };
+
+  React.useEffect(() => {
+    if (guide === '14') {
+      scrollToElement();
+    }
+  }, [guide]);
+
   return (
     <div>
-      <div className='expense__card bold'>
+      <div className={guide === '14' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
         <div style={{ margin: '0 0 1rem 0' }}>
-          <DonutChart
-            sums={categorysumonlyposnumbyyear}
-            names={categorynameonlyposnumbyyear}
-            colors={colors}
-          />
+          <DonutChart sums={categorysumonlyposnumbyyear} names={categorynameonlyposnumbyyear} colors={colors} />
         </div>
         <div className='donuttitle'>Income</div>
         <div className='flexrow'>
@@ -56,6 +70,7 @@ const Expense = () => {
             </div>
             <div className='flexrow'>
               <div>Monthly Average: </div>
+              <Element name='myScrollToElement'></Element>
               <div className={'text-success px'}>{yearmonthavg}</div>
             </div>
           </div>

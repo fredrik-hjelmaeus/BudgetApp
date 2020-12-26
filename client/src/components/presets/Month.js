@@ -5,6 +5,7 @@ import AddtoPiggybankModal from './AddtoPiggybankModal';
 import CsvPresetCreateModal from '../csv/CsvPresetCreateModal';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
+import GuideContext from '../../context/guide/guideContext';
 import CssContext from '../../context/css/cssContext';
 import Purchases from './Purchases';
 import MonthSummary from './MonthSummary';
@@ -14,9 +15,11 @@ import MonthSavingsSummary from '../presets/MonthSavingsSummary';
 import UserProfileModal from '../auth/UserProfileModal';
 import SelectFile from '../csv/SelectFile';
 import SelectCSVfields from '../csv/SelectCSVfields';
+import GuideModal from '../guide/GuideModal';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
+  const { guide } = useContext(GuideContext);
   const cssContext = useContext(CssContext);
   const { modal, modalprops } = cssContext;
   const {
@@ -53,6 +56,7 @@ const Month = () => {
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
       {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
       <Datemenu />
+      {((!isNaN(guide) && parseInt(guide) >= 4) || parseInt(guide) <= 9) && <GuideModal />}
       <div className='monthgrid'>
         <div className='monthgrid__presetformOrder'>
           <PresetForm />
