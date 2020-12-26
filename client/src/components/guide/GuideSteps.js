@@ -6,11 +6,13 @@ const GuideSteps = ({ text, setGuide, guide, nextStep, onExit }) => {
     <>
       <div className='guide__card'>
         <DotStepsMenu guide={guide} setGuide={setGuide} />
-        <div>{text}</div>
+        <div className='guide__text'>{text}</div>
         <div className='guide__btn__group'>
-          <button className='guide__btn__group__next' onClick={nextStep}>
-            Next
-          </button>
+          {nextStep && (
+            <button className='guide__btn__group__next' onClick={nextStep}>
+              Next
+            </button>
+          )}
           <button className='guide__btn__group__exit' onClick={onExit}>
             Exit
           </button>

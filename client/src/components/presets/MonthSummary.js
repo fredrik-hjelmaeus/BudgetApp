@@ -2,12 +2,15 @@ import React, { useContext, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import PresetFilter from '../presets/PresetFilter';
 import PresetNegativeFilter from '../presets/PresetNegativeFilter';
+import GuideContext from '../../context/guide/guideContext';
 
 const MonthSummary = () => {
   const presetContext = useContext(PresetContext);
   const { getPresets, presets } = presetContext;
+  const { guide } = useContext(GuideContext);
   useEffect(() => {
-    presets && getPresets();
+    // TODO may need to not render on first render
+    presets && !guide && getPresets();
     // eslint-disable-next-line
   }, []);
 
