@@ -8,15 +8,11 @@ const YearSummaryMenu = () => {
   const { guide } = useContext(GuideContext);
 
   React.useEffect(() => {
-    if (guide === '13') {
-      setYearSummary('expense');
-    }
-    if (guide === '14') {
-      setYearSummary('income');
-    }
-    if (guide === '15') {
-      setYearSummary('savings');
-    }
+    guide === '2' && setYearSummary('balance');
+    guide === '3' && setYearSummary('balance');
+    guide === '13' && setYearSummary('expense');
+    guide === '14' && setYearSummary('income');
+    guide === '15' && setYearSummary('savings');
   }, [guide]);
 
   useEffect(() => {
