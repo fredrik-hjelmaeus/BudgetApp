@@ -2,38 +2,73 @@ import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
 import PresetContext from '../../context/preset/presetContext';
-import Test from './Test';
 import GuideSteps from './GuideSteps';
-
 import { animateScroll } from 'react-scroll';
+
+/* 
+Actions triggered to make this guide work:
+1.this modal is first triggered in Year-component if user dont have any presets and havent exited this guide.
+2.useEffect in this component sets year,month,scroll and loads guidedata based on guide-step.
+3.This component sets guidesteps based on nextStep.
+4.DotsStepsMenu sets guidesteps based on dot clicked.
+5.onExit in this component clears dummydata,exit guidemodal and set localStorage to never ask user if they want to run guide again.
+6.YearSummaryMenu switches between balance,expense,income and savings-screen.
+7.Alot off css-classes with position and zindex is used to bring elements in focus on top of overlay. Search for guide__ to see.
+8.data-tooltip is used to show tooltips throughout components. Search for data-tooltip too find.
+9.react-scroll is used to focus user to top,bottom or on element. Search for scrollToElement() or scrollToTop()
+10.In PresetForm there is plenty of actions, search for guide in that component to find them.
+*/
 
 const GuideModal = () => {
   const authContext = useContext(AuthContext);
   const guideContext = useContext(GuideContext);
-  const { guide, setGuide, setUserExited, exitedguide } = guideContext;
-  const { getGuidePresets, clearPresets, presets, setYear, year, getPresets, addMonth } = useContext(PresetContext);
-  //authContext && console.log(authContext.user.name);
+  const { guide, setGuide, setUserExited } = guideContext;
+  const { getGuidePresets, clearPresets, setYear, getPresets, addMonth } = useContext(PresetContext);
   const { isAuthenticated, user } = authContext;
 
+  // When user exits guide
   const onExit = () => {
+    // clear the dummy/guidedata
     clearPresets();
+    // deactivate guide-modal-component
     setGuide(null);
+    // deactivate popup-question from guide-modal to user about running the guide. Uses localstorage.
     setUserExited(true);
+    // loads actual user-data,which could be empty but neverteless wipes out the dummydata.
     getPresets();
   };
+
   const nextStep = () => {
-    year !== '2019' && setYear('2019');
-    guide === '3' && addMonth('January');
-    !isNaN(guide) && parseInt(guide) < 10 && animateScroll.scrollToTop(); // if guidestep less than 10 scroll to top
-    !isNaN(guide) && parseInt(guide) > 14 && animateScroll.scrollToTop(); // if guidestep less than 10 scroll to top
-    guide === '10' && animateScroll.scrollToBottom();
-    guide === '11' && animateScroll.scrollToTop();
-    guide === '12' && setYear('2019');
-    guide === '12' && animateScroll.scrollToTop();
-    //if guide reach last number,finish and exit guide by null,else increment guide by 1
-    guide === '16' ? setGuide(null) : setGuide((parseInt(guide) + 1).toString());
+    setGuide((parseInt(guide) + 1).toString());
   };
+
+  // These guide-actions is in useeffect as both nextStep and DotStepsMenu should trigger these changes/actions.
   React.useEffect(() => {
+    // between step 4 and step 11 the guide is in the month tab. Rest of the steps is in year-tab.
+    guide === '1' && setYear('2019');
+    guide === '2' && setYear('2019');
+    guide === '3' && setYear('2019');
+    guide === '4' && addMonth('January');
+    guide === '5' && addMonth('January');
+    guide === '6' && addMonth('January');
+    guide === '7' && addMonth('January');
+    guide === '8' && addMonth('January');
+    guide === '9' && addMonth('January');
+    guide === '10' && addMonth('January');
+    guide === '11' && addMonth('January');
+    guide === '12' && addMonth('January');
+    guide === '13' && setYear('2019');
+    guide === '14' && setYear('2019');
+    guide === '15' && setYear('2019');
+    // scroll view
+    !isNaN(guide) && parseInt(guide) <= 10 && animateScroll.scrollToTop(); // if guidestep less than 11 scroll to top
+    !isNaN(guide) && parseInt(guide) > 14 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top
+
+    guide === '11' && animateScroll.scrollToBottom();
+    guide === '12' && animateScroll.scrollToTop();
+    guide === '13' && animateScroll.scrollToTop();
+
+    // Loads guide-data. Dummydata to have something to show the user.
     !isNaN(guide) && parseInt(guide) >= 2 && getGuidePresets();
   }, [guide]);
 
