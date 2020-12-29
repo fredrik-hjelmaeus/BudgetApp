@@ -1164,6 +1164,8 @@ input::placeholder {
 }
 @media (max-width: 800px) {
   .presetform__upload {
+    width: 100%;
+    overflow: hidden;
     display: block;
     color: var(--gray-color);
     font-weight: 500;
@@ -2095,39 +2097,41 @@ table th {
 }
 .guide__card {
   background-image: linear-gradient(30deg, rgba(219, 21, 64, 0.8), rgba(219, 132, 32, 0.8));
-  /*  box-shadow: 0px 0px 24px rgba(0, 0, 0, 1); */
-
   left: 50%;
   bottom: 40%;
-
   color: rgb(255, 255, 255);
   box-shadow: 0px 3px 6px #2b2b2b;
-  masrgin: auto;
   margin-left: calc(-50% / 3);
-  masrgin-bottom: calc(-50% / 2);
   padding: 20px 40px;
   border: 1px solid black;
   border-radius: 1rem;
   width: 40%;
-  hesight: 80%;
   font-size: 14px;
   align-content: center;
   align-items: center;
   align-self: center;
   display: flex;
   flex-direction: column;
-
   position: fixed;
-  tsransform: scale(1.1);
   z-index: 9999;
-
-  ospacity: 0.99;
 }
 .guide__btn__group {
   display: flex;
   flex-direction: row;
 }
 .guide__btn__group__next {
+  box-shadow: 0px 3px 6px #2b2b2b;
+  background-color: white;
+  color: rgb(253, 0, 55);
+  color: black;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+}
+.guide__btn__group__prev {
   box-shadow: 0px 3px 6px #2b2b2b;
   background-color: white;
   color: rgb(253, 0, 55);
@@ -2197,8 +2201,6 @@ table th {
 }
 
 .guide__dots__active {
-  /*  right: 12%;
-  opacity: 0.5; */
   background: rgb(51, 17, 17);
 }
 
@@ -2211,18 +2213,7 @@ table th {
   align-items: center;
   text-align: center;
 }
-.guisde__datemenustep {
-  background-color: var(--light-color);
-  box-shadow: 0px 3px 6px #2b2b2b;
-  margin: 100px auto;
-  padding: 20px 40px;
-  border: 3px solid var(--orange-color);
-  width: 70%;
-  hesight: 80%;
-  font-size: 14px;
-  z-index: 4;
-  position: relative;
-}
+
 .guide__arrowicon {
   background-color: transparent;
   position: fixed;
@@ -2271,6 +2262,82 @@ table th {
   position: relative;
   z-index: 1;
 }
+.guide__step3and4 {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--light-color);
+  padding: 0rem 2rem;
+  border-radius: 12px;
+  z-index: 10;
+  width: 100%;
+  opacity: 1;
+}
+.guide__presetformclosed {
+  position: relative;
+  z-index: 100;
+  border-radius: 24px;
+}
+.guide__presetform {
+  position: relative;
+  z-index: 100;
+}
+.guide__closebtn {
+  display: none;
+  background: url('./components/layout/close-24px.svg') no-repeat;
+  width: 24px;
+  cursor: pointer;
+  border: none;
+  padding: 14px;
+  outline: none;
+  align-self: flex-end;
+  margin-top: -10px;
+  margin-right: -25px;
+}
+/* guide mobile */
+@media (max-width: 800px) {
+  .guide__card {
+    margin-left: calc(-80% / 2);
+    padding: 20px 40px;
+    width: 80%;
+    font-size: 14px;
+    position: fixed;
+  }
+  .guide__card__addtobudgetsteps {
+    min-height: 120px;
+    bottom: 120px;
+  }
+  .guide__title {
+    font-size: 20px;
+  }
+  .guide__title__h3 {
+    font-size: 16px;
+  }
+  .guide__dotcontainer {
+    display: none;
+  }
+  .guide__closebtn {
+    display: block;
+  }
+  .guide__btn__group__exit {
+    display: none;
+  }
+  .guide__btn__group__prev {
+    display: block;
+  }
+  .guide__datemenu__mobile__yearfocus {
+    position: relative;
+    z-index: 999;
+    padding: 15px;
+    background: white;
+    border-radius: 18px;
+  }
+  .guide__presetformclosed {
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+}
 /* Datemenu */
 .datemenu__guide {
   display: flex;
@@ -2294,37 +2361,8 @@ table th {
   padding: 0.7rem 2rem;
   z-index: 1;
   width: 100%;
-  bsorder: 1px solid black;
   opacity: 1;
   margin-bottom: 1rem;
-}
-.guide__step3and4 {
-  posistion: fixed !important;
-  lesft: 0;
-  stop: 0;
-  bsottom: 0;
-  risght: 0;
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--light-color);
-  padding: 0rem 2rem;
-  border-radius: 12px;
-  z-index: 10;
-  width: 100%;
-  bsorder: 1px solid black;
-  opacity: 1;
-  masrgin-bottom: 1rem;
-}
-.guide__presetformclosed {
-  position: relative;
-  z-index: 100;
-  border-radius: 24px;
-}
-.guide__presetform {
-  position: relative;
-  z-index: 100;
 }
 
 @media (max-width: 800px) {
@@ -2339,11 +2377,15 @@ table th {
   }
   .prev {
     justify-self: start;
-    borfder: 1px solid red;
   }
   .next {
     justify-self: end;
-    borfder: 1px solid blue;
+  }
+  .guide__datemenu {
+    position: relative;
+    z-index: 999;
+    padding: 1rem;
+    border-radius: 12px;
   }
 }
 

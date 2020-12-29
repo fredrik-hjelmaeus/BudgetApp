@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
+import GuideContext from '../../context/guide/guideContext';
+import guideContext from '../../context/guide/guideContext';
 
 // Uses DateList as a base to figure out what months to show
 // 'year' gets replaced with active year in adjustlist
@@ -9,6 +11,7 @@ import PresetContext from '../../context/preset/presetContext';
 const DateItemMobile = () => {
   const presetContext = useContext(PresetContext);
   const { year, setYear, addMonth, month } = presetContext;
+  const { guide } = useContext(GuideContext);
   const [LocalYear, setLocalYear] = useState(null);
   const [LocalMonth, setLocalMonth] = useState(null);
   const [DateList, setDateList] = useState([
@@ -154,7 +157,10 @@ const DateItemMobile = () => {
         );
       } else {
         MyArray.push(
-          <ul>
+          <ul
+            className={(guide === '3' || guide === '4') && 'guide__datemenu__mobile__yearfocus'}
+            data-tooltip={guide === '4' ? 'Month selected here' : guide === '3' ? 'Here you select year' : null}
+          >
             <button key={DateList[i]} onClick={onClick} className='btn-Datemenu-mobilefocus' value={DateList[i]} name={DateList[i]}>
               {DateList[i]}
             </button>
@@ -176,7 +182,10 @@ const DateItemMobile = () => {
   }, [year, month, LocalMonth, LocalYear, addMonth, setYear, DateList, adjustDateList]);
 
   return (
-    <div className='datemenu specialorder '>
+    <div
+      data-tooltip={guide === '2' ? 'This is the datemenu. Here you navigate in your timeline' : null}
+      className={guide === '2' ? 'datemenu specialorder guide__datemenu' : 'datemenu specialorder'}
+    >
       <ul>
         <button onClick={onClick} className='btn-Datemenu prev' value='prev' name='prev'>
           {' '}
