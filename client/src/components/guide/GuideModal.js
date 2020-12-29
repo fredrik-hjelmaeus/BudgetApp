@@ -42,6 +42,10 @@ const GuideModal = () => {
     setGuide((parseInt(guide) + 1).toString());
   };
 
+  const prevStep = () => {
+    !isNaN(guide) && parseInt(guide) > 1 && setGuide((parseInt(guide) - 1).toString());
+  };
+
   // These guide-actions is in useeffect as both nextStep and DotStepsMenu should trigger these changes/actions.
   React.useEffect(() => {
     // between step 4 and step 11 the guide is in the month tab. Rest of the steps is in year-tab.
@@ -79,7 +83,7 @@ const GuideModal = () => {
         {guide === '1' && (
           <div className='guide__card'>
             <h1 className='guide__title'>Budget App Guide</h1>
-            <h3>Welcome {isAuthenticated && user.name}!</h3>
+            <h3 className='guide__title__h3'>Welcome {isAuthenticated && user.name}!</h3>
             <p>To be able to properly use this App we suggest following this quick guided tour of all the features.</p>
             <div className='guide__btn__group'>
               <button className='guide__btn__group__next' onClick={nextStep}>
@@ -94,6 +98,7 @@ const GuideModal = () => {
         {guide === '2' && (
           <GuideSteps
             nextStep={nextStep}
+            prevStep={prevStep}
             onExit={onExit}
             text={'The date-menu is your main navigationpoint in the app. Here you navigate in your timeline'}
             guide={guide}
@@ -103,6 +108,7 @@ const GuideModal = () => {
         {guide === '3' && (
           <GuideSteps
             nextStep={nextStep}
+            prevStep={prevStep}
             onExit={onExit}
             text={'Under year you will find a statistic summary for the year'}
             guide={guide}
@@ -113,27 +119,59 @@ const GuideModal = () => {
         {guide === '4' && (
           <GuideSteps
             nextStep={nextStep}
+            prevStep={prevStep}
             onExit={onExit}
             text={'Under month you will find a statistic summary for the month'}
             guide={guide}
             setGuide={setGuide}
           />
         )}
-        {guide === '5' && <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget'} guide={guide} setGuide={setGuide} />}
+        {guide === '5' && (
+          <GuideSteps prevStep={prevStep} nextStep={nextStep} onExit={onExit} text={'Add to Budget'} guide={guide} setGuide={setGuide} />
+        )}
         {guide === '6' && (
-          <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Overhead'} guide={guide} setGuide={setGuide} />
+          <GuideSteps
+            prevStep={prevStep}
+            nextStep={nextStep}
+            onExit={onExit}
+            text={'Add to Budget: Overhead'}
+            guide={guide}
+            setGuide={setGuide}
+          />
         )}
         {guide === '7' && (
-          <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Upload CSV'} guide={guide} setGuide={setGuide} />
+          <GuideSteps
+            prevStep={prevStep}
+            nextStep={nextStep}
+            onExit={onExit}
+            text={'Add to Budget: Upload CSV'}
+            guide={guide}
+            setGuide={setGuide}
+          />
         )}
         {guide === '8' && (
-          <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Capital'} guide={guide} setGuide={setGuide} />
+          <GuideSteps
+            prevStep={prevStep}
+            nextStep={nextStep}
+            onExit={onExit}
+            text={'Add to Budget: Capital'}
+            guide={guide}
+            setGuide={setGuide}
+          />
         )}
         {guide === '9' && (
-          <GuideSteps nextStep={nextStep} onExit={onExit} text={'Add to Budget: Savings'} guide={guide} setGuide={setGuide} />
+          <GuideSteps
+            prevStep={prevStep}
+            nextStep={nextStep}
+            onExit={onExit}
+            text={'Add to Budget: Savings'}
+            guide={guide}
+            setGuide={setGuide}
+          />
         )}
         {guide === '10' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={`You can make a purchase plan for things you wish to buy or do. Then, whenever you have a 
@@ -144,6 +182,7 @@ const GuideModal = () => {
         )}
         {guide === '11' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={`if the month has sufficient month surplus your planned purchases becomes visible at the bottom of your month tab . 
@@ -157,6 +196,7 @@ const GuideModal = () => {
         )}
         {guide === '12' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={'To go back to year summary you press the year in the datemenu'}
@@ -166,6 +206,7 @@ const GuideModal = () => {
         )}
         {guide === '13' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={'Under expense summary you get a good overview of your expenditure during the year'}
@@ -175,6 +216,7 @@ const GuideModal = () => {
         )}
         {guide === '14' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={'Income summary gives you a chart representation of your income divided into categories'}
@@ -184,6 +226,7 @@ const GuideModal = () => {
         )}
         {guide === '15' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={`Savings summary gives you overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
@@ -193,6 +236,7 @@ const GuideModal = () => {
         )}
         {guide === '16' && (
           <GuideSteps
+            prevStep={prevStep}
             nextStep={false}
             onExit={onExit}
             text={`Guide complete!. 

@@ -8,9 +8,7 @@ import About from './components/pages/About';
 import Landing from './components/pages/Landing';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import Alerts from './components/layout/Alerts';
 import ResetPassword from './components/auth/ResetPassword';
-
 import PresetState from './context/preset/PresetState';
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
