@@ -57,7 +57,14 @@ const Month = () => {
       {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
       <Datemenu />
       {((!isNaN(guide) && parseInt(guide) >= 4) || parseInt(guide) <= 9) && <GuideModal />}
-      <div className='monthgrid'>
+      <div
+        className='monthgrid'
+        data-tooltip={
+          guide === '6'
+            ? 'Here you add transactions for this month by giving the name,number and category. Overhead option will add it to your income and expenses'
+            : null
+        }
+      >
         <div className='monthgrid__presetformOrder'>
           <PresetForm />
         </div>

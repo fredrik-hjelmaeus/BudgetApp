@@ -6,7 +6,11 @@ const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep }) => {
     <>
       <div
         className={
-          !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 10 ? 'guide__card guide__card__addtobudgetsteps' : 'guide__card'
+          (!isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 10) || (parseInt(guide) >= 13 && parseInt(guide) < 15)
+            ? 'guide__card guide__card__bottom'
+            : guide === '10' || guide === '11'
+            ? 'guide__card guide__card__top'
+            : 'guide__card'
         }
       >
         <DotStepsMenu guide={guide} setGuide={setGuide} />

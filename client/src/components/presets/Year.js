@@ -13,6 +13,7 @@ import YearTitle from './YearTitle';
 import GuideModal from '../guide/GuideModal';
 import Tooltip from '../guide/Tooltip';
 import UserProfileModal from '../auth/UserProfileModal';
+import YearSwiper from '../layout/YearSwiper';
 
 const Year = () => {
   const presetContext = useContext(PresetContext);
@@ -78,7 +79,7 @@ const Year = () => {
 
     // eslint-disable-next-line
   }, [presets, year]);
-
+  //if (dimensions.width < 800) return <YearSwiper />;
   return (
     <Fragment>
       {modal === 'profile' && <UserProfileModal />}
@@ -91,13 +92,14 @@ const Year = () => {
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
         <div className='year-bg'>
-          {yearsummary === 'savings' && <Savings />}
-          {yearsummary === 'expense' && <Expense />}
-          {yearsummary === 'balance' && <YearBalance />}
-          {yearsummary === 'category' && <YearCategoryBalance />}
-          {yearsummary === 'income' && <Income />}
-          {dimensions.width < 800 && <YearSummaryMenu />}
+          {dimensions.width < 800 && <YearSwiper yearsummary={yearsummary} />}
+          {dimensions.width > 800 && yearsummary === 'savings' && <Savings />}
+          {dimensions.width > 800 && yearsummary === 'expense' && <Expense />}
+          {dimensions.width > 800 && yearsummary === 'balance' && <YearBalance />}
+          {dimensions.width > 800 && yearsummary === 'category' && <YearCategoryBalance />}
+          {dimensions.width > 800 && yearsummary === 'income' && <Income />}
         </div>
+        {/* {dimensions.width < 800 && <YearSummaryMenu />} */}
       </div>
     </Fragment>
   );
