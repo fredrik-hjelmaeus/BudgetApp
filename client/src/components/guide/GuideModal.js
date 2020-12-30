@@ -189,7 +189,7 @@ const GuideModal = () => {
           Here you can delegate your monthly surplus into separate piggybanks for every purchase goal. 
           You get feedback how many more monthly deposits of this months surplus you need to be able to finance it fully. 
           When you have enough piggybank savings and your month surplus is enough an buy button will be shown and your purchase will 
-          then be booked into that months transactions.`}
+          then be moved into that months transactions.`}
             guide={guide}
             setGuide={setGuide}
           />
@@ -209,7 +209,7 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Under expense summary you get a good overview of your expenditure during the year'}
+            text={'Under expense summary in year-tab, you get a good overview of your expenditure during the year'}
             guide={guide}
             setGuide={setGuide}
           />
@@ -229,7 +229,7 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={`Savings summary gives you overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
+            text={`Savings summary gives overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
             guide={guide}
             setGuide={setGuide}
           />

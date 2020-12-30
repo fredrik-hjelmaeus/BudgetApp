@@ -120,16 +120,7 @@ const PresetForm = () => {
           className={!isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 12 ? 'presetform guide__presetform' : 'presetform'}
         >
           <Alerts />
-          <h2
-            data-tooltip={
-              guide === '6'
-                ? 'Here you add transactions for this month by giving the name,number and category. Overhead option will add it to your income and expenses'
-                : null
-            }
-            className='text-primary all-center presetformtitle'
-          >
-            {edit === null ? 'ADD TO BUDGET' : 'EDIT VALUE'}
-          </h2>
+          <h2 className='text-primary all-center presetformtitle'>{edit === null ? 'ADD TO BUDGET' : 'EDIT VALUE'}</h2>
           <span className='presetformspan'>
             <input
               className={guide === '6' ? 'presetformname guide__presetformname' : 'presetformname'}

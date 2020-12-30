@@ -1165,7 +1165,7 @@ input::placeholder {
 @media (max-width: 800px) {
   .presetform__upload {
     width: 100%;
-    overflow: hidden;
+    ovsrflow: unset;
     display: block;
     color: var(--gray-color);
     font-weight: 500;
@@ -2297,6 +2297,9 @@ table th {
 }
 /* guide mobile */
 @media (max-width: 800px) {
+  .guide__modal__hidden {
+    display: none;
+  }
   .guide__card {
     margin-left: calc(-80% / 2);
     padding: 20px 40px;
@@ -2304,9 +2307,19 @@ table th {
     font-size: 14px;
     position: fixed;
   }
-  .guide__card__addtobudgetsteps {
-    min-height: 120px;
-    bottom: 120px;
+  .guide__card__bottom {
+    min-heisght: 120px;
+
+    bottom: 0;
+  }
+  .guide__card__top {
+    top: 0;
+    bottom: initial;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
   }
   .guide__title {
     font-size: 20px;
@@ -2336,6 +2349,10 @@ table th {
   .guide__presetformclosed {
     border-radius: 12px;
     padding: 1.5rem;
+  }
+  .guide__presetform {
+    overflow: hidden;
+    width: 100%;
   }
 }
 /* Datemenu */
@@ -2619,6 +2636,18 @@ table th {
   }
 }
 
+/* Swiper */
+.yearswiper {
+  didsplay: flex;
+  widdth: 100%;
+  background: gray;
+  min-height: 250px;
+  fldex: 1;
+  flex-dirdection: row;
+}
+.yearswiper__slide {
+  fledx: 1;
+}
 /* Showcase */
 
 .year-bg {
