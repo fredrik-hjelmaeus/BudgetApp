@@ -158,8 +158,8 @@ const DateItemMobile = () => {
       } else {
         MyArray.push(
           <ul
-            className={(guide === '3' || guide === '4') && 'guide__datemenu__mobile__yearfocus'}
-            data-tooltip={guide === '4' ? 'Month selected here' : guide === '3' ? 'Here you select year' : null}
+            className={(guide === '3' || guide === '4' || guide === '12') && 'guide__datemenu__mobile__yearfocus'}
+            data-tooltip={guide === '4' ? 'Month selected here' : guide === '3' || guide === '12' ? 'Here you select year' : null}
           >
             <button key={DateList[i]} onClick={onClick} className='btn-Datemenu-mobilefocus' value={DateList[i]} name={DateList[i]}>
               {DateList[i]}

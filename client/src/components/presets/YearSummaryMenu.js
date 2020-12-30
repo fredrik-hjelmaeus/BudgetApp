@@ -4,7 +4,7 @@ import GuideContext from '../../context/guide/guideContext';
 
 const YearSummaryMenu = () => {
   const cssContext = useContext(CssContext);
-  const { yearsummary, setYearSummary } = cssContext;
+  const { yearsummary, setYearSummary, dimensions } = cssContext;
   const { guide } = useContext(GuideContext);
 
   React.useEffect(() => {
@@ -45,7 +45,7 @@ const YearSummaryMenu = () => {
           value='expense'
           onClick={onClick}
           className={textcolor('expense')}
-          data-tooltip={guide === '13' ? 'To get to Expense Summary you press here' : null}
+          data-tooltip={guide === '13' && dimensions > 800 ? 'To get to Expense Summary you press here' : null}
         >
           Expense Summary: Presented in donut-chart representing spending by category
         </button>
@@ -54,6 +54,7 @@ const YearSummaryMenu = () => {
         <button value='income' onClick={onClick} className={textcolor('income')}>
           03.
         </button>
+
         <button
           value='income'
           onClick={onClick}
@@ -67,6 +68,7 @@ const YearSummaryMenu = () => {
         <button value='savings' onClick={onClick} className={textcolor('savings')}>
           04.
         </button>
+
         <button
           value='savings'
           onClick={onClick}
@@ -76,6 +78,7 @@ const YearSummaryMenu = () => {
           Savings Summary
         </button>
       </span>
+
       {/*Mobile Buttons */}
       <div className='YearSummaryMenuMinimizedButtonsContainer'>
         <div className='YearSummaryMenuMinimizedButtons'>
