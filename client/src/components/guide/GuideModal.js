@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
-import CssContext from '../../context/css/cssContext';
 import PresetContext from '../../context/preset/presetContext';
 import GuideSteps from './GuideSteps';
 import { animateScroll } from 'react-scroll';
@@ -27,7 +26,6 @@ const GuideModal = () => {
   const { guide, setGuide, setUserExited } = guideContext;
   const { getGuidePresets, clearPresets, setYear, getPresets, addMonth } = useContext(PresetContext);
   const { isAuthenticated, user } = authContext;
-  const { dimensions } = useContext(CssContext);
 
   // When user exits guide
   const onExit = () => {
