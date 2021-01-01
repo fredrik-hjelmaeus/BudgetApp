@@ -10,9 +10,10 @@ const YearSummaryMenu = () => {
   React.useEffect(() => {
     guide === '2' && setYearSummary('balance');
     guide === '3' && setYearSummary('balance');
-    guide === '13' && setYearSummary('expense');
-    guide === '14' && setYearSummary('income');
-    guide === '15' && setYearSummary('savings');
+    guide === '13' && setYearSummary('balance');
+    guide === '14' && setYearSummary('expense');
+    guide === '15' && setYearSummary('income');
+    guide === '16' && setYearSummary('savings');
   }, [guide]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const YearSummaryMenu = () => {
           Balance Summary: Presented in barchart representing month surplus.
         </button>
       </span>
-      <span className={guide === '13' && 'guide__expense'}>
+      <span className={guide === '14' && 'guide__expense'}>
         <button value='expense' onClick={onClick} className={textcolor('expense')}>
           02.
         </button>
@@ -45,12 +46,12 @@ const YearSummaryMenu = () => {
           value='expense'
           onClick={onClick}
           className={textcolor('expense')}
-          data-tooltip={guide === '13' && dimensions > 800 ? 'To get to Expense Summary you press here' : null}
+          data-tooltip={guide === '14' && dimensions.width > 800 ? 'To get to Expense Summary you press here' : null}
         >
           Expense Summary: Presented in donut-chart representing spending by category
         </button>
       </span>
-      <span className={guide === '14' && 'guide__expense'}>
+      <span className={guide === '15' && 'guide__expense'}>
         <button value='income' onClick={onClick} className={textcolor('income')}>
           03.
         </button>
@@ -59,12 +60,12 @@ const YearSummaryMenu = () => {
           value='income'
           onClick={onClick}
           className={textcolor('income')}
-          data-tooltip={guide === '14' ? 'To get to Income Summary you press here' : null}
+          data-tooltip={guide === '15' && dimensions.width > 800 ? 'To get to Income Summary you press here' : null}
         >
           Income Summary: Presented in donut-chart representing spending by category
         </button>
       </span>
-      <span className={guide === '15' && 'guide__expense'}>
+      <span className={guide === '16' && 'guide__expense'}>
         <button value='savings' onClick={onClick} className={textcolor('savings')}>
           04.
         </button>
@@ -73,7 +74,7 @@ const YearSummaryMenu = () => {
           value='savings'
           onClick={onClick}
           className={textcolor('savings')}
-          data-tooltip={guide === '15' ? 'To get to Savings Summary you press here' : null}
+          data-tooltip={guide === '16' && dimensions.width > 800 ? 'To get to Savings Summary you press here' : null}
         >
           Savings Summary
         </button>

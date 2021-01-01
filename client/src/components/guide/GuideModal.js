@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
+import CssContext from '../../context/css/cssContext';
 import PresetContext from '../../context/preset/presetContext';
 import GuideSteps from './GuideSteps';
 import { animateScroll } from 'react-scroll';
@@ -17,6 +18,7 @@ Actions triggered to make this guide work:
 8.data-tooltip is used to show tooltips throughout components. Search for data-tooltip too find.
 9.react-scroll is used to focus user to top,bottom or on element. Search for scrollToElement() or scrollToTop()
 10.In PresetForm there is plenty of actions, search for guide in that component to find them.
+11. Also note the ugly jsx style override hack in guide__modal.
 */
 
 const GuideModal = () => {
@@ -25,6 +27,7 @@ const GuideModal = () => {
   const { guide, setGuide, setUserExited } = guideContext;
   const { getGuidePresets, clearPresets, setYear, getPresets, addMonth } = useContext(PresetContext);
   const { isAuthenticated, user } = authContext;
+  const { dimensions } = useContext(CssContext);
 
   // When user exits guide
   const onExit = () => {
@@ -64,13 +67,17 @@ const GuideModal = () => {
     guide === '13' && setYear('2019');
     guide === '14' && setYear('2019');
     guide === '15' && setYear('2019');
+    guide === '16' && setYear('2019');
     // scroll view
     !isNaN(guide) && parseInt(guide) <= 10 && animateScroll.scrollToTop(); // if guidestep less than 11 scroll to top
-    !isNaN(guide) && parseInt(guide) > 14 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top
+    !isNaN(guide) && parseInt(guide) > 16 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top
 
     guide === '11' && animateScroll.scrollToBottom();
     guide === '12' && animateScroll.scrollToTop();
-    guide === '13' && animateScroll.scrollToTop();
+    guide === '13' && animateScroll.scrollToBottom();
+    guide === '14' && animateScroll.scrollToBottom();
+    guide === '15' && animateScroll.scrollToBottom();
+    guide === '16' && animateScroll.scrollToBottom();
 
     // Loads guide-data. Dummydata to have something to show the user.
     !isNaN(guide) && parseInt(guide) >= 2 && getGuidePresets();
@@ -78,7 +85,7 @@ const GuideModal = () => {
 
   return (
     <>
-      <div className='guide__modal'></div>
+      <div className='guide__modal' style={{ zIndex: guide === '17' ? 33 : 1 }}></div>
       <div>
         {guide === '1' && (
           <div className='guide__card'>
@@ -137,6 +144,7 @@ const GuideModal = () => {
             text={'Add to Budget: Overhead'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '7' && (
@@ -147,6 +155,7 @@ const GuideModal = () => {
             text={'Add to Budget: Upload CSV'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '8' && (
@@ -157,6 +166,7 @@ const GuideModal = () => {
             text={'Add to Budget: Capital'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '9' && (
@@ -167,6 +177,7 @@ const GuideModal = () => {
             text={'Add to Budget: Savings'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '10' && (
@@ -178,6 +189,7 @@ const GuideModal = () => {
           month surplus, you can add some amount to that planned purchase piggybank`}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__top'}
           />
         )}
         {guide === '11' && (
@@ -192,6 +204,7 @@ const GuideModal = () => {
           then be moved into that months transactions.`}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__top'}
           />
         )}
         {guide === '12' && (
@@ -209,9 +222,10 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Under expense summary in year-tab, you get a good overview of your expenditure during the year'}
+            text={'Under year you can swipe right to get to expense summary'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '14' && (
@@ -219,9 +233,10 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Income summary gives you a chart representation of your income divided into categories'}
+            text={'Under expense summary in year-tab, you get a good overview of your expenditure during the year'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '15' && (
@@ -229,12 +244,24 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={`Savings summary gives overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
+            text={'Income summary gives you a chart representation of your income divided into categories'}
             guide={guide}
             setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
           />
         )}
         {guide === '16' && (
+          <GuideSteps
+            prevStep={prevStep}
+            nextStep={nextStep}
+            onExit={onExit}
+            text={`Savings summary gives overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
+            guide={guide}
+            setGuide={setGuide}
+            placement={'guide__card guide__card__bottom'}
+          />
+        )}
+        {guide === '17' && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={false}
