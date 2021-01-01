@@ -1,0 +1,11 @@
+{
+  "mongoURI": "mongodb+srv://kirderfovane:alwaysbehindSEAGULL@contactkeeper-sdlbd.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "alwaysbehindSEAGULL",
+  "SMTP_HOST": "smtp.mailtrap.io",
+  "SMTP_PORT": "2525",
+  "SMTP_EMAIL": "e0c30f978000d3",
+  "SMTP_PASSWORD": "3cd433b94c96e6",
+  "FROM_EMAIL": "noreply@budgetapp.io",
+  "FROM_NAME": "BudgetApp",
+  "resetpasswordURL": "development"
+}
