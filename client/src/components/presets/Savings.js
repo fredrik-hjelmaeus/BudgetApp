@@ -9,7 +9,7 @@ const Savings = () => {
   const presetContext = useContext(PresetContext);
   return (
     <div>
-      <div className={guide === '15' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
+      <div className={guide === '16' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
         <div className='flexcolumn '>
           <div className='flexrow-2 borderdivider'>
             <div>General Savings: </div>

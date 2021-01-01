@@ -37,7 +37,7 @@ const Year = () => {
     calcAllMonthSum,
   } = presetContext;
 
-  const { yearsummary, dimensions, modal } = cssContext;
+  const { setYearSummary, yearsummary, dimensions, modal } = cssContext;
   const { setGuide, guide, exitedguide } = guideContext;
 
   // loads presets from database when year-variable is updated
@@ -92,14 +92,14 @@ const Year = () => {
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
         <div className='year-bg'>
-          {dimensions.width < 800 && <YearSwiper yearsummary={yearsummary} />}
+          {dimensions.width < 800 && <YearSwiper guide={guide} setYearSummary={setYearSummary} yearsummary={yearsummary} />}
           {dimensions.width > 800 && yearsummary === 'savings' && <Savings />}
           {dimensions.width > 800 && yearsummary === 'expense' && <Expense />}
           {dimensions.width > 800 && yearsummary === 'balance' && <YearBalance />}
           {dimensions.width > 800 && yearsummary === 'category' && <YearCategoryBalance />}
           {dimensions.width > 800 && yearsummary === 'income' && <Income />}
         </div>
-        {/* {dimensions.width < 800 && <YearSummaryMenu />} */}
+        {dimensions.width < 800 && <YearSummaryMenu />}
       </div>
     </Fragment>
   );

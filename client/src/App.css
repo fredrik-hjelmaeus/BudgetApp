@@ -2295,6 +2295,7 @@ table th {
   margin-top: -10px;
   margin-right: -25px;
 }
+
 /* guide mobile */
 @media (max-width: 800px) {
   .guide__modal__hidden {
