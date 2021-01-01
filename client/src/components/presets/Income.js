@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import DonutChart from '../layout/DonutChart';
 import PresetContext from '../../context/preset/presetContext';
 import GuideContext from '../../context/guide/guideContext';
+import CssContext from '../../context/css/cssContext';
 import Scroll from 'react-scroll';
 
 const Expense = () => {
   const presetContext = useContext(PresetContext);
   const { categorysumonlyposnumbyyear, categorynameonlyposnumbyyear } = presetContext;
-
+  const { dimensions } = useContext(CssContext);
   const YearExpense = categorysumonlyposnumbyyear.reduce((a, b) => a + b, 0);
   const yearmonthavg = parseInt(parseFloat(YearExpense / 12));
   //colors set here so expense and income can have different colors in their chart
@@ -50,14 +51,14 @@ const Expense = () => {
   };
 
   React.useEffect(() => {
-    if (guide === '14') {
+    if (guide === '15' && dimensions.width > 800) {
       scrollToElement();
     }
   }, [guide]);
 
   return (
     <div>
-      <div className={guide === '14' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
+      <div className={guide === '15' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
         <div style={{ margin: '0 0 1rem 0' }}>
           <DonutChart sums={categorysumonlyposnumbyyear} names={categorynameonlyposnumbyyear} colors={colors} />
         </div>

@@ -1,18 +1,10 @@
 import React from 'react';
 import DotStepsMenu from './DotStepsMenu';
 
-const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep }) => {
+const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep, placement }) => {
   return (
     <>
-      <div
-        className={
-          (!isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 10) || (parseInt(guide) >= 13 && parseInt(guide) < 15)
-            ? 'guide__card guide__card__bottom'
-            : guide === '10' || guide === '11'
-            ? 'guide__card guide__card__top'
-            : 'guide__card'
-        }
-      >
+      <div className={placement}>
         <DotStepsMenu guide={guide} setGuide={setGuide} />
         <button className='guide__closebtn' value='close' onClick={onExit}></button>
         <div className='guide__text'>{text}</div>
@@ -35,5 +27,7 @@ const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep }) => {
     </>
   );
 };
-
+GuideSteps.defaultProps = {
+  placement: 'guide__card',
+};
 export default GuideSteps;
