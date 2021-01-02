@@ -21,7 +21,7 @@ const Month = () => {
   const presetContext = useContext(PresetContext);
   const { guide } = useContext(GuideContext);
   const cssContext = useContext(CssContext);
-  const { modal, modalprops } = cssContext;
+  const { modal, modalprops, dimensions } = cssContext;
   const {
     presets,
     calcSum,
@@ -60,12 +60,19 @@ const Month = () => {
       <div
         className='monthgrid'
         data-tooltip={
-          guide === '6'
+          guide === '6' && dimensions.width < 800
             ? 'Here you add transactions for this month by giving the name,number and category. Overhead option will add it to your income and expenses'
             : null
         }
       >
-        <div className='monthgrid__presetformOrder'>
+        <div
+          className='monthgrid__presetformOrder'
+          data-tooltip={
+            guide === '6' && dimensions.width > 800
+              ? 'Here you add transactions for this month by giving the name,number and category. Overhead option will add it to your income and expenses'
+              : null
+          }
+        >
           <PresetForm />
         </div>
 

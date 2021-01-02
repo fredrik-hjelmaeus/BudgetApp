@@ -39,6 +39,7 @@ const PresetForm = () => {
 
   // expands the budget tab for the guide
   useEffect(() => {
+    guide === '5' && setExpand(false);
     !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) <= 11 && setExpand(true);
     guide === '8' && setPreset({ ...preset, type: 'capital' });
     guide === '9' && setPreset({ ...preset, type: 'savings' });
