@@ -29,11 +29,16 @@ const YearSummaryMenu = () => {
 
   return (
     <div className='yearbalance__container card bg-light yearSummaryMenu '>
-      <span>
+      <span className={guide === '13' && 'guide__expense'}>
         <button value='balance' onClick={onClick} className={textcolor('balance')}>
           01.
         </button>
-        <button value='balance' onClick={onClick} className={textcolor('balance')}>
+        <button
+          value='balance'
+          onClick={onClick}
+          className={textcolor('balance')}
+          data-tooltip={guide === '13' && dimensions.width > 800 ? 'Balance Summary' : null}
+        >
           Balance Summary: Presented in barchart representing month surplus.
         </button>
       </span>

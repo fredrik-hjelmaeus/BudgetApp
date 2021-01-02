@@ -1727,6 +1727,7 @@ input::placeholder {
   height: 80vh;
   position: relative;
   overflow-y: hidden;
+  overflow: hidden;
 }
 
 .Landing__btn__black {
@@ -1844,8 +1845,8 @@ table th {
   padding: 20px;
   border: 1px solid #000000;
   border-radius: 8px;
-  width: 461px;
-  height: 489px;
+  max-width: 461px;
+  max-height: 489px;
   font-size: 14px;
 }
 
@@ -1862,8 +1863,8 @@ table th {
   padding: 20px;
   border: 1px solid #000000;
   border-radius: 8px;
-  width: 461px;
-  height: 489px;
+  max-width: 461px;
+  max-height: 489px;
   font-size: 14px;
 }
 
@@ -2573,6 +2574,7 @@ table th {
   height: 20vh;
   width: 100%;
   padding: 2.5rem 2rem 0rem 3rem;
+  overflow: hidden;
 }
 
 .footer__cols {
