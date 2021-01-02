@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import GuideContext from '../../context/guide/guideContext';
 import AuthContext from '../../context/auth/authContext';
 import PresetContext from '../../context/preset/presetContext';
+import CssContext from '../../context/css/cssContext';
 import GuideSteps from './GuideSteps';
 import { animateScroll } from 'react-scroll';
 
@@ -26,7 +27,7 @@ const GuideModal = () => {
   const { guide, setGuide, setUserExited } = guideContext;
   const { getGuidePresets, clearPresets, setYear, getPresets, addMonth } = useContext(PresetContext);
   const { isAuthenticated, user } = authContext;
-
+  const { dimensions } = useContext(CssContext);
   // When user exits guide
   const onExit = () => {
     // clear the dummy/guidedata
@@ -220,7 +221,11 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Under year you can swipe right to get to expense summary'}
+            text={
+              dimensions.width < 800
+                ? 'Under year there are 4 summary tabs you can reach by swiping right and left on the charts'
+                : 'Under year there are 4 summary tabs you can reach by clicking on the different subject fields on the left'
+            }
             guide={guide}
             setGuide={setGuide}
             placement={'guide__card guide__card__bottom'}
@@ -253,7 +258,7 @@ const GuideModal = () => {
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={`Savings summary gives overview of all your savings: general savings not delegated to, capital and piggybank savings and their progress`}
+            text={`Savings summary gives overview of all your savings: general savings, capital and piggybank/targeted savings and their progress`}
             guide={guide}
             setGuide={setGuide}
             placement={'guide__card guide__card__bottom'}
