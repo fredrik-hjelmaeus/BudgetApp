@@ -1,5 +1,4 @@
 import React from 'react';
-import logoicon from './assessment-24px.svg';
 import logoicon2 from './logo/logo_color.svg';
 
 const Logo = () => (

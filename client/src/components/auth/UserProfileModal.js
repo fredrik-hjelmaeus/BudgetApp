@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
 import CssContext from '../../context/css/cssContext';
+import GuideContext from '../../context/guide/guideContext';
 import personicon from '../layout/person.svg';
+import AppGuideIcon from '../layout/AppGuideIcon.svg';
 import Alerts from '../layout/Alerts';
 import UserDetails from './UserDetails';
 import UserChangePassword from './UserChangePassword';
@@ -11,6 +13,7 @@ const UserProfileModal = () => {
   // Context
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
+  const { setUserExited, setGuide } = useContext(GuideContext);
 
   const { setAlert } = alertContext;
   const { user, error, clearErrors, updateDetails, updatePassword } = authContext;
@@ -85,6 +88,13 @@ const UserProfileModal = () => {
     setExpandChangePassword(true);
   };
 
+  const startGuide = () => {
+    setUserExited(false);
+
+    toggleModal('');
+    setGuide('1');
+  };
+
   return (
     <div id='myModal' className='modal-register' style={{ display: 'block' }}>
       <div className='modal-content-register' style={{ height: 'auto' }}>
@@ -119,6 +129,9 @@ const UserProfileModal = () => {
             onChange={onChange}
             onSubmitPassword={onSubmitPassword}
           />
+          <button className={'btn btn-light btn-block my-1'} type='button' onClick={startGuide}>
+            App Guide <img src={AppGuideIcon} alt='start the app guide icon'></img>
+          </button>
         </div>
       </div>
     </div>

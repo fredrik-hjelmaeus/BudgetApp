@@ -19,9 +19,7 @@ const DeletePurchaseModal = ({ Item }) => {
   //cancel purchase
   // for every piggybank that is not savedAmount 0,convert to new preset type savings at the month piggybankitem was registred. Then delete purchasepreset
   const onDelete = () => {
-    const FilteredPiggybanks = Item.piggybank.filter(
-      (piggybank) => piggybank.savedAmount !== 0
-    );
+    const FilteredPiggybanks = Item.piggybank.filter((piggybank) => piggybank.savedAmount !== 0);
 
     FilteredPiggybanks.map((newSaving) =>
       addPreset({
@@ -31,7 +29,7 @@ const DeletePurchaseModal = ({ Item }) => {
         year: newSaving.year,
         category: Item.category,
         type: 'savings', //switch type from purchase to savings)
-        piggybank: [{ month, year: '2019', savedAmount: '' }],
+        piggybank: [{ month, year: '2021', savedAmount: '' }],
       })
     );
     deletePreset(Item._id);
@@ -49,19 +47,11 @@ const DeletePurchaseModal = ({ Item }) => {
           <h1 className='regular'>Confirm delete</h1>
         </div>
         <div className=' purchasemodalobjname'>{Item.name}</div>
-        <button
-          className='text-primary purchasemodaldeletebutton'
-          value='delete'
-          onClick={onDelete}
-        >
+        <button className='text-primary purchasemodaldeletebutton' value='delete' onClick={onDelete}>
           Delete{'  '}
           <PiggybankSVG fill='var(--primary-color)' />
         </button>
-        <button
-          className='btn btn-outline btn-block  p-3'
-          value='delete'
-          onClick={() => toggleModal('')}
-        >
+        <button className='btn btn-outline btn-block  p-3' value='delete' onClick={() => toggleModal('')}>
           Cancel
         </button>
       </div>
