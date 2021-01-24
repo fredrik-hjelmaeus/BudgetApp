@@ -51,9 +51,9 @@ const GuideModal = () => {
   // These guide-actions is in useeffect as both nextStep and DotStepsMenu should trigger these changes/actions.
   React.useEffect(() => {
     // between step 4 and step 11 the guide is in the month tab. Rest of the steps is in year-tab.
-    guide === '1' && setYear('2019');
-    guide === '2' && setYear('2019');
-    guide === '3' && setYear('2019');
+    guide === '1' && setYear('2021');
+    guide === '2' && setYear('2021');
+    guide === '3' && setYear('2021');
     guide === '4' && addMonth('January');
     guide === '5' && addMonth('January');
     guide === '6' && addMonth('January');
@@ -63,10 +63,10 @@ const GuideModal = () => {
     guide === '10' && addMonth('January');
     guide === '11' && addMonth('January');
     guide === '12' && addMonth('January');
-    guide === '13' && setYear('2019');
-    guide === '14' && setYear('2019');
-    guide === '15' && setYear('2019');
-    guide === '16' && setYear('2019');
+    guide === '13' && setYear('2021');
+    guide === '14' && setYear('2021');
+    guide === '15' && setYear('2021');
+    guide === '16' && setYear('2021');
     // scroll view
     !isNaN(guide) && parseInt(guide) <= 10 && animateScroll.scrollToTop(); // if guidestep less than 11 scroll to top
     !isNaN(guide) && parseInt(guide) > 16 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top
@@ -273,6 +273,7 @@ const GuideModal = () => {
             A good startingpoint now is to add your initial capital under month/add to budget, and from there you can then input your monthly transactions`}
             guide={guide}
             setGuide={setGuide}
+            finalStep={true}
           />
         )}
       </div>

@@ -173,8 +173,8 @@ const DateItemMobile = () => {
   };
 
   useEffect(() => {
-    year === null && setYear(2019);
-    year === null && setLocalMonth(2019);
+    year === null && setYear(2021);
+    year === null && setLocalMonth(2021);
     LocalMonth === null && year !== null && setLocalMonth(parseInt(year));
     month !== null && setLocalMonth(month);
     year !== null && setLocalYear(parseInt(year));

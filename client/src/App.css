@@ -1825,7 +1825,7 @@ table th {
 .modal-register {
   display: block; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  z-index: 100; /* Sit on top */
   padding-top: 200px; /* Location of the box */
   left: 0;
   top: 0;
@@ -2144,7 +2144,8 @@ table th {
   margin: 10px;
   cursor: pointer;
 }
-.guide__btn__group__exit {
+.guide__btn__group__exit,
+.guide__btn__group__final {
   box-shadow: 0px 3px 6px #2b2b2b;
   background-color: rgb(214, 212, 212);
   color: var(--light-color);
@@ -2311,7 +2312,6 @@ table th {
   }
   .guide__card__bottom {
     min-heisght: 120px;
-
     bottom: 0;
   }
   .guide__card__top {
@@ -2338,6 +2338,7 @@ table th {
   .guide__btn__group__exit {
     display: none;
   }
+
   .guide__btn__group__prev {
     display: block;
   }
