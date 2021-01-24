@@ -80,6 +80,7 @@ const Year = () => {
     // eslint-disable-next-line
   }, [presets, year]);
   //if (dimensions.width < 800) return <YearSwiper />;
+
   return (
     <Fragment>
       {modal === 'profile' && <UserProfileModal />}

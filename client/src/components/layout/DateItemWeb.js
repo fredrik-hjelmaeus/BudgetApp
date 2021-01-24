@@ -12,8 +12,8 @@ const DateItemWeb = () => {
   const [LocalMonth, setLocalMonth] = useState(null);
 
   useEffect(() => {
-    year === null && setYear('2019');
-    year === null && setLocalMonth('2019');
+    year === null && setYear('2021');
+    year === null && setLocalMonth('2021');
     month !== null && setLocalMonth(month);
     LocalMonth === null && setLocalMonth(year);
     year !== null && setPrevYear(parseInt(year - 1).toString());
@@ -44,7 +44,7 @@ const DateItemWeb = () => {
     // year pressed
     if (e.target.value === year) {
       if (guide === '12') {
-        setYear('2019');
+        setYear('2021');
         setGuide((parseInt(guide) + 1).toString());
       } else {
         addMonth(e.target.value);

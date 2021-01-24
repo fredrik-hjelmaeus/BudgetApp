@@ -1,7 +1,7 @@
 import React from 'react';
 import DotStepsMenu from './DotStepsMenu';
 
-const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep, placement }) => {
+const GuideSteps = ({ finalStep, text, setGuide, guide, nextStep, onExit, prevStep, placement }) => {
   return (
     <>
       <div className={placement}>
@@ -19,7 +19,7 @@ const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep, placeme
               Next
             </button>
           )}
-          <button className='guide__btn__group__exit' onClick={onExit}>
+          <button className={finalStep ? 'guide__btn__group__final' : 'guide__btn__group__exit'} onClick={onExit}>
             Exit
           </button>
         </div>
@@ -29,5 +29,6 @@ const GuideSteps = ({ text, setGuide, guide, nextStep, onExit, prevStep, placeme
 };
 GuideSteps.defaultProps = {
   placement: 'guide__card',
+  finalStep: false,
 };
 export default GuideSteps;
