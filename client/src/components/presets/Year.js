@@ -11,7 +11,6 @@ import YearCategoryBalance from './YearCategoryBalance';
 import YearSummaryMenu from './YearSummaryMenu';
 import YearTitle from './YearTitle';
 import GuideModal from '../guide/GuideModal';
-import Tooltip from '../guide/Tooltip';
 import UserProfileModal from '../auth/UserProfileModal';
 import YearSwiper from '../layout/YearSwiper';
 

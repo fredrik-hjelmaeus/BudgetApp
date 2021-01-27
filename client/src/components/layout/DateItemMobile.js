@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import GuideContext from '../../context/guide/guideContext';
-import guideContext from '../../context/guide/guideContext';
 
 // Uses DateList as a base to figure out what months to show
 // 'year' gets replaced with active year in adjustlist
@@ -70,11 +69,11 @@ const DateItemMobile = () => {
     ThirdIndex = shiftLeftDateList(cleanedDateList, MiddleIndex);
     let smallDateList = [];
     const SecondIndex = shiftRightDateList(cleanedDateList, 1);
-    const FirstIndex = shiftRightDateList(cleanedDateList, 1); // not used but will be if ipad-size is implemented
+    //const FirstIndex = shiftRightDateList(cleanedDateList, 1); // not used but will be if ipad-size is implemented
     smallDateList.push(SecondIndex);
     smallDateList.push(ThirdIndex);
     const FourthIndex = shiftLeftDateList(cleanedDateList, 3);
-    const FifthIndex = shiftLeftDateList(cleanedDateList, 1); // not used but will be if ipad-size is implemented
+    //const FifthIndex = shiftLeftDateList(cleanedDateList, 1); // not used but will be if ipad-size is implemented
     smallDateList.push(FourthIndex);
 
     setDateList(smallDateList);

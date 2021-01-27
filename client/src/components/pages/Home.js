@@ -11,7 +11,7 @@ const Home = () => {
 
   const cssContext = useContext(CssContext);
 
-  const { navbar, toggleNavbar, modal } = cssContext;
+  const { navbar, toggleNavbar } = cssContext;
 
   const { month } = presetContext;
 
