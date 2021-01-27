@@ -84,7 +84,7 @@ const SelectFile = () => {
       setSelectedFile('');
       setSelectedFileName('');
     }
-  }, [selectedFile, selectedFileName, uploadCSV]);
+  }, [selectedFile, selectedFileName, uploadCSV, format]);
 
   // detect if the uploadCSV resulted in valid csvs and then close this modal to give room for csvpresetcreatemodal
   React.useEffect(() => {
@@ -93,7 +93,7 @@ const SelectFile = () => {
     } else {
       csvpresets && toggleModal('SelectCSVfields');
     }
-  }, [csvpresets]);
+  }, [csvpresets, format, toggleModal]);
 
   //jsx
   return (

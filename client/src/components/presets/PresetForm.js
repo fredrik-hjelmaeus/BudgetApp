@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext, useEffect, useRef } from 'react';
+import React, { Fragment, useState, useContext, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import GuideContext from '../../context/guide/guideContext';
 import AlertContext from '../../context/alert/alertContext';

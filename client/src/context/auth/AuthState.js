@@ -12,7 +12,6 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
-  FORGOT_FAIL,
   FORGOT_SUCCESS,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
@@ -116,7 +115,7 @@ const AuthState = (props) => {
     };
 
     try {
-      const res = await axios.post('/api/auth/forgotpassword', formData, config); //endpoint/url
+      const res = await axios.post('/api/auth/forgotpassword', formData, config);
 
       dispatch({
         type: FORGOT_SUCCESS,

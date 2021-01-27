@@ -50,11 +50,14 @@ const Expense = () => {
     });
   };
 
-  React.useEffect(() => {
-    if (guide === '15' && dimensions.width > 800) {
-      scrollToElement();
-    }
-  }, [guide]);
+  React.useEffect(
+    () => {
+      if (guide === '15' && dimensions.width > 800) {
+        scrollToElement();
+      }
+    }, // eslint-disable-next-line
+    [guide, dimensions]
+  );
 
   return (
     <div>

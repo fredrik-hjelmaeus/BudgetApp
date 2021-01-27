@@ -2,9 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import { withRouter } from 'react-router-dom';
-import CssContext from '../../context/css/cssContext';
 import personicon from '../layout/person.svg';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Alerts from '../layout/Alerts';
 
 export const ResetPassword = (props) => {
@@ -13,7 +12,7 @@ export const ResetPassword = (props) => {
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { login, error, clearErrors, isAuthenticated, resetPassword } = authContext;
+  const { error, clearErrors, resetPassword } = authContext;
 
   const [user, setUser] = useState({
     token: props.match.params.id,

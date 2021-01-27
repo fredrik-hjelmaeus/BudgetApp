@@ -4,13 +4,11 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
-//import logoicon from './assessment-24px.svg';
-import logoicon from './logo/logo-white.svg';
 import logoicon2 from './logo/logo_color.svg';
 import personicon from '../layout/person.svg';
 import logouticon from '../layout/logout.svg';
 
-const Navbar = ({ title, icon }) => {
+const Navbar = ({ title }) => {
   const authContext = useContext(AuthContext);
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
