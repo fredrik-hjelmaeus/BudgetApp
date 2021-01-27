@@ -80,6 +80,8 @@ const GuideModal = () => {
 
     // Loads guide-data. Dummydata to have something to show the user.
     !isNaN(guide) && parseInt(guide) >= 2 && getGuidePresets();
+
+    // eslint-disable-next-line
   }, [guide]);
 
   return (

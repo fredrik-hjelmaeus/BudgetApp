@@ -54,7 +54,8 @@ const Expense = () => {
     if (guide === '14' && dimensions.width > 800) {
       scrollToElement();
     }
-  }, [guide]);
+    //eslint-disable-next-line
+  }, [guide, dimensions]);
 
   return (
     <div>

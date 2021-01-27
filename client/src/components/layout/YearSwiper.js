@@ -41,7 +41,7 @@ const YearSwiper = ({ guide, yearsummary, setYearSummary }) => {
       yearsummary === 'income' && swipeRef.current.swiper.slideTo(2);
       yearsummary === 'savings' && swipeRef.current.swiper.slideTo(3);
     }
-  }, [yearsummary]);
+  }, [yearsummary, guide]);
 
   return (
     <Swiper
