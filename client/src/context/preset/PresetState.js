@@ -184,7 +184,6 @@ const PresetState = (props) => {
 
   //Update CSV
   const updateCsvPresets = (preset) => {
-    //console.log('updatecsv');
     dispatch({ type: UPDATE_CSV, payload: preset });
   };
 
@@ -234,8 +233,6 @@ const PresetState = (props) => {
 
   // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = (month) => {
-    //console.log(state.year);
-    //console.log(state.presets);
     dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
   };
 

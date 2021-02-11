@@ -37,15 +37,6 @@ const PresetForm = () => {
     // eslint-disable-next-line
   }, [edit, month, presets]);
 
-  // expands the budget tab for the guide
-  useEffect(() => {
-    guide === '5' && setExpand(false);
-    !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) <= 11 && setExpand(true);
-    guide === '8' && setPreset({ ...preset, type: 'capital' });
-    guide === '9' && setPreset({ ...preset, type: 'savings' });
-    guide === '10' && setPreset({ ...preset, type: 'purchase' });
-  }, [guide]);
-
   const [expand, setExpand] = useState(false);
 
   const [preset, setPreset] = useState(
@@ -109,6 +100,16 @@ const PresetForm = () => {
   const toggleExpand = () => {
     setExpand(!expand);
   };
+
+  // expands the budget tab for the guide
+  useEffect(() => {
+    guide === '5' && setExpand(false);
+    !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) <= 11 && setExpand(true);
+    guide === '8' && setPreset({ ...preset, type: 'capital' });
+    guide === '9' && setPreset({ ...preset, type: 'savings' });
+    guide === '10' && setPreset({ ...preset, type: 'purchase' });
+    // eslint-disable-next-line
+  }, [guide]);
 
   const { name, number, category } = preset;
 
