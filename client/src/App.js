@@ -14,6 +14,7 @@ import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 import CssState from './context/css/CssState';
 import GuideState from './context/guide/GuideState';
+import DateState from './context/date/DateState';
 import setAuthToken from './utils/setAuthToken';
 
 if (localStorage.token) {
@@ -24,26 +25,28 @@ const App = () => {
   return (
     <AuthState>
       <PresetState>
-        <AlertState>
-          <CssState>
-            <GuideState>
-              <Router>
-                <Fragment>
-                  <Navbar />
-                  <div>
-                    <Switch>
-                      <PrivateRoute exact path='/' component={Home} />
-                      <Route exact path='/about' component={About} />
-                      <Route exact path='/Landing' component={Landing} />
-                      <Route path='/resetpassword/:id' component={ResetPassword} />
-                    </Switch>
-                  </div>
-                  <Footer />
-                </Fragment>
-              </Router>
-            </GuideState>
-          </CssState>
-        </AlertState>
+        <DateState>
+          <AlertState>
+            <CssState>
+              <GuideState>
+                <Router>
+                  <Fragment>
+                    <Navbar />
+                    <div>
+                      <Switch>
+                        <PrivateRoute exact path='/' component={Home} />
+                        <Route exact path='/about' component={About} />
+                        <Route exact path='/Landing' component={Landing} />
+                        <Route path='/resetpassword/:id' component={ResetPassword} />
+                      </Switch>
+                    </div>
+                    <Footer />
+                  </Fragment>
+                </Router>
+              </GuideState>
+            </CssState>
+          </AlertState>
+        </DateState>
       </PresetState>
     </AuthState>
   );

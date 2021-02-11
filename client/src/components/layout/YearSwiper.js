@@ -52,7 +52,7 @@ const YearSwiper = ({ guide, yearsummary, setYearSummary }) => {
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
       onSlideChange={(swiper) => onSwipe(swiper.activeIndex)}
-      classsName='yearswiper year-bg'
+      className='yearswiper year-bg'
     >
       <SwiperSlide>{yearsummary === 'balance' && <YearBalance />}</SwiperSlide>
       <SwiperSlide>{yearsummary === 'expense' && <Expense />}</SwiperSlide>
