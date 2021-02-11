@@ -7,6 +7,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 const PresetFilter = () => {
   const presetContext = useContext(PresetContext);
   const {
+    year,
     month,
     filteredmonthandposnum,
     loading,
@@ -15,19 +16,14 @@ const PresetFilter = () => {
     filterOutPositiveNumsAndMonth,
   } = presetContext;
 
-  //console.log(filteredmonthandposnum);
   useEffect(() => {
-    if (month !== null && presets !== null) {
+    if (month !== null && presets !== null && year !== null) {
       filterOutPositiveNumsAndMonth(month);
       filterOutNegativeNumsAndMonth(month);
     } // eslint-disable-next-line
   }, [month, presets]);
 
-  if (
-    filteredmonthandposnum !== null &&
-    filteredmonthandposnum.length === 0 &&
-    !loading
-  ) {
+  if (filteredmonthandposnum !== null && filteredmonthandposnum.length === 0 && !loading) {
     return <h4>Please add a Value</h4>;
   }
 
