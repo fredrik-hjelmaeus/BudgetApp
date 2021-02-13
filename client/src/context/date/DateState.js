@@ -28,7 +28,6 @@ const DateState = (props) => {
 
   // Set date
   const setDate = (dateListArray) => {
-    console.log(dateListArray);
     dispatch({ type: SET_DATE, payload: dateListArray });
   };
 

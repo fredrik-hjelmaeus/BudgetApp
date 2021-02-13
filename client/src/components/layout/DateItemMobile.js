@@ -29,7 +29,7 @@ const DateItemMobile = () => {
         const removed = shiftedDateList.pop();
         shiftedDateList.unshift(removed);
       }
-      setDate(shiftedDateList);
+      setDate(shiftedDateList); // TODO: this exec after displayYear/setDate so it resets the year to wrong year as shiftedDateList is created with the old state.
 
       addMonth(shiftedDateList[6]);
       return;
@@ -42,27 +42,41 @@ const DateItemMobile = () => {
     const checkYear = (event, dateList) => {
       if (event.target.value === 'prev' && dateList[5] === 'December') {
         setYear(parseInt(year - 1));
-        console.log('Year to ' + year);
+        addMonth('December');
+        console.log('Year to ' + parseInt(year - 1));
       }
-      if (event.target.value === 'next' && isNaN(!event.target.value)) {
+      if (event.target.value === 'next' && !isNaN(dateList[7])) {
         console.log('next year: ' + year);
         setYear(parseInt(year + 1));
         addMonth(null);
       }
     };
 
+    const displayYear = (dateList) => {
+      console.log(dateList[5], dateList[7]);
+      if (dateList[5] === 'November') {
+        const newDateList = [...dateList];
+        newDateList[7] = year;
+        setDate(newDateList);
+        console.log('newDateList: ', newDateList);
+      }
+    };
+    console.log('dateList', dateList);
+    displayYear(dateList);
     rotateDateList(event);
 
     checkYear(event, dateList); // TODO: MAKE YEAR SWITCH AND DISPLAY WORK
   };
-
+  //console.log(dateList);
+  //console.log(dateList);
   // This makes sure year is defined when onClick is pressed and switching to month by addMonth-function.
   // If year is not defined when switching to month ,
   // the calculations on the presets will fail as they are using a defined presetContext-year value
   React.useEffect(() => {
     !year && setYear(dateList[6]);
   }, []);
-
+  //console.log(!isNaN(dateList[7]) ? parseInt(dateList[7] + 1) : dateList[7]);
+  // console.log(year);
   return (
     <div
       data-tooltip={guide === '2' ? 'This is the datemenu. Here you navigate in your timeline' : null}
