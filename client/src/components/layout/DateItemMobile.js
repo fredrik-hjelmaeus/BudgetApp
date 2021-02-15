@@ -1,16 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import GuideContext from '../../context/guide/guideContext';
 import DateContext from '../../context/date/dateContext';
 
-// Uses DateList as a base to figure out what months to show
-// 'year' gets replaced with active year in adjustlist
+// Uses dateList as a base to figure out what months to show
 // Was first intended to show 5 dateitems and arrows,but took too much space after adjusting fontsize to mobile
-// If ever developed for ipad,5 dateitems may be fitting.
+// If ever developed for ipad, 5 dateitems may be fitting.
 
 const DateItemMobile = () => {
   const presetContext = useContext(PresetContext);
-  const { year, setYear, addMonth, month } = presetContext;
+  const { year, setYear, addMonth } = presetContext;
   const { guide } = useContext(GuideContext);
   const { dateList, setDate } = useContext(DateContext);
 
@@ -18,10 +17,7 @@ const DateItemMobile = () => {
 
   const onDateClick = (event) => {
     //shift the datelist
-
     const rotateDateList = (event, shiftedDateList) => {
-      //const shiftedDateList = [...newDateList];
-
       if (event.target.name === 'next') {
         const removed = shiftedDateList.shift();
         shiftedDateList.push(removed);
@@ -29,25 +25,23 @@ const DateItemMobile = () => {
         const removed = shiftedDateList.pop();
         shiftedDateList.unshift(removed);
       }
-      setDate(shiftedDateList); // TODO: this exec after displayYear/setDate so it resets the year to wrong year as shiftedDateList is created with the old state.
+      setDate(shiftedDateList);
 
       addMonth(shiftedDateList[6]);
       return shiftedDateList;
     };
-    // onClick, set new state, no update.
+
     /**
      * Adjusts year if menu is centered on december when swiping prev
      * or centered on year when swiping next
      */
     const checkYear = (event, shiftedDateList) => {
-      // console.log(event.target.value, shiftedDateList[6]);
       if (event.target.value === 'prev' && shiftedDateList[6] === 'December') {
         setYear(parseInt(year - 1));
         addMonth('December');
       }
-      console.log(event.target.value, shiftedDateList[6]);
+
       if ((event.target.value === 'next' && !isNaN(shiftedDateList[6])) || (!isNaN(event.target.value) && !isNaN(shiftedDateList[6]))) {
-        console.log('next year triggered: ' + parseInt(year + 1));
         const dateListWithNewYear = [...shiftedDateList];
         dateListWithNewYear[6] = parseInt(year + 1);
         setDate(dateListWithNewYear);
@@ -56,6 +50,8 @@ const DateItemMobile = () => {
       }
     };
 
+    // what year to display is not always what year is active.
+    // This function solves this problem.
     const displayYear = (event, dateList) => {
       if (event.target.value === 'prev' && dateList[5] === 'November') {
         const newDateList = [...dateList];
@@ -75,9 +71,9 @@ const DateItemMobile = () => {
       return dateList;
     };
 
+    // pipeline for dateList below. Made to be run in below order or will break.
     const newDateList = displayYear(event, dateList);
     const shiftedDateList = rotateDateList(event, newDateList);
-
     checkYear(event, shiftedDateList);
   };
 
