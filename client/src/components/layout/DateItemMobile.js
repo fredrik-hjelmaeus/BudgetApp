@@ -40,15 +40,14 @@ const DateItemMobile = () => {
      * or centered on year when swiping next
      */
     const checkYear = (event, shiftedDateList) => {
+      // console.log(event.target.value, shiftedDateList[6]);
       if (event.target.value === 'prev' && shiftedDateList[6] === 'December') {
-        console.log('Year to ' + parseInt(year - 1));
-
         setYear(parseInt(year - 1));
         addMonth('December');
       }
-      //console.log(event.target.value, shiftedDateList[6]);
-      if (event.target.value === 'next' && !isNaN(shiftedDateList[6])) {
-        console.log('next year: ' + year);
+      console.log(event.target.value, shiftedDateList[6]);
+      if ((event.target.value === 'next' && !isNaN(shiftedDateList[6])) || (!isNaN(event.target.value) && !isNaN(shiftedDateList[6]))) {
+        console.log('next year triggered: ' + parseInt(year + 1));
         const dateListWithNewYear = [...shiftedDateList];
         dateListWithNewYear[6] = parseInt(year + 1);
         setDate(dateListWithNewYear);
@@ -58,39 +57,39 @@ const DateItemMobile = () => {
     };
 
     const displayYear = (event, dateList) => {
-      //  console.log(dateList[5], dateList[7]);
       if (event.target.value === 'prev' && dateList[5] === 'November') {
         const newDateList = [...dateList];
-        newDateList[7] = year;
-        //setDate(newDateList);
-        // console.log('newDateList: ', newDateList);
+        newDateList[7] = parseInt(year);
         return newDateList;
       }
-      // console.log(event.target.value, dateList[7]);
-      if (event.target.value === 'next' && dateList[7] === 'December') {
-        console.log('ran');
+
+      if (
+        (event.target.value === 'next' && dateList[7] === 'December') ||
+        (event.target.value === 'December' && dateList[7] === 'December')
+      ) {
         const newDateList = [...dateList];
         newDateList[8] = parseInt(year + 1);
         return newDateList;
       }
+
       return dateList;
     };
 
-    //console.log('dateList', dateList);
     const newDateList = displayYear(event, dateList);
     const shiftedDateList = rotateDateList(event, newDateList);
 
-    checkYear(event, shiftedDateList); // TODO: MAKE YEAR SWITCH AND DISPLAY WORK WHEN PRESSING MONTHS AND NOT PREV/NEXT
+    checkYear(event, shiftedDateList);
   };
 
   // This makes sure year is defined when onClick is pressed and switching to month by addMonth-function.
   // If year is not defined when switching to month ,
   // the calculations on the presets will fail as they are using a defined presetContext-year value
+  // we also make sure year is of type number as if we switch from Web where string is used, DateItemMobile will otherwise make calc on string-year.
   React.useEffect(() => {
-    !year && setYear(dateList[6]);
+    !year && setYear(parseInt(dateList[6]));
+    year && typeof year === 'string' && setYear(parseInt(year));
   }, []);
-  //console.log(!isNaN(dateList[7]) ? parseInt(dateList[7] + 1) : dateList[7]);
-  // console.log(year);
+
   return (
     <div
       data-tooltip={guide === '2' ? 'This is the datemenu. Here you navigate in your timeline' : null}

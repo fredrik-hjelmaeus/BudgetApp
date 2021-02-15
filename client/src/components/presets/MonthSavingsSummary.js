@@ -73,7 +73,7 @@ const MonthSavingsSummary = () => {
         ))}
         {localPiggy &&
           localPiggy.length !== 0 &&
-          localPiggy.map((piggy) => <MonthSavingsItem Item={piggy.Item} SumOfPreset={piggy.SumOfPreset} key={piggy._id} />)}
+          localPiggy.map((piggy) => <MonthSavingsItem Item={piggy.Item} SumOfPreset={piggy.SumOfPreset} key={piggy.key} />)}
       </div>
     );
   } else return null;
