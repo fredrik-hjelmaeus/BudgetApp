@@ -3,7 +3,7 @@ import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
 import CssContext from '../../context/css/cssContext';
 import { withRouter } from 'react-router-dom';
-import personicon from '../layout/person.svg';
+import personicon from '../layout/images/person.svg';
 import Alerts from '../layout/Alerts';
 
 const RegisterModal = (props) => {

@@ -5,8 +5,8 @@ import AuthContext from '../../context/auth/authContext';
 import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
 import logoicon2 from './logo/logo_color.svg';
-import personicon from '../layout/person.svg';
-import logouticon from '../layout/logout.svg';
+import personicon from '../layout/images/person.svg';
+import logouticon from '../layout/images/logout.svg';
 
 const Navbar = ({ title }) => {
   const authContext = useContext(AuthContext);
