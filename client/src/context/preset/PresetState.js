@@ -573,7 +573,7 @@ const PresetState = (props) => {
     let UniqueCatThisMonth = categoriesArray.filter(function (item, i, ar) {
       return ar.indexOf(item) === i;
     });
-    //console.log(`Unika kategorier: ${UniqueCatThisMonth.length}`);
+
     let MajorArray = [];
 
     for (let i = 0; i < UniqueCatThisMonth.length; i++) {
@@ -630,7 +630,7 @@ const PresetState = (props) => {
     let UniqueCatThisMonth = categoriesArray.filter(function (item, i, ar) {
       return ar.indexOf(item) === i;
     });
-    //console.log(`Unika kategorier: ${UniqueCatThisMonth.length}`);
+
     let MajorArray = [];
 
     for (let i = 0; i < UniqueCatThisMonth.length; i++) {
@@ -705,7 +705,7 @@ const PresetState = (props) => {
     let UniqueCatThisMonth = categoriesArray.filter(function (item, i, ar) {
       return ar.indexOf(item) === i;
     });
-    //console.log(`Unika kategorier: ${UniqueCatThisMonth.length}`);
+
     let MajorArray = [];
 
     for (let i = 0; i < UniqueCatThisMonth.length; i++) {
@@ -909,8 +909,6 @@ const PresetState = (props) => {
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALCSAVINGS, payload: TotalMonthSum });
-    } else {
-      // console.log('no savings to calculate on this user ');
     }
   };
 
@@ -944,10 +942,8 @@ const PresetState = (props) => {
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALC_MONTH_SAVINGS, payload: TotalMonthSum });
-      //console.log(`monthsavings: ${TotalMonthSum} in ${state.month} `);
     } else {
       dispatch({ type: CALC_MONTH_SAVINGS, payload: null });
-      //console.log(`no monthsavings to calculate in ${state.month} `);
     }
   };
 
@@ -992,7 +988,6 @@ const PresetState = (props) => {
       dispatch({ type: CALCCAPITAL, payload: TotalMonthSum });
     } else {
       dispatch({ type: CALCCAPITAL, payload: 0 });
-      // console.log('no capital to calculate ');
     }
   };
   const clearPresetErrors = () => {
@@ -1017,7 +1012,6 @@ const PresetState = (props) => {
 
   const setTotalOfAllPiggybanksThisMonth = (Sum) => {
     dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
-    //console.log('ran');
   };
 
   const submitCsvItems = (string) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import CssContext from '../../context/css/cssContext';
 import GuideContext from '../../context/guide/guideContext';
 
@@ -14,11 +14,8 @@ const YearSummaryMenu = () => {
     guide === '14' && setYearSummary('expense');
     guide === '15' && setYearSummary('income');
     guide === '16' && setYearSummary('savings');
-  }, [guide]);
+  }, [guide, setYearSummary]);
 
-  useEffect(() => {
-    yearsummary === undefined && console.log('error');
-  }, [yearsummary]);
   // sets css color when button is pressed and creates class for unselected that is used in css to hide buttons that ar not active in mobile-size
   const textcolor = (input) => (yearsummary === input ? `text-dark` : `text-gray ${input}`);
 
