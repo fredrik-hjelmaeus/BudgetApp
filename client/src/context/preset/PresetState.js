@@ -265,9 +265,11 @@ const PresetState = (props) => {
       }
     };
 
+    // filters out purchase-type and push preset.number to presetArray
     state.presets.map((preset) => {
-      preset.type !== 'purchase' && presetArray.push(parseFloat(preset.number));
+      return preset.type !== 'purchase' && presetArray.push(parseFloat(preset.number));
     });
+
     dispatchSum(presetArray);
   };
 
@@ -282,36 +284,36 @@ const PresetState = (props) => {
       let TotalMonthSum = 0;
       if (state.year === '2019' || state.year === 2019) {
         state.presets.map((preset) => {
-          if (
+          return (
             preset.year === undefined ||
             preset.year === '2019' ||
             (preset.year === 2019 &&
               preset.month === month &&
               preset.type !== 'savings' &&
               preset.type !== 'capital' &&
-              preset.type !== 'purchase')
-          )
-            presetArray.push(parseFloat(preset.number));
+              preset.type !== 'purchase' &&
+              presetArray.push(parseFloat(preset.number)))
+          );
         });
       } else {
         state.presets.map((preset) => {
-          if (
+          return (
             preset.year == state.year &&
             preset.month === month &&
             preset.type !== 'savings' &&
             preset.type !== 'capital' &&
-            preset.type !== 'purchase'
-          )
-            presetArray.push(parseFloat(preset.number));
+            preset.type !== 'purchase' &&
+            presetArray.push(parseFloat(preset.number))
+          );
         });
       }
       // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
       if (presetArray.length !== 0) {
         TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
-        dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
+        return dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
       } else {
         TotalMonthSum = 0;
-        dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
+        return dispatch({ type: SET_ALLMONTHSUM, payload: TotalMonthSum });
       }
     });
   };
