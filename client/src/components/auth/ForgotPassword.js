@@ -14,7 +14,7 @@ export const ForgotPassword = (props) => {
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { login, error, clearErrors, forgotPassword, mailsentmsg } = authContext;
+  const { error, clearErrors, forgotPassword, mailsentmsg } = authContext;
 
   const [user, setUser] = useState({
     email: '',
@@ -42,7 +42,7 @@ export const ForgotPassword = (props) => {
       setAlert(error, 'danger');
       clearErrors();
     }
-  }, [mailsentmsg]);
+  }, [mailsentmsg, setAlert, clearErrors, error]);
   // Css: modal context
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
