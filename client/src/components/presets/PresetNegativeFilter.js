@@ -8,11 +8,7 @@ const PresetNegativeFilter = () => {
   const presetContext = useContext(PresetContext);
   const { filteredmonthandnegnum, loading } = presetContext;
 
-  if (
-    filteredmonthandnegnum !== null &&
-    filteredmonthandnegnum.length === 0 &&
-    !loading
-  ) {
+  if (filteredmonthandnegnum !== null && filteredmonthandnegnum.length === 0 && !loading) {
     return <h4>Please add a Value</h4>;
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import instagramicon from './instagramicon.svg';
-import twittericon from './twittericon.svg';
-import facebookicon from './facebookicon.svg';
+import instagramicon from './images/instagramicon.svg';
+import twittericon from './images/twittericon.svg';
+import facebookicon from './images/facebookicon.svg';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -23,7 +23,7 @@ const Footer = () => {
         </li>
         <li></li>
 
-        <li className='footer__information' >INFORMATION</li>
+        <li className='footer__information'>INFORMATION</li>
         <li>
           <Link to='/about' className='footer__information_btn'>
             About
@@ -34,18 +34,13 @@ const Footer = () => {
           <br />
           <button className='footer__information_btn'>Policy privacy</button>
           <br />
-          <button className='footer__information_btn'>
-            Terms & Conditions
-          </button>
+          <button className='footer__information_btn'>Terms & Conditions</button>
           <br />
           <button className='footer__information_btn'>Press Enquires</button>
         </li>
         <li></li>
         <li className='footer__links'>
-          <a
-            href='https://www.instagram.com/leomessi/'
-            className='footer__links_btn'
-          >
+          <a href='https://www.instagram.com/leomessi/' className='footer__links_btn'>
             <img src={instagramicon} alt='img' className='footericons' />
           </a>
 
@@ -53,10 +48,7 @@ const Footer = () => {
           <a href='https://twitter.com/imessi' className='footer__links_btn'>
             <img src={twittericon} alt='img' className='footericons' />
           </a>
-          <a
-            href='https://www.facebook.com/leomessi/'
-            className='footer__links_btn'
-          >
+          <a href='https://www.facebook.com/leomessi/' className='footer__links_btn'>
             <img src={facebookicon} alt='img' className='footericons' />
           </a>
         </li>

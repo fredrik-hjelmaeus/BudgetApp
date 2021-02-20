@@ -3,7 +3,7 @@ import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import { withRouter } from 'react-router-dom';
 import CssContext from '../../context/css/cssContext';
-import personicon from '../layout/person.svg';
+import personicon from '../layout/images/person.svg';
 import Alerts from '../layout/Alerts';
 
 export const LoginModal = (props) => {
