@@ -93,7 +93,6 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      //console.log(err.response.data.errors[0].msg);
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response.data.errors[0].msg,
@@ -133,16 +132,9 @@ const AuthState = (props) => {
   //Reset Password
   const resetPassword = async (formData) => {
     const { token } = formData;
-    // console.log(password);
-    // console.log(token);
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
 
     try {
-      const res = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
+      await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
       console.log('success');
     } catch (err) {
       /*  dispatch({
@@ -162,7 +154,7 @@ const AuthState = (props) => {
       },
     };
     try {
-      const res = await axios.put('/api/auth/updatedetails', formData, config);
+      await axios.put('/api/auth/updatedetails', formData, config);
       console.log('success');
       loadUser();
     } catch (err) {
@@ -181,7 +173,7 @@ const AuthState = (props) => {
       'Content-Type': 'application/json',
     };
     try {
-      const res = await axios.put('/api/auth/updatepassword', formData, config);
+      await axios.put('/api/auth/updatepassword', formData, config);
       console.log('success');
     } catch (err) {
       dispatch({

@@ -13,7 +13,7 @@ const DateItemMobile = () => {
   const { guide } = useContext(GuideContext);
   const { dateList, setDate } = useContext(DateContext);
 
-  const [LocalMonth, setLocalMonth] = useState(null);
+  const [LocalMonth] = useState(null);
 
   const onDateClick = (event) => {
     //shift the datelist
@@ -84,6 +84,7 @@ const DateItemMobile = () => {
   React.useEffect(() => {
     !year && setYear(parseInt(dateList[6]));
     year && typeof year === 'string' && setYear(parseInt(year));
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -93,7 +94,7 @@ const DateItemMobile = () => {
     >
       <ul>
         <button onClick={onDateClick} className='btn-Datemenu prev' value='prev' name='prev'>
-          {year == 'prev' ? <strong className='text-dark'>{`<`}</strong> : `<`}
+          {year === 'prev' ? <strong className='text-dark'>{`<`}</strong> : `<`}
         </button>
       </ul>
 
@@ -114,7 +115,7 @@ const DateItemMobile = () => {
       </ul>
       <ul>
         <button onClick={onDateClick} className='btn-Datemenu next' value='next' name='next'>
-          {LocalMonth == 'next' ? <strong className='text-dark'>{`>`}</strong> : `>`}
+          {LocalMonth === 'next' ? <strong className='text-dark'>{`>`}</strong> : `>`}
         </button>
       </ul>
     </div>
