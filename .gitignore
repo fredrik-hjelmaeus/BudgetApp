@@ -9,7 +9,7 @@ config/production.json
 *.JPG
 *.psd
 *.tif
-*.png
+
 .gitignore
 misc/
 /client/build
