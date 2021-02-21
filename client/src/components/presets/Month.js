@@ -38,7 +38,6 @@ const Month = () => {
   } = presetContext;
 
   useEffect(() => {
-    presets && console.log(presets);
     presets && calcSum();
     presets && setPurchase();
     presets && calcMonthSum(month);
