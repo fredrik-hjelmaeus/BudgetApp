@@ -14,7 +14,7 @@ const YearSummaryMenu = () => {
     guide === '14' && setYearSummary('expense');
     guide === '15' && setYearSummary('income');
     guide === '16' && setYearSummary('savings');
-  }, [guide, setYearSummary]);
+  }, [guide]);
 
   // sets css color when button is pressed and creates class for unselected that is used in css to hide buttons that ar not active in mobile-size
   const textcolor = (input) => (yearsummary === input ? `text-dark` : `text-gray ${input}`);
