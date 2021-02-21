@@ -18,7 +18,7 @@ const MonthSavingsSummary = () => {
     const calcPiggySavings = () => {
       // filters out presets that is type purchase and has piggybank savings
       monthpurchasewithpiggybank = presets.filter((preset) => preset.type === 'purchase' && preset.piggybank.length !== 0);
-      console.log(monthpurchasewithpiggybank, presetContext.year);
+
       // filters out piggybankvalues made in active month
       filteroutbymonth = monthpurchasewithpiggybank.map((purchase) =>
         purchase.piggybank.filter(
