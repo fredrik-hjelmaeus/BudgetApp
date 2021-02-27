@@ -949,6 +949,7 @@ const PresetState = (props) => {
 
   // calc month balance
   const calcMonthBalance = () => {
+    // console.log(state.MonthSum, state.monthsavings, state.SumPiggybanksMonth);
     const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
     dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
   };

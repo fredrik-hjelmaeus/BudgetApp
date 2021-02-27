@@ -2,7 +2,7 @@ import React from 'react';
 
 const CheckBoxField = ({ guide, preset, onChange }) => {
   return (
-    <div className={guide === '8' && 'guide__checkboxfield_zindex'}>
+    <div className={guide === '8' ? 'guide__checkboxfield_zindex' : undefined}>
       <h5 className='text-gray'>Add to</h5>
       <span className='grid-2 my-1'>
         <label className={guide === '6' ? 'presetformtypecheckboxcontainer guide__overheadtextcolor' : 'presetformtypecheckboxcontainer'}>
