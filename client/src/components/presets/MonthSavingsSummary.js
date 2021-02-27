@@ -23,9 +23,7 @@ const MonthSavingsSummary = () => {
       filteroutbymonth = monthpurchasewithpiggybank.map((purchase) =>
         purchase.piggybank.filter(
           (piggybank) =>
-            piggybank.month === presetContext.month &&
-            piggybank.savedAmount !== 0 &&
-            piggybank.year.toString() === presetContext.year.toString()
+            piggybank.month === month && piggybank.savedAmount !== 0 && piggybank.year.toString() === presetContext.year.toString()
         )
       );
 
@@ -54,14 +52,18 @@ const MonthSavingsSummary = () => {
       return MyArray;
     };
 
-    if (presets) {
+    // if piggybank deposits have been made in this month, set them in localpiggy state for display.
+    if (presets && TotalOfAllPiggybanksThisMonth !== 0) {
       setLocalPiggy(createSavingsItem());
-    }
-    TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0 && setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth);
+    } else setLocalPiggy(null);
+
+    TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0
+      ? setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth)
+      : setTotalOfAllPiggybanksThisMonth(0);
     // eslint-disable-next-line
   }, [month, presets, year]);
 
-  // If no piggybankdeposit exist the total will be zero. If that is the case, don't render this component at all
+  // If no piggybankdeposits exist , don't render this component at all
   if (localPiggy || (monthsavingspresets && monthsavingspresets.length > 0)) {
     return (
       <div className='card_monthright_surplussavings bold'>
