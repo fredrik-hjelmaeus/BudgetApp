@@ -36,9 +36,14 @@ const DateItemMobile = () => {
      * or centered on year when swiping next
      */
     const checkYear = (event, shiftedDateList) => {
+      // coming from year and pressing december
       if (event.target.value === 'prev' && shiftedDateList[6] === 'December') {
         setYear(parseInt(year - 1));
         addMonth('December');
+      }
+      // coming from january and pressing year
+      if (event.target.value === 'prev' && !isNaN(shiftedDateList[6])) {
+        addMonth(null);
       }
 
       if ((event.target.value === 'next' && !isNaN(shiftedDateList[6])) || (!isNaN(event.target.value) && !isNaN(shiftedDateList[6]))) {
@@ -80,7 +85,8 @@ const DateItemMobile = () => {
   // This makes sure year is defined when onClick is pressed and switching to month by addMonth-function.
   // If year is not defined when switching to month ,
   // the calculations on the presets will fail as they are using a defined presetContext-year value
-  // we also make sure year is of type number as if we switch from Web where string is used, DateItemMobile will otherwise make calc on string-year.
+  // we also make sure year is of type number as if we switch from Web where string is used,
+  //DateItemMobile will otherwise make calc on string-year.
   React.useEffect(() => {
     !year && setYear(parseInt(dateList[6]));
     year && typeof year === 'string' && setYear(parseInt(year));

@@ -14,6 +14,7 @@ const YearSummaryMenu = () => {
     guide === '14' && setYearSummary('expense');
     guide === '15' && setYearSummary('income');
     guide === '16' && setYearSummary('savings');
+    //eslint-disable-next-line
   }, [guide]);
 
   // sets css color when button is pressed and creates class for unselected that is used in css to hide buttons that ar not active in mobile-size
@@ -26,7 +27,7 @@ const YearSummaryMenu = () => {
 
   return (
     <div className='yearbalance__container card bg-light yearSummaryMenu '>
-      <span className={guide === '13' && 'guide__expense'}>
+      <span className={guide === '13' ? 'guide__expense' : undefined}>
         <button value='balance' onClick={onClick} className={textcolor('balance')}>
           01.
         </button>
@@ -39,7 +40,7 @@ const YearSummaryMenu = () => {
           Balance Summary: Presented in barchart representing month surplus.
         </button>
       </span>
-      <span className={guide === '14' && 'guide__expense'}>
+      <span className={guide === '14' ? 'guide__expense' : undefined}>
         <button value='expense' onClick={onClick} className={textcolor('expense')}>
           02.
         </button>
@@ -53,7 +54,7 @@ const YearSummaryMenu = () => {
           Expense Summary: Presented in donut-chart representing spending by category
         </button>
       </span>
-      <span className={guide === '15' && 'guide__expense'}>
+      <span className={guide === '15' ? 'guide__expense' : undefined}>
         <button value='income' onClick={onClick} className={textcolor('income')}>
           03.
         </button>
@@ -67,7 +68,7 @@ const YearSummaryMenu = () => {
           Income Summary: Presented in donut-chart representing spending by category
         </button>
       </span>
-      <span className={guide === '16' && 'guide__expense'}>
+      <span className={guide === '16' ? 'guide__expense' : undefined}>
         <button value='savings' onClick={onClick} className={textcolor('savings')}>
           04.
         </button>
