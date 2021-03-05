@@ -22,6 +22,7 @@ import {
   CATEGORYYEARSUM,
   YEARSUM,
   CALCSAVINGS,
+  SET_SAVINGS_LIST,
   CALCCAPITAL,
   SET_PURCHASE,
   CATEGORYSUMONLYBYYEAR,
@@ -242,6 +243,11 @@ export default (state, action) => {
       return {
         ...state,
         savings: action.payload,
+      };
+    case SET_SAVINGS_LIST:
+      return {
+        ...state,
+        savingsList: action.payload,
       };
     case CALC_MONTH_SAVINGS:
       return {

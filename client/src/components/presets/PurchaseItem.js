@@ -57,7 +57,7 @@ const PurchaseItem = ({ Item }) => {
 
   const onBuy = () => {
     sendEdit(expensepreset); //switch from type:purchase to type overhead .
-    addPreset(incomepreset); //switch from type:purchase to type overhead .
+    //addPreset(incomepreset); //switch from type:purchase to type overhead .
   };
 
   const onSave = () => {
