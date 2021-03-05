@@ -26,6 +26,7 @@ import {
   CATEGORYYEARSUM,
   YEARSUM,
   CALCSAVINGS,
+  SET_SAVINGS_LIST,
   CALCCAPITAL,
   SET_PURCHASE,
   CATEGORYSUMONLYBYYEAR,
@@ -88,6 +89,7 @@ const PresetState = (props) => {
     purchases: null, // year independent
     csvpresets: null, // used to store values from csv-file in stagingarea
     doSubmitCsv: '',
+    savingsList: [],
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -896,6 +898,14 @@ const PresetState = (props) => {
     } else dispatch({ type: YEARSUM, payload: 0 });
   };
 
+  const getSavingsList = () => {
+    const listOfSavings = state.presets.filter((preset) => {
+      return preset.type === 'savings' && preset;
+    });
+    dispatch({ type: SET_SAVINGS_LIST, payload: listOfSavings });
+    console.log(listOfSavings);
+  };
+
   // Calc savings sum
   const calcSavings = () => {
     //array att iterera igenom
@@ -905,10 +915,13 @@ const PresetState = (props) => {
     state.presets.map((preset) => {
       return preset.type === 'savings' && presetArray.push(parseFloat(preset.number));
     });
+
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
       dispatch({ type: CALCSAVINGS, payload: TotalMonthSum });
+    } else {
+      dispatch({ type: CALCSAVINGS, payload: 0 });
     }
   };
 
@@ -1071,6 +1084,7 @@ const PresetState = (props) => {
         MonthBalance: state.MonthBalance,
         csvpresets: state.csvpresets,
         doSubmitCsv: state.doSubmitCsv,
+        savingsList: state.savingsList,
         addPreset,
         calcSum,
         deletePreset,
@@ -1119,6 +1133,7 @@ const PresetState = (props) => {
         removeCSV,
         clearPresetErrors,
         getGuidePresets,
+        getSavingsList,
       }}
     >
       {props.children}

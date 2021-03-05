@@ -1,21 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import piggyicon from '../layout/images/piggybank.svg';
 import PiggybankSavings from './PiggybankSavings';
 import GuideContext from '../../context/guide/guideContext';
+import SavingsItem from './SavingsItem';
 
 const Savings = () => {
   const { guide } = useContext(GuideContext);
   const presetContext = useContext(PresetContext);
+  const { savingsList } = presetContext;
+  const [showIndividualSavingsList, setShowIndividualSavingsList] = useState(false);
+  useEffect(() => {
+    presetContext.getSavingsList();
+  }, []);
+  const onClick = () => {
+    setShowIndividualSavingsList(!showIndividualSavingsList);
+  };
   return (
     <div>
       <div className={guide === '16' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
         <div className='flexcolumn '>
           <div className='flexrow-2 borderdivider'>
             <div>General Savings: </div>
-            <div className={'text-success px text-left'}>{presetContext.savings}</div>
+            <button onClick={onClick} className={'text-success px text-left'}>
+              {presetContext.savings}
+            </button>
           </div>
-
+          {showIndividualSavingsList &&
+            savingsList &&
+            savingsList.map((savingsItem) => <SavingsItem savingsItem={savingsItem} key={savingsItem.id} />)}
           <div className='flexrow-2 borderdivider'>
             <div>Capital: </div>
             <div className={'text-success px text-left'}>{presetContext.capital}</div>
