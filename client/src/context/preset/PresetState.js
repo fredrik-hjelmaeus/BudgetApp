@@ -252,27 +252,43 @@ const PresetState = (props) => {
     dispatch({ type: SET_PURCHASE });
   };
 
-  // Calculate Sum of presets
+  /**
+   * Calculate AccountBalance
+   * Sum of overhead & capital presets minus savings and piggybank savings.
+   *
+   * */
+
   const calcSum = () => {
     let presetArray = [];
     let TotalSum = 0;
 
-    const dispatchSum = (presetArray) => {
+    const dispatchSum = (sumArray) => {
       // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
-      if (presetArray.length !== 0) {
-        TotalSum = presetArray.reduce((a, b) => a + b, 0);
+      if (sumArray.length !== 0) {
+        TotalSum = sumArray.reduce((a, b) => a + b, 0);
         dispatch({ type: SUM, payload: TotalSum });
       } else {
         dispatch({ type: SUM, payload: 0 });
       }
     };
-
-    // filters out purchase-type and push preset.number to presetArray
+    const sumArray = [];
     state.presets.map((preset) => {
-      return preset.type !== 'purchase' && presetArray.push(parseFloat(preset.number));
+      if (preset.type !== 'purchase' && preset.type !== 'savings') {
+        sumArray.push(parseFloat(preset.number));
+      } else {
+        if (preset.type === 'savings') {
+          sumArray.push(parseFloat(preset.number * -1));
+        }
+      }
     });
+    //const accountSum = sumArray.reduce((a, b) => a + b, 0);
+    //  console.log(sumArray, accountSum);
+    // collect overhead and capital presets
+    /*  state.presets.map((preset) => {
+      return preset.type !== 'purchase' && preset.type !== 'savings' && presetArray.push(parseFloat(preset.number));
+    }); */
 
-    dispatchSum(presetArray);
+    dispatchSum(sumArray);
   };
 
   // Calc _ALL_ months sum

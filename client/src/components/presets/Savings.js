@@ -8,11 +8,11 @@ import SavingsItem from './SavingsItem';
 const Savings = () => {
   const { guide } = useContext(GuideContext);
   const presetContext = useContext(PresetContext);
-  const { savingsList } = presetContext;
+  const { getSavingsList, savingsList, presets, savings, capital } = presetContext;
   const [showIndividualSavingsList, setShowIndividualSavingsList] = useState(false);
   useEffect(() => {
-    presetContext.getSavingsList();
-  }, []);
+    getSavingsList();
+  }, [presets]);
   const onClick = () => {
     setShowIndividualSavingsList(!showIndividualSavingsList);
   };
@@ -23,7 +23,7 @@ const Savings = () => {
           <div className='flexrow-2 borderdivider'>
             <div>General Savings: </div>
             <button onClick={onClick} className={'text-success px text-left'}>
-              {presetContext.savings}
+              {savings}
             </button>
           </div>
           {showIndividualSavingsList &&
@@ -31,7 +31,7 @@ const Savings = () => {
             savingsList.map((savingsItem) => <SavingsItem savingsItem={savingsItem} key={savingsItem.id} />)}
           <div className='flexrow-2 borderdivider'>
             <div>Capital: </div>
-            <div className={'text-success px text-left'}>{presetContext.capital}</div>
+            <div className={'text-success px text-left'}>{capital}</div>
           </div>
           <div className='flexrow-2 savings__piggyiconandtitle'>
             <div>
