@@ -186,6 +186,15 @@ img {
   border: #ccc 2px solid;
   margin: 0.5rem 0;
 }
+.card-piggyItem {
+  border: none;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-bottom: #ccc 2px solid;
+}
+.card-piggyItem__month {
+  overflow: 'hidden';
+  align-self: center;
+}
 
 .card_yeargridrigth {
   background: #ffffff;
