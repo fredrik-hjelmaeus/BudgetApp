@@ -5,6 +5,7 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 import TrashDeleteButton from './TrashDeleteButton';
 
 const PurchaseItem = ({ Item }) => {
+  console.log(Item);
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops, modal } = cssContext;

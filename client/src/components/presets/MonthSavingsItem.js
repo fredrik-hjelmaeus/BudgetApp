@@ -28,6 +28,7 @@ import {
 } from '../layout/images/index';
 
 const MonthSavingsItem = ({ Item, SumOfPreset }) => {
+  console.log(Item);
   const presetContext = useContext(PresetContext);
   const { presets, deletePreset, month, sendEdit } = presetContext;
   const { name, number, category } = Item;
@@ -101,11 +102,11 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   };
   const onDelete = () => {
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
-    Item.type === 'savings' ? deletePreset(Item._id) : testPiggybank(Item);
+    Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
   };
 
   // console.log(preset.piggybank.length);
-  const testPiggybank = (Item) => {
+  const deletePiggybankItem = (Item) => {
     let newPiggybankArray = [];
     presets &&
       presets.map((preset) =>
@@ -146,15 +147,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     <div className='monthitem'>
       <div className='namebutton'>
         <h4>
-          <button
-            className={
-              number > 0
-                ? ' text-primary btn-form no-wrap'
-                : ' text-primary btn-form no-wrap'
-            }
-          >
-            {name}
-          </button>
+          <button className={number > 0 ? ' text-primary btn-form no-wrap' : ' text-primary btn-form no-wrap'}>{name}</button>
         </h4>
       </div>
       <div>
@@ -162,11 +155,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       </div>
       <div>
         <button className='btn-form'>
-          <img
-            src={getCategoryIcon(category)}
-            alt=''
-            style={{ height: '20px', width: '20px' }}
-          />
+          <img src={getCategoryIcon(category)} alt='' style={{ height: '20px', width: '20px' }} />
         </button>
       </div>
       {Item.type !== 'savings' && (
@@ -183,11 +172,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
           onMouseLeave={stopHover}
           onClick={onDelete}
         >
-          {DelbtnColor === true ? (
-            <DeleteSVG fill='var(--danger-color)' />
-          ) : (
-            <DeleteSVG fill='var(--light-color)' />
-          )}
+          {DelbtnColor === true ? <DeleteSVG fill='var(--danger-color)' /> : <DeleteSVG fill='var(--light-color)' />}
         </button>
       </div>
     </div>

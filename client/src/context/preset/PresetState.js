@@ -259,7 +259,6 @@ const PresetState = (props) => {
    * */
 
   const calcSum = () => {
-    let presetArray = [];
     let TotalSum = 0;
 
     const dispatchSum = (sumArray) => {
@@ -281,12 +280,6 @@ const PresetState = (props) => {
         }
       }
     });
-    //const accountSum = sumArray.reduce((a, b) => a + b, 0);
-    //  console.log(sumArray, accountSum);
-    // collect overhead and capital presets
-    /*  state.presets.map((preset) => {
-      return preset.type !== 'purchase' && preset.type !== 'savings' && presetArray.push(parseFloat(preset.number));
-    }); */
 
     dispatchSum(sumArray);
   };
@@ -919,7 +912,6 @@ const PresetState = (props) => {
       return preset.type === 'savings' && preset;
     });
     dispatch({ type: SET_SAVINGS_LIST, payload: listOfSavings });
-    console.log(listOfSavings);
   };
 
   // Calc savings sum
