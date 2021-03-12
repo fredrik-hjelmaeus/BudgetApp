@@ -105,7 +105,6 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
   };
 
-  // console.log(preset.piggybank.length);
   const deletePiggybankItem = (Item) => {
     let newPiggybankArray = [];
     presets &&

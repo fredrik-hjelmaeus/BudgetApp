@@ -48,6 +48,7 @@ import {
   REMOVE_CSV,
   LOGOUT,
   PRESET_CLEAR_ERRORS,
+  SET_CAPITAL_LIST,
 } from '../types';
 
 export default (state, action) => {
@@ -248,6 +249,11 @@ export default (state, action) => {
       return {
         ...state,
         savingsList: action.payload,
+      };
+    case SET_CAPITAL_LIST:
+      return {
+        ...state,
+        capitalList: action.payload,
       };
     case CALC_MONTH_SAVINGS:
       return {
