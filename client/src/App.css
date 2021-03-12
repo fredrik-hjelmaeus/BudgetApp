@@ -195,6 +195,11 @@ img {
   overflow: 'hidden';
   align-self: center;
 }
+.card-piggyItem__btn {
+  outline: none;
+  border: none;
+  background: none;
+}
 
 .card_yeargridrigth {
   background: #ffffff;
@@ -275,6 +280,15 @@ img {
   padding: 0 2rem;
   margin: 0.5rem;
   white-space: nowrap;
+}
+.expandbutton {
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+}
+.expandbutton:hover {
+  opacity: 0.2;
 }
 .savings__piggyicon {
   padding: 0 0.5rem;

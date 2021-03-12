@@ -28,7 +28,7 @@ const Savings = () => {
         <div className='flexcolumn '>
           <div className='flexrow-2 borderdivider'>
             <div>General Savings: </div>
-            <button onClick={onClick} className={'text-success px text-left'}>
+            <button onClick={onClick} className={'text-success px text-left expandbutton'}>
               {savings}
             </button>
           </div>
@@ -37,7 +37,7 @@ const Savings = () => {
             savingsList.map((savingsItem) => <SavingsItem savingsItem={savingsItem} key={savingsItem.id} />)}
           <div className='flexrow-2 borderdivider'>
             <div>Capital: </div>
-            <button onClick={onCapitalClick} className={'text-success px text-left'}>
+            <button onClick={onCapitalClick} className={'text-success px text-left expandbutton'}>
               {capital}
             </button>
           </div>

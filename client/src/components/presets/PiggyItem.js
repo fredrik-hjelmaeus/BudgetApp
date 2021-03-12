@@ -18,8 +18,14 @@ const PiggyItem = ({ piggyItem, onPiggyItemDelete }) => {
       <div className='flexrow-piggycard'>
         <div className='px text-gray'>{piggyItem.year}</div>
         <div className='text-primary px'>{piggyItem.savedAmount}</div>
-        <button value='delbtn' onMouseEnter={onHover} onMouseLeave={stopHover} onClick={() => onPiggyItemDelete(piggyItem._id)}>
-          <TrashiconSVG name={piggyItem.month} fill={trashIconIsHover ? 'blue' : 'gray'} />
+        <button
+          className='card-piggyItem__btn'
+          value='delbtn'
+          onMouseEnter={onHover}
+          onMouseLeave={stopHover}
+          onClick={() => onPiggyItemDelete(piggyItem._id)}
+        >
+          <TrashiconSVG name={piggyItem.month} fill={trashIconIsHover ? '#ec5a23' : 'gray'} />
         </button>
       </div>
     </div>
