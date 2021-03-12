@@ -29,8 +29,8 @@ const SavingsItem = ({ savingsItem }) => {
         <div className='px text-gray'>{savingsItem.month}</div>
         <div className='px text-gray'>{savingsItem.category}</div>
         <div className='text-primary px'>{savingsItem.number}</div>
-        <button value='delbtn' onMouseEnter={onHover} onMouseLeave={stopHover} onClick={onDelete}>
-          <TrashiconSVG name={savingsItem.name} fill={trashIconIsHover ? 'blue' : 'gray'} />
+        <button className='card-piggyItem__btn' value='delbtn' onMouseEnter={onHover} onMouseLeave={stopHover} onClick={onDelete}>
+          <TrashiconSVG name={savingsItem.name} fill={trashIconIsHover ? '#ec5a23' : 'gray'} />
         </button>
       </div>
     </div>

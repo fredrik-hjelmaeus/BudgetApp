@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import TrashiconSVG from '../layout/images/TrashiconSVG';
 import piggyicon from '../layout/images/piggybank.svg';
 import PresetContext from '../../context/preset/presetContext';
 import PiggyItem from './PiggyItem';
@@ -41,12 +40,11 @@ const PiggyBankSavingItem = ({ purchase }) => {
         </div>
         <div className='flexrow-piggycard'>
           <img src={piggyicon} alt='' style={{ width: '26px' }} />
-          <button onClick={onClick} className='px text-orange'>
+          <button onClick={onClick} className='px text-orange expandbutton'>
             {totalsum}
           </button>
           <div className='text-light'>of</div>
           <div className='text-gray px'>({number})</div>
-          <TrashiconSVG />
         </div>
       </div>
       {showIndividualPiggyItems &&
