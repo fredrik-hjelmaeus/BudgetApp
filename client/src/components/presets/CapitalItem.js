@@ -2,8 +2,8 @@ import React from 'react';
 import TrashiconSVG from '../layout/images/TrashiconSVG';
 import PresetContext from '../../context/preset/presetContext';
 
-const SavingsItem = ({ savingsItem }) => {
-  const { deletePreset, presets, calcSavings } = React.useContext(PresetContext);
+const CapitalItem = ({ capitalItem }) => {
+  const { deletePreset, presets, calcCapital } = React.useContext(PresetContext);
   const [trashIconIsHover, setTrashIconIsHover] = React.useState(false);
   //on delete button hover
   const onHover = () => {
@@ -14,26 +14,27 @@ const SavingsItem = ({ savingsItem }) => {
     setTrashIconIsHover(false);
   };
   const onDelete = () => {
-    deletePreset(savingsItem._id);
+    deletePreset(capitalItem._id);
   };
   React.useEffect(() => {
-    presets && calcSavings();
+    presets && calcCapital();
   }, [presets]);
   return (
     <div className='card-piggy'>
       <div className='no-wrap' style={{ overflow: 'hidden' }}>
-        {savingsItem.name}
+        {capitalItem.name}
       </div>
 
       <div className='flexrow-piggycard'>
-        <div className='px text-gray'>{savingsItem.month}</div>
-        <div className='px text-gray'>{savingsItem.category}</div>
-        <div className='text-primary px'>{savingsItem.number}</div>
+        <div className='px text-gray'>{capitalItem.year}</div>
+        <div className='px text-gray'>{capitalItem.month}</div>
+        <div className='px text-gray'>{capitalItem.category}</div>
+        <div className='text-primary px'>{capitalItem.number}</div>
         <button value='delbtn' onMouseEnter={onHover} onMouseLeave={stopHover} onClick={onDelete}>
-          <TrashiconSVG name={savingsItem.name} fill={trashIconIsHover ? 'blue' : 'gray'} />
+          <TrashiconSVG name={capitalItem.name} fill={trashIconIsHover ? 'blue' : 'gray'} />
         </button>
       </div>
     </div>
   );
 };
-export default SavingsItem;
+export default CapitalItem;
