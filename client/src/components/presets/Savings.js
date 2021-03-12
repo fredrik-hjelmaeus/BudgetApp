@@ -4,17 +4,23 @@ import piggyicon from '../layout/images/piggybank.svg';
 import PiggybankSavings from './PiggybankSavings';
 import GuideContext from '../../context/guide/guideContext';
 import SavingsItem from './SavingsItem';
+import CapitalItem from './CapitalItem';
 
 const Savings = () => {
   const { guide } = useContext(GuideContext);
   const presetContext = useContext(PresetContext);
-  const { getSavingsList, savingsList, presets, savings, capital } = presetContext;
+  const { getSavingsList, savingsList, capitalList, presets, savings, capital, getCapitalList } = presetContext;
   const [showIndividualSavingsList, setShowIndividualSavingsList] = useState(false);
+  const [showCapitalItems, setShowCapitalItems] = useState(false);
   useEffect(() => {
     getSavingsList();
+    getCapitalList();
   }, [presets]);
   const onClick = () => {
     setShowIndividualSavingsList(!showIndividualSavingsList);
+  };
+  const onCapitalClick = () => {
+    setShowCapitalItems(!showCapitalItems);
   };
   return (
     <div>
@@ -31,8 +37,13 @@ const Savings = () => {
             savingsList.map((savingsItem) => <SavingsItem savingsItem={savingsItem} key={savingsItem.id} />)}
           <div className='flexrow-2 borderdivider'>
             <div>Capital: </div>
-            <div className={'text-success px text-left'}>{capital}</div>
+            <button onClick={onCapitalClick} className={'text-success px text-left'}>
+              {capital}
+            </button>
           </div>
+          {showCapitalItems &&
+            capitalList &&
+            capitalList.map((capitalItem) => <CapitalItem capitalItem={capitalItem} key={capitalItem.id} />)}
           <div className='flexrow-2 savings__piggyiconandtitle'>
             <div>
               <img src={piggyicon} alt='' className='savings__piggyicon' />{' '}

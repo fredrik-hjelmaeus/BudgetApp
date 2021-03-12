@@ -73,3 +73,4 @@ export const REMOVE_GUIDE_PRESET = 'REMOVE_GUIDE_PRESET';
 export const TOGGLE_EXIT = 'TOGGLE_EXIT';
 export const SET_DATE = 'SET_DATE';
 export const SET_SAVINGS_LIST = 'SET_SAVINGS_LIST';
+export const SET_CAPITAL_LIST = 'SET_CAPITAL_LIST';

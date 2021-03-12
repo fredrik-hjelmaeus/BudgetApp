@@ -27,6 +27,7 @@ import {
   YEARSUM,
   CALCSAVINGS,
   SET_SAVINGS_LIST,
+  SET_CAPITAL_LIST,
   CALCCAPITAL,
   SET_PURCHASE,
   CATEGORYSUMONLYBYYEAR,
@@ -90,6 +91,7 @@ const PresetState = (props) => {
     csvpresets: null, // used to store values from csv-file in stagingarea
     doSubmitCsv: '',
     savingsList: [],
+    capitalList: [],
   };
 
   const [state, dispatch] = useReducer(presetReducer, initialState);
@@ -914,6 +916,14 @@ const PresetState = (props) => {
     dispatch({ type: SET_SAVINGS_LIST, payload: listOfSavings });
   };
 
+  const getCapitalList = () => {
+    const listOfCapitalItems = state.presets.filter((preset) => {
+      return preset.type === 'capital' && preset;
+    });
+    console.log(listOfCapitalItems);
+    dispatch({ type: SET_CAPITAL_LIST, payload: listOfCapitalItems });
+  };
+
   // Calc savings sum
   const calcSavings = () => {
     //array att iterera igenom
@@ -1093,6 +1103,7 @@ const PresetState = (props) => {
         csvpresets: state.csvpresets,
         doSubmitCsv: state.doSubmitCsv,
         savingsList: state.savingsList,
+        capitalList: state.capitalList,
         addPreset,
         calcSum,
         deletePreset,
@@ -1142,6 +1153,7 @@ const PresetState = (props) => {
         clearPresetErrors,
         getGuidePresets,
         getSavingsList,
+        getCapitalList,
       }}
     >
       {props.children}
