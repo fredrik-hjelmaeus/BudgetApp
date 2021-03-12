@@ -30,8 +30,8 @@ const CapitalItem = ({ capitalItem }) => {
         <div className='px text-gray'>{capitalItem.month}</div>
         <div className='px text-gray'>{capitalItem.category}</div>
         <div className='text-primary px'>{capitalItem.number}</div>
-        <button value='delbtn' onMouseEnter={onHover} onMouseLeave={stopHover} onClick={onDelete}>
-          <TrashiconSVG name={capitalItem.name} fill={trashIconIsHover ? 'blue' : 'gray'} />
+        <button className='card-piggyItem__btn' value='delbtn' onMouseEnter={onHover} onMouseLeave={stopHover} onClick={onDelete}>
+          <TrashiconSVG name={capitalItem.name} fill={trashIconIsHover ? '#ec5a23' : 'gray'} />
         </button>
       </div>
     </div>
