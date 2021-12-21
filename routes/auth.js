@@ -30,12 +30,19 @@ router.get('/', auth, async (req, res) => {
 router.post(
   '/',
 
-  [check('email', 'Please include a valid email').isEmail(), check('password', 'Password is required').exists()],
+  [
+    check('email', 'Email is required').isEmail(),
+    check('password', 'The password must be 6+ chars long and contain a number')
+      .exists()
+      .isLength({ min: 6 })
+      .withMessage('must be at least 6 chars long')
+      .matches(/\d/),
+  ],
   async (req, res) => {
     const myAgent = req.header('my_user-agent');
-    console.log(myAgent);
+
     const errors = validationResult(req);
-    //console.log(errors);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }

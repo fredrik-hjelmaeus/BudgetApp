@@ -75,13 +75,15 @@ const getCategoryIcon = (category) => {
   }
 };
 
-const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
+const PresetItemCategoryDropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
+  const [active, setActive] = React.useState(false);
   // localpreset.markdelete !== undefined && console.log(localpreset.markdelete);
   return (
-    <div className={localpreset.markdelete === false ? 'dropdown' : localpreset.markdelete ? 'dropdown disable__hover' : 'dropdown'}>
-      <button
+    <>
+      <div className={localpreset.markdelete === false ? 'dropdown' : localpreset.markdelete ? 'dropdown disable__hover' : 'dropdown'}>
+        {/*  <button
         onClick={onClick}
-        // onMouseEnter={onClick}
+      
         className={
           localpreset.category === 'Select Category' || localpreset.category === 'Select an category'
             ? localpreset.markdelete
@@ -111,14 +113,16 @@ const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
             }}
             name='edit category'
             onClick={onClick}
-            //onMouseEnter={onClick}
-            //onMouseLeave={stopHover}
-            className={localpreset.markdelete ? 'dropdown__categoryicon__grayedout' : 'dropdown__categoryicon'}
+                        className={localpreset.markdelete ? 'dropdown__categoryicon__grayedout' : 'dropdown__categoryicon'}
           />
         )}
+      </button> */}
+      </div>
+      <button onClick={onClick} className='dropbtn'>
+        t
       </button>
 
-      <div className={localpreset.markdelete ? 'dropdown-content markgraydelete disable__hover' : 'dropdown-content'}>
+      <div className={active ? 'dropdown-content dropdown-active' : 'dropdown-content'}>
         <button name='Commute' onClick={onDropdownClick}>
           Commute
         </button>
@@ -186,7 +190,7 @@ const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
           Reminder Fee
         </button>
       </div>
-    </div>
+    </>
   );
 };
-export default DropdownMenu;
+export default PresetItemCategoryDropdownMenu;

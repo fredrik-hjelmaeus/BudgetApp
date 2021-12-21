@@ -2915,6 +2915,9 @@ input[type='range']:focus::-ms-fill-lower {
 
 /* Dropdown Button */
 .dropbtn {
+  display: block;
+  position: relative;
+  z-index: 500000;
   outline: none;
   background-color: var(--orange-color);
   color: var(--primary-color);
@@ -2950,6 +2953,7 @@ input[type='range']:focus::-ms-fill-lower {
 .dropdown {
   position: relative;
   display: inline-block;
+  z-index: 10000 !important;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -2960,12 +2964,18 @@ input[type='range']:focus::-ms-fill-lower {
   msin-width: 40px;
   width: 100%;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 1000;
 }
-
+.dropdown-active {
+  display: inline-block;
+  position: absolute;
+  z-index: 10000;
+}
 /* Links inside the dropdown */
 
 .dropdown-content button {
+  position: relative;
+  z-index: 100000;
   outline: none;
   border: none;
   border-bottom: solid 1px var(--primary-color);
@@ -2980,15 +2990,31 @@ input[type='range']:focus::-ms-fill-lower {
 /* Change color of dropdown links on hover */
 
 .dropdown-content button:hover {
-  background-color: var(--gray-color);
+  bacskground-color: var(--gray-color);
+  background-color: green;
   border-radius: 4px;
 }
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+  position: absolute;
+  z-index: 100000;
+  background-color: red;
 }
-
+.deleteItemBtn {
+  position: relative;
+  z-index: 100;
+  border: 1px solid red;
+  background-color: #63ccca;
+}
+.new_drop {
+  display: block;
+  position: relative;
+  z-index: 500;
+  width: 100px;
+  background-color: greenyellow;
+}
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
   background-color: var(--orange-color);

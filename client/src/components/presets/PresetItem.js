@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
-import DropdownMenu from './DropdownMenu';
+import PresetItemCategoryDropdownMenu from './PresetItemCategoryDropdownMenu';
 
 const PresetItem = ({ preset }) => {
   const presetContext = useContext(PresetContext);
@@ -65,6 +65,7 @@ const PresetItem = ({ preset }) => {
   const inputCategoryRef = useRef();
 
   const onClick = (e) => {
+    console.log(e.target.name);
     setInputMode(e.target.name);
     setEdit(preset);
   };
@@ -143,20 +144,26 @@ const PresetItem = ({ preset }) => {
         />
       </div>
       {/* category */}
-      <DropdownMenu onDropdownClick={onDropdownClick} localpreset={localpreset} onClick={onTestClick} category={category} />
+
+      <PresetItemCategoryDropdownMenu
+        onDropdownClick={onDropdownClick}
+        localpreset={localpreset}
+        onClick={onTestClick}
+        category={category}
+      />
+
       {/* deletebutton */}
-      <div>
-        <button
-          className='btn text-primary delete'
-          value='delbtn'
-          name={name}
-          onMouseEnter={onHover}
-          onMouseLeave={stopHover}
-          onClick={onDelete}
-        >
-          {DelbtnColor === true ? <DeleteSVG fill='var(--danger-color)' /> : <DeleteSVG fill='var(--light-color)' />}
-        </button>
-      </div>
+
+      <button
+        className='btn text-primary deleteItemBtn'
+        value='delbtn'
+        name={name}
+        onMouseEnter={onHover}
+        onMouseLeave={stopHover}
+        onClick={onDelete}
+      >
+        {DelbtnColor === true ? <DeleteSVG fill='var(--danger-color)' /> : <DeleteSVG fill='var(--light-color)' />}
+      </button>
     </div>
   );
 };
