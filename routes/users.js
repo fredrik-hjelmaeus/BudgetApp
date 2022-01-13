@@ -7,6 +7,14 @@ const config = require('config');
 
 const User = require('../models/User');
 
+// @route GET api/users/test
+// @desc  Testing
+// @access Public
+router.post('/test', async (req, res) => {
+  //console.log(req);
+  res.sendStatus(201);
+});
+
 // @route   POST api/users
 // @desc    Register a user
 // @access  Public
