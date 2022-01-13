@@ -1,11 +1,11 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
-// Import Swiper styles
-import 'swiper/swiper.scss';
-import 'swiper/components/navigation/navigation.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/scrollbar/scrollbar.scss';
+// Note: This is not linked directly to library. Will break on update.
+// This is just the required css i grabbed from node_modules
+import '../../Swiper-bundle.css';
 
 import Savings from '../presets/Savings';
 import YearBalance from '../presets/YearBalance';
@@ -45,6 +45,8 @@ const YearSwiper = ({ guide, yearsummary, setYearSummary }) => {
 
   return (
     <Swiper
+      // install Swiper modules
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
       ref={swipeRef}
       spaceBetween={100}
       slidesPerView={1}
