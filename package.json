@@ -38,7 +38,6 @@
     "helmet": "^4.2.0",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
-    "mongodb-memory-server": "^7.0.0",
     "mongoose": "^5.7.7",
     "nodemailer": "^6.4.10",
     "ofx": "^0.5.0",
@@ -48,6 +47,8 @@
   },
   "devDependencies": {
     "concurrently": "^5.0.0",
+    "jest": "^24.9.0",
+    "mongodb-memory-server": "^7.6.3",
     "nodemon": "^1.19.4",
     "supertest": "^6.1.6"
   }
