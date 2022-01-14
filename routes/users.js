@@ -29,14 +29,14 @@ router.post(
     const myAgent = req.header('my_user-agent');
     console.log(myAgent);
     const errors = validationResult(req);
-    //console.log(errors);
+    console.log(errors);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     // validering avklarad!
-
     //destructurera req.body
     const { name, email, password } = req.body;
+    console.log(req.body);
 
     try {
       let user = await User.findOne({ email });
@@ -77,12 +77,14 @@ router.post(
           },
           (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            console.log('ENDDDD');
+            res.status(201).json({ token });
           }
         );
       } else {
         jwt.sign(payload, config.get('jwtSecret'), (err, token) => {
           if (err) throw err;
+          console.log('RN');
           res.json({ token });
         });
       }
