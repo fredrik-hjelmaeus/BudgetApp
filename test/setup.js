@@ -1,19 +1,25 @@
-const MongoMemoryServer = require('mongodb-memory-server');
+//const MongoMemoryServer = require('mongodb-memory-server');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const app = require('../app');
 
-//let mongo;
+let mongo;
 // Setup hook for memory server
 beforeAll(async () => {
   //<-- beforeAll is jest
   //mongo = await MongoMemoryServer.create();
-  const mongo = await MongoMemoryServer.create();
+  mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
-
+  console.log(mongoUri);
   await mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+
+  /*   await connect(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }); */
 });
 
 // Reset collections/data before testing
@@ -26,7 +32,7 @@ beforeEach(async () => {
   }
 });
 
-// After testing is complete, stop the mongo memory server.
+// After testing is complete, stop the mongo memory server and tell mongoose to disconnect.
 afterAll(async () => {
   //<-- afterAll is jest
   await mongo.stop();
