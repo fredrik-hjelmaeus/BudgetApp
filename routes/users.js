@@ -7,14 +7,6 @@ const config = require('config');
 
 const User = require('../models/User');
 
-// @route GET api/users/test
-// @desc  Testing
-// @access Public
-router.post('/test', async (req, res) => {
-  //console.log(req);
-  res.sendStatus(201);
-});
-
 // @route   POST api/users
 // @desc    Register a user
 // @access  Public
@@ -27,34 +19,33 @@ router.post(
   ],
   async (req, res) => {
     const myAgent = req.header('my_user-agent');
-    console.log(myAgent);
+
     const errors = validationResult(req);
-    console.log(errors);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    // validering avklarad!
-    //destructurera req.body
+    // input validation is completed
+
     const { name, email, password } = req.body;
-    console.log(req.body);
 
     try {
       let user = await User.findOne({ email });
 
-      // om user existerar rapportera errormsg
+      // if user exist, report errormsg
       if (user) {
         return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
 
-      //om user mail inte existerar , Skapa ny user
+      // if user mail don't exist, create a new user
       user = new User({
         name,
         email,
         password,
       });
 
-      // kryptera password med bcrypt och dess funktioner
-      // salt är säkerthetsnivån, dvs 10 i detta fall
+      // encrypt password
+      // salt is the time/quality of hash encryption
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
 
@@ -67,7 +58,7 @@ router.post(
       };
 
       //react native check
-      //react native ska inte ha en expiration på sitt auth då det är en mobilapp
+      //react native should not have an expiration date in token,since it's a mobile app.
       if (myAgent && myAgent === 'react') {
         jwt.sign(
           payload,
@@ -77,14 +68,12 @@ router.post(
           },
           (err, token) => {
             if (err) throw err;
-            console.log('ENDDDD');
             res.status(201).json({ token });
           }
         );
       } else {
         jwt.sign(payload, config.get('jwtSecret'), (err, token) => {
           if (err) throw err;
-          console.log('RN');
           res.json({ token });
         });
       }
