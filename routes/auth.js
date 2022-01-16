@@ -51,7 +51,7 @@ router.post(
 
     try {
       let user = await User.findOne({ email });
-      console.log(user);
+
       if (!user) {
         return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
@@ -85,7 +85,7 @@ router.post(
       } else {
         jwt.sign(payload, config.get('jwtSecret'), (err, token) => {
           if (err) throw err;
-          console.log(token);
+
           res.json({ token });
         });
       }
@@ -102,7 +102,7 @@ router.post(
 router.post('/forgotpassword', [check('email', 'Please include a valid email').isEmail()], async (req, res) => {
   //validate : check if a valid mail syntax was used
   const errors = validationResult(req);
-  console.log(errors);
+
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
@@ -187,7 +187,7 @@ router.put('/resetpassword/:resettoken', async (req, res) => {
 router.put('/updatedetails', auth, [check('email', 'Please include a valid email').isEmail()], async (req, res) => {
   //validering
   const errors = validationResult(req);
-  console.log(errors);
+
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
@@ -229,7 +229,7 @@ router.put(
   async (req, res) => {
     //validering
     const errors = validationResult(req);
-    console.log(errors);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }

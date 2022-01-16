@@ -1,11 +1,11 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
-let mongo;
+let mongoTestServer;
 // Setup hook for memory server
 beforeAll(async () => {
-  mongo = await MongoMemoryServer.create();
-  const mongoUri = mongo.getUri();
+  mongoTestServer = await MongoMemoryServer.create();
+  const mongoUri = mongoTestServer.getUri();
 
   await mongoose.connect(mongoUri, {
     useNewUrlParser: true,
@@ -24,6 +24,6 @@ beforeEach(async () => {
 
 // After testing is complete, stop the mongo memory server and tell mongoose to disconnect.
 afterAll(async () => {
-  await mongo.stop();
+  await mongoTestServer.stop();
   await mongoose.connection.close();
 });
