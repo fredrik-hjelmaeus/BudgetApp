@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const config = require('config');
 
+// This should be wrapped in outer function and instead Inject whatever mailserviceprovider we choose as an arg input.
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
     host: config.get('SMTP_HOST'),
