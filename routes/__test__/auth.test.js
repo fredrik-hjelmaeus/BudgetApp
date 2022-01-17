@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../app');
 const mongoose = require('mongoose'); //used to validate mongo _id
+const User = require('../../models/User');
 
 // prevents sendEmail from sending mail
 jest.mock('../../utils/sendEmail');
@@ -258,7 +259,114 @@ describe('authorization flow', () => {
       expect(sendEmail).toBeCalledTimes(0);
     });
   });
-  describe('PUT /api/auth/resetpassword/:resettoken', () => {});
+
+  describe('PUT /api/auth/resetpassword/:resettoken', () => {
+    it('happy path', async () => {
+      // create user
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // create resetpasswordtoken
+      const user = await User.findOne({ email: 'gris@test.com' });
+      const resetToken = user.getResetPasswordToken();
+      // save token to db
+      await user.save({ validateBeforeSave: false });
+      // create resetUrl-endpoint using token
+      const resetUrl = `/api/auth/resetpassword/${resetToken}`;
+
+      // hit the endpoint resetpassword
+      const res = await request(app).put(resetUrl).send({ password: 'whatever4' }).expect(200);
+      expect(res.body.data).toEqual('Password Changed');
+    });
+    it('The password must be 6+ chars long and contain a number', async () => {
+      // create user
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // create resetpasswordtoken
+      const user = await User.findOne({ email: 'gris@test.com' });
+      const resetToken = user.getResetPasswordToken();
+      // save token to db
+      await user.save({ validateBeforeSave: false });
+      // create resetUrl-endpoint using token
+      const resetUrl = `/api/auth/resetpassword/${resetToken}`;
+
+      // hit the endpoint resetpassword
+      const res = await request(app).put(resetUrl).send({ password: 'short' }).expect(400);
+      expect(res.body.errors[0].msg).toEqual('must be at least 6 chars long');
+      expect(res.body.errors[1].msg).toEqual('The password must be 6+ chars long and contain a number');
+    });
+    it('The password must be 6+ chars long', async () => {
+      // create user
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // create resetpasswordtoken
+      const user = await User.findOne({ email: 'gris@test.com' });
+      const resetToken = user.getResetPasswordToken();
+      // save token to db
+      await user.save({ validateBeforeSave: false });
+      // create resetUrl-endpoint using token
+      const resetUrl = `/api/auth/resetpassword/${resetToken}`;
+
+      // hit the endpoint resetpassword
+      const res = await request(app).put(resetUrl).send({ password: 'closebutnocigar' }).expect(400);
+      expect(res.body.errors[0].msg).toEqual('The password must be 6+ chars long and contain a number');
+    });
+    it('The password has a numeric but too short fails', async () => {
+      // create user
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // create resetpasswordtoken
+      const user = await User.findOne({ email: 'gris@test.com' });
+      const resetToken = user.getResetPasswordToken();
+      // save token to db
+      await user.save({ validateBeforeSave: false });
+      // create resetUrl-endpoint using token
+      const resetUrl = `/api/auth/resetpassword/${resetToken}`;
+
+      // hit the endpoint resetpassword
+      const res = await request(app).put(resetUrl).send({ password: '4444s' }).expect(400);
+      expect(res.body.errors[0].msg).toEqual('must be at least 6 chars long');
+    });
+  });
   describe('PUT /api/auth/updatedetails', () => {});
   describe('PUT /api/auth/updatepassword', () => {});
 });
