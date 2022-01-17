@@ -128,13 +128,13 @@ router.post('/forgotpassword', [check('email', 'Please include a valid email').i
 
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please follow this link to create new password: \n\n ${resetUrlTwo}`;
     try {
-      await sendEmail({
+      const sendEmailResponse = await sendEmail({
         email: user.email,
         subject: 'Password reset token',
         message,
       });
-
-      res.status(200).json({ success: true, data: 'Email sent' });
+      console.log(sendEmailResponse);
+      return res.status(200).json({ success: true, data: 'Email sent' });
     } catch (err) {
       console.log(err);
       user.resetPasswordToken = undefined;

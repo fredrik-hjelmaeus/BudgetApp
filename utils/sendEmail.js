@@ -2,7 +2,15 @@ const nodemailer = require('nodemailer');
 const config = require('config');
 
 // This should be wrapped in outer function and instead Inject whatever mailserviceprovider we choose as an arg input.
+// If the the await fails,error is catched in the controller atm.
+// validation of email is also done in the controller
 const sendEmail = async (options) => {
+  //validate options argument recieved
+  if (isObjectEmpty(options)) {
+    console.log('halleluja');
+    return 'No options provided to sendEmail';
+  }
+
   const transporter = nodemailer.createTransport({
     host: config.get('SMTP_HOST'),
     port: config.get('SMTP_PORT'),
@@ -21,7 +29,13 @@ const sendEmail = async (options) => {
   };
   const info = await transporter.sendMail(message);
 
-  console.log('Message sent: %s', info.messageId);
+  process.env.NODE_ENV !== 'test' && console.log('Message sent: %s', info.messageId);
+  return info;
+};
+
+const isObjectEmpty = (obj) => {
+  for (let i in obj) return false;
+  return true;
 };
 
 module.exports = sendEmail;
