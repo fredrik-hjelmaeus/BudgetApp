@@ -7,7 +7,6 @@ const config = require('config');
 const sendEmail = async (options) => {
   //validate options argument recieved
   if (isObjectEmpty(options)) {
-    console.log('halleluja');
     return 'No options provided to sendEmail';
   }
 
@@ -30,7 +29,6 @@ const sendEmail = async (options) => {
   const info = await transporter.sendMail(message);
 
   process.env.NODE_ENV !== 'test' && console.log('Message sent: %s', info.messageId);
-  return info;
 };
 
 const isObjectEmpty = (obj) => {

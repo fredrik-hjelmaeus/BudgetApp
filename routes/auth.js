@@ -126,14 +126,16 @@ router.post('/forgotpassword', [check('email', 'Please include a valid email').i
         ? `https://dry-eyrie-55051.herokuapp.com/resetpassword/${resetToken}`
         : `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
 
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please follow this link to create new password: \n\n ${resetUrlTwo}`;
+    const message = `You are receiving this email because you (or someone else) has 
+                     requested the reset of a password. Please follow this link to 
+                     create new password: \n\n ${resetUrlTwo}`;
     try {
-      const sendEmailResponse = await sendEmail({
+      await sendEmail({
         email: user.email,
         subject: 'Password reset token',
         message,
       });
-      console.log(sendEmailResponse);
+
       return res.status(200).json({ success: true, data: 'Email sent' });
     } catch (err) {
       console.log(err);
@@ -155,31 +157,46 @@ router.post('/forgotpassword', [check('email', 'Please include a valid email').i
 // @desc          Reset Password
 // @route         PUT /api/auth/resetpassword/:resettoken
 // @access        Public
-router.put('/resetpassword/:resettoken', async (req, res) => {
-  try {
-    // Get hashed token
-    const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+router.put(
+  '/resetpassword/:resettoken',
+  check('password', 'The password must be 6+ chars long and contain a number')
+    .exists()
+    .isLength({ min: 6 })
+    .withMessage('must be at least 6 chars long')
+    .matches(/\d/),
+  async (req, res) => {
+    //validate : check if a valid mail syntax was used
+    const errors = validationResult(req);
 
-    const user = await User.findOne({ resetPasswordToken, resetPasswordExpire: { $gt: Date.now() } });
-
-    if (!user) {
-      return res.status(400).json({ data: 'Invalid token' });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    // Set/Encrypt new password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(req.body.password, salt);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+    try {
+      // Get hashed token
+      const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
 
-    await user.save();
+      const user = await User.findOne({ resetPasswordToken, resetPasswordExpire: { $gt: Date.now() } });
 
-    res.status(200).json({ data: 'Password Changed' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+      if (!user) {
+        return res.status(400).json({ data: 'Invalid token' });
+      }
+
+      // Set/Encrypt new password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+
+      await user.save();
+
+      res.status(200).json({ data: 'Password Changed' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   }
-});
+);
 
 // @desc          Update user details
 // @route         PUT /api/auth/updatedetails
