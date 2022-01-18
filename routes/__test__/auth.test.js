@@ -385,9 +385,9 @@ describe('authorization flow', () => {
         })
         .expect(201);
 
-      request(app)
+      await request(app)
         .put('/api/auth/updatedetails')
-        .set(response.body.token)
+        .set('x-auth-token', response.body.token)
         .send({
           name: 'fredags',
           email: 'gris@test.com',
@@ -436,10 +436,115 @@ describe('authorization flow', () => {
       expect(res.body.data.name).toBe('fredags');
       expect(res.body.data.email).toBe('fris@test.com');
     });
-    it('fails with no email', () => {});
-    it('fails with invalid email', () => {});
-    it('fails when already taken email', () => {});
-    it('fails on xss-attempt', () => {});
+    it('fails with no email', async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatedetails')
+        .set('x-auth-token', response.body.token)
+        .send({ name: 'fris@test.com' })
+        .expect(400);
+      expect(res.body.errors[0].msg).toEqual('Please include a valid email');
+      // prettier-ignore
+      const res2 = await request(app)
+      .put('/api/auth/updatedetails')
+      .set('x-auth-token', response.body.token)
+      .send({}).expect(400);
+      expect(res2.body.errors[0].msg).toEqual('Please include a valid email');
+    });
+    it('fails with invalid email', async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatedetails')
+        .set('x-auth-token', response.body.token)
+        .send({ email: 'fristest.com' })
+        .expect(400);
+      expect(res.body.errors[0].msg).toEqual('Please include a valid email');
+    });
+    it('fails when already taken email', async () => {
+      // signup new user
+      // NOTE dependant on signup working.
+      await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'theother@test.com',
+          name: 'another',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+      // signup new user to retrieve a valid token
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // try to change email to theother from gris@test.com
+      const res = await request(app)
+        .put('/api/auth/updatedetails')
+        .set('x-auth-token', response.body.token)
+        .send({ email: 'theother@test.com' })
+        .expect(401);
+      expect(res.body.errors[0].msg).toEqual('This email is already in use');
+    });
+    it('fails on xss-attempt', async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      await request(app)
+        .put('/api/auth/updatedetails')
+        .set('x-auth-token', response.body.token)
+        .send({
+          name: 'fredags',
+          email: 'gris@test.com',
+        })
+        .expect(200);
+
+      const res = await request(app)
+        .put('/api/auth/updatedetails')
+        .set('x-auth-token', response.body.token)
+        .send({
+          name: 'fredags"<script>(alert "test")</script>',
+          email: 'gris@test.com',
+        })
+        .expect(200);
+      expect(res.body.data.name).toEqual('fredags"&lt;script>(alert "test")&lt;/script>');
+    });
   });
   // Update Password
   describe('PUT /api/auth/updatepassword', () => {});
