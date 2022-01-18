@@ -9,6 +9,7 @@ const auth = require('../middleware/auth');
 const sendEmail = require('../utils/sendEmail');
 
 const User = require('../models/User');
+const req = require('express/lib/request');
 
 // @route   GET api/auth
 // @desc    Get logged in user
@@ -210,18 +211,17 @@ router.put('/updatedetails', auth, [check('email', 'Please include a valid email
   }
 
   try {
-    // extract information from request
-    const fieldsToUpdate = {
-      name: req.body.name,
-      email: req.body.email,
-    };
-
     // make sure new requested email is not already in use
     const emailInUse = await User.findOne({ email: req.body.email });
     // if it exist a user with that email and it's not the id of the authenticated user ,cancel change
     if (emailInUse && emailInUse.id !== req.user.id) {
       return res.status(401).json({ errors: [{ msg: 'This email is already in use' }] });
     }
+
+    // extract information from request
+    // if user did not provide a name field to update,adapt object fields
+    const fieldsToUpdate =
+      typeof req.body.name !== 'undefined' ? { name: req.body.name, email: req.body.email } : { email: req.body.email };
 
     // update user
     const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
