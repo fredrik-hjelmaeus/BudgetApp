@@ -8,6 +8,7 @@ jest.mock('../../utils/sendEmail');
 const sendEmail = require('../../utils/sendEmail');
 
 describe('authorization flow', () => {
+  // Get Current User
   describe('GET api/auth', () => {
     it('get logged in user data', async () => {
       // NOTE dependant on signup working.
@@ -82,6 +83,7 @@ describe('authorization flow', () => {
         .expect(401);
     });
   });
+  // Login
   describe('POST api/auth', () => {
     it('Auth user & get token web', async () => {
       // NOTE dependant on signup working.
@@ -187,6 +189,7 @@ describe('authorization flow', () => {
       expect(response.body.token).toBeUndefined();
     });
   });
+  // Forgot Password
   describe('POST api/auth/forgotpassword', () => {
     afterEach(() => jest.resetAllMocks());
     it('sentEmail called when correct email is provided', async () => {
@@ -259,7 +262,7 @@ describe('authorization flow', () => {
       expect(sendEmail).toBeCalledTimes(0);
     });
   });
-
+  // Reset Password
   describe('PUT /api/auth/resetpassword/:resettoken', () => {
     it('happy path', async () => {
       // create user
@@ -367,6 +370,77 @@ describe('authorization flow', () => {
       expect(res.body.errors[0].msg).toEqual('must be at least 6 chars long');
     });
   });
-  describe('PUT /api/auth/updatedetails', () => {});
+  // Update User Details
+  describe('PUT /api/auth/updatedetails', () => {
+    it('happy path with valid name and email', async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      request(app)
+        .put('/api/auth/updatedetails')
+        .set(response.body.token)
+        .send({
+          name: 'fredags',
+          email: 'gris@test.com',
+        })
+        .expect(200);
+    });
+    it('fails with empty object provided', async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // prettier-ignore
+      const res = await request(app)
+      .put('/api/auth/updatedetails')
+      .set('x-auth-token', response.body.token)
+      .send({})
+      .expect(400);
+    });
+    it('Do not update name if name field is not provided', async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatedetails')
+        .set('x-auth-token', response.body.token)
+        .send({ email: 'fris@test.com' })
+        .expect(200);
+
+      expect(res.body.data.name).toBe('fredags');
+      expect(res.body.data.email).toBe('fris@test.com');
+    });
+    it('fails with no email', () => {});
+    it('fails with invalid email', () => {});
+    it('fails when already taken email', () => {});
+    it('fails on xss-attempt', () => {});
+  });
+  // Update Password
   describe('PUT /api/auth/updatepassword', () => {});
 });
