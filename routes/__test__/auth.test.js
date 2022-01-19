@@ -547,5 +547,123 @@ describe('authorization flow', () => {
     });
   });
   // Update Password
-  describe('PUT /api/auth/updatepassword', () => {});
+  describe('PUT /api/auth/updatepassword', () => {
+    it('updated password', async () => {
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'Passw0rd!', password: 'wat24master' })
+        .expect(200);
+      expect(res.body.msg).toEqual('Password Updated');
+    });
+    it('invalid current password', async () => {
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      // currentPassword valid length and with number but wrong
+      const res = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'assw0rd!', password: 'wat24master' })
+        .expect(401);
+      expect(res.body.errors[0].msg).toEqual('Current Password is incorrect');
+
+      // currentPassword invalid length and wrong
+      const res2 = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'w0rd!', password: 'wat24master' })
+        .expect(401);
+      expect(res2.body.errors[0].msg).toEqual('Current Password is incorrect');
+
+      // currentPassword invalid length ,no number and wrong
+      const res3 = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'w', password: 'wat24master' })
+        .expect(401);
+      expect(res3.body.errors[0].msg).toEqual('Current Password is incorrect');
+    });
+    it('The new password fails with no number provided', async () => {
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'Passw0rd!', password: 'watman' })
+        .expect(400);
+      expect(res.body.errors[0].msg).toEqual('The password must be 6+ chars long and contain a number');
+    });
+    it('The new password fails when to short', async () => {
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'Passw0rd!', password: 'wat' })
+        .expect(400);
+      expect(res.body.errors[0].msg).toEqual('must be at least 6 chars long');
+    });
+    it('The new password has a numeric but too short, fails', async () => {
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      const response = await request(app)
+        .post('/api/users/')
+        .set('my_user-agent', 'react')
+        .send({
+          email: 'gris@test.com',
+          name: 'fredags',
+          password: 'Passw0rd!',
+        })
+        .expect(201);
+
+      const res = await request(app)
+        .put('/api/auth/updatepassword')
+        .set('x-auth-token', response.body.token)
+        .send({ currentPassword: 'Passw0rd!', password: 'w2at' })
+        .expect(400);
+      expect(res.body.errors[0].msg).toEqual('must be at least 6 chars long');
+    });
+  });
 });
