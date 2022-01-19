@@ -241,7 +241,13 @@ router.put('/updatedetails', auth, [check('email', 'Please include a valid email
 // @access        Private
 router.put(
   '/updatepassword',
-  [check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })],
+  [
+    check('password', 'The password must be 6+ chars long and contain a number')
+      .exists()
+      .isLength({ min: 6 })
+      .withMessage('must be at least 6 chars long')
+      .matches(/\d/),
+  ],
   auth,
   async (req, res) => {
     //validering
@@ -256,7 +262,7 @@ router.put(
 
       // Check current password
       if (!(await bcrypt.compare(req.body.currentPassword, user.password))) {
-        return res.status(401).json({ errors: [{ msg: 'Password is incorrect' }] });
+        return res.status(401).json({ errors: [{ msg: 'Current Password is incorrect' }] });
       }
 
       // Set/Encrypt new password
