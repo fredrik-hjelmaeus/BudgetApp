@@ -4,6 +4,8 @@ const { v4: uuidv4 } = require('uuid');
 //const ofxConvert = require('../utils/ofxConvert');
 const ofx = require('ofx');
 module.exports = function (req, res, next) {
+  console.log(req.files);
+
   // Check if file was provided in the formdata
   if (!req.files) {
     return res.status(400).send('No File Uploaded');
