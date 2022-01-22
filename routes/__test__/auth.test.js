@@ -57,8 +57,9 @@ describe('authorization flow', () => {
       expect(isValid).toEqual(true);
     });
 
-    it('does no get user data when not logged in', async () => {
-      await request(app).get('/api/auth/').set('my_user-agent', 'react').expect(401);
+    it('does no get user data when not logged in and no token provided', async () => {
+      const res = await request(app).get('/api/auth/').set('my_user-agent', 'react').expect(401);
+      expect(res.body.msg).toEqual('No token, authorization denied'); // <-- auth middleware
     });
 
     it('does no get user data when invalid token is provided', async () => {
@@ -66,21 +67,24 @@ describe('authorization flow', () => {
         'cyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFlMmUwNDIyMzNiZjYzYjUwM2M0NGM3In0sImlhdCI6MTY0MjI1ODQ5OCwiZXhwIjoxNjQyMjYyMDk4fQ.bSwhOuHZ5vSjBtsHW6R92Mru5-0eRo0ShvtHb-H5O6o';
 
       // prettier-ignore
-      await request(app)
+      const res = await request(app)
     .get('/api/auth/')
     .set('my_user-agent', 'react')
     .set('x-auth-token', invalidToken)
     .expect(401);
+      expect(res.body.msg).toEqual('Token is not valid'); // <-- auth middleware
     });
+
     it('does no get user data with expired token', async () => {
       const expiredToken =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFlMmM0YzE2ZTg3NGQ0ODQwZGJlZjZhIn0sImlhdCI6MTY0MjI1MTQ1NywiZXhwIjoxNjQyMjU1MDU3fQ.K6rAO-UBKow2saWSFVOMn1Q6ezDZcJdQKlOGzKz_Wc0';
       // prettier-ignore
-      await request(app)
+      const res = await request(app)
         .get('/api/auth/')
         .set('my_user-agent', 'react')
         .set('x-auth-token', expiredToken)
         .expect(401);
+      expect(res.body.msg).toEqual('Token is not valid'); // <-- auth middleware
     });
   });
   // Login
