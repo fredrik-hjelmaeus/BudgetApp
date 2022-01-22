@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 const csvtojson = require('../middleware/csvtojson');
 
 // @route   GET api/userpreset
-// @desc    Get all user presets
+// @desc    Get logged in user all presets
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
