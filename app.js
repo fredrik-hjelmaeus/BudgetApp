@@ -30,10 +30,24 @@ const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 mins
   max: 300, //num of request allowed
 });
-app.use(limiter);
+//app.use(limiter);
 
 // Prevent http param pollution
 app.use(hpp());
+
+// Common Error handler that communicates with frontend
+// It's task is to provide frontend with a uniform json-structured response to avoid
+// having to handle special cases for every error.
+// TODO: put in separate file and create interface for json-error-structure
+app.use((err, req, res, next) => {
+  console.log('errorhandler! reporting');
+  //console.log(err);
+  if (!res.headersSent) {
+    console.log(err.httpStatusCode);
+    return res.status(err.httpStatusCode || 500).send(err.message);
+    res.status(500).send(err.message);
+  }
+});
 
 // Define Routes
 app.use('/api/users', require('./routes/users'));
