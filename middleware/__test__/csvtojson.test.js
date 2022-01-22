@@ -1,0 +1,208 @@
+const request = require('supertest');
+const app = require('../../app');
+const path = require('path');
+
+// TODO: async-problem in csvtojson somewhere below check of correct file-extension. Maybe missing a try/catch-block somewhere.
+
+describe('csvtojson', () => {
+  it('Successfull handelsbanken csv conversion on valid file', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('handelsbanken', path.resolve(__dirname, '../../_data/csv_testfiles/handelsbanken.csv'))
+      .expect(200);
+    // check that some data from the converted file exist
+    expect(res.body[0].number).toEqual('-188752.33');
+  });
+
+  it('reports error on invalid handelsbanken csv fields', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('handelsbanken', path.resolve(__dirname, '../../_data/csv_testfiles/Handelsbanken_invalid_fields.csv'))
+      .expect(400);
+    expect(res.text).toEqual('File does not contain valid Handelsbanken-values!');
+  });
+
+  it('reports error on invalid rfc4180 csv ', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('RFC4180', path.resolve(__dirname, '../../_data/csv_testfiles/RFC4180_invalid.csv'))
+      .expect(400);
+    expect(res.text).toEqual('CSV does not contain valid RFC4180-values!');
+    // TODO: make a error response using the middleware-err
+  });
+
+  it('Successfull on large valid rfc4180 csv ', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('RFC4180', path.resolve(__dirname, '../../_data/csv_testfiles/RFC4180_verylargefile.csv'))
+      .expect(200);
+
+    expect(res.body[0].row.order_line_id).toEqual('10763-1GUI85-1');
+  });
+
+  it('Successfull on Nordea valid csv ', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('nordea', path.resolve(__dirname, '../../_data/csv_testfiles/Nordea_valid.csv'))
+      .expect(200);
+    expect(res.body[0].number).toEqual('-276,40');
+  });
+
+  it('fail on invalid Nordea csv ', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('nordea', path.resolve(__dirname, '../../_data/csv_testfiles/Nordea_invalid.csv'))
+      .expect(400);
+    expect(res.text).toEqual('CSV does not contain valid Nordea-values!');
+  });
+
+  it('fail on valid nordea but wrong delimiter selected', async () => {
+    // prettier-ignore
+    const response = await request(app)
+      .post('/api/users')
+      .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('RFC4180', path.resolve(__dirname, '../../_data/csv_testfiles/Nordea_valid.csv'))
+      .expect(400);
+    expect(res.text).toEqual('CSV does not contain valid RFC4180-values!');
+  });
+  it('fail on valid rfc4180 but wrong delimiter (nordea) selected', async () => {
+    // prettier-ignore
+    const response = await request(app)
+      .post('/api/users')
+      .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('nordea', path.resolve(__dirname, '../../_data/csv_testfiles/RFC4180_verylargefile.csv'))
+      .expect(400);
+
+    expect(res.text).toEqual('CSV does not contain valid Nordea-values!');
+  });
+
+  it('fail on valid rfc4180 but wrong delimiter (swedbank) selected', async () => {
+    // prettier-ignore
+    const response = await request(app)
+      .post('/api/users')
+      .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('swedbank', path.resolve(__dirname, '../../_data/csv_testfiles/RFC4180_verylargefile.csv'))
+      .expect(400);
+
+    expect(res.text).toEqual('CSV does not contain valid Swedbank-values!');
+  });
+
+  it('fail on valid handelsbanken but wrong delimiter selected', async () => {
+    // prettier-ignore
+    const response = await request(app)
+    .post('/api/users')
+    .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('nordea', path.resolve(__dirname, '../../_data/csv_testfiles/handelsbanken.csv'))
+      .expect(400);
+
+    expect(res.text).toEqual('CSV does not contain valid Nordea-values!');
+  });
+
+  it('fail on valid swedbank but wrong delimiter selected', async () => {
+    // prettier-ignore
+    const response = await request(app)
+      .post('/api/users')
+      .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('nordea', path.resolve(__dirname, '../../_data/csv_testfiles/Swedbank_Transaktioner_2020-11-03_13-43-18.csv'))
+      .expect(400);
+
+    expect(res.text).toEqual('CSV does not contain valid Nordea-values!');
+  });
+
+  it('Successfull Swedbank conversion', async () => {
+    // prettier-ignore
+    const response = await request(app)
+        .post('/api/users')
+        .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('swedbank', path.resolve(__dirname, '../../_data/csv_testfiles/Swedbank_Transaktioner_2020-11-03_13-43-18.csv'))
+      .expect(200);
+    expect(res.body[0].number).toEqual('1.00');
+  });
+  it.only('fail on invalid file-extension', async () => {
+    // prettier-ignore
+    const response = await request(app)
+        .post('/api/users')
+        .send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    // send the formdata
+    const res = await request(app)
+      .post('/api/userpreset/upload')
+      .set('x-auth-token', response.body.token)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('swedbank', path.resolve(__dirname, '../../_data/csv_testfiles/Invalid_fileextension.xlsx'))
+      .expect(400);
+
+    expect(res.text).toEqual('Wrong filetype, only accepts csv!');
+  });
+});

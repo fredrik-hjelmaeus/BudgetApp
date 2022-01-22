@@ -15,6 +15,7 @@ router.post(
     try {
       res.json(req.newpresets);
     } catch (err) {
+      console.log('upload error here!');
       console.error(err.message);
       res.status(500).send('Server Error');
     }
