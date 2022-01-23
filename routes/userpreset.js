@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Preset = require('../models/Preset');
 const auth = require('../middleware/auth');
 const csvtojson = require('../middleware/csvtojson');
+const isObjectEmpty = require('../utils/isObjectEmpty');
 
 // @route   GET api/userpreset
 // @desc    Get logged in user all presets
@@ -79,6 +80,11 @@ router.put('/:id', auth, async (req, res) => {
   if (category) presetFields.category = category;
   if (type) presetFields.type = type;
   if (piggybank) presetFields.piggybank = piggybank;
+
+  // check if any fields to update was found
+  if (isObjectEmpty(presetFields)) {
+    return res.status(400).json({ msg: 'Found no fields to update on preset' });
+  }
 
   try {
     let preset = await Preset.findById(req.params.id);

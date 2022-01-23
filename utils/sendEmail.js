@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require('config');
+const isObjectEmpty = require('./isObjectEmpty');
 
 // This should be wrapped in outer function and instead Inject whatever mailserviceprovider we choose as an arg input.
 // If the the await fails,error is catched in the controller atm.
@@ -29,11 +30,6 @@ const sendEmail = async (options) => {
   const info = await transporter.sendMail(message);
 
   process.env.NODE_ENV !== 'test' && console.log('Message sent: %s', info.messageId);
-};
-
-const isObjectEmpty = (obj) => {
-  for (let i in obj) return false;
-  return true;
 };
 
 module.exports = sendEmail;
