@@ -107,7 +107,7 @@ describe('Update preset', () => {
   beforeEach(() => {
     const setup = async () => {
       const testpreset = { name: 'test', number: 200, month: 'january', category: 'test', type: 'test' };
-      // Relies on Signup to get token
+      // Relies on Signup to get token, creates new user
       const response = await request(app).post('/api/users').send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
       const res = await request(app).post('/api/userpreset').set('x-auth-token', response.body.token).send(testpreset);
       const setupObj = { token: response.body.token, presetId: res.body._id };
@@ -141,6 +141,25 @@ describe('Update preset', () => {
       .send({ name: 'fett', number: 120, type: 'flood', category: 'none', piggybank: [{ month: 'feb', year: '2000', savedAmount: '200' }] })
       .expect(401);
     expect(response.body.msg).toEqual('No token, authorization denied'); // <-- auth middleware
+  });
+
+  it('fails with no preset id in endpoint', async () => {
+    const { token } = await setup_vars;
+
+    await request(app).put(`/api/userpreset/`).set('x-auth-token', token).send({ name: 'fett' }).expect(404);
+  });
+
+  it('fails with invalid preset id', async () => {
+    const { token } = await setup_vars;
+
+    // not a valid mongoose hex id.
+    const invalidMongoosePresetId = '61ed41d89e82db28547a6a033';
+    const res = await request(app)
+      .put(`/api/userpreset/${invalidMongoosePresetId}`)
+      .set('x-auth-token', token)
+      .send({ name: 'fett' })
+      .expect(400);
+    expect(res.body.msg).toEqual('Invalid preset id provided');
   });
 
   it('fails when trying to edit another users preset', async () => {
@@ -186,5 +205,63 @@ describe('Update preset', () => {
       .expect(200);
 
     expect(response.body.name).toEqual('fett');
+  });
+});
+
+describe('Delete preset', () => {
+  beforeEach(() => {
+    const setup = async () => {
+      const testpreset = { name: 'test', number: 200, month: 'january', category: 'test', type: 'test' };
+      // Relies on Signup to get token, creates new user
+      const response = await request(app).post('/api/users').send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+      const res = await request(app).post('/api/userpreset').set('x-auth-token', response.body.token).send(testpreset);
+      const setupObj = { token: response.body.token, presetId: res.body._id };
+      return setupObj;
+    };
+    setup_vars = setup();
+    return setup_vars;
+  });
+  it('successfully deletes preset', async () => {
+    const { token, presetId } = await setup_vars; // create new user token and a new presetId
+
+    const res = await request(app).delete(`/api/userpreset/${presetId}`).set('x-auth-token', token).expect(200);
+    expect(res.body.msg).toEqual('Preset removed');
+  });
+  it('fails when not logged in', async () => {
+    const { presetId } = await setup_vars; // create new user token and a new presetId
+
+    const res = await request(app).delete(`/api/userpreset/${presetId}`).expect(401);
+
+    expect(res.body.msg).toEqual('No token, authorization denied');
+  });
+  it('fails with invalid preset id ', async () => {
+    const { token } = await setup_vars; // create new user token and a new presetFields
+
+    const invalidPresetId = '61ed434ee9ae521d2cbfc80e';
+    const res = await request(app).delete(`/api/userpreset/${invalidPresetId}`).set('x-auth-token', token).expect(404);
+    expect(res.body.msg).toEqual('Preset not found');
+
+    // not a valid mongoose hex id.
+    const invalidMongoosePresetId = '61ed41d89e82db28547a6a033';
+    const res2 = await request(app).delete(`/api/userpreset/${invalidMongoosePresetId}`).set('x-auth-token', token).expect(400);
+    expect(res2.body.msg).toEqual('Invalid preset id provided');
+  });
+  it('fails when trying to delete another users preset', async () => {
+    const { presetId } = await setup_vars; // create new user token and a new presetId
+
+    // register new user and get logged in
+    const response = await request(app)
+      .post('/api/users/')
+      .set('my_user-agent', 'react')
+      .send({
+        email: 'gris@test.com',
+        name: 'fredags',
+        password: 'Passw0rd!',
+      })
+      .expect(201);
+
+    const res = await request(app).delete(`/api/userpreset/${presetId}`).set('x-auth-token', response.body.token).expect(401);
+
+    expect(res.body.msg).toEqual('Not authorized');
   });
 });

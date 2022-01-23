@@ -6,6 +6,7 @@ const Preset = require('../models/Preset');
 const auth = require('../middleware/auth');
 const csvtojson = require('../middleware/csvtojson');
 const isObjectEmpty = require('../utils/isObjectEmpty');
+const mongoose = require('mongoose');
 
 // @route   GET api/userpreset
 // @desc    Get logged in user all presets
@@ -71,6 +72,16 @@ router.post(
 // @desc    Update preset
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
+  // no :id provided
+  if (!req.params.id) {
+    return res.status(404).json({ msg: 'No preset id found' });
+  }
+
+  // Is the id a valid mongoose id?
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ msg: 'Invalid preset id provided' });
+  }
+
   const { name, number, category, type, piggybank } = req.body;
 
   // Build preset object
@@ -110,6 +121,15 @@ router.put('/:id', auth, async (req, res) => {
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
+    if (!req.params.id) {
+      return res.status(400).json({ msg: 'No preset id found' });
+    }
+
+    // Is the id a valid mongoose id?
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ msg: 'Invalid preset id provided' });
+    }
+
     let preset = await Preset.findById(req.params.id);
 
     if (!preset) return res.status(404).json({ msg: 'Preset not found' });
