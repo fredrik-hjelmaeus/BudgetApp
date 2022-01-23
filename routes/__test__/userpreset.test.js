@@ -102,6 +102,7 @@ describe('Add new preset', () => {
     expect(res.body.errors[0].msg).toEqual('Type is required');
   });
 });
+
 describe('Update preset', () => {
   beforeEach(() => {
     const setup = async () => {
@@ -131,8 +132,59 @@ describe('Update preset', () => {
     expect(response.body.category).toEqual('none');
     expect(response.body.piggybank[0].year).toEqual(2000);
   });
-  it('fails when not logged in', async () => {});
-  it('fails when trying to edit another users preset', async () => {});
-  it('fails when sending empty obj', async () => {});
-  it('update only a single fields', async () => {});
+
+  it('fails when not logged in', async () => {
+    const testSetupObjects = await setup_vars;
+
+    const response = await request(app)
+      .put(`/api/userpreset/${testSetupObjects.presetId}`)
+      .send({ name: 'fett', number: 120, type: 'flood', category: 'none', piggybank: [{ month: 'feb', year: '2000', savedAmount: '200' }] })
+      .expect(401);
+    expect(response.body.msg).toEqual('No token, authorization denied'); // <-- auth middleware
+  });
+
+  it('fails when trying to edit another users preset', async () => {
+    const testSetupObjects = await setup_vars;
+
+    // register a new user and recieve token
+    const anotherUser = await request(app)
+      .post('/api/users/')
+      .set('my_user-agent', 'react')
+      .send({
+        email: 'gris@test.com',
+        name: 'fredags',
+        password: 'Passw0rd!',
+      })
+      .expect(201);
+
+    const response = await request(app)
+      .put(`/api/userpreset/${testSetupObjects.presetId}`)
+      .set('x-auth-token', anotherUser.body.token)
+      .send({ name: 'fett', number: 120, type: 'flood', category: 'none', piggybank: [{ month: 'feb', year: '2000', savedAmount: '200' }] })
+      .expect(401);
+    expect(response.body.msg).toEqual('Not authorized');
+  });
+
+  it('fails when sending empty obj', async () => {
+    const testSetupObjects = await setup_vars;
+
+    const response = await request(app)
+      .put(`/api/userpreset/${testSetupObjects.presetId}`)
+      .set('x-auth-token', testSetupObjects.token)
+      .send({})
+      .expect(400);
+    expect(response.body.msg).toEqual('Found no fields to update on preset');
+  });
+
+  it('update only a single field', async () => {
+    const testSetupObjects = await setup_vars;
+
+    const response = await request(app)
+      .put(`/api/userpreset/${testSetupObjects.presetId}`)
+      .set('x-auth-token', testSetupObjects.token)
+      .send({ name: 'fett' })
+      .expect(200);
+
+    expect(response.body.name).toEqual('fett');
+  });
 });

@@ -190,7 +190,7 @@ describe('csvtojson', () => {
       .expect(200);
     expect(res.body[0].number).toEqual('1.00');
   });
-  it('fail on invalid file-extension', async () => {
+  it.only('fail on invalid file-extension', async () => {
     // prettier-ignore
     const response = await request(app)
         .post('/api/users')
@@ -267,7 +267,7 @@ describe('csvtojson', () => {
     expect(res.text).toEqual('Invalid OFX file!');
   });
 
-  it.only('fail because no file was provided', async () => {
+  it('fail because no file was provided', async () => {
     // prettier-ignore
     const response = await request(app)
      .post('/api/users')
