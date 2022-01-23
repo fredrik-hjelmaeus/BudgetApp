@@ -1,6 +1,8 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
+jest.setTimeout(30000); // 30 seconds to finish tests
+
 let mongoTestServer;
 // Setup hook for memory server
 beforeAll(async () => {
@@ -8,7 +10,9 @@ beforeAll(async () => {
   const mongoUri = mongoTestServer.getUri();
 
   await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
+    // useNewUrlParser: true,
+    // useCreateIndex: true,
+    //  useFindAndModify: false,
     useUnifiedTopology: true,
   });
 });
