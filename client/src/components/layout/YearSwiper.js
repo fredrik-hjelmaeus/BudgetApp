@@ -1,16 +1,39 @@
 import React from 'react';
-// import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-
-// Note: This is not linked directly to library. Will break on update.
-// This is just the required css i grabbed from node_modules
-import '../../Swiper-bundle.css';
-
 import Savings from '../presets/Savings';
 import YearBalance from '../presets/YearBalance';
 import Expense from '../presets/Expense';
 import Income from '../presets/Income';
+// import Swiper core and required modules
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+//import { SwiperSlide } from 'swiper/react/swiper-react.js';
+import 'swiper/swiper.scss';
+import 'swiper/components/navigation/navigation.scss';
+import 'swiper/components/pagination/pagination.scss';
+import 'swiper/components/scrollbar/scrollbar.scss';
+//###### Swiper 6
+// swiper bundle styles
+//import 'swiper/swiper-bundle.min.css';
+
+// swiper core styles
+//import 'swiper/swiper.min.css';
+
+// modules styles
+//import 'swiper/components/navigation/navigation.min.css';
+//import 'swiper/components/pagination/pagination.min.css';
+//Swiper.use([Navigation, Pagination, Scrollbar, A11y]);
+// ##########
+
+// Note: This is not linked directly to library. Will break on update.
+// This is just the required css i grabbed from node_modules
+//import '../../Swiper-bundle.css';
+//import 'swiper/css';
+//import 'swiper/swiper.scss';
+//import 'swiper/swiper.min.css';
+//import 'swiper/modules/navigation/navigation.css'; // Navigation module
+//import 'swiper/modules/pagination/pagination.css'; // Pagination module
+
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 const YearSwiper = ({ guide, yearsummary, setYearSummary }) => {
   const swipeRef = React.useRef(null);
@@ -52,7 +75,7 @@ const YearSwiper = ({ guide, yearsummary, setYearSummary }) => {
       slidesPerView={1}
       //navigation
       pagination={{ clickable: true }}
-      scrollbar={{ draggable: true }}
+      // scrollbar={{ draggable: true }}
       onSlideChange={(swiper) => onSwipe(swiper.activeIndex)}
       className='yearswiper year-bg'
     >
