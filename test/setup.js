@@ -4,15 +4,13 @@ const mongoose = require('mongoose');
 jest.setTimeout(30000); // 30 seconds to finish tests
 
 let mongoTestServer;
+
 // Setup hook for memory server
 beforeAll(async () => {
   mongoTestServer = await MongoMemoryServer.create();
-  const mongoUri = mongoTestServer.getUri();
+  //const mongoUri = await mongoTestServer.getUri();
 
-  await mongoose.connect(mongoUri, {
-    // useNewUrlParser: true,
-    // useCreateIndex: true,
-    //  useFindAndModify: false,
+  await mongoose.connect(mongoTestServer.getUri(), {
     useUnifiedTopology: true,
   });
 });
@@ -28,6 +26,8 @@ beforeEach(async () => {
 
 // After testing is complete, stop the mongo memory server and tell mongoose to disconnect.
 afterAll(async () => {
-  await mongoTestServer.stop();
+  //await mongoose.disconnect();
   await mongoose.connection.close();
+  await mongoTestServer.stop();
+  //await mongooseConnection.connection.close();
 });
