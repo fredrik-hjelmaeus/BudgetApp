@@ -2,9 +2,7 @@ const request = require('supertest');
 const app = require('../../app');
 const path = require('path');
 
-// TODO: async-problem in csvtojson somewhere below check of correct file-extension. Maybe missing a try/catch-block somewhere.
-
-describe.skip('csvtojson', () => {
+describe('csvtojson', () => {
   it('Successfull handelsbanken csv conversion on valid file', async () => {
     // prettier-ignore
     const response = await request(app)
@@ -52,7 +50,7 @@ describe.skip('csvtojson', () => {
     // TODO: make a error response using the middleware-err
   });
 
-  it.skip('Successfull on large valid rfc4180 csv ', async () => {
+  it('Successfull on large valid rfc4180 csv ', async () => {
     // prettier-ignore
     const response = await request(app)
     .post('/api/users')
@@ -112,7 +110,7 @@ describe.skip('csvtojson', () => {
       .expect(400);
     expect(res.text).toEqual('CSV does not contain valid RFC4180-values!');
   });
-  it.skip('fail on valid rfc4180 but wrong delimiter (nordea) selected', async () => {
+  it('fail on valid rfc4180 but wrong delimiter (nordea) selected', async () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/users')
@@ -128,7 +126,7 @@ describe.skip('csvtojson', () => {
     expect(res.text).toEqual('CSV does not contain valid Nordea-values!');
   });
 
-  it.skip('fail on valid rfc4180 but wrong delimiter (swedbank) selected', async () => {
+  it('fail on valid rfc4180 but wrong delimiter (swedbank) selected', async () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/users')
@@ -188,9 +186,10 @@ describe.skip('csvtojson', () => {
       .set('Content-Type', 'multipart/form-data')
       .attach('swedbank', path.resolve(__dirname, '../../_data/csv_testfiles/Swedbank_Transaktioner_2020-11-03_13-43-18.csv'))
       .expect(200);
+    console.log(res.text);
     expect(res.body[0].number).toEqual('1.00');
   });
-  it.only('fail on invalid file-extension', async () => {
+  it('fail on invalid file-extension', async () => {
     // prettier-ignore
     const response = await request(app)
         .post('/api/users')
