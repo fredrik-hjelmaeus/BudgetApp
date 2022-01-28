@@ -29,7 +29,7 @@ const sendEmail = async (options) => {
   };
   const info = await transporter.sendMail(message);
 
-  process.env.NODE_ENV !== 'test' && console.log('Message sent: %s', info.messageId);
+  process.env.NODE_ENV === 'development' && console.log('Message sent: %s', info.messageId);
 };
 
 module.exports = sendEmail;
