@@ -47,7 +47,6 @@ const csvtojson = (req, res, next) => {
 
   // Check if an object was provided in the formdata
   if (!Object.getOwnPropertyNames(req.files)) {
-    //  console.log('Invalid data,filetype or object not found');
     return res.status(400).send('Invalid data');
   }
   //  Set objectname as filetype
@@ -56,27 +55,17 @@ const csvtojson = (req, res, next) => {
 
   // Compare fileextension with provided filetype
   //ofx
-  if (file.name.endsWith('ofx') && filetype === 'ofx') {
-    //  console.log('ofx it is');
-  } else {
-    // csv and txt
-    if (file.name.endsWith('csv') || file.name.endsWith('txt')) {
-      if (file.name.endsWith('txt') && filetype !== 'handelsbanken') {
-        return res.status(400).send('Wrong filetype, only accepts csv!');
-      }
-      /*     if (file.name.endsWith('csv') && filetype === 'handelsbanken') {
-        console.log('Wrong filetype, only accepts txt!');
-        return res.status(400).send('Wrong filetype, only accepts txt!');
-      } */
-    } else {
-      if (filetype === 'ofx') {
-        return res.status(400).send('Wrong filetype, only accepts ofx!');
-      } else {
-        return res.status(400).send('Wrong filetype, only accepts csv!');
-      }
-    }
+  if (filetype === 'ofx' && !file.name.endsWith('ofx')) {
+    return res.status(400).send('Wrong filetype, only accepts ofx!');
   }
-  // csv
+  if (
+    (filetype === 'RFC4180' && !file.name.endsWith('csv')) ||
+    (filetype === 'swedbank' && !file.name.endsWith('csv')) ||
+    (filetype === 'nordea' && !file.name.endsWith('csv')) ||
+    (filetype === 'handelsbanken' && !file.name.endsWith('csv'))
+  ) {
+    return res.status(400).send('Wrong filetype, only accepts csv!');
+  }
 
   // Check what filetype-button the user pressed,set deLimit and return file
   function setDelimiter(type) {
@@ -169,10 +158,10 @@ const csvtojson = (req, res, next) => {
   };
 
   // if ofx convert with ofx else convert with csvtojson
-  const runConversion = (filetype, file) => {
+  const runConversion = async (filetype, file) => {
     if (filetype === 'ofx') {
       if (!file.name.endsWith('ofx')) {
-        deleteFile(`${__dirname}/${file.name}`);
+        await deleteFile(`${__dirname}/${file.name}`);
         return res.status(400).send('Invalid OFX file!');
       }
       let tempArr = [];
@@ -296,7 +285,7 @@ const csvtojson = (req, res, next) => {
 const deleteFile = async (filepath) => {
   fs.unlink(filepath, (err) => {
     if (err) throw err;
-    console.log('Successfully deleted file');
+    //console.log('Successfully deleted file');
   });
 };
 

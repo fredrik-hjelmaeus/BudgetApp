@@ -34,3 +34,4 @@ seeder.js
 presetitems.json
 
 coverage/
+config/test.json

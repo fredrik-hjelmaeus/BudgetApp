@@ -263,7 +263,7 @@ describe('csvtojson', () => {
       .set('Content-Type', 'multipart/form-data')
       .attach('ofx', path.resolve(__dirname, '../../_data/csv_testfiles/Nordea_valid.csv'))
       .expect(400);
-    expect(res.text).toEqual('Invalid OFX file!');
+    expect(res.text).toEqual('Wrong filetype, only accepts ofx!');
   });
 
   it('fail because no file was provided', async () => {
