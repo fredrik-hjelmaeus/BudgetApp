@@ -2,5 +2,4 @@ const isObjectEmpty = (obj: object) => {
   for (let i in obj) return false;
   return true;
 };
-
-module.exports = isObjectEmpty;
+export default isObjectEmpty;

@@ -1,4 +1,6 @@
-const app = require('./app');
+import app from './app';
+import express from 'express';
+import path from 'path';
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

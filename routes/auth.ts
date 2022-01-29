@@ -1,26 +1,25 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const config = require('config');
-const { check, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
-const sendEmail = require('../utils/sendEmail');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import config from 'config';
+import { check, validationResult } from 'express-validator';
+import authMiddleware from '../middleware/auth';
+import sendEmail from '../utils/sendEmail';
 
-const User = require('../models/User');
-const req = require('express/lib/request');
+import User from '../models/User';
 
 // @route   GET api/auth
 // @desc    Get logged in user
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
 
     res.json(user);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) console.error(error.message);
     res.status(500).send('Server Error');
   }
 });
@@ -39,7 +38,7 @@ router.post(
       .withMessage('must be at least 6 chars long')
       .matches(/\d/),
   ],
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const myAgent = req.header('my_user-agent');
 
     const errors = validationResult(req);
@@ -51,18 +50,22 @@ router.post(
     const { email, password } = req.body;
 
     try {
+      // try fetch user by email from db
       let user = await User.findOne({ email });
 
+      // if no user found in db
       if (!user) {
         return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
+      // check that provided password matches fetched user from dbs password
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
         return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
+      // create object that will be input to jwt.sign
       const payload = {
         user: {
           id: user.id,
@@ -90,8 +93,8 @@ router.post(
           res.json({ token });
         });
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) console.error(error.message);
       res.status(500).send('Server Error');
     }
   }
@@ -100,7 +103,7 @@ router.post(
 // @route   POST api/auth/forgotpassword
 // @desc    Forgot password
 // @access  Public
-router.post('/forgotpassword', [check('email', 'Please include a valid email').isEmail()], async (req, res) => {
+router.post('/forgotpassword', [check('email', 'Please include a valid email').isEmail()], async (req: Request, res: Response) => {
   //validate : check if a valid mail syntax was used
   const errors = validationResult(req);
 
@@ -149,8 +152,8 @@ router.post('/forgotpassword', [check('email', 'Please include a valid email').i
     }
 
     // res.status(200).json({ msg: 'Email sent, check your mailbox', data: user });
-  } catch (err) {
-    console.error(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -165,7 +168,7 @@ router.put(
     .isLength({ min: 6 })
     .withMessage('must be at least 6 chars long')
     .matches(/\d/),
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     //validate : check if a valid mail syntax was used
     const errors = validationResult(req);
 
@@ -192,8 +195,8 @@ router.put(
       await user.save();
 
       res.status(200).json({ data: 'Password Changed' });
-    } catch (err) {
-      console.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
@@ -202,39 +205,44 @@ router.put(
 // @desc          Update user details
 // @route         PUT /api/auth/updatedetails
 // @access        Private
-router.put('/updatedetails', auth, [check('email', 'Please include a valid email').isEmail()], async (req, res) => {
-  //validering
-  const errors = validationResult(req);
+router.put(
+  '/updatedetails',
+  authMiddleware,
+  [check('email', 'Please include a valid email').isEmail()],
+  async (req: Request, res: Response) => {
+    //validering
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    // make sure new requested email is not already in use
-    const emailInUse = await User.findOne({ email: req.body.email });
-    // if it exist a user with that email and it's not the id of the authenticated user ,cancel change
-    if (emailInUse && emailInUse.id !== req.user.id) {
-      return res.status(401).json({ errors: [{ msg: 'This email is already in use' }] });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    // extract information from request
-    // if user did not provide a name field to update,adapt object fields
-    const fieldsToUpdate =
-      typeof req.body.name !== 'undefined' ? { name: req.body.name, email: req.body.email } : { email: req.body.email };
+    try {
+      // make sure new requested email is not already in use
+      const emailInUse = await User.findOne({ email: req.body.email });
+      // if it exist a user with that email and it's not the id of the authenticated user ,cancel change
+      if (emailInUse && emailInUse.id !== req.user.id) {
+        return res.status(401).json({ errors: [{ msg: 'This email is already in use' }] });
+      }
 
-    // update user
-    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
-      new: true,
-      runValidators: true,
-    });
+      // extract information from request
+      // if user did not provide a name field to update,adapt object fields
+      const fieldsToUpdate =
+        typeof req.body.name !== 'undefined' ? { name: req.body.name, email: req.body.email } : { email: req.body.email };
 
-    res.status(200).json({ success: true, data: user, msg: 'Successfully updated profile' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+      // update user
+      const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+        new: true,
+        runValidators: true,
+      });
+
+      res.status(200).json({ success: true, data: user, msg: 'Successfully updated profile' });
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   }
-});
+);
 
 // @desc          Update password
 // @route         PUT /api/auth/updatepassword
@@ -248,8 +256,8 @@ router.put(
       .withMessage('must be at least 6 chars long')
       .matches(/\d/),
   ],
-  auth,
-  async (req, res) => {
+  authMiddleware,
+  async (req: Request, res: Response) => {
     //validering
     const errors = validationResult(req);
 
@@ -259,6 +267,10 @@ router.put(
 
     try {
       const user = await User.findById(req.user.id).select('+password');
+
+      if (!user) {
+        return res.status(400).json({ msg: 'No User found' });
+      }
 
       // Check current password
       if (!(await bcrypt.compare(req.body.currentPassword, user.password))) {
@@ -271,8 +283,8 @@ router.put(
 
       await user.save();
       res.status(200).json({ msg: 'Password Updated' });
-    } catch (err) {
-      console.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
