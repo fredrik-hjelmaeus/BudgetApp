@@ -56,7 +56,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // Define Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
-//app.use('/api/userpreset', require('./routes/userpreset'));
+app.use('/api/userpreset', require('./routes/userpreset'));
 //app.use('/api/userpreset/upload', require('./routes/upload'));
 app.use('/api/guide', require('./routes/guide'));
 

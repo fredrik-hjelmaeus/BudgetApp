@@ -1,24 +1,24 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
-const User = require('../models/User');
-const Preset = require('../models/Preset');
-const auth = require('../middleware/auth');
+import { check, validationResult } from 'express-validator';
+//import User,{IUser,IUserInput} from '../models/User';
+import Preset, { IPreset, IUpdatablePresetFields } from '../models/Preset';
 const csvtojson = require('../middleware/csvtojson');
-const isObjectEmpty = require('../utils/isObjectEmpty');
-const mongoose = require('mongoose');
+import isObjectEmpty from '../utils/isObjectEmpty';
+import mongoose from 'mongoose';
+import authMiddleware from '../middleware/auth';
 
 // @route   GET api/userpreset
 // @desc    Get logged in user all presets
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
     const presets = await Preset.find({ user: req.user.id }).sort({
       number: -1,
     });
     res.json(presets);
-  } catch (err) {
-    console.error(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -28,17 +28,16 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 router.post(
   '/',
+
+  authMiddleware,
   [
-    auth,
-    [
-      check('name', 'Name is required').not().isEmpty(),
-      check('number', 'Number is required').not().isEmpty(),
-      check('month', 'Month is required').not().isEmpty(),
-      check('category', 'Category is required').not().isEmpty(),
-      check('type', 'Type is required').not().isEmpty(),
-    ],
+    check('name', 'Name is required').not().isEmpty(),
+    check('number', 'Number is required').not().isEmpty(),
+    check('month', 'Month is required').not().isEmpty(),
+    check('category', 'Category is required').not().isEmpty(),
+    check('type', 'Type is required').not().isEmpty(),
   ],
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -61,8 +60,8 @@ router.post(
       const preset = await newPreset.save();
 
       res.json(preset);
-    } catch (err) {
-      console.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
@@ -71,7 +70,7 @@ router.post(
 // @route   PUT api/userpreset/:id
 // @desc    Update preset
 // @access  Private
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   // no :id provided
   if (!req.params.id) {
     return res.status(404).json({ msg: 'No preset id found' });
@@ -85,12 +84,13 @@ router.put('/:id', auth, async (req, res) => {
   const { name, number, category, type, piggybank } = req.body;
 
   // Build preset object
-  const presetFields = {};
-  if (name) presetFields.name = name;
-  if (number) presetFields.number = number;
-  if (category) presetFields.category = category;
-  if (type) presetFields.type = type;
-  if (piggybank) presetFields.piggybank = piggybank;
+  const presetFields: IUpdatablePresetFields = {
+    name: name ? name : undefined,
+    number: number ? number : undefined,
+    category: category ? category : undefined,
+    type: type ? type : undefined,
+    piggybank: piggybank ? piggybank : undefined,
+  };
 
   // check if any fields to update was found
   if (isObjectEmpty(presetFields)) {
@@ -110,8 +110,8 @@ router.put('/:id', auth, async (req, res) => {
     preset = await Preset.findByIdAndUpdate(req.params.id, { $set: presetFields }, { new: true });
 
     res.json(preset);
-  } catch (err) {
-    console.error(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -119,7 +119,7 @@ router.put('/:id', auth, async (req, res) => {
 // @route   DELETE api/userpreset/:id
 // @desc    Delete preset
 // @access  Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     if (!req.params.id) {
       return res.status(400).json({ msg: 'No preset id found' });
@@ -142,10 +142,10 @@ router.delete('/:id', auth, async (req, res) => {
     await Preset.findByIdAndRemove(req.params.id);
 
     res.json({ msg: 'Preset removed' });
-  } catch (err) {
-    console.error(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
-module.exports = router;
+export = router;

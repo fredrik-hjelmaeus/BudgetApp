@@ -7,8 +7,16 @@ interface IPiggybank {
   savedAmount: number | undefined;
 }
 
-export interface IPreset {
-  userId: mongoose.Schema.Types.ObjectId;
+export interface IUpdatablePresetFields {
+  name: string | undefined;
+  number: number | undefined;
+  category: string | undefined;
+  type: string | undefined;
+  piggybank: IPiggybank[] | undefined;
+}
+
+export interface IPreset extends mongoose.Document {
+  user: mongoose.Schema.Types.ObjectId;
   name: string;
   number: number;
   month: string;
