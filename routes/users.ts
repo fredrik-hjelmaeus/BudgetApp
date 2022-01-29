@@ -1,11 +1,11 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const config = require('config');
+import { check, validationResult } from 'express-validator';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
-const User = require('../models/User');
+import User from '../models/User';
 
 // @route   POST api/users
 // @desc    Register a user
@@ -17,7 +17,7 @@ router.post(
     check('email', 'Please include a valid Email').isEmail(),
     check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
   ],
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const myAgent = req.header('my_user-agent');
 
     const errors = validationResult(req);
@@ -77,11 +77,11 @@ router.post(
           res.status(201).json({ token });
         });
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
       res.status(500).send('server error');
     }
   }
 );
 
-module.exports = router;
+export = router;

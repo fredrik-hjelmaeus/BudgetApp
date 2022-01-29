@@ -1,6 +1,24 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const PresetSchema = mongoose.Schema({
+interface IPiggybank {
+  piggyId: mongoose.Schema.Types.ObjectId | undefined;
+  month: string | undefined;
+  year: string | undefined;
+  savedAmount: number | undefined;
+}
+
+export interface IPreset {
+  userId: mongoose.Schema.Types.ObjectId;
+  name: string;
+  number: number;
+  month: string;
+  year: number;
+  category: string;
+  type: string;
+  piggybank: IPiggybank[] | undefined;
+}
+
+const PresetSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
@@ -55,4 +73,4 @@ const PresetSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('preset', PresetSchema);
+export default mongoose.model<IPreset>('preset', PresetSchema);
