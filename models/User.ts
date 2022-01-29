@@ -1,7 +1,20 @@
-const mongoose = require('mongoose');
-const crypto = require('crypto');
+import mongoose from 'mongoose';
+import crypto from 'crypto';
 
-const UserSchema = mongoose.Schema({
+export interface IUserInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IUser extends IUserInput, mongoose.Document {
+  date: Date;
+  resetPasswordToken: string | undefined;
+  resetPasswordExpire: Date | undefined;
+  getResetPasswordToken(): string;
+}
+
+const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -24,7 +37,7 @@ const UserSchema = mongoose.Schema({
 });
 
 // Generate and hash password token
-UserSchema.methods.getResetPasswordToken = function () {
+UserSchema.methods.getResetPasswordToken = function (): string {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -37,4 +50,5 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-module.exports = mongoose.model('user', UserSchema);
+//module.exports = mongoose.model('user', UserSchema);
+export default mongoose.model<IUser>('User', UserSchema);

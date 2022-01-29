@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const authMiddleware = require('../middleware/auth');
 const csvtojson = require('../middleware/csvtojson');
 
 // @route   POST api/userpreset/upload
@@ -8,7 +8,7 @@ const csvtojson = require('../middleware/csvtojson');
 // @access  Private
 router.post(
   '/',
-  auth,
+  authMiddleware,
   csvtojson,
 
   async (req, res) => {

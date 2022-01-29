@@ -1,7 +1,9 @@
-const express = require('express');
+import { NextFunction, Request, Response } from 'express';
+
+import express from 'express';
 const connectDB = require('./config/db');
 const app = express();
-const path = require('path');
+import path from 'path';
 const fileUpload = require('express-fileupload');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
@@ -13,7 +15,8 @@ const hpp = require('hpp');
 process.env.NODE_ENV !== 'test' && connectDB();
 
 // Init Middleware
-app.use(express.json({ extended: false }));
+//app.use(express.json({ extended: false }));
+app.use(express.json());
 app.use(fileUpload());
 
 // Sanitize data
@@ -39,12 +42,13 @@ app.use(hpp());
 // It's task is to provide frontend with a uniform json-structured response to avoid
 // having to handle special cases for every error.
 // TODO: put in separate file and create interface for json-error-structure
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log('errorhandler! reporting');
   //console.log(err);
+
   if (!res.headersSent) {
-    console.log(err.httpStatusCode);
-    return res.status(err.httpStatusCode || 500).send(err.message);
+    //console.log(err.httpStatusCode);
+    // return res.status(err.httpStatusCode || 500).send(err.message);
     res.status(500).send(err.message);
   }
 });
@@ -52,8 +56,8 @@ app.use((err, req, res, next) => {
 // Define Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/userpreset', require('./routes/userpreset'));
-app.use('/api/userpreset/upload', require('./routes/upload'));
-app.use('/api/guide', require('./routes/guide'));
+//app.use('/api/userpreset', require('./routes/userpreset'));
+//app.use('/api/userpreset/upload', require('./routes/upload'));
+//app.use('/api/guide', require('./routes/guide'));
 
-module.exports = app;
+export default app;
