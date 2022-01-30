@@ -4,7 +4,7 @@ import express from 'express';
 const connectDB = require('./config/db');
 const app = express();
 import path from 'path';
-const fileUpload = require('express-fileupload');
+import fileUpload from 'express-fileupload';
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -57,7 +57,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/userpreset', require('./routes/userpreset'));
-//app.use('/api/userpreset/upload', require('./routes/upload'));
+app.use('/api/userpreset/upload', require('./routes/upload'));
 app.use('/api/guide', require('./routes/guide'));
 
 export default app;
