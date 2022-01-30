@@ -3,8 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
-//const ofxConvert = require('../utils/ofxConvert');
-const ofx = require('ofx');
+const ofx = require('ofx'); // not migrated to ts
 
 // DATA STRUCTURE OF req.files:
 // RFC4180 is the delimiter the user pressed.
