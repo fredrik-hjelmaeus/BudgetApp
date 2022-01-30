@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
 const router = express.Router();
 import { check, validationResult } from 'express-validator';
-//import User,{IUser,IUserInput} from '../models/User';
-import Preset, { IPreset, IUpdatablePresetFields } from '../models/Preset';
+import Preset, { IUpdatablePresetFields } from '../models/Preset';
 const csvtojson = require('../middleware/csvtojson');
 import isObjectEmpty from '../utils/isObjectEmpty';
 import mongoose from 'mongoose';
