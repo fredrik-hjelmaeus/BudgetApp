@@ -132,28 +132,20 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     }
 
     // handelsbanken
-    /*   if (filetype === 'handelsbanken') {
-      source.map((preset) =>
-        newpresets.push({
-          number: Object.values(preset)[6][Object.values(preset)[6].length - 1],
-          name: Object.values(preset)[7],
-          id: uuidv4(),
-        })
-      );
-    } */
-    /*    if (filetype === 'handelsbanken') {
+    if (filetype === 'handelsbanken') {
       source.map((preset) => {
-        const newBankObj:INewPreset = {
-          number:Number(Object.values(preset)[6][Object.values(preset)[6].length - 1]),
-          name: String(Object.values(preset)[7]),
+        const numberValues = Object.values(preset)[6] as number[];
+        const lastNumberValue = numberValues[numberValues.length - 1];
+        const nameValue = Object.values(preset)[7] as string;
+        const newHandelsbankenObj: INewPreset = {
+          number: lastNumberValue,
+          name: nameValue,
           id: uuidv4(),
-        }
-        newpresets.push(newBankObj)
-      }
-        
-      );
+        };
+        newpresets.push(newHandelsbankenObj);
+      });
     }
- */
+
     // swedbank
     if (filetype === 'swedbank') {
       source.slice(1).map((row) =>
@@ -167,8 +159,6 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
 
     // RFC4180
     if (filetype === 'RFC4180') {
-      //console.log(source.map((row) => Object.entries(row)));
-      //console.log(source.map((row) => row));
       source.map((row) =>
         newpresets.push({
           row,
