@@ -1,11 +1,11 @@
-const request = require('supertest');
-const app = require('../../app');
-const mongoose = require('mongoose'); //used to validate mongo _id
-const User = require('../../models/User');
+import request from 'supertest';
+import app from '../../app';
+import mongoose from 'mongoose'; //used to validate mongo _id
+import User, { IUser } from '../../models/User';
 
 // prevents sendEmail from sending mail
 jest.mock('../../utils/sendEmail');
-const sendEmail = require('../../utils/sendEmail');
+import sendEmail from '../../utils/sendEmail';
 
 describe('authorization flow', () => {
   // Get Current User
@@ -283,7 +283,8 @@ describe('authorization flow', () => {
         .expect(201);
 
       // create resetpasswordtoken
-      const user = await User.findOne({ email: 'gris@test.com' });
+      const user: IUser | null = await User.findOne({ email: 'gris@test.com' });
+      if (!user) throw Error('fail');
       const resetToken = user.getResetPasswordToken();
       // save token to db
       await user.save({ validateBeforeSave: false });
@@ -309,7 +310,8 @@ describe('authorization flow', () => {
         .expect(201);
 
       // create resetpasswordtoken
-      const user = await User.findOne({ email: 'gris@test.com' });
+      const user: IUser | null = await User.findOne({ email: 'gris@test.com' });
+      if (!user) throw Error('fail');
       const resetToken = user.getResetPasswordToken();
       // save token to db
       await user.save({ validateBeforeSave: false });
@@ -336,7 +338,8 @@ describe('authorization flow', () => {
         .expect(201);
 
       // create resetpasswordtoken
-      const user = await User.findOne({ email: 'gris@test.com' });
+      const user: IUser | null = await User.findOne({ email: 'gris@test.com' });
+      if (!user) throw Error('fail');
       const resetToken = user.getResetPasswordToken();
       // save token to db
       await user.save({ validateBeforeSave: false });
@@ -362,7 +365,8 @@ describe('authorization flow', () => {
         .expect(201);
 
       // create resetpasswordtoken
-      const user = await User.findOne({ email: 'gris@test.com' });
+      const user: IUser | null = await User.findOne({ email: 'gris@test.com' });
+      if (!user) throw Error('fail');
       const resetToken = user.getResetPasswordToken();
       // save token to db
       await user.save({ validateBeforeSave: false });

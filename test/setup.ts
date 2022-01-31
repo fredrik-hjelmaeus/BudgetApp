@@ -1,9 +1,9 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const mongoose = require('mongoose');
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 
 jest.setTimeout(30000); // 30 seconds to finish tests
 
-let mongoTestServer;
+let mongoTestServer: MongoMemoryServer;
 
 // Setup hook for memory server
 beforeAll(async () => {
@@ -11,7 +11,7 @@ beforeAll(async () => {
   //const mongoUri = await mongoTestServer.getUri();
 
   await mongoose.connect(mongoTestServer.getUri(), {
-    useUnifiedTopology: true,
+    // useUnifiedTopology: true,
   });
 });
 
