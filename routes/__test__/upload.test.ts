@@ -1,6 +1,6 @@
-const request = require('supertest');
-const app = require('../../app');
-const path = require('path');
+import request from 'supertest';
+import app from '../../app';
+import path from 'path';
 
 describe('file upload', () => {
   it('Successfull upload', async () => {

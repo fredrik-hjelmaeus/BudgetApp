@@ -1,5 +1,5 @@
-const request = require('supertest');
-const app = require('../../app');
+import request from 'supertest';
+import app from '../../app';
 
 describe('Get logged in user all presets', () => {
   it('successfully gets only the users presets', async () => {
@@ -113,12 +113,12 @@ describe('Update preset', () => {
       const setupObj = { token: response.body.token, presetId: res.body._id };
       return setupObj;
     };
-    setup_vars = setup();
+    const setup_vars = setup();
     return setup_vars;
   });
 
   it('happy path, update all preset fields', async () => {
-    const testSetupObjects = await setup_vars;
+    const testSetupObjects = await setup();
 
     const response = await request(app)
       .put(`/api/userpreset/${testSetupObjects.presetId}`)
