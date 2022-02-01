@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 const router = express.Router();
 import { check, validationResult } from 'express-validator';
 import Preset, { IUpdatablePresetFields } from '../models/Preset';
-const csvtojson = require('../middleware/csvtojson');
+import csvtojson from '../middleware/csvtojson';
 import isObjectEmpty from '../utils/isObjectEmpty';
 import mongoose from 'mongoose';
 import authMiddleware from '../middleware/auth';
@@ -80,6 +80,10 @@ router.put('/:id', authMiddleware, async (req, res) => {
     return res.status(400).json({ msg: 'Invalid preset id provided' });
   }
 
+  // check if any fields to update was found
+  if (isObjectEmpty(req.body)) {
+    return res.status(400).json({ msg: 'Found no fields to update on preset' });
+  }
   const { name, number, category, type, piggybank } = req.body;
 
   // Build preset object
@@ -90,11 +94,6 @@ router.put('/:id', authMiddleware, async (req, res) => {
     type: type ? type : undefined,
     piggybank: piggybank ? piggybank : undefined,
   };
-
-  // check if any fields to update was found
-  if (isObjectEmpty(presetFields)) {
-    return res.status(400).json({ msg: 'Found no fields to update on preset' });
-  }
 
   try {
     let preset = await Preset.findById(req.params.id);
