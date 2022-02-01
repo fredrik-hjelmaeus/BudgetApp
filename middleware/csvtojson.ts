@@ -30,6 +30,12 @@ interface INewPreset {
   id: string;
 }
 
+interface IHandelsbankenPreset {
+  number: number;
+  name: string;
+  id: string;
+}
+
 // Extending Express Request object with newpresets.
 // So req.newspresets can hold the extracted csv-file-data and send it to next middleware.
 declare global {
@@ -105,12 +111,12 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     delimiter?: string[];
   }
   const deLimit: delimiterObject | undefined = setDelimiter(filetype);
-  console.log('ran delimiter');
+
   const uploadPath: string = `${__dirname}/${file.name}`;
 
   file.mv(uploadPath, function (err) {
     if (err) return res.status(500).send(err);
-    console.log('file moved to', uploadPath);
+
     runConversion(filetype, file);
   });
 
@@ -136,6 +142,11 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
         const numberValues = Object.values(preset)[6] as number[];
         const lastNumberValue = numberValues[numberValues.length - 1];
         const nameValue = Object.values(preset)[7] as string;
+
+        if (nameValue.length === 0 || lastNumberValue === undefined) {
+          return res.status(400).send('File does not contain valid Handelsbanken-values!');
+        }
+
         const newHandelsbankenObj: INewPreset = {
           number: lastNumberValue,
           name: nameValue,
@@ -248,7 +259,6 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
               }
             }
             if (filetype === 'nordea') {
-              console.log('got here');
               // Check for new Nordea-csv
               if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
                 deleteFile(`${__dirname}/${file.name}`);
