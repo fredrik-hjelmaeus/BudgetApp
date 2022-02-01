@@ -16,7 +16,9 @@ router.post(
       res.json(req.newpresets);
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send('Server Error');
+      if (!res.headersSent) {
+        res.status(500).send('Server Error');
+      }
     }
   }
 );
