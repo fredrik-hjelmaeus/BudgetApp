@@ -30,12 +30,6 @@ interface INewPreset {
   id: string;
 }
 
-interface IHandelsbankenPreset {
-  number: number;
-  name: string;
-  id: string;
-}
-
 // Extending Express Request object with newpresets.
 // So req.newspresets can hold the extracted csv-file-data and send it to next middleware.
 declare global {
