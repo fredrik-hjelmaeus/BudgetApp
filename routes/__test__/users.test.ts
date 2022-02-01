@@ -1,5 +1,5 @@
-const app = require('../../app');
-const request = require('supertest');
+import app from '../../app';
+import request from 'supertest';
 
 describe('User SignUp', () => {
   it('returns a 201 on successful signup using mobile-app', async () => {

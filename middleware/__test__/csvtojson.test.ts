@@ -1,6 +1,6 @@
-const request = require('supertest');
-const app = require('../../app');
-const path = require('path');
+import request from 'supertest';
+import app from '../../app';
+import path from 'path';
 
 describe('csvtojson', () => {
   it('Successfull handelsbanken csv conversion on valid file', async () => {
@@ -187,7 +187,7 @@ describe('csvtojson', () => {
       .attach('swedbank', path.resolve(__dirname, '../../_data/csv_testfiles/Swedbank_Transaktioner_2020-11-03_13-43-18.csv'))
       .expect(200);
     console.log(res.text);
-    expect(res.body[0].number).toEqual('1.00');
+    expect(res.body[0].number).toEqual(1);
   });
   it('fail on invalid file-extension', async () => {
     // prettier-ignore

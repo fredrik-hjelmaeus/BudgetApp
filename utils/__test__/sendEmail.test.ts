@@ -1,5 +1,5 @@
-const sendEmail = require('../sendEmail');
-const config = require('config');
+import sendEmail from '../sendEmail';
+import config from 'config';
 const sendMailMock = jest.fn(); // this will return undefined if .sendMail() is called
 
 // In order to return a specific value you can use this instead
