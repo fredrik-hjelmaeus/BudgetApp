@@ -103,23 +103,26 @@ describe('Add new preset', () => {
   });
 });
 
+const setup = async () => {
+  const testpreset = { name: 'test', number: 200, month: 'january', category: 'test', type: 'test' };
+  // Relies on Signup to get token, creates new user
+  try {
+    const response = await request(app).post('/api/users').send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
+    const res = await request(app).post('/api/userpreset').set('x-auth-token', response.body.token).send(testpreset);
+    const setupObj = { token: response.body.token, presetId: res.body._id };
+    return setupObj;
+  } catch (error) {
+    if (error instanceof Error) return error.message;
+  }
+  // return setup;
+};
+console.log(typeof setup);
 describe('Update preset', () => {
-  beforeEach(() => {
-    const setup = async () => {
-      const testpreset = { name: 'test', number: 200, month: 'january', category: 'test', type: 'test' };
-      // Relies on Signup to get token, creates new user
-      const response = await request(app).post('/api/users').send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
-      const res = await request(app).post('/api/userpreset').set('x-auth-token', response.body.token).send(testpreset);
-      const setupObj = { token: response.body.token, presetId: res.body._id };
-      return setupObj;
-    };
-    const setup_vars = setup();
-    return setup_vars;
-  });
-
   it('happy path, update all preset fields', async () => {
     const testSetupObjects = await setup();
-
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
     const response = await request(app)
       .put(`/api/userpreset/${testSetupObjects.presetId}`)
       .set('x-auth-token', testSetupObjects.token)
@@ -134,7 +137,10 @@ describe('Update preset', () => {
   });
 
   it('fails when not logged in', async () => {
-    const testSetupObjects = await setup_vars;
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
 
     const response = await request(app)
       .put(`/api/userpreset/${testSetupObjects.presetId}`)
@@ -144,14 +150,20 @@ describe('Update preset', () => {
   });
 
   it('fails with no preset id in endpoint', async () => {
-    const { token } = await setup_vars;
-
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
+    const { token } = testSetupObjects;
     await request(app).put(`/api/userpreset/`).set('x-auth-token', token).send({ name: 'fett' }).expect(404);
   });
 
   it('fails with invalid preset id', async () => {
-    const { token } = await setup_vars;
-
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
+    const { token } = testSetupObjects;
     // not a valid mongoose hex id.
     const invalidMongoosePresetId = '61ed41d89e82db28547a6a033';
     const res = await request(app)
@@ -163,7 +175,10 @@ describe('Update preset', () => {
   });
 
   it('fails when trying to edit another users preset', async () => {
-    const testSetupObjects = await setup_vars;
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
 
     // register a new user and recieve token
     const anotherUser = await request(app)
@@ -185,7 +200,10 @@ describe('Update preset', () => {
   });
 
   it('fails when sending empty obj', async () => {
-    const testSetupObjects = await setup_vars;
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
 
     const response = await request(app)
       .put(`/api/userpreset/${testSetupObjects.presetId}`)
@@ -196,7 +214,10 @@ describe('Update preset', () => {
   });
 
   it('update only a single field', async () => {
-    const testSetupObjects = await setup_vars;
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
 
     const response = await request(app)
       .put(`/api/userpreset/${testSetupObjects.presetId}`)
@@ -209,34 +230,30 @@ describe('Update preset', () => {
 });
 
 describe('Delete preset', () => {
-  beforeEach(() => {
-    const setup = async () => {
-      const testpreset = { name: 'test', number: 200, month: 'january', category: 'test', type: 'test' };
-      // Relies on Signup to get token, creates new user
-      const response = await request(app).post('/api/users').send({ email: 'nisse@manpower.se', name: 'nisse', password: 'Passw0rd!' });
-      const res = await request(app).post('/api/userpreset').set('x-auth-token', response.body.token).send(testpreset);
-      const setupObj = { token: response.body.token, presetId: res.body._id };
-      return setupObj;
-    };
-    setup_vars = setup();
-    return setup_vars;
-  });
   it('successfully deletes preset', async () => {
-    const { token, presetId } = await setup_vars; // create new user token and a new presetId
-
+    const testSetupObjects = await setup(); // create new user token and a new presetId
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
+    const { token, presetId } = testSetupObjects;
     const res = await request(app).delete(`/api/userpreset/${presetId}`).set('x-auth-token', token).expect(200);
     expect(res.body.msg).toEqual('Preset removed');
   });
   it('fails when not logged in', async () => {
-    const { presetId } = await setup_vars; // create new user token and a new presetId
-
-    const res = await request(app).delete(`/api/userpreset/${presetId}`).expect(401);
+    const testSetupObjects = await setup(); // create new user token and a new presetId
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
+    const res = await request(app).delete(`/api/userpreset/${testSetupObjects.presetId}`).expect(401);
 
     expect(res.body.msg).toEqual('No token, authorization denied');
   });
   it('fails with invalid preset id ', async () => {
-    const { token } = await setup_vars; // create new user token and a new presetFields
-
+    const testSetupObjects = await setup(); // create new user token and a new presetFields
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
+    const { token } = testSetupObjects;
     const invalidPresetId = '61ed434ee9ae521d2cbfc80e';
     const res = await request(app).delete(`/api/userpreset/${invalidPresetId}`).set('x-auth-token', token).expect(404);
     expect(res.body.msg).toEqual('Preset not found');
@@ -247,8 +264,11 @@ describe('Delete preset', () => {
     expect(res2.body.msg).toEqual('Invalid preset id provided');
   });
   it('fails when trying to delete another users preset', async () => {
-    const { presetId } = await setup_vars; // create new user token and a new presetId
-
+    const testSetupObjects = await setup(); // create new user token and a new presetId
+    if (typeof testSetupObjects === 'string' || testSetupObjects === undefined) {
+      throw new Error('setup failed');
+    }
+    const { presetId } = testSetupObjects;
     // register new user and get logged in
     const response = await request(app)
       .post('/api/users/')
