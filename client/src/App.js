@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -19,7 +19,10 @@ import setAuthToken from './utils/setAuthToken';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
+  console.log('ran this');
+  <Redirect to='/Home' />;
 }
+console.log('found token', localStorage.token);
 
 const App = () => {
   return (
@@ -34,9 +37,9 @@ const App = () => {
                     <Navbar />
                     <div>
                       <Switch>
-                        <PrivateRoute exact path='/' component={Home} />
+                        <Route exact path='/' component={Landing} />
+                        <PrivateRoute exact path='/Home' component={Home} />
                         <Route exact path='/about' component={About} />
-                        <Route exact path='/Landing' component={Landing} />
                         <Route path='/resetpassword/:id' component={ResetPassword} />
                       </Switch>
                     </div>
