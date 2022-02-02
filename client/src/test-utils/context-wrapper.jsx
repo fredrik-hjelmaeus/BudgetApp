@@ -10,6 +10,7 @@ import { CssContextProvider } from '../context/css/CssContext';
 import GuideState from '../context/guide/GuideState';
 import DateState from '../context/date/DateState';
 //import {AlertContextProvider } from "../context/alert/AlertState"
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 const AllTheProviders = ({ children }) => {
   return (
@@ -18,7 +19,9 @@ const AllTheProviders = ({ children }) => {
         <DateState>
           <AlertState>
             <CssState>
-              <GuideState>{children}</GuideState>
+              <GuideState>
+                <Router>{children}</Router>
+              </GuideState>
             </CssState>
           </AlertState>
         </DateState>
