@@ -16,7 +16,7 @@ const RegisterModal = (props) => {
   useEffect(() => {
     if (isAuthenticated) {
       console.log('ran');
-      props.history.push('/');
+      props.history.push('/Home');
     }
     if (error === 'Please include a valid Email') {
       setAlert(error, 'danger');

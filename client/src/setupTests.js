@@ -12,3 +12,5 @@ afterEach(() => server.resetHandlers());
 
 // Clean up after the tests are finished.
 afterAll(() => server.close());
+
+//jest.setTimeout(18000);
