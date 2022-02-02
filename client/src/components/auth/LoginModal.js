@@ -22,17 +22,24 @@ export const LoginModal = (props) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      props.history.push('/');
+      props.history.push('/Home');
     }
+    let isMounted = true;
+    isMounted && console.log('updated isAuthenticated', isAuthenticated);
+    if (error === 'Please include a valid email' && isMounted) {
+      setAlert(error, 'danger');
+      clearErrors();
+    } // eslint-disable-next-line
+    if (error === 'Invalid Credentials' && isMounted) {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    return () => {
+      // cancel the subscription
+      isMounted = false;
+    };
 
-    if (error === 'Please include a valid email') {
-      setAlert(error, 'danger');
-      clearErrors();
-    } // eslint-disable-next-line
-    if (error === 'Invalid Credentials') {
-      setAlert(error, 'danger');
-      clearErrors();
-    } // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
 
   const { email, password } = user;
@@ -40,6 +47,7 @@ export const LoginModal = (props) => {
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
+    console.log('login ran');
     e.preventDefault();
     if (email === '' || password === '') {
       setAlert('Please fill in all fields', 'danger');
@@ -90,6 +98,7 @@ export const LoginModal = (props) => {
             <button value='forgot' className='btn btn-block modallogin__forgotpassword' onClick={onClick}>
               Forgot Password
             </button>
+            <div placeholder='temp'>{isAuthenticated ? 'true' : 'false'}</div>
           </div>
         </div>
       </div>
