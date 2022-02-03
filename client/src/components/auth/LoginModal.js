@@ -22,10 +22,11 @@ export const LoginModal = (props) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      props.history.push('/Home');
+      props.history.push('/');
     }
+
     let isMounted = true;
-    isMounted && console.log('updated isAuthenticated', isAuthenticated);
+
     if (error === 'Please include a valid email' && isMounted) {
       setAlert(error, 'danger');
       clearErrors();
@@ -98,7 +99,6 @@ export const LoginModal = (props) => {
             <button value='forgot' className='btn btn-block modallogin__forgotpassword' onClick={onClick}>
               Forgot Password
             </button>
-            <div placeholder='temp'>{isAuthenticated ? 'true' : 'false'}</div>
           </div>
         </div>
       </div>
