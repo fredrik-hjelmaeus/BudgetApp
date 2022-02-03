@@ -19,10 +19,8 @@ import setAuthToken from './utils/setAuthToken';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
-  console.log('ran this');
-  <Redirect to='/Home' />;
 }
-console.log('found token', localStorage.token);
+console.log('app token state', localStorage.token);
 
 const App = () => {
   return (
@@ -37,8 +35,8 @@ const App = () => {
                     <Navbar />
                     <div>
                       <Switch>
-                        <Route exact path='/' component={Landing} />
-                        <PrivateRoute exact path='/Home' component={Home} />
+                        <Route exact path='/Landing' component={Landing} />
+                        <PrivateRoute exact path='/' component={Home} />
                         <Route exact path='/about' component={About} />
                         <Route path='/resetpassword/:id' component={ResetPassword} />
                       </Switch>
