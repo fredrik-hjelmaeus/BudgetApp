@@ -6,8 +6,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const authContext = useContext(AuthContext);
 
   const { isAuthenticated, loading } = authContext;
-  console.log(isAuthenticated);
-  return <Route {...rest} render={(props) => (!isAuthenticated && !loading ? <Redirect to='/' /> : <Component {...props} />)} />;
+  console.log('privRoute:', isAuthenticated);
+
+  if (!isAuthenticated && !loading) {
+    return <Redirect to='/Landing' />;
+  } else {
+    return <Component {...rest} />;
+  }
 };
 
 export default PrivateRoute;

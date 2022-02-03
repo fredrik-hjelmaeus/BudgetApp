@@ -20,7 +20,7 @@ import {
 const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem('token'),
-    isAuthenticated: null,
+    isAuthenticated: false,
     loading: true,
     user: null,
     error: null,
@@ -35,7 +35,7 @@ const AuthState = (props) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    console.log('trying load user');
+    // console.log('trying load user');
     try {
       const res = await axios.get('/api/auth');
 
@@ -44,7 +44,7 @@ const AuthState = (props) => {
         payload: res.data,
       });
     } catch (err) {
-      console.log('failed to load user: ', err);
+      // console.log('failed to load user: ', err.response);
       dispatch({ type: AUTH_ERROR });
     }
   };
@@ -68,7 +68,7 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      console.log(err.response.data.errors[0].msg);
+      // console.log(err.response.data.errors[0].msg);
       dispatch({
         type: REGISTER_FAIL,
         payload: err.response.data.errors[0].msg,
@@ -78,7 +78,7 @@ const AuthState = (props) => {
 
   // Login User
   const login = async (formData) => {
-    console.log('login ran');
+    // console.log('login ran');
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.post('/api/auth', formData, config); //endpoint/url
-      console.log('dispatch');
+      // console.log('login user fetch data success');
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -96,8 +96,8 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      console.log('shit');
-      console.log(err.response);
+      //  console.log('login user fetch data fail');
+      // console.log(err.response.data.errors[0].msg);
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response.data.errors[0].msg,
