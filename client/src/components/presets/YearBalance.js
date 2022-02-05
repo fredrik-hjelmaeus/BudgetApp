@@ -25,9 +25,7 @@ const YearBalance = () => {
             <ul className='chartmonth'>Dec</ul>
           </div>
           <div>
-            <div className='barchart'>
-              <BarChart />
-            </div>
+            <div className='barchart'>{/*       <BarChart /> */}</div>
           </div>
           <div className='flexrow chartsummarytext'>
             <div className='flexcolumn'>

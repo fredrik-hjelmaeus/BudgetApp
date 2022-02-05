@@ -5,7 +5,7 @@ import GuideContext from '../../context/guide/guideContext';
 import CssContext from '../../context/css/cssContext';
 import Scroll from 'react-scroll';
 
-const Expense = () => {
+const Income = () => {
   const presetContext = useContext(PresetContext);
   const { categorysumonlyposnumbyyear, categorynameonlyposnumbyyear } = presetContext;
   const { dimensions } = useContext(CssContext);
@@ -83,4 +83,4 @@ const Expense = () => {
     </div>
   );
 };
-export default Expense;
+export default Income;
