@@ -12,20 +12,7 @@ export const handlers = [
       })
     );
   }),
-  //fail to get token:
-  /*   rest.post('http://localhost/api/auth', (req, res, ctx) => {
-    return res(
-      ctx.status(500),
-      ctx.json({
-        errors: [
-          {
-            msg: 'No token, authorization denied',
-          },
-        ],
-      })
-    );
-  }), */
-  // success on getting current user
+
   rest.get('http://localhost/api/auth', (req, res, ctx) => {
     return res(
       ctx.json({
@@ -38,20 +25,6 @@ export const handlers = [
     );
   }),
 
-  //fail to get user
-  /*   rest.get('http://localhost/api/auth', (req, res, ctx) => {
-    return res(
-      ctx.status(500),
-      ctx.json({
-        errors: [
-          {
-            msg: 'Invalid Credentials',
-          },
-        ],
-      })
-    );
-  }), */
-  // success on getting user presets
   rest.get('http://localhost/api/userpreset', (req, res, ctx) => {
     return res(ctx.json([]));
   }),
@@ -67,3 +40,33 @@ export const handlers = [
     return res(ctx.json({ success: true, data: 'Email sent' }));
   }),
 ];
+
+//fail to get token:
+/*   rest.post('http://localhost/api/auth', (req, res, ctx) => {
+    return res(
+      ctx.status(500),
+      ctx.json({
+        errors: [
+          {
+            msg: 'No token, authorization denied',
+          },
+        ],
+      })
+    );
+  }), */
+// success on getting current user
+
+//fail to get user
+/*   rest.get('http://localhost/api/auth', (req, res, ctx) => {
+    return res(
+      ctx.status(500),
+      ctx.json({
+        errors: [
+          {
+            msg: 'Invalid Credentials',
+          },
+        ],
+      })
+    );
+  }), */
+// success on getting user presets

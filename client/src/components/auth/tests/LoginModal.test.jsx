@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitForElementToBeRemoved } from '../../../test-utils/context-wrapper';
-import Landing from '../Landing';
+import Landing from '../../pages/Landing';
 import App from '../../../App';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
@@ -15,7 +15,7 @@ describe('login flow', () => {
     expect(loginModalH1element).toBeInTheDocument();
   });
 
-  test('login happy path', async () => {
+  test.only('login happy path', async () => {
     render(<App />);
     // startingstate: local storage has no token so we are directed to landing page
 
