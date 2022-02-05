@@ -91,7 +91,7 @@ const GuideModal = () => {
         {guide === '1' && (
           <div className='guide__card'>
             <h1 className='guide__title'>Budget App Guide</h1>
-            <h3 className='guide__title__h3'>Welcome {isAuthenticated && user.name}!</h3>
+            <h3 className='guide__title__h3'>Welcome {isAuthenticated && user?.name}!</h3>
             <p>To be able to properly use this App we suggest following this quick guided tour of all the features.</p>
             <div className='guide__btn__group'>
               <button className='guide__btn__group__next' onClick={nextStep}>

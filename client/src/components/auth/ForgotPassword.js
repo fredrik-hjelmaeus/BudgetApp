@@ -7,6 +7,7 @@ import personicon from '../layout/images/person.svg';
 
 import ForgotMailInput from './ForgotMailInput';
 import ForgotMailSent from './ForgotMailSent';
+import Alerts from '../layout/Alerts';
 
 export const ForgotPassword = (props) => {
   // Authentication
@@ -14,7 +15,7 @@ export const ForgotPassword = (props) => {
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { error, clearErrors, forgotPassword, mailsentmsg } = authContext;
+  const { errors, clearErrors, forgotPassword, mailsentmsg } = authContext;
 
   const [user, setUser] = useState({
     email: '',
@@ -33,16 +34,18 @@ export const ForgotPassword = (props) => {
       forgotPassword({
         email,
       });
-      setMailSent(true);
     }
   };
 
   useEffect(() => {
-    if (mailsentmsg !== null && mailsentmsg.success !== true) {
-      setAlert(error, 'danger');
+    if (mailsentmsg === null && errors.length > 0) {
+      console.log('forgotpasswordmodal:', errors); // TODO: replace this with logging message to report wrong structured error message response
+      errors.map((error) => error && setAlert(error?.msg, 'danger'));
       clearErrors();
+    } else {
+      mailsentmsg && setMailSent(true);
     }
-  }, [mailsentmsg, setAlert, clearErrors, error]);
+  }, [mailsentmsg, setAlert, clearErrors, errors]);
   // Css: modal context
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
@@ -63,6 +66,7 @@ export const ForgotPassword = (props) => {
             <img src={personicon} alt='img'></img>
             <h1>Forgot Password</h1>
           </div>
+          <Alerts />
           {mailSent ? (
             <ForgotMailSent email={email} />
           ) : (

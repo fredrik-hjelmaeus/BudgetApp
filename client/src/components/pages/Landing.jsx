@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import CssContext from '../../context/css/cssContext';
 import Logo from '../layout/Logo';
-
 import LoginModal from '../auth/LoginModal';
 import RegisterModal from '../auth/RegisterModal';
 import ForgotPassword from '../auth/ForgotPassword';
@@ -12,6 +11,10 @@ const Landing = () => {
 
   useEffect(() => {
     toggleNavbar(navbar);
+
+    return () => {
+      toggleModal('');
+    };
     // eslint-disable-next-line
   }, []);
 

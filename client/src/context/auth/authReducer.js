@@ -16,7 +16,7 @@ import {
 export default (state, action) => {
   switch (action.type) {
     case USER_LOADED:
-      console.log('user loaded ');
+      // console.log('user loaded ');
       return {
         ...state,
         isAuthenticated: true,
@@ -25,8 +25,8 @@ export default (state, action) => {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      console.log('payload', action.payload.token);
-      console.log('action paylod:', action.payload);
+      // console.log('payload', action.payload.token);
+      // console.log('action paylod:', action.payload);
       localStorage.setItem('token', action.payload.token);
       return {
         ...state,
@@ -38,6 +38,7 @@ export default (state, action) => {
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case LOGOUT:
+    case FORGOT_FAIL:
       localStorage.removeItem('token');
       return {
         ...state,
@@ -45,22 +46,17 @@ export default (state, action) => {
         isAuthenticated: false,
         loading: false,
         user: null,
-        error: action.payload,
+        errors: [...state.errors, action.payload],
       };
     case CLEAR_ERRORS:
       return {
         ...state,
-        error: null,
+        errors: [],
       };
     case FORGOT_SUCCESS:
       return {
         ...state,
         mailsentmsg: action.payload,
-      };
-    case FORGOT_FAIL:
-      return {
-        ...state,
-        mailsentmsg: null,
       };
     case UPDATE_PASSWORD_FAIL:
     case UPDATE_DETAILS_FAIL:

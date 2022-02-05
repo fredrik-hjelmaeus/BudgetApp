@@ -13,7 +13,7 @@ export const LoginModal = (props) => {
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { login, error, clearErrors, isAuthenticated } = authContext;
+  const { login, errors, clearErrors, isAuthenticated } = authContext;
 
   const [user, setUser] = useState({
     email: '',
@@ -21,34 +21,31 @@ export const LoginModal = (props) => {
   });
 
   useEffect(() => {
-    if (isAuthenticated) {
+    let isMounted = true;
+    if (isAuthenticated && isMounted) {
+      toggleModal('');
       props.history.push('/');
     }
 
-    let isMounted = true;
-
-    if (error === 'Please include a valid email' && isMounted) {
-      setAlert(error, 'danger');
-      clearErrors();
-    } // eslint-disable-next-line
-    if (error === 'Invalid Credentials' && isMounted) {
-      setAlert(error, 'danger');
+    if (errors.length > 0 && isMounted) {
+      console.log('loginmodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
+      errors.map((error) => error && setAlert(error?.msg, 'danger'));
       clearErrors();
     }
+
     return () => {
       // cancel the subscription
       isMounted = false;
     };
 
     // eslint-disable-next-line
-  }, [error, isAuthenticated, props.history]);
+  }, [errors, isAuthenticated, props.history]);
 
   const { email, password } = user;
 
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
-    console.log('login ran');
     e.preventDefault();
     if (email === '' || password === '') {
       setAlert('Please fill in all fields', 'danger');
@@ -83,6 +80,7 @@ export const LoginModal = (props) => {
 
           <div className='form-container'>
             <Alerts />
+
             <form onSubmit={onSubmit}>
               <div className='form-text'>
                 <input type='email' placeholder='Email Address' name='email' value={email} onChange={onChange} required />

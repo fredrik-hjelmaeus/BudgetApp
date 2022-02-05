@@ -32,9 +32,10 @@ const Navbar = ({ title }) => {
         </button>
       </li>
       <li>
-        <a onClick={onLogout} href='#!'>
-          <img src={logouticon} alt='img' style={{ width: '24px', position: 'relative', bottom: '0.1rem' }}></img>
-        </a>
+        <button onClick={onLogout} href='/Landing' name='logout' value='logout'>
+          logout
+          <img src={logouticon} alt='logout_button_image' style={{ width: '24px', position: 'relative', bottom: '0.1rem' }}></img>
+        </button>
       </li>
     </Fragment>
   );
