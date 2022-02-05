@@ -55,4 +55,15 @@ export const handlers = [
   rest.get('http://localhost/api/userpreset', (req, res, ctx) => {
     return res(ctx.json([]));
   }),
+  rest.post('http://localhost/api/users', (req, res, ctx) => {
+    return res(
+      ctx.json({
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFlZDcyZDE2Zjg5NWIxMTAwZGJhYjY2In0sImlhdCI6MTY0MzgxMDg2OX0.QvfZLV0HBznOEIMFOMAQNIsEpWjmEKtz6EqUNh9D--s',
+      })
+    );
+  }),
+  rest.post('http://localhost/api/auth/forgotpassword', (req, res, ctx) => {
+    return res(ctx.json({ success: true, data: 'Email sent' }));
+  }),
 ];

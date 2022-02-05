@@ -11,22 +11,24 @@ const RegisterModal = (props) => {
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { register, error, clearErrors, isAuthenticated } = authContext;
+  const { register, errors, clearErrors, isAuthenticated } = authContext;
 
   useEffect(() => {
+    let isMounted = true;
     if (isAuthenticated) {
-      console.log('ran');
-      props.history.push('/Home');
+      isMounted && toggleModal('');
+      props.history.push('/');
     }
-    if (error === 'Please include a valid Email') {
-      setAlert(error, 'danger');
+    if (errors.length > 0 && isMounted) {
+      console.log('registermodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
+      errors.map((error) => error && setAlert(error?.msg, 'danger'));
       clearErrors();
     }
-    if (error === 'User already exists') {
-      setAlert(error, 'danger');
-      clearErrors();
-    } // eslint-disable-next-line
-  }, [error, isAuthenticated, props.history]);
+    return () => {
+      // cancel the subscription
+      isMounted = false;
+    };
+  }, [errors, isAuthenticated, props.history]);
 
   const [user, setUser] = useState({
     name: '',
@@ -59,7 +61,6 @@ const RegisterModal = (props) => {
   const { toggleModal } = cssContext;
 
   const onClick = (e) => {
-    console.log('togglemodalran');
     toggleModal('');
   };
 
