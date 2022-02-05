@@ -13,6 +13,7 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   FORGOT_SUCCESS,
+  FORGOT_FAIL,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
 } from '../types';
@@ -23,7 +24,7 @@ const AuthState = (props) => {
     isAuthenticated: false,
     loading: true,
     user: null,
-    error: null,
+    errors: [],
     mailsentmsg: null,
   };
 
@@ -35,7 +36,6 @@ const AuthState = (props) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    // console.log('trying load user');
     try {
       const res = await axios.get('/api/auth');
 
@@ -44,8 +44,7 @@ const AuthState = (props) => {
         payload: res.data,
       });
     } catch (err) {
-      // console.log('failed to load user: ', err.response);
-      dispatch({ type: AUTH_ERROR });
+      dispatch({ type: AUTH_ERROR, payload: err.response.data.errors[0] });
     }
   };
 
@@ -60,7 +59,6 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.post('/api/users', formData, config); //endpoint/url
-
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
@@ -68,17 +66,15 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      // console.log(err.response.data.errors[0].msg);
       dispatch({
         type: REGISTER_FAIL,
-        payload: err.response.data.errors[0].msg,
+        payload: err.response.data.errors[0],
       });
     }
   };
 
   // Login User
   const login = async (formData) => {
-    // console.log('login ran');
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +84,7 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.post('/api/auth', formData, config); //endpoint/url
-      // console.log('login user fetch data success');
+
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -96,11 +92,9 @@ const AuthState = (props) => {
 
       loadUser();
     } catch (err) {
-      //  console.log('login user fetch data fail');
-      // console.log(err.response.data.errors[0].msg);
       dispatch({
         type: LOGIN_FAIL,
-        payload: err.response.data.errors[0].msg,
+        payload: err.response.data.errors[0],
       });
     }
   };
@@ -127,11 +121,11 @@ const AuthState = (props) => {
         payload: res.data,
       });
     } catch (err) {
-      console.log(err);
-      /*  dispatch({
+      console.log(err.response.data.errors[0]);
+      dispatch({
         type: FORGOT_FAIL,
-        payload: err,
-      }); */
+        payload: err.response.data.errors[0],
+      });
     }
   };
 
@@ -196,7 +190,7 @@ const AuthState = (props) => {
         isAuthenticated: state.isAuthenticated,
         loading: state.loading,
         user: state.user,
-        error: state.error,
+        errors: state.errors,
         mailsentmsg: state.mailsentmsg,
         register,
         login,
