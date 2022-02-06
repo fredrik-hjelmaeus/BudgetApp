@@ -8,11 +8,11 @@ interface IPiggybank {
 }
 
 export interface IUpdatablePresetFields {
-  name: string | undefined;
-  number: number | undefined;
-  category: string | undefined;
-  type: string | undefined;
-  piggybank: IPiggybank[] | undefined;
+  name?: string;
+  number?: number;
+  category?: string;
+  type?: string;
+  piggybank?: IPiggybank[];
 }
 
 export interface IPreset extends mongoose.Document {
