@@ -122,7 +122,7 @@ const AuthState = (props) => {
         payload: res.data,
       });
     } catch (err) {
-      console.log(err.response.data.errors[0]);
+      //console.log(err.response.data.errors[0]);
       dispatch({
         type: FORGOT_FAIL,
         payload: err.response.data.errors[0],

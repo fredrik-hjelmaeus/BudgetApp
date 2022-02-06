@@ -20,7 +20,6 @@ import setAuthToken from './utils/setAuthToken';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
-console.log('app token state', localStorage.token);
 
 const App = () => {
   return (
