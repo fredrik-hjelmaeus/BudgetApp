@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 const router = express.Router();
 import { check, validationResult } from 'express-validator';
-import Preset, { IUpdatablePresetFields } from '../models/Preset';
+import Preset, { IUpdatablePresetFields, IPreset } from '../models/Preset';
 import csvtojson from '../middleware/csvtojson';
 import isObjectEmpty from '../utils/isObjectEmpty';
 import mongoose from 'mongoose';
@@ -88,13 +88,12 @@ router.put('/:id', authMiddleware, async (req, res) => {
 
   // Build preset object
   const presetFields: IUpdatablePresetFields = {
-    name: name ? name : undefined,
-    number: number ? number : undefined,
-    category: category ? category : undefined,
-    type: type ? type : undefined,
-    piggybank: piggybank ? piggybank : undefined,
+    name,
+    number,
+    category,
+    type,
+    piggybank,
   };
-
   try {
     let preset = await Preset.findById(req.params.id);
 

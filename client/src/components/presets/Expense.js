@@ -62,19 +62,19 @@ const Expense = () => {
       <Element name='myScrollToElement'></Element>
       <div className={guide === '14' ? 'expense__card guide__expense__card' : 'expense__card'}>
         <div style={{ margin: '0 0 1rem 0' }}>
-          <DonutChart sums={categorysumonlynegnumbyyear} names={categorynameonlynegnumbyyear} colors={colors} />
+          {/* <DonutChart sums={categorysumonlynegnumbyyear} names={categorynameonlynegnumbyyear} colors={colors} /> */}
         </div>
         <div className='donuttitle'>Expenses</div>
         <div className='flexrow'>
           <div className='flexcolumn'>
-            <div className='flexrow'>
-              <div>Year Expenses: </div>
-              <div className={'text-danger px'}>{YearExpense}</div>
-            </div>
-            <div className='flexrow'>
-              <div>Monthly Average: </div>
-              <div className={'text-danger px'}>{yearmonthavg}</div>
-            </div>
+            <ul className='flexrow'>
+              <li>Year Expenses: </li>
+              <li className={'text-danger px'}>{YearExpense}</li>
+            </ul>
+            <ul className='flexrow'>
+              <li>Monthly Average: </li>
+              <li className={'text-danger px'}>{yearmonthavg}</li>
+            </ul>
           </div>
         </div>
       </div>

@@ -63,20 +63,20 @@ const Income = () => {
     <div>
       <div className={guide === '15' ? 'expense__card bold guide__expense__card' : 'expense__card bold'}>
         <div style={{ margin: '0 0 1rem 0' }}>
-          <DonutChart sums={categorysumonlyposnumbyyear} names={categorynameonlyposnumbyyear} colors={colors} />
+          {/*   <DonutChart sums={categorysumonlyposnumbyyear} names={categorynameonlyposnumbyyear} colors={colors} /> */}
         </div>
         <div className='donuttitle'>Income</div>
         <div className='flexrow'>
           <div className='flexcolumn'>
-            <div className='flexrow'>
-              <div>Year Income: </div>
-              <div className={'text-success px'}>{YearExpense}</div>
-            </div>
-            <div className='flexrow'>
-              <div>Monthly Average: </div>
+            <ul className='flexrow'>
+              <li>Year Income: </li>
+              <li className={'text-success px'}>{YearExpense}</li>
+            </ul>
+            <ul className='flexrow'>
+              <li>Monthly Average: </li>
               <Element name='myScrollToElement'></Element>
-              <div className={'text-success px'}>{yearmonthavg}</div>
-            </div>
+              <li className={'text-success px'}>{yearmonthavg}</li>
+            </ul>
           </div>
         </div>
       </div>

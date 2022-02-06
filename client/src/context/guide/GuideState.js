@@ -18,7 +18,7 @@ const GuideState = (props) => {
   const setUserExited = (boolean) => {
     dispatch({ type: TOGGLE_EXIT, payload: boolean });
   };
-  console.log(state.exitedguide);
+
   return (
     <GuideContext.Provider
       value={{

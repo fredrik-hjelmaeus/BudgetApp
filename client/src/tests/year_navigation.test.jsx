@@ -47,10 +47,99 @@ describe('navigation through all year pages', () => {
     expect(accountBalanceSum).toBeInTheDocument();
   });
 
-  test('navigate to expense summary works and state is correct', () => {});
-  test('navigate to income summary works and state is correct', () => {});
-  test('navigate to savings summary works and state is correct', () => {});
-  test('navigate back to balance summary works', () => {});
+  test('navigate to expense summary works and state is correct', async () => {
+    render(<App />);
+    // go to year by logging in
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.click(loginButton);
+    const emailField = screen.getByPlaceholderText(/Email Address/i);
+    userEvent.type(emailField, 'nisse@manpower.se');
+    const passwordField = screen.getByPlaceholderText(/password/i);
+    userEvent.type(passwordField, 'Passw0rd!');
+    const submitLoginButton = screen.getByDisplayValue(/login/i);
+    fireEvent.click(submitLoginButton);
+    await waitForElementToBeRemoved(submitLoginButton);
+
+    const expenseSummary = screen.queryByRole('button', { name: /Expense Summary/i });
+    expect(expenseSummary).toBeInTheDocument();
+    fireEvent.click(expenseSummary);
+
+    const yearExpenseSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '275');
+    expect(yearExpenseSum).toBeInTheDocument();
+    const expenseAverage = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '22');
+    expect(expenseAverage).toBeInTheDocument();
+  });
+  test('navigate to income summary works and state is correct', async () => {
+    render(<App />);
+    // go to year by logging in
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.click(loginButton);
+    const emailField = screen.getByPlaceholderText(/Email Address/i);
+    userEvent.type(emailField, 'nisse@manpower.se');
+    const passwordField = screen.getByPlaceholderText(/password/i);
+    userEvent.type(passwordField, 'Passw0rd!');
+    const submitLoginButton = screen.getByDisplayValue(/login/i);
+    fireEvent.click(submitLoginButton);
+    await waitForElementToBeRemoved(submitLoginButton);
+
+    const incomeSummary = screen.queryByRole('button', { name: /Income Summary/i });
+    expect(incomeSummary).toBeInTheDocument();
+    fireEvent.click(incomeSummary);
+
+    const incomeSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990463');
+    expect(incomeSum).toBeInTheDocument();
+    const incomeAverage = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82538');
+    expect(incomeAverage).toBeInTheDocument();
+  });
+  test('navigate to savings summary works and state is correct', async () => {
+    render(<App />);
+    // go to year by logging in
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.click(loginButton);
+    const emailField = screen.getByPlaceholderText(/Email Address/i);
+    userEvent.type(emailField, 'nisse@manpower.se');
+    const passwordField = screen.getByPlaceholderText(/password/i);
+    userEvent.type(passwordField, 'Passw0rd!');
+    const submitLoginButton = screen.getByDisplayValue(/login/i);
+    fireEvent.click(submitLoginButton);
+    await waitForElementToBeRemoved(submitLoginButton);
+
+    const savingsSummary = screen.queryByRole('button', { name: /Savings Summary/i });
+    expect(savingsSummary).toBeInTheDocument();
+    fireEvent.click(savingsSummary);
+
+    const savingSum = screen.queryAllByRole('button').find((b) => b.textContent === '456788');
+    const capitalSum = screen.queryAllByRole('button').find((b) => b.textContent === '4455');
+
+    expect(savingSum).toHaveTextContent('456788');
+    expect(capitalSum).toHaveTextContent('4455');
+  });
+  test('navigate back to balance summary works', async () => {
+    render(<App />);
+    // go to year by logging in
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.click(loginButton);
+    const emailField = screen.getByPlaceholderText(/Email Address/i);
+    userEvent.type(emailField, 'nisse@manpower.se');
+    const passwordField = screen.getByPlaceholderText(/password/i);
+    userEvent.type(passwordField, 'Passw0rd!');
+    const submitLoginButton = screen.getByDisplayValue(/login/i);
+    fireEvent.click(submitLoginButton);
+    await waitForElementToBeRemoved(submitLoginButton);
+
+    // click to expense view
+    const expenseSummary = screen.queryByRole('button', { name: /Expense Summary/i });
+    expect(expenseSummary).toBeInTheDocument();
+    fireEvent.click(expenseSummary);
+
+    //click back to balance summary view
+    const balanceSummary = screen.queryByRole('button', { name: /Balance Summary/i });
+    fireEvent.click(balanceSummary);
+
+    //check a value that is only in balance summary view
+    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
+    expect(yearSumNumber).toBeInTheDocument();
+  });
   test('open user details modals works', async () => {
     render(<App />);
 
@@ -102,7 +191,7 @@ describe('navigation through all year pages', () => {
     const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
     expect(yearSumNumber).toBeInTheDocument();
   });
-  test.skip('initial year state correct after stopping guide for user with own presets created', async () => {
+  test('initial year state correct after stopping guide for user with own presets created', async () => {
     render(<App />);
 
     // go to year by logging in
@@ -117,26 +206,27 @@ describe('navigation through all year pages', () => {
     await waitForElementToBeRemoved(submitLoginButton);
 
     // click user details
-    const userDetailsButton = screen.getByRole('button', { name: /dirk/i });
+    const userDetailsButton = await screen.findByRole('button', { name: /dirk/i });
+    expect(userDetailsButton).toBeInTheDocument();
     fireEvent.click(userDetailsButton);
 
     // click start guide button
-    const startGuideButton = screen.getByRole('button', { name: /start the app guide/i });
+    const startGuideButton = await screen.findByRole('button', { name: /start the app guide/i });
     fireEvent.click(startGuideButton);
 
     // click run guide button
-    const runGuideButton = screen.getByRole('button', { name: 'Start Guide' });
+    const runGuideButton = await screen.findByRole('button', { name: 'Start Guide' });
     fireEvent.click(runGuideButton);
 
     // click stop guide button
-    const exitGuideButton = screen.getByRole('button', { name: /exit/i });
+    const exitGuideButton = await screen.findByRole('button', { name: /exit/i });
     fireEvent.click(exitGuideButton);
 
     // check yearsumnumber
     const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
-    expect(yearSumNumber).toBeInTheDocument();
+    expect(yearSumNumber).toHaveTextContent('990188');
   });
-  test.skip('guide is activated on new user', async () => {
+  test('guide is activated on new user', async () => {
     // override handlers.js presets to be zero ,indicating new user
     await SetupNewUser();
 
@@ -171,12 +261,22 @@ describe('navigation through all year pages', () => {
     const passwordField = screen.getByPlaceholderText(/password/i);
     userEvent.type(passwordField, 'Passw0rd!');
     const submitLoginButton = screen.getByDisplayValue(/login/i);
+
     fireEvent.click(submitLoginButton);
     await waitForElementToBeRemoved(submitLoginButton);
 
-    //test by looking for welcome dirk in home screen
-    const loggedInUserWelcomeElement = await screen.findByRole('heading', { name: /welcome dirk!/i });
-    expect(loggedInUserWelcomeElement).toBeInTheDocument();
+    // click run guide button
+    const runGuideButton = await screen.findByRole('button', { name: 'Start Guide' });
+    fireEvent.click(runGuideButton);
+
+    // click stop guide button
+    const exitGuideButton = await screen.findByRole('button', { name: /exit/i });
+    fireEvent.click(exitGuideButton);
+    expect(exitGuideButton).not.toBeInTheDocument();
+
+    // check yearsumnumber
+    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '0');
+    expect(yearSumNumber).toHaveTextContent('0');
   });
 });
 
@@ -217,6 +317,9 @@ async function SetupNewUser() {
       return res(ctx.json({ success: true, data: 'Email sent' }));
     }),
     rest.get('http://localhost/api/userpreset', (req, res, ctx) => {
+      return res(ctx.json([]));
+    }),
+    rest.get('http://localhost/api/guide', (req, res, ctx) => {
       return res(ctx.json([]));
     })
   );
