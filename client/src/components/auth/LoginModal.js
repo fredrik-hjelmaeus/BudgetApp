@@ -28,7 +28,7 @@ export const LoginModal = (props) => {
     }
 
     if (errors.length > 0 && isMounted) {
-      console.log('loginmodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
+      //console.log('loginmodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
       errors.map((error) => error && setAlert(error?.msg, 'danger'));
       clearErrors();
     }

@@ -39,7 +39,7 @@ export const ForgotPassword = (props) => {
 
   useEffect(() => {
     if (mailsentmsg === null && errors.length > 0) {
-      console.log('forgotpasswordmodal:', errors); // TODO: replace this with logging message to report wrong structured error message response
+      // console.log('forgotpasswordmodal:', errors); // TODO: replace this with logging message to report wrong structured error message response
       errors.map((error) => error && setAlert(error?.msg, 'danger'));
       clearErrors();
     } else {

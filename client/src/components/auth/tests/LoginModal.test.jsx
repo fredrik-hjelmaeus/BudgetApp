@@ -43,8 +43,8 @@ describe('login flow', () => {
     expect(submitLoginButton).not.toBeInTheDocument();
 
     // make sure we arrived to user home
-    const loggedInUserWelcomeElement = await screen.findByRole('heading', { name: /welcome dirk!/i });
-    expect(loggedInUserWelcomeElement).toBeInTheDocument();
+    const loggedInUserNameAndButton = await screen.findByRole('button', { name: /dirk/i });
+    expect(loggedInUserNameAndButton).toBeInTheDocument();
 
     // logout user
     const logoutButton = await screen.findByRole('button', { name: /logout/i });
