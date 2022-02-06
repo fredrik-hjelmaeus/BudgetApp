@@ -5,7 +5,7 @@ function UserDetails({ onSubmitProfile, onChange, name, email }) {
     <form onSubmit={onSubmitProfile}>
       <div className='flexrow'>
         <div>
-          <label className='form-text label' for='name'>
+          <label className='form-text label' htmlFor='name'>
             Name:
           </label>
         </div>
@@ -15,7 +15,7 @@ function UserDetails({ onSubmitProfile, onChange, name, email }) {
       </div>
       <div className='flexrow '>
         <div>
-          <label className='form-text label' for='email'>
+          <label className='form-text label' htmlFor='email'>
             Email:
           </label>
         </div>
