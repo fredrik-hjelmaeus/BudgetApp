@@ -37,7 +37,30 @@ export const handlers = [
     return res(ctx.json({ success: true, data: 'Email sent' }));
   }),
   rest.get('http://localhost/api/guide', (req, res, ctx) => {
-    return res(ctx.json([]));
+    return res(
+      ctx.json([
+        {
+          _id: '61ffc16219c0a7a8173c7f2d',
+          user: '61ed72d16f895b1100dbab66',
+          name: 'Guide preset',
+          number: 123456789,
+          month: 'September',
+          year: 2021,
+          category: 'Housing',
+          type: 'overhead',
+          piggybank: [
+            {
+              month: 'September',
+              year: 2021,
+              savedAmount: 0,
+              _id: '61ffc16219c0a7a8173c7f2e',
+            },
+          ],
+          date: '2022-02-06T12:38:58.720Z',
+          __v: 0,
+        },
+      ])
+    );
   }),
   rest.get('http://localhost/api/userpreset', (req, res, ctx) => {
     return res(

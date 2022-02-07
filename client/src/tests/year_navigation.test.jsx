@@ -46,7 +46,6 @@ describe('navigation through all year pages', () => {
     const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544622');
     expect(accountBalanceSum).toBeInTheDocument();
   });
-
   test('navigate to expense summary works and state is correct', async () => {
     render(<App />);
     // go to year by logging in
