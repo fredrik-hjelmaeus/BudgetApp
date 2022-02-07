@@ -15,7 +15,7 @@ describe('login flow', () => {
     expect(loginModalH1element).toBeInTheDocument();
   });
 
-  test.only('login happy path', async () => {
+  test('login happy path', async () => {
     render(<App />);
     // startingstate: local storage has no token so we are directed to landing page
 

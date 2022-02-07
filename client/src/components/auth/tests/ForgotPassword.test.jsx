@@ -35,7 +35,7 @@ describe('forgot password modal', () => {
     const emailField = screen.getByPlaceholderText(/email address/i);
     expect(emailField.hasAttribute('required')).toBeTruthy();
   });
-  test.only('email sent show error when failing to connect with server', async () => {
+  test('email sent show error when failing to connect with server', async () => {
     // override normal 200 response from handlers and make it report error like backend:
     server.resetHandlers(
       // login endpoint
