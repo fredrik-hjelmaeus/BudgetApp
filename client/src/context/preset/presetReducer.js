@@ -273,7 +273,7 @@ export default (state, action) => {
     case SEND_EDIT:
       return {
         ...state,
-        presets: state.presets.map((preset) => (preset._id === action.payload._id ? action.payload : preset)),
+        presets: state.presets?.map((preset) => (preset._id === action.payload._id ? action.payload : preset)),
         loading: false,
       };
     case DELETE_PRESET:
