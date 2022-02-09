@@ -308,6 +308,22 @@ export const handlers = [
       ])
     );
   }),
+  rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+    return res(
+      ctx.json({
+        user: '6203e2152bdb63c78b35b670',
+        name: 'testtest',
+        number: 1000,
+        month: 'january',
+        category: 'travel',
+        type: 'overhead',
+        piggybank: [],
+        _id: '6203e22b2bdb63c78b35b672',
+        date: '2022-02-09T15:47:55.671Z',
+        __v: 0,
+      })
+    );
+  }),
 ];
 
 //fail to get token:
