@@ -22,17 +22,23 @@ describe('navigation through all month pages', () => {
 
     // check all elements is there
     const addToBudgetButton = await screen.findByRole('button', { name: /add to budget/i });
-    const sum = await screen.findAllByText('444');
-    expect(sum.length).toBe(3);
+    // month income
+    const sum = await screen.findAllByText('799');
+    expect(sum.length).toBe(1);
+    // month expenses
     const expenses = await screen.findAllByText('-255');
     expect(expenses.length).toBe(3);
-    const BalanceAndSurplus = await screen.findAllByText('189');
+    const BalanceAndSurplus = await screen.findAllByText('544');
     expect(BalanceAndSurplus.length).toBe(2);
-    const accountBalanceSum = await screen.findByText('544622');
+    const accountBalanceSum = await screen.findByText('544977');
     const monthSavings = await screen.findByText('0');
+
+    // purchase elements
     const purchaseElement = await screen.findByRole('heading', { name: /purchases/i });
+    const purchasePreset = await screen.findByText('55000');
 
     expect(purchaseElement).toBeInTheDocument();
+    expect(purchasePreset).toBeInTheDocument();
     expect(monthSavings).toBeInTheDocument();
     expect(accountBalanceSum).toBeInTheDocument();
     expect(addToBudgetButton).toBeInTheDocument();
@@ -96,7 +102,7 @@ describe('navigation through all month pages', () => {
     expect(sum.length).toBe(5);
     const expenses = await screen.findAllByText('Please add a Value');
     expect(expenses.length).toBe(1);
-    const accountBalanceSum = await screen.findByText('544622');
+    const accountBalanceSum = await screen.findByText('544977');
     const SavingsAndExpenses = await screen.findAllByText('0');
     expect(SavingsAndExpenses.length).toBe(2);
     const purchaseElement = await screen.findByRole('heading', { name: /purchases/i });
@@ -145,15 +151,15 @@ describe('navigation through all month pages', () => {
     const yearBalanceChartSummary = screen.getByText(/Year Summary:/i);
     expect(yearBalanceChartSummary).toBeInTheDocument();
 
-    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
-    expect(yearSumNumber).toBeInTheDocument();
-    const montlyAverageSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82515');
+    const yearSummaryNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
+    expect(yearSummaryNumber).toBeInTheDocument();
+    const montlyAverageSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82545');
     expect(montlyAverageSum).toBeInTheDocument();
     const capitalSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '4455');
     expect(capitalSum).toBeInTheDocument();
     const savingsSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '456788');
     expect(savingsSum).toBeInTheDocument();
-    const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544622');
+    const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544977');
     expect(accountBalanceSum).toBeInTheDocument();
   });
   test('add to budget expands and contracts correct', async () => {
