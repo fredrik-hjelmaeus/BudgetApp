@@ -35,15 +35,15 @@ describe('navigation through all year pages', () => {
     const yearBalanceChartSummary = screen.getByText(/Year Summary:/i);
     expect(yearBalanceChartSummary).toBeInTheDocument();
 
-    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
+    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
     expect(yearSumNumber).toBeInTheDocument();
-    const montlyAverageSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82515');
+    const montlyAverageSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82545');
     expect(montlyAverageSum).toBeInTheDocument();
     const capitalSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '4455');
     expect(capitalSum).toBeInTheDocument();
     const savingsSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '456788');
     expect(savingsSum).toBeInTheDocument();
-    const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544622');
+    const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544977');
     expect(accountBalanceSum).toBeInTheDocument();
   });
   test('navigate to expense summary works and state is correct', async () => {
@@ -85,9 +85,9 @@ describe('navigation through all year pages', () => {
     expect(incomeSummary).toBeInTheDocument();
     fireEvent.click(incomeSummary);
 
-    const incomeSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990463');
+    const incomeSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990818');
     expect(incomeSum).toBeInTheDocument();
-    const incomeAverage = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82538');
+    const incomeAverage = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82568');
     expect(incomeAverage).toBeInTheDocument();
   });
   test('navigate to savings summary works and state is correct', async () => {
@@ -136,7 +136,7 @@ describe('navigation through all year pages', () => {
     fireEvent.click(balanceSummary);
 
     //check a value that is only in balance summary view
-    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
+    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
     expect(yearSumNumber).toBeInTheDocument();
   });
   test('open user details modals works', async () => {
@@ -187,7 +187,7 @@ describe('navigation through all year pages', () => {
     fireEvent.click(declineGuideButton);
 
     // check yearsumnumber
-    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
+    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
     expect(yearSumNumber).toBeInTheDocument();
   });
   test('initial year state correct after stopping guide for user with own presets created', async () => {
@@ -222,8 +222,8 @@ describe('navigation through all year pages', () => {
     fireEvent.click(exitGuideButton);
 
     // check yearsumnumber
-    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990188');
-    expect(yearSumNumber).toHaveTextContent('990188');
+    const yearSumNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
+    expect(yearSumNumber).toHaveTextContent('990543');
   });
   test('guide is activated on new user', async () => {
     // override handlers.js presets to be zero ,indicating new user

@@ -920,7 +920,7 @@ const PresetState = (props) => {
     const listOfCapitalItems = state.presets.filter((preset) => {
       return preset.type === 'capital' && preset;
     });
-    console.log(listOfCapitalItems);
+    // console.log(listOfCapitalItems);
     dispatch({ type: SET_CAPITAL_LIST, payload: listOfCapitalItems });
   };
 
