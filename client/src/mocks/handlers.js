@@ -126,6 +126,26 @@ export const handlers = [
           __v: 0,
         },
         {
+          _id: '6203c32b8015507e05a926cd',
+          user: '61ed72d16f895b1100dbab66',
+          name: 'Resa',
+          number: 55000,
+          month: 'January',
+          year: 2021,
+          category: 'Travel',
+          type: 'purchase',
+          piggybank: [
+            {
+              month: 'January',
+              year: 2021,
+              savedAmount: 0,
+              _id: '6203c32b8015507e05a926ce',
+            },
+          ],
+          date: '2022-02-09T13:35:39.173Z',
+          __v: 0,
+        },
+        {
           _id: '61edb2af5e11343d1268fa24',
           user: '61ed72d16f895b1100dbab66',
           name: '6776',
@@ -183,6 +203,26 @@ export const handlers = [
             },
           ],
           date: '2022-01-23T19:50:54.267Z',
+          __v: 0,
+        },
+        {
+          _id: '62039bb18015507e05a926a3',
+          user: '61ed72d16f895b1100dbab66',
+          name: 'dsfs',
+          number: 355,
+          month: 'January',
+          year: 2021,
+          category: 'Commute',
+          type: 'overhead',
+          piggybank: [
+            {
+              month: 'January',
+              year: 2021,
+              savedAmount: 0,
+              _id: '62039bb18015507e05a926a4',
+            },
+          ],
+          date: '2022-02-09T10:47:13.627Z',
           __v: 0,
         },
         {
