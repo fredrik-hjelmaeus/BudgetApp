@@ -273,12 +273,12 @@ const PresetState = (props) => {
       }
     };
     const sumArray = [];
-    state.presets.map((preset) => {
+    state.presets?.map((preset) => {
       if (preset.type !== 'purchase' && preset.type !== 'savings') {
-        sumArray.push(parseFloat(preset.number));
+        return sumArray.push(parseFloat(preset.number));
       } else {
         if (preset.type === 'savings') {
-          sumArray.push(parseFloat(preset.number * -1));
+          return sumArray.push(parseFloat(preset.number * -1));
         }
       }
     });
@@ -297,7 +297,7 @@ const PresetState = (props) => {
       //håller uträknade summan
       let TotalMonthSum = 0;
       if (state.year === '2019' || state.year === 2019) {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             preset.year === undefined ||
             preset.year === '2019' ||
@@ -310,7 +310,7 @@ const PresetState = (props) => {
           );
         });
       } else {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             parseInt(preset.year) === parseInt(state.year) &&
             preset.month === month &&
@@ -339,7 +339,7 @@ const PresetState = (props) => {
     //håller uträknade summan
     let TotalMonthSum = 0;
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -351,7 +351,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.month === month &&
@@ -414,7 +414,7 @@ const PresetState = (props) => {
   const calcCategoryByMonth = (month) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
-    state.presets.map((preset) => {
+    state.presets?.map((preset) => {
       return (
         preset.type !== null &&
         preset.type !== 'purchase' &&
@@ -437,7 +437,7 @@ const PresetState = (props) => {
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
       if (state.year === '2019' || state.year === 2019) {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             preset.year === undefined ||
             (parseInt(preset.year) === parseInt('2019') &&
@@ -451,7 +451,7 @@ const PresetState = (props) => {
           );
         }); // end inner loop
       } else {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             parseInt(preset.year) === parseInt(state.year) &&
             preset.type !== null &&
@@ -482,7 +482,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -494,7 +494,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -518,7 +518,7 @@ const PresetState = (props) => {
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
       if (state.year === '2019' || state.year === 2019) {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             preset.year === undefined ||
             (parseInt(preset.year) === parseInt('2019') &&
@@ -531,7 +531,7 @@ const PresetState = (props) => {
           );
         }); // end inner loop
       } else {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             parseInt(preset.year) === parseInt(state.year) &&
             preset.type !== null &&
@@ -560,7 +560,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -572,7 +572,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -594,7 +594,7 @@ const PresetState = (props) => {
       let SumOfCat;
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.type !== null &&
           preset.type !== 'purchase' &&
@@ -615,7 +615,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -628,7 +628,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -652,7 +652,7 @@ const PresetState = (props) => {
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
       if (state.year === '2019' || state.year === 2019) {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             preset.year === undefined ||
             (parseInt(preset.year) === parseInt('2019') &&
@@ -666,7 +666,7 @@ const PresetState = (props) => {
           );
         }); // end inner loop
       } else {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             parseInt(preset.year) === parseInt(state.year) &&
             preset.type !== null &&
@@ -690,7 +690,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -703,7 +703,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -727,7 +727,7 @@ const PresetState = (props) => {
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
       if (state.year === '2019' || state.year === 2019) {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             preset.year === undefined ||
             (parseInt(preset.year) === parseInt('2019') &&
@@ -741,7 +741,7 @@ const PresetState = (props) => {
           );
         }); // end inner loop
       } else {
-        state.presets.map((preset) => {
+        state.presets?.map((preset) => {
           return (
             parseInt(preset.year) === parseInt(state.year) &&
             preset.type !== null &&
@@ -765,7 +765,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -777,7 +777,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -800,7 +800,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -813,7 +813,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -840,7 +840,7 @@ const PresetState = (props) => {
     // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
     let categoriesArray = [];
     if (state.year === '2019' || state.year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -853,7 +853,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -878,7 +878,7 @@ const PresetState = (props) => {
   const calcYearsum = (year) => {
     let numberArray = [];
     if (year === '2019' || year === 2019) {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -890,7 +890,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type !== null &&
@@ -930,7 +930,7 @@ const PresetState = (props) => {
     let presetArray = [];
     //håller uträknade summan
     let TotalMonthSum = 0;
-    state.presets.map((preset) => {
+    state.presets?.map((preset) => {
       return preset.type === 'savings' && presetArray.push(parseFloat(preset.number));
     });
 
@@ -950,7 +950,7 @@ const PresetState = (props) => {
     //håller uträknade summan
     let TotalMonthSum = 0;
     if (state.year === 2019 || state.year === '2019') {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           preset.year === undefined ||
           (parseInt(preset.year) === parseInt('2019') &&
@@ -960,7 +960,7 @@ const PresetState = (props) => {
         );
       });
     } else {
-      state.presets.map((preset) => {
+      state.presets?.map((preset) => {
         return (
           parseInt(preset.year) === parseInt(state.year) &&
           preset.type === 'savings' &&
@@ -1010,7 +1010,7 @@ const PresetState = (props) => {
     let presetArray = [];
     //håller uträknade summan
     let TotalMonthSum = 0;
-    state.presets.map((preset) => {
+    state.presets?.map((preset) => {
       return preset.type === 'capital' && presetArray.push(parseFloat(preset.number));
     });
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
