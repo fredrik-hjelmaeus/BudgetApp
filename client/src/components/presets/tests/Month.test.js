@@ -1,11 +1,179 @@
-//import { render, screen, fireEvent, waitForElementToBeRemoved } from '../test-utils/context-wrapper';
+import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor } from '../../../test-utils/context-wrapper';
 import userEvent from '@testing-library/user-event';
-import PresetForm from '../PresetForm';
+import App from '../../../App';
+import { server } from '../../../mocks/server';
+import { rest } from 'msw';
 
 describe('Summation functionality', () => {
-  test.skip('Deleting presetvalues updates all summation-fields', () => {});
-  test.skip('Adding overhead income presetvalue updates all summation-fields', () => {});
-  test.skip('Adding overhead expense presetvalue updates all summation-fields', () => {});
+  beforeEach(async () => {
+    // go to month and expand preset form
+    render(<App />);
+    //login
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.click(loginButton);
+    const emailField = screen.getByPlaceholderText(/Email Address/i);
+    userEvent.type(emailField, 'nisse@manpower.se');
+    const passwordField = screen.getByPlaceholderText(/password/i);
+    userEvent.type(passwordField, 'Passw0rd!');
+    const submitLoginButton = screen.getByDisplayValue(/login/i);
+    fireEvent.click(submitLoginButton);
+    await waitForElementToBeRemoved(submitLoginButton);
+
+    // go to month
+    const januaryButton = screen.queryByRole('button', { name: /january/i });
+    fireEvent.click(januaryButton);
+
+    // click add to budget button
+    const addToBudgetButton = await screen.findByRole('button', { name: /add to budget/i });
+    fireEvent.click(addToBudgetButton);
+
+    // assert inital month state
+    const sum = await screen.findAllByText('799');
+    expect(sum.length).toBe(1);
+    const expenses = await screen.findAllByText('-255');
+    expect(expenses.length).toBe(3);
+    const BalanceAndSurplus = await screen.findAllByText('544');
+    expect(BalanceAndSurplus.length).toBe(2);
+    const accountBalanceSum = await screen.findByText('544977');
+    const monthSavings = await screen.findByText('0');
+    const purchaseElement = await screen.findByRole('heading', { name: /purchases/i });
+    const purchasePreset = await screen.findByText('55000');
+    const presetElement = await screen.findByText('sadas');
+    expect(presetElement).toBeInTheDocument();
+    expect(purchaseElement).toBeInTheDocument();
+    expect(purchasePreset).toBeInTheDocument();
+    expect(monthSavings).toBeInTheDocument();
+    expect(accountBalanceSum).toBeInTheDocument();
+  });
+
+  test('Adding overhead income presetvalue updates all summation-fields', async () => {
+    // starting point is month January with expanded preset form setup in beforeEach
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    userEvent.type(nameField, 'incomepreset');
+    userEvent.type(numberField, '100');
+    userEvent.selectOptions(categoryField, 'Reminderfees');
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    // expect form fields to be reset
+    expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+    expect(screen.getByRole('combobox')).toHaveValue('Select an category');
+
+    // expect preset to be added to monthsummary income
+    const presetElement2 = await screen.findByRole('button', { name: 'testtest' });
+    expect(presetElement2).toBeInTheDocument();
+
+    // expect sum fields to be updated with +1000 as per endpoint:rest.post('http://localhost/api/userpreset') response in handlers
+    const newMonthIncomeSum = screen.getByText('1799');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+    const AccBal = screen.getByText('545977');
+    expect(AccBal).toBeInTheDocument();
+    const monthSurplusValue = screen.getByText('Month Surplus:').parentElement.children[1].textContent;
+    expect(monthSurplusValue).toBe('1544');
+    const monthBalanceValue = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceValue).toBe('Month Balance:1544');
+    const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
+    expect(BalanceByCategory_TravelField).toBe('745');
+  });
+
+  test('Adding overhead expense presetvalue updates all summation-fields', async () => {
+    // starting point is month January with expanded preset form
+
+    // override endpoint to respond with expense number
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: 'expensepreset',
+            number: -1000,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: 'overhead',
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    userEvent.type(nameField, 'incomepreset');
+    userEvent.type(numberField, '100');
+    userEvent.selectOptions(categoryField, 'Reminderfees');
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    // expect preset to be added to monthsummary income
+    const presetElement = await screen.findByRole('button', { name: 'expensepreset' });
+    expect(presetElement).toBeInTheDocument();
+
+    //Month Income:
+    const newMonthIncomeSum = screen.getByText('799');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+
+    const AccountBalance = screen.getByText('543977');
+    expect(AccountBalance).toBeInTheDocument();
+
+    //Month Expenses: -1255
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-1255');
+
+    //Month Balance: -456
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Balance Month:-456');
+
+    //Month Savings: 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
+  test.only('Deleting presetvalues updates all summation-fields', async () => {
+    // starting point is month January with expanded preset form
+
+    // delete preset
+    const presetElement_DeleteButton = screen.queryAllByRole('button').find((btn) => btn.value === 'delbtn' && btn.name === 'sadas');
+    fireEvent.click(presetElement_DeleteButton);
+    await waitForElementToBeRemoved(presetElement_DeleteButton);
+
+    // expect to not find deleted preset
+    const deletedPreset = screen.queryAllByRole('button').find((btn) => btn.value === 'delbtn' && btn.name === 'sadas');
+    expect(deletedPreset).toBeUndefined();
+
+    // expect summation values to update:
+    //Month Income:
+    const newMonthIncomeSum = screen.getByDisplayValue('355');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+
+    //Account Balance
+    const AccountBalance = screen.getByText('544533');
+    expect(AccountBalance).toBeInTheDocument();
+
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-255');
+
+    //Month Balance:
+    const MonthBalanceAndSurplus = screen.getAllByText('100');
+    expect(MonthBalanceAndSurplus.length).toBe(2);
+
+    //Month Savings:
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
   test.skip('Adding multiple overhead presetvalues through upload csv dialog updates all summation-fields correctly', () => {});
   test.skip('Editing overhead income presetvalues updates all summation-fields', () => {});
   test.skip('Editing overhead expense presetvalues updates all summation-fields', () => {});

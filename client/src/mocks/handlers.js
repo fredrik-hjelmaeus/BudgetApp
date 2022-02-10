@@ -311,16 +311,31 @@ export const handlers = [
   rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
     return res(
       ctx.json({
+        _id: '6203e22b2bdb63c78b35b672',
         user: '6203e2152bdb63c78b35b670',
         name: 'testtest',
         number: 1000,
-        month: 'january',
-        category: 'travel',
+        month: 'January',
+        year: 2021,
+        category: 'Travel',
         type: 'overhead',
-        piggybank: [],
-        _id: '6203e22b2bdb63c78b35b672',
+        piggybank: [
+          {
+            month: 'January',
+            year: 2021,
+            savedAmount: 0,
+            _id: '61edb1a5c557568270d9349e',
+          },
+        ],
         date: '2022-02-09T15:47:55.671Z',
         __v: 0,
+      })
+    );
+  }),
+  rest.delete(`http://localhost/api/userpreset/61edb19ec557568270d9349a`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        msg: 'Preset removed',
       })
     );
   }),
