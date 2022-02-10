@@ -14,7 +14,7 @@ const PresetForm = () => {
   const guideContext = useContext(GuideContext);
 
   const { guide } = guideContext;
-  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year } = presetContext;
+  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year, error } = presetContext;
   const { setAlert } = alertContext;
   const { toggleModal } = cssContext;
 
@@ -34,8 +34,9 @@ const PresetForm = () => {
         });
       }
     }
+    if (error) setAlert(error, 'danger');
     // eslint-disable-next-line
-  }, [edit, month, presets]);
+  }, [edit, month, presets, error]);
 
   const [expand, setExpand] = useState(false);
 
@@ -62,14 +63,14 @@ const PresetForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (preset.category !== 'Select an category') {
+    if (preset.category !== 'Select an category ^') {
       if (edit === null) {
         addPreset(preset);
         if (preset.name !== '' || preset.number !== '') {
           calcSum();
         }
       } else {
-        if (preset.name !== '' || preset.number !== '' || preset.category !== 'Select an category') {
+        if (preset.name !== '' || preset.number !== '' || preset.category !== 'Select an category ^') {
           sendEdit(preset);
           calcSum();
         }
@@ -85,7 +86,7 @@ const PresetForm = () => {
         number: '',
         month,
         year,
-        category,
+        category: 'Select an category ^',
         type: 'overhead',
       });
     } else {
@@ -134,7 +135,7 @@ const PresetForm = () => {
             />
             <input
               className={guide === '6' ? 'presetformnumber guide__presetformnumber' : 'presetformnumber'}
-              type='text'
+              type='number'
               placeholder='Number'
               name='number'
               value={number}
