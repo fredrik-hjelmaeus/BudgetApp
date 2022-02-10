@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitForElementToBeRemoved } from '../../../test-utils/context-wrapper';
+import { render, screen, fireEvent } from '../../../test-utils/context-wrapper';
 import userEvent from '@testing-library/user-event';
 import PresetForm from '../PresetForm';
 
@@ -96,5 +96,41 @@ test('number field only accepts negative or positive numbers', () => {
   expect(screen.getByRole('combobox')).toHaveValue('Reminderfees');
   expect(screen.getByText('Please fill in both fields')).toBeInTheDocument();
 });
-test('select category field works', () => {});
-test('checkboxfield works', () => {});
+
+test('checkboxfield works', () => {
+  render(<PresetForm />);
+
+  //expand the form
+  const expandBtn = screen.getByRole('button', { name: /add to budget/i });
+  fireEvent.click(expandBtn);
+
+  // click around on checkboxes
+  const overheadCheckbox = screen.getByRole('checkbox', { name: /overhead/i });
+  expect(overheadCheckbox).toBeChecked();
+  const purchaseCheckbox = screen.getByRole('checkbox', { name: /purchase/i });
+  fireEvent.click(purchaseCheckbox);
+  expect(purchaseCheckbox).toBeChecked();
+  const savingsCheckbox = screen.getByRole('checkbox', { name: /savings/i });
+  fireEvent.click(savingsCheckbox);
+  expect(savingsCheckbox).toBeChecked();
+  const capitalCheckbox = screen.getByRole('checkbox', { name: /capital/i });
+  fireEvent.click(capitalCheckbox);
+  expect(capitalCheckbox).toBeChecked();
+
+  // fill in the form
+  const nameField = screen.getByPlaceholderText('Name');
+  const numberField = screen.getByPlaceholderText('Number');
+  const categoryField = screen.getByRole('combobox');
+  userEvent.type(nameField, 'test');
+  userEvent.type(numberField, '100');
+  userEvent.selectOptions(categoryField, 'Reminderfees');
+  //click submit
+  fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+  // expect fields to be reset after submit
+  expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+  expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+  expect(screen.getByRole('combobox')).toHaveValue('Select an category');
+  expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
+  // correct checkbox value sent to backend is tested in month integration test.
+});
