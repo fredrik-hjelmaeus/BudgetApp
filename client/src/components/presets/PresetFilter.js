@@ -6,15 +6,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const PresetFilter = () => {
   const presetContext = useContext(PresetContext);
-  const {
-    year,
-    month,
-    filteredmonthandposnum,
-    loading,
-    presets,
-    filterOutNegativeNumsAndMonth,
-    filterOutPositiveNumsAndMonth,
-  } = presetContext;
+  const { year, month, filteredmonthandposnum, loading, presets, filterOutNegativeNumsAndMonth, filterOutPositiveNumsAndMonth } =
+    presetContext;
 
   useEffect(() => {
     if (month !== null && presets !== null && year !== null) {

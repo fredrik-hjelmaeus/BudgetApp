@@ -182,7 +182,6 @@ const PresetState = (props) => {
     };
     try {
       const res = await axios.post('/api/userpreset/upload', formData, config);
-
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
       dispatch({
@@ -384,7 +383,7 @@ const PresetState = (props) => {
     let presetArray = [];
     //håller uträknade summan
     let TotalMonthSum = 0;
-    filteredmonthandposnum &&
+    state.filteredmonthandposnum &&
       state.filteredmonthandposnum.map((preset) => {
         return presetArray.push(parseFloat(preset.number));
       });
