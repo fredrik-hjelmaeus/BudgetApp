@@ -121,11 +121,17 @@ const PresetState = (props) => {
       const res = await axios.post('/api/userpreset', preset, config);
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err) {
-      dispatch({
-        type: PRESET_ERROR,
-        payload: err.response.msg,
-      });
-      console.log(err);
+      if (err.response === undefined) {
+        dispatch({
+          type: PRESET_ERROR,
+          payload: 'Server or you are offline',
+        });
+      } else {
+        dispatch({
+          type: PRESET_ERROR,
+          payload: err.response.msg,
+        });
+      }
     }
   };
   // Delete preset
