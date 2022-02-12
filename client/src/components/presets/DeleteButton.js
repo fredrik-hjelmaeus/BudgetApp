@@ -11,6 +11,7 @@ const DeleteButton = ({ name, onDelete, onHover, stopHover, localpreset, DelbtnC
       onMouseEnter={onHover}
       onMouseLeave={stopHover}
       onClick={onDelete}
+      data-testid='deleteCsvPresetBtn'
     >
       {localpreset.markdelete === true ? (
         DelbtnColor === true ? (

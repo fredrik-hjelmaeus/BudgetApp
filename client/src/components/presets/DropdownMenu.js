@@ -76,7 +76,6 @@ const getCategoryIcon = (category) => {
 };
 
 const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
-  // localpreset.markdelete !== undefined && console.log(localpreset.markdelete);
   return (
     <div className={localpreset.markdelete === false ? 'dropdown' : localpreset.markdelete ? 'dropdown disable__hover' : 'dropdown'}>
       <button
@@ -119,7 +118,7 @@ const DropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
       </button>
 
       <div className={localpreset.markdelete ? 'dropdown-content markgraydelete disable__hover' : 'dropdown-content'}>
-        <button name='Commute' onClick={onDropdownClick}>
+        <button name='Commute' onClick={onDropdownClick} data-testid='dropdownselect'>
           Commute
         </button>
         <button name='Car' onClick={onDropdownClick}>
