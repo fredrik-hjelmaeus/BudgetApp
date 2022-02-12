@@ -105,7 +105,7 @@ const SelectFile = () => {
         {/* alert */}
         <Alerts />
         {/* Input */}
-        <input style={{ display: 'none' }} type='file' name='csvFile' onChange={onFileChange} ref={inputRef} />
+        <input style={{ display: 'none' }} type='file' name='csvFile' onChange={onFileChange} ref={inputRef} data-testid='fileupload' />
         {/* Select File Format */}
         <SelectSupportedFileFormat selectChange={selectChange} format={format} />
         {/* Buttons */}

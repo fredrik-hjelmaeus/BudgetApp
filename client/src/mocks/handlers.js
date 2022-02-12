@@ -339,6 +339,48 @@ export const handlers = [
       })
     );
   }),
+  rest.post('http://localhost/api/userpreset/upload', (req, res, ctx) => {
+    return res(
+      ctx.json([
+        {
+          row: {
+            Year: '1997',
+            Make: 'Ford',
+            Model: 'E350',
+            Month: 'feb',
+            Day: '12',
+            Saldo: '556',
+            Color: 'green',
+            Speed: 'fast',
+            Title: 'Test',
+            last: 'yes',
+            first: 'no',
+          },
+          id: 'e9657b67-5316-4ea6-9b12-c853d9e8f5dd',
+        },
+        {
+          row: {
+            Year: '2000',
+            Make: 'Mercury',
+            Model: 'Cougar',
+            Month: 'REALLY LONG MONTH NAME JANUARY',
+            Day: '5',
+            Saldo: '777',
+            Color: 'blue',
+            Speed: 'slow',
+            Title: 'two',
+            last: 'no',
+            first: 'yes',
+          },
+          id: '91e7c4cc-16b4-4600-ae42-b029448764b7',
+        },
+      ])
+    );
+  }),
+  rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+    const { _id } = req.console.log(_id);
+    return res(ctx.json({}));
+  }),
 ];
 
 //fail to get token:
