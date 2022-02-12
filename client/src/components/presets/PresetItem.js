@@ -129,6 +129,7 @@ const PresetItem = ({ preset }) => {
           style={InputMode === 'number' ? { display: 'none' } : { display: 'block' }}
           className={number > 0 ? 'text-success btn-form' : 'text-danger btn-form'}
           name='number'
+          data-testid='presetitem'
         >
           {number}
         </button>

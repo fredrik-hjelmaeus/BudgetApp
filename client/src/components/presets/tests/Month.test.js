@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../../../App';
 import { server } from '../../../mocks/server';
 import { rest } from 'msw';
+import path from 'path';
 
 describe('Summation functionality', () => {
   beforeEach(async () => {
@@ -113,12 +114,12 @@ describe('Summation functionality', () => {
     const nameField = screen.getByPlaceholderText('Name');
     const numberField = screen.getByPlaceholderText('Number');
     const categoryField = screen.getByRole('combobox');
-    userEvent.type(nameField, 'incomepreset');
+    userEvent.type(nameField, 'expense');
     userEvent.type(numberField, '100');
     userEvent.selectOptions(categoryField, 'Reminderfees');
     fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
 
-    // expect preset to be added to monthsummary income
+    // expect preset to be added to monthsummary expense
     const presetElement = await screen.findByRole('button', { name: 'expensepreset' });
     expect(presetElement).toBeInTheDocument();
 
@@ -141,7 +142,7 @@ describe('Summation functionality', () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test.only('Deleting presetvalues updates all summation-fields', async () => {
+  test('Deleting presetvalues updates all summation-fields', async () => {
     // starting point is month January with expanded preset form
 
     // delete preset
@@ -174,8 +175,113 @@ describe('Summation functionality', () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test.skip('Adding multiple overhead presetvalues through upload csv dialog updates all summation-fields correctly', () => {});
-  test.skip('Editing overhead income presetvalues updates all summation-fields', () => {});
+
+  test('Adding overhead presetvalues through upload csv dialog updates all summation-fields correctly', async () => {
+    // starting point is month January with expanded preset form
+
+    // click upload csv button
+    fireEvent.click(screen.getByRole('button', { name: /upload csv-file/i }));
+    const input = screen.getByTestId('fileupload');
+    expect(input).toBeInTheDocument();
+
+    // not sure if this need to be specific as it mocked anyhow
+    const filepath = path.resolve(__dirname, '../../_data/csv_testfiles/RFC4180.csv');
+    const file = new File(['RFC4180'], filepath, { type: 'multipart/form-data' });
+
+    // click upload inside csv file format modal
+    userEvent.upload(input, file);
+    fireEvent.click(screen.getByRole('button', { name: 'Upload' }));
+    await waitForElementToBeRemoved(screen.getByRole('button', { name: 'Upload' }));
+
+    // Assert on SelectCSVfields component and that it shows data values correct
+    expect(screen.getByRole('heading', { name: /select csv fields/i })).toBeInTheDocument();
+    expect(screen.getByText('description')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /e350/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /slow/i })).toBeInTheDocument();
+    // select make as description field
+    fireEvent.click(screen.getByRole('button', { name: /make/i }));
+
+    // verify we got to the value field selection dialog
+    expect(screen.getByText(/value/i)).toBeInTheDocument();
+    // select saldo as value field
+    fireEvent.click(screen.getByRole('button', { name: /saldo/i })); // 556 + 777
+    // verify we got to create transactions dialog
+    expect(screen.getByRole('heading', { name: /create transactions/i }));
+
+    // select categories for the fields and change to commute
+    const categoryButtons = screen.getAllByTestId('dropdownselect');
+    fireEvent.click(categoryButtons[0]);
+    fireEvent.click(categoryButtons[1]);
+
+    // delete the second field
+    const presetDeleteBtn = screen.getAllByTestId('deleteCsvPresetBtn').find((btn) => btn.name === 'Mercury');
+    fireEvent.click(presetDeleteBtn);
+
+    // overwrite the addPreset endpoint response
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: 'Ford',
+            number: 556,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: 'overhead',
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+
+    // submit the new csvpresets
+    const submitBtn = screen.getAllByRole('button', { name: /add to budget/i }).find((b) => b.value !== 'ADD TO BUDGET');
+    expect(submitBtn).toBeInTheDocument();
+    fireEvent.click(submitBtn);
+
+    // handle the prompt
+    const confirmButton = screen.getByRole('button', { name: /add the 1 transactions that has a category specified/i });
+    fireEvent.click(confirmButton);
+    expect(submitBtn).not.toBeInTheDocument();
+
+    // expect new preset from csv in monthsummary
+    expect(await screen.findByText('Ford'));
+    expect(await screen.findByText('556'));
+    const presets = await screen.findAllByTestId('presetitem');
+    expect(presets.length).toBe(4);
+
+    //expect all summation fields to be updated
+    //Month Income:
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('1355');
+
+    const AccountBalance = screen.getByText('545533'); //544977
+    expect(AccountBalance).toBeInTheDocument();
+
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-255');
+
+    //Month Balance:
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Month Surplus:1100');
+
+    //Month Savings: 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
+  test.only('Editing overhead income presetvalues updates all summation-fields', () => {});
   test.skip('Editing overhead expense presetvalues updates all summation-fields', () => {});
   test.skip('Editing overhead income to expense presetvalues updates all summation-fields', () => {});
   test.skip('Editing overhead expense to income presetvalues updates all summation-fields', () => {});

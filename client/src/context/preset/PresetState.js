@@ -184,6 +184,7 @@ const PresetState = (props) => {
       const res = await axios.post('/api/userpreset/upload', formData, config);
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err) {
+      console.log('errrrrrr', err);
       dispatch({
         type: PRESET_ERROR,
         payload: err.response.data,
