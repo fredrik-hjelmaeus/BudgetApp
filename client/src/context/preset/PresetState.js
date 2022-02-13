@@ -161,6 +161,7 @@ const PresetState = (props) => {
       const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: PRESET_ERROR,
         payload: err.response.msg,

@@ -16,6 +16,7 @@ import UserProfileModal from '../auth/UserProfileModal';
 import SelectFile from '../csv/SelectFile';
 import SelectCSVfields from '../csv/SelectCSVfields';
 import GuideModal from '../guide/GuideModal';
+import EditPreset from './EditPreset';
 
 const Month = () => {
   const presetContext = useContext(PresetContext);
@@ -49,6 +50,7 @@ const Month = () => {
 
   return (
     <Fragment>
+      {modal === 'editpreset' && <EditPreset />}
       {modal === 'SelectFile' && <SelectFile />}
       {modal === 'SelectCSVfields' && <SelectCSVfields />}
       {modal === 'profile' && <UserProfileModal />}
