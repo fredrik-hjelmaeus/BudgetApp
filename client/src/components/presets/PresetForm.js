@@ -14,29 +14,26 @@ const PresetForm = () => {
   const guideContext = useContext(GuideContext);
 
   const { guide } = guideContext;
-  const { presets, addPreset, edit, cancelEdit, sendEdit, calcSum, month, year, error } = presetContext;
+  const { presets, addPreset, calcSum, month, year, error } = presetContext;
   const { setAlert } = alertContext;
   const { toggleModal } = cssContext;
 
   useEffect(() => {
-    if (edit !== null) {
-      setPreset(edit);
-    } else {
-      if (guide !== '8' && guide !== '9' && guide !== '10') {
-        setPreset({
-          name: '',
-          number: '',
-          month,
-          year,
-          category,
-          type: 'overhead',
-          piggybank: [{ month, year, savedAmount: 0 }],
-        });
-      }
+    if (guide !== '8' && guide !== '9' && guide !== '10') {
+      setPreset({
+        name: '',
+        number: '',
+        month,
+        year,
+        category,
+        type: 'overhead',
+        piggybank: [{ month, year, savedAmount: 0 }],
+      });
     }
+
     if (error) setAlert(error, 'danger');
     // eslint-disable-next-line
-  }, [edit, month, presets, error]);
+  }, [month, presets, error]);
 
   const [expand, setExpand] = useState(false);
 
@@ -49,8 +46,8 @@ const PresetForm = () => {
       category: 'Select an category ^',
       type: 'overhead',
       piggybank: [{ month, year, savedAmount: '' }],
-    },
-    [presetContext, edit]
+    }
+    // [presetContext, edit]
   );
 
   const onChange = (e) => {
@@ -64,21 +61,14 @@ const PresetForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (preset.category !== 'Select an category ^') {
-      if (edit === null) {
+      if (preset.name === '' || preset.number === '') {
+        setAlert('Please fill in both fields', 'danger');
+        return;
+      } else {
         addPreset(preset);
         if (preset.name !== '' || preset.number !== '') {
           calcSum();
         }
-      } else {
-        if (preset.name !== '' || preset.number !== '' || preset.category !== 'Select an category ^') {
-          sendEdit(preset);
-          calcSum();
-        }
-        cancelEdit();
-      }
-      if (preset.name === '' || preset.number === '') {
-        setAlert('Please fill in both fields', 'danger');
-        return;
       }
 
       setPreset({
@@ -92,10 +82,6 @@ const PresetForm = () => {
     } else {
       setAlert('Please select an category', 'danger');
     }
-  };
-
-  const clearAll = () => {
-    cancelEdit();
   };
 
   const toggleExpand = () => {
@@ -123,7 +109,7 @@ const PresetForm = () => {
           className={!isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 12 ? 'presetform guide__presetform' : 'presetform'}
         >
           <Alerts />
-          <h2 className='text-primary all-center presetformtitle'>{edit === null ? 'ADD TO BUDGET' : 'EDIT VALUE'}</h2>
+          <h2 className='text-primary all-center presetformtitle'> ADD TO BUDGET</h2>
           <span className='presetformspan'>
             <input
               className={guide === '6' ? 'presetformname guide__presetformname' : 'presetformname'}
@@ -172,15 +158,8 @@ const PresetForm = () => {
           </div>
 
           <div>
-            <input type='submit' value={edit === null ? 'ADD TO BUDGET' : 'UPDATE'} className='btn btn-presetformadd' />
+            <input type='submit' value={'ADD TO BUDGET'} className='btn btn-presetformadd' />
           </div>
-          {edit && (
-            <div>
-              <button className='btn btn-light btn-block' onClick={clearAll}>
-                Cancel Edit
-              </button>
-            </div>
-          )}
         </form>
       )}
       {expand === false && (

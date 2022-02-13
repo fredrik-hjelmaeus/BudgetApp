@@ -378,7 +378,8 @@ export const handlers = [
     );
   }),
   rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
-    const { _id } = req.console.log(_id);
+    // const { _id } = req.console.log(_id);
+    const { _id } = req.params;
     return res(ctx.json({}));
   }),
 ];
