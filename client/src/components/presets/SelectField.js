@@ -5,7 +5,7 @@ const SelectField = ({ guide, selectChange, category }) => {
     <span className='presetformselectcategory'>
       <select
         onChange={selectChange}
-        className={guide === '6' ? 'text-dark guide__presetformselectcategory' : 'text-dark'}
+        className={guide && guide === '6' ? 'text-dark guide__presetformselectcategory' : 'text-dark'}
         value={category}
       >
         <option name='Select an category' value='Select an category'>

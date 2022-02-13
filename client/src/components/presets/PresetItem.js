@@ -1,10 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
+import CssContext from '../../context/css/cssContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import PresetItemCategoryDropdownMenu from './PresetItemCategoryDropdownMenu';
 
 const PresetItem = ({ preset }) => {
   const presetContext = useContext(PresetContext);
+  const cssContext = useContext(CssContext);
+  const { toggleModal } = cssContext;
 
   const { deletePreset, setEdit, cancelEdit, calcSum, edit, sendEdit } = presetContext;
 
@@ -65,13 +68,14 @@ const PresetItem = ({ preset }) => {
   const inputCategoryRef = useRef();
 
   const onClick = (e) => {
-    console.log(e.target.name);
-    setInputMode(e.target.name);
+    // setInputMode(e.target.name);
     setEdit(preset);
+    toggleModal('editpreset');
   };
   const onTestClick = (e) => {
     setEdit(preset);
-    setInputMode(e.target.name);
+    toggleModal('editpreset');
+    // setInputMode(e.target.name);
   };
 
   // implementation of dropdownmenu for categoryselection
@@ -83,6 +87,7 @@ const PresetItem = ({ preset }) => {
     InputMode === 'categorychanged' && setEdit(localpreset);
     InputMode === 'categorychanged' && setInputMode('');
     if (InputMode === '' && edit !== null) {
+      console.log('this crap ran');
       sendEdit(localpreset);
       cancelEdit();
     }

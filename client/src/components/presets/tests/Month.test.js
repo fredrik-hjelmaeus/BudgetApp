@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor } from '../../../test-utils/context-wrapper';
+import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor, act } from '../../../test-utils/context-wrapper';
 import userEvent from '@testing-library/user-event';
 import App from '../../../App';
 import { server } from '../../../mocks/server';
@@ -281,7 +281,45 @@ describe('Summation functionality', () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test.only('Editing overhead income presetvalues updates all summation-fields', () => {});
+  test.skip('Editing overhead income presetvalues updates all summation-fields', async () => {
+    // press preset in monthsummary component
+    fireEvent.click(screen.getByRole('button', { name: '444' }));
+
+    //confirm edit mode is enabled in edit preset modal
+    expect(screen.getByText(/edit/i)).toBeInTheDocument();
+    expect(screen.getByText(/update/i)).toBeInTheDocument();
+    const editNameField = await screen.findByPlaceholderText('Name');
+    const editValueField = await screen.findByPlaceholderText('Number');
+    expect(editNameField).toHaveValue('sadas');
+    expect(editValueField).toHaveValue(444);
+
+    //change name and number of preset
+    userEvent.type(editNameField, 'uniquetext');
+    userEvent.type(editValueField, '1000');
+
+    //submit change
+    fireEvent.click(await screen.findByRole('button', { name: /update/i }));
+
+    // expect preset to have been changed in monthsummary
+    const preset = await findByText('uniquetext');
+    expect(preset).toBeInTheDocument();
+
+    // summation with new values is correct, 1000-444 = 556
+    //Month Income:
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('1355');
+    const AccountBalance = screen.getByText('545533'); //544977
+    expect(AccountBalance).toBeInTheDocument();
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-255');
+    //Month Balance:
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Month Surplus:1100');
+    //Month Savings: 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
   test.skip('Editing overhead expense presetvalues updates all summation-fields', () => {});
   test.skip('Editing overhead income to expense presetvalues updates all summation-fields', () => {});
   test.skip('Editing overhead expense to income presetvalues updates all summation-fields', () => {});
