@@ -5,12 +5,11 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 import TrashDeleteButton from './TrashDeleteButton';
 
 const PurchaseItem = ({ Item }) => {
-  // console.log(Item);
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops, modal } = cssContext;
 
-  const { setEdit, MonthBalance, sendEdit, addPreset, month, year } = presetContext;
+  const { setEdit, MonthBalance, sendEdit, month, year } = presetContext;
 
   const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState('');
 
@@ -120,14 +119,20 @@ const PurchaseItem = ({ Item }) => {
     }
   };
 
+  // on name or number click, activate edit preset modal
+  const onClick = (e) => {
+    setEdit(Item);
+    toggleModal('editpreset');
+  };
+
   return (
     <div className='card-categorybalance bg-white'>
       <span className='text-gray purchasegrid'>
-        <button onClick={() => setEdit(Item)} className={'purchasetitlebtn no-wrap text-gray'}>
+        <button onClick={onClick} className={'purchasetitlebtn no-wrap text-gray'}>
           {Item.name}
         </button>
         <button
-          onClick={() => setEdit(Item)}
+          onClick={onClick}
           className={MonthBalance > 0 ? 'purchasenumberbtn no-wrap text-danger bold' : 'purchasenumberbtn no-wrap text-danger bold'}
         >
           {Item.number}
