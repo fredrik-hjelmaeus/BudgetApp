@@ -34,7 +34,7 @@ const EditPreset = () => {
     setLocalPreset({ ...localPreset, category: e.target.value });
   };
 
-  console.log(localPreset);
+  // console.log(localPreset);
   const onSubmitEditPreset = (e) => {
     e.preventDefault();
     // client side field validation
@@ -44,6 +44,7 @@ const EditPreset = () => {
     if (category === 'Select an category') {
       setAlert('You need to provide an category', 'danger');
     }
+    //  console.log('sending edit', localPreset);
     sendEdit(localPreset);
     calcSum();
     toggleModal('');
@@ -74,7 +75,7 @@ const EditPreset = () => {
                 </label>
               </div>
               <div className='form-text'>
-                <input type='name' placeholder='Name' name='name' value={name} onChange={onChange} required />
+                <input type='name' id='name' placeholder='Name' name='name' value={name} onChange={onChange} required />
               </div>
             </div>
             <div className='flexrow '>
@@ -84,7 +85,7 @@ const EditPreset = () => {
                 </label>
               </div>
               <div className='form-text'>
-                <input type='number' placeholder='Number' name='number' value={number} onChange={onChange} required />
+                <input type='number' id='Number' placeholder='Number' name='number' value={number} onChange={onChange} required />
               </div>
             </div>
             <SelectField selectChange={selectChange} category={category} />
