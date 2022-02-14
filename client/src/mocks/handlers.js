@@ -378,9 +378,30 @@ export const handlers = [
     );
   }),
   rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
-    // const { _id } = req.console.log(_id);
     const { _id } = req.params;
-    return res(ctx.json({}));
+
+    return res(
+      ctx.json({
+        _id,
+        user: req.body.user,
+        name: req.body.name,
+        number: req.body.number,
+        month: 'January',
+        year: 2021,
+        category: req.body.category,
+        type: req.body.type,
+        piggybank: [
+          {
+            month: 'January',
+            year: 2021,
+            savedAmount: 0,
+            _id: '6205143125ad67554798451b',
+          },
+        ],
+        date: '2022-02-10T13:33:37.780Z',
+        __v: 0,
+      })
+    );
   }),
 ];
 
