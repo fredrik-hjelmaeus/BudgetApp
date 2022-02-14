@@ -281,15 +281,16 @@ describe('Summation functionality', () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test.skip('Editing overhead income presetvalues updates all summation-fields', async () => {
+
+  test('Editing overhead income presetvalues updates all summation-fields', async () => {
     // press preset in monthsummary component
     fireEvent.click(screen.getByRole('button', { name: '444' }));
 
     //confirm edit mode is enabled in edit preset modal
     expect(screen.getByText(/edit/i)).toBeInTheDocument();
     expect(screen.getByText(/update/i)).toBeInTheDocument();
-    const editNameField = await screen.findByPlaceholderText('Name');
-    const editValueField = await screen.findByPlaceholderText('Number');
+    const editNameField = await screen.findByLabelText('Name:');
+    const editValueField = await screen.findByLabelText('Number');
     expect(editNameField).toHaveValue('sadas');
     expect(editValueField).toHaveValue(444);
 
@@ -298,30 +299,115 @@ describe('Summation functionality', () => {
     userEvent.type(editValueField, '1000');
 
     //submit change
-    fireEvent.click(await screen.findByRole('button', { name: /update/i }));
+    const submitChangesButton = await screen.findByRole('button', { name: /update/i });
+    fireEvent.click(submitChangesButton);
+    expect(submitChangesButton).not.toBeInTheDocument();
 
     // expect preset to have been changed in monthsummary
-    const preset = await findByText('uniquetext');
+    const preset = await screen.findByText('sadasuniquetext');
     expect(preset).toBeInTheDocument();
 
-    // summation with new values is correct, 1000-444 = 556
+    // summation with new values is correct, 4441000 - 444 = 4440556
     //Month Income:
     const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
-    expect(monthIncomeSum).toBe('1355');
-    const AccountBalance = screen.getByText('545533'); //544977
+    expect(monthIncomeSum).toBe('4441355');
+    const AccountBalance = screen.getByText('4985533'); //544977
     expect(AccountBalance).toBeInTheDocument();
     //Month Expenses:
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe('-255');
     //Month Balance:
     const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
-    expect(MonthBalance).toBe('Month Surplus:1100');
+    expect(MonthBalance).toBe('Month Surplus:4441100');
     //Month Savings: 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test.skip('Editing overhead expense presetvalues updates all summation-fields', () => {});
-  test.skip('Editing overhead income to expense presetvalues updates all summation-fields', () => {});
+
+  test('Editing overhead expense presetvalues updates all summation-fields', async () => {
+    // press preset in monthsummary component
+    fireEvent.click(screen.getByRole('button', { name: '-255' }));
+
+    //confirm edit mode is enabled in edit preset modal
+    expect(screen.getByText(/edit/i)).toBeInTheDocument();
+    expect(screen.getByText(/update/i)).toBeInTheDocument();
+    const editNameField = await screen.findByLabelText('Name:');
+    const editValueField = await screen.findByLabelText('Number');
+    expect(editNameField).toHaveValue('sfdc');
+    expect(editValueField).toHaveValue(-255);
+
+    //change name and number of preset
+    userEvent.type(editNameField, 'uniquetext');
+    userEvent.clear(editValueField);
+    userEvent.type(editValueField, '-200');
+    //submit change
+    const submitChangesButton = await screen.findByRole('button', { name: /update/i });
+    fireEvent.click(submitChangesButton);
+    expect(submitChangesButton).not.toBeInTheDocument();
+
+    // expect preset to have been changed in monthsummary
+    const preset = await screen.findByText('sfdcuniquetext');
+    expect(preset).toBeInTheDocument();
+
+    // summation with new values is correct, 4441000 - 444 = 4440556
+    //Month Income:
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('799');
+    const AccountBalance = screen.getByText('Month Balance:').children[0].textContent;
+    expect(AccountBalance).toBe('599');
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-200');
+    //Month Balance:
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Month Surplus:599');
+    //Month Savings: 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
+  test.only('Editing overhead income to expense presetvalues updates all summation-fields', async () => {
+    // press preset in monthsummary component
+    fireEvent.click(screen.getByRole('button', { name: '444' }));
+
+    //confirm edit mode is enabled in edit preset modal
+    expect(screen.getByText(/edit/i)).toBeInTheDocument();
+    expect(screen.getByText(/update/i)).toBeInTheDocument();
+    const editNameField = await screen.findByLabelText('Name:');
+    const editValueField = await screen.findByLabelText('Number');
+    expect(editNameField).toHaveValue('sadas');
+    expect(editValueField).toHaveValue(444);
+
+    //change name and number of preset
+    userEvent.clear(editNameField);
+    userEvent.type(editNameField, 'switcher');
+    userEvent.clear(editValueField);
+    userEvent.type(editValueField, '-200');
+    //submit change
+    const submitChangesButton = await screen.findByRole('button', { name: /update/i });
+    fireEvent.click(submitChangesButton);
+    expect(submitChangesButton).not.toBeInTheDocument();
+
+    // expect preset to have been changed in monthsummary
+    const preset = await screen.findByText('switcher');
+    expect(preset.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].textContent).toBe('Expenses');
+    expect(preset).toBeInTheDocument();
+
+    // summation with new values is correct, 4441000 - 444 = 4440556
+    //Month Income:
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('355');
+    const AccountBalance = screen.getByText('Month Balance:').children[0].textContent;
+    expect(AccountBalance).toBe('-100');
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-455');
+    //Month Balance:
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Balance Month:-100');
+    //Month Savings: 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
   test.skip('Editing overhead expense to income presetvalues updates all summation-fields', () => {});
   test.skip('Add purchase presetvalues updates all summation-fields', () => {});
   test.skip('Edit purchase presetvalues updates all summation-fields', () => {});

@@ -156,9 +156,10 @@ const PresetState = (props) => {
         'Content-Type': 'application/json',
       },
     };
-
+    console.log(preset);
     try {
       const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
+      // console.log(res.data);
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err) {
       console.log(err);
