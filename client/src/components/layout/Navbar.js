@@ -17,8 +17,8 @@ const Navbar = ({ title }) => {
   const { toggleModal } = cssContext;
 
   const onLogout = () => {
-    logout();
     clearPresets();
+    logout();
   };
   const onUserClick = (e) => {
     toggleModal('profile');

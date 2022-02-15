@@ -32,6 +32,7 @@ const DeletePurchaseModal = ({ Item }) => {
         piggybank: [{ month, year: '2021', savedAmount: '' }],
       })
     );
+    console.log('deleteing purchasepreset: ', Item._id);
     deletePreset(Item._id);
     toggleModal('');
   };

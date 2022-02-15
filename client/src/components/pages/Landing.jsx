@@ -4,19 +4,34 @@ import Logo from '../layout/Logo';
 import LoginModal from '../auth/LoginModal';
 import RegisterModal from '../auth/RegisterModal';
 import ForgotPassword from '../auth/ForgotPassword';
+import AuthContext from '../../context/auth/authContext';
 
-const Landing = () => {
+const Landing = (props) => {
   const cssContext = useContext(CssContext);
-  const { navbar, toggleNavbar, toggleModal, modal } = cssContext;
+  const authContext = useContext(AuthContext);
+  const { toggleNavbar, toggleModal, modal } = cssContext;
+  const { isAuthenticated, token, loadUser, user } = authContext;
+
+  const tryToAuthenticate = async () => {
+    await loadUser();
+  };
 
   useEffect(() => {
-    toggleNavbar(navbar);
+    if (token && !isAuthenticated && !user) {
+      tryToAuthenticate();
+    }
+
+    if (user && isAuthenticated) {
+      props.history.push('/');
+    }
+
+    toggleNavbar(true);
 
     return () => {
       toggleModal('');
     };
     // eslint-disable-next-line
-  }, []);
+  }, [token, isAuthenticated, user]);
 
   const onClick = (e) => {
     toggleModal(e.target.value);
