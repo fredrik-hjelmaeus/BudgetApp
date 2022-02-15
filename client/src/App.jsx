@@ -34,8 +34,8 @@ const App = () => {
                     <Navbar />
                     <div>
                       <Switch>
-                        <Route exact path='/Landing' component={Landing} />
                         <PrivateRoute exact path='/' component={Home} />
+                        <Route exact path='/Landing' component={Landing} />
                         <Route exact path='/about' component={About} />
                         <Route path='/resetpassword/:id' component={ResetPassword} />
                       </Switch>

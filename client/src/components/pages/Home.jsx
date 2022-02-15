@@ -16,9 +16,9 @@ const Home = () => {
   const { month } = presetContext;
 
   useEffect(() => {
-    // If token found, try to authenticate user with token
     localStorage.token && authContext.loadUser();
     navbar === false && toggleNavbar(navbar); // makes navbar persistent
+
     // eslint-disable-next-line
   }, []);
 
