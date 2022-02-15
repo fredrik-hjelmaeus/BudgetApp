@@ -403,6 +403,15 @@ export const handlers = [
       })
     );
   }),
+  rest.delete(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+    const { _id } = req.params;
+
+    return res(
+      ctx.json({
+        msg: 'Preset removed',
+      })
+    );
+  }),
 ];
 
 //fail to get token:

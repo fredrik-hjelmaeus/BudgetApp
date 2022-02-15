@@ -67,7 +67,9 @@ const PurchaseItem = ({ Item }) => {
   };
 
   const onDelete = () => {
-    //calls on modal to activate in Month.js
+    console.log('delete purchase', Item);
+    //calls on <DeletePurchaseModal>  to activate in Month.js
+    //<DeletePurchaseModal> handles the delete of purchase
     toggleModal('deletepurchase');
     //switch from purchase to savings. set piggybanksaving as number.
     setModalprops(Item);

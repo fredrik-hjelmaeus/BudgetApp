@@ -562,7 +562,21 @@ describe('Summation functionality', () => {
     const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
     expect(BalanceByCategory_TravelField).toBe('-255');
   });
-  test.skip('Delete purchase presetvalues updates all summation-fields', () => {});
+  test.only('Delete purchase presetvalues updates all summation-fields', async () => {
+    // starting point is month January with expanded preset form setup in beforeEach
+
+    // click purchase preset deletebutton
+    const deleteButton = screen.getAllByRole('button').find((b) => b.value === 'trashicon');
+    fireEvent.click(deleteButton);
+    //expect DeletePurchaseModal to be activated
+    const header = screen.getByRole('heading', { name: 'Confirm delete' });
+    expect(header).toBeInTheDocument();
+    const deleteBtn = screen.getByRole('button', { name: /delete/i });
+    console.log(deleteBtn);
+    fireEvent.click(deleteBtn);
+    await waitForElementToBeRemoved(header);
+    //expect(await screen.findByRole('button', { name: /Resa/i })).not.toBeInTheDocument();
+  });
   test.skip('Buy purchase updates all summation-fields', () => {});
   test.skip('Add piggybank saving to a purchase updates all summation-fields', () => {});
   test.skip('Add saving presetvalues updates all summation-fields', () => {});
