@@ -6,7 +6,9 @@ import { rest } from 'msw';
 
 describe('forgot password modal', () => {
   test.only('email is successfully sent', async () => {
-    // this test fails because loading is not set to false before test ends,because get current user endpoint fails picking up error and dispatch it to reducer // solved
+    // this test fails because loading is not set to false before test ends,
+    // because get current user endpoint fails picking up error and dispatch it to reducer
+    // solved by changing error response in endpoint get current user
     server.use(
       // login endpoint
       rest.post('http://localhost/api/auth', (req, res, ctx) => {
