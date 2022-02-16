@@ -32,20 +32,22 @@ const AuthState = (props) => {
 
   // Load User
   const loadUser = async () => {
+    console.log('loaduser ran');
     // load token into global headers
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
       const res = await axios.get('/api/auth');
-
+      console.log(res.data);
       dispatch({
         type: USER_LOADED,
         payload: res.data,
       });
     } catch (err) {
-      console.log(err);
-      dispatch({ type: AUTH_ERROR, payload: err.response.data.errors[0] });
+      // console.log('ERROROROROROR');
+      // console.log(err.response.data.msg);
+      dispatch({ type: AUTH_ERROR, payload: err.response.data.msg /* err.response.data.errors[0] */ });
     }
   };
 
@@ -76,6 +78,7 @@ const AuthState = (props) => {
 
   // Login User
   const login = async (formData) => {
+    console.log('login ran');
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -108,6 +111,7 @@ const AuthState = (props) => {
 
   //Forgot Password
   const forgotPassword = async (formData) => {
+    console.log('forgot');
     const config = {
       headers: {
         'Content-Type': 'application/json',
