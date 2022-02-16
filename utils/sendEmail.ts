@@ -35,7 +35,6 @@ const sendEmail = async (options: ISendEmailOptions) => {
     text: options.message,
   };
   const info = await transporter.sendMail(message);
-
   process.env.NODE_ENV === 'development' && console.log('Message sent: %s', info.messageId);
 };
 

@@ -3,7 +3,7 @@ import { rest } from 'msw';
 // mocking backend/context responses: happy paths
 
 export const handlers = [
-  // success on getting token
+  //Login user
   rest.post('http://localhost/api/auth', (req, res, ctx) => {
     return res(
       ctx.json({
@@ -12,7 +12,7 @@ export const handlers = [
       })
     );
   }),
-
+  // get current user using token
   rest.get('http://localhost/api/auth', (req, res, ctx) => {
     return res(
       ctx.json({
@@ -24,7 +24,7 @@ export const handlers = [
       })
     );
   }),
-
+  // register user
   rest.post('http://localhost/api/users', (req, res, ctx) => {
     return res(
       ctx.json({

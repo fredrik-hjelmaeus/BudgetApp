@@ -14,9 +14,10 @@ const Home = () => {
   const { navbar, toggleNavbar } = cssContext;
 
   const { month } = presetContext;
-
+  console.log('home', authContext.isAuthenticated, authContext.loading, authContext.token);
   useEffect(() => {
-    localStorage.token && authContext.loadUser();
+    //localStorage.token && authContext.loadUser();
+    authContext.loadUser(); // it always have to run because even if no user found we need to set loading to false
     navbar === false && toggleNavbar(navbar); // makes navbar persistent
 
     // eslint-disable-next-line
