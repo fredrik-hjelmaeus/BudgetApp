@@ -1,21 +1,10 @@
-import { render, screen, fireEvent, waitForElementToBeRemoved } from '../test-utils/context-wrapper';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor } from '../test-utils/context-wrapper';
 import App from '../App';
 
 describe('navigation through all month pages', () => {
   test('initial state correct in month', async () => {
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
-
+    // user is logged in
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
     fireEvent.click(januaryButton);
@@ -45,16 +34,7 @@ describe('navigation through all month pages', () => {
   });
   test('guide is activated correct from user profile modal from month', async () => {
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
+    // user is logged in
 
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
@@ -78,16 +58,7 @@ describe('navigation through all month pages', () => {
   });
   test('navigate to other month works and updates all state', async () => {
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
+    // user is logged in
 
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
@@ -115,16 +86,7 @@ describe('navigation through all month pages', () => {
   });
   test('click to year and back to month works', async () => {
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
+    // user is logged in
 
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
@@ -151,29 +113,22 @@ describe('navigation through all month pages', () => {
     const yearBalanceChartSummary = screen.getByText(/Year Summary:/i);
     expect(yearBalanceChartSummary).toBeInTheDocument();
 
-    const yearSummaryNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
-    expect(yearSummaryNumber).toBeInTheDocument();
-    const montlyAverageSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82545');
-    expect(montlyAverageSum).toBeInTheDocument();
-    const capitalSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '4455');
-    expect(capitalSum).toBeInTheDocument();
-    const savingsSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '456788');
-    expect(savingsSum).toBeInTheDocument();
-    const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544977');
-    expect(accountBalanceSum).toBeInTheDocument();
+    await waitFor(async () => {
+      const yearSummaryNumber = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '990543');
+      expect(yearSummaryNumber).toBeInTheDocument();
+      const montlyAverageSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '82545');
+      expect(montlyAverageSum).toBeInTheDocument();
+      const capitalSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '4455');
+      expect(capitalSum).toBeInTheDocument();
+      const savingsSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '456788');
+      expect(savingsSum).toBeInTheDocument();
+      const accountBalanceSum = screen.queryAllByRole('listitem').find((listitem) => listitem.textContent === '544977');
+      expect(accountBalanceSum).toBeInTheDocument();
+    });
   });
   test('add to budget expands and contracts correct', async () => {
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
+    // user is logged in
 
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
@@ -196,16 +151,7 @@ describe('navigation through all month pages', () => {
   });
   test('open user details modals works', async () => {
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
+    // user is logged in
 
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
