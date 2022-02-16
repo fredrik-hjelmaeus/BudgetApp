@@ -128,7 +128,7 @@ const PurchaseItem = ({ Item }) => {
   };
 
   return (
-    <div className='card-categorybalance bg-white'>
+    <div className='card-categorybalance bg-white' data-testid='purchaseitem'>
       <span className='text-gray purchasegrid'>
         <button onClick={onClick} className={'purchasetitlebtn no-wrap text-gray'}>
           {Item.name}
