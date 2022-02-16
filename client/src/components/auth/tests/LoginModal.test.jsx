@@ -16,8 +16,34 @@ describe('login flow', () => {
   });
 
   test('login happy path', async () => {
-    render(<App />);
     // startingstate: local storage has no token so we are directed to landing page
+    server.use(
+      // login endpoint
+      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({
+            errors: [
+              {
+                msg: 'Invalid Credentials',
+              },
+            ],
+          })
+        );
+      }),
+      // get current user via token endpoint
+      //fail to get user and will only try if token is found.
+      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.status(500),
+          ctx.json({
+            msg: 'No token, authorization denied',
+          })
+        );
+      })
+    );
+
+    render(<App />);
 
     // make sure we are at the landing page
     const welcomeText = await screen.findByText(/An app that helps you organize your economy./i);
@@ -29,6 +55,30 @@ describe('login flow', () => {
     fireEvent.click(loginButton);
     const loginModalH1element = screen.queryByRole('heading', { name: /account login/i });
     expect(loginModalH1element).toBeInTheDocument();
+
+    // setup endpoints to respond with a 200 status,token and user
+    server.use(
+      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            token:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFlZDcyZDE2Zjg5NWIxMTAwZGJhYjY2In0sImlhdCI6MTY0MzgxMDg2OX0.QvfZLV0HBznOEIMFOMAQNIsEpWjmEKtz6EqUNh9D--s',
+          })
+        );
+      }),
+      // get current user using token
+      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '61ed72d16f895b1100dbab66',
+            name: 'dirk',
+            email: 'nisse@manpower.se',
+            date: '2022-01-23T15:22:57.772Z',
+            __v: 0,
+          })
+        );
+      })
+    );
 
     // fill in the login form,submit
     const emailField = screen.getByPlaceholderText(/Email Address/i);
@@ -56,17 +106,44 @@ describe('login flow', () => {
   });
 
   test('login email and password field is required', async () => {
-    render(<App />);
     // startingstate: local storage has no token so we are directed to landing page
+    server.use(
+      // login endpoint
+      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({
+            errors: [
+              {
+                msg: 'Invalid Credentials',
+              },
+            ],
+          })
+        );
+      }),
+      // get current user via token endpoint
+      //fail to get user and will only try if token is found.
+      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.status(500),
+          ctx.json({
+            msg: 'No token, authorization denied',
+          })
+        );
+      })
+    );
+
+    render(<App />);
 
     //go to login form
-    const loginButton = screen.queryByText(/login/i);
+    const loginButton = await screen.findByRole('button', { name: /login/i });
     expect(loginButton).toBeInTheDocument();
     fireEvent.click(loginButton);
 
     // check the fields and make sure they have attribute required
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    const passwordField = screen.getByPlaceholderText(/password/i);
+    expect(await screen.findByRole('heading', { name: /account login/i })).toBeInTheDocument();
+    const emailField = await screen.findByPlaceholderText(/Email Address/i);
+    const passwordField = await screen.findByPlaceholderText(/password/i);
     expect(emailField.hasAttribute('required')).toBeTruthy();
     expect(passwordField.hasAttribute('required')).toBeTruthy();
   });

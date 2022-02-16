@@ -8,19 +8,6 @@ describe('navigation through all year pages', () => {
   test('initial state correct in year', async () => {
     // setup not logged in user
     server.use(
-      // login endpoint
-      /* rest.post('http://localhost/api/auth', (req, res, ctx) => {
-        return res(
-          ctx.status(401),
-          ctx.json({
-            errors: [
-              {
-                msg: 'Invalid Credentials',
-              },
-            ],
-          })
-        );
-      }), */
       // get current user via token endpoint
       //fail to get user and will only try if token is found.
       rest.get('http://localhost/api/auth', (req, res, ctx) => {
