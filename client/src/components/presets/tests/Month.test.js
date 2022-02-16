@@ -9,16 +9,6 @@ describe('Summation functionality', () => {
   beforeEach(async () => {
     // go to month and expand preset form
     render(<App />);
-    //login
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    fireEvent.click(loginButton);
-    const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
-    const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
-    const submitLoginButton = screen.getByDisplayValue(/login/i);
-    fireEvent.click(submitLoginButton);
-    await waitForElementToBeRemoved(submitLoginButton);
 
     // go to month
     const januaryButton = screen.queryByRole('button', { name: /january/i });
@@ -562,20 +552,28 @@ describe('Summation functionality', () => {
     const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
     expect(BalanceByCategory_TravelField).toBe('-255');
   });
-  test.only('Delete purchase presetvalues updates all summation-fields', async () => {
+  test('Delete purchase presetvalues updates all summation-fields', async () => {
     // starting point is month January with expanded preset form setup in beforeEach
+    const presetToDelete = await screen.findByRole('button', { name: /Resa/i });
 
     // click purchase preset deletebutton
     const deleteButton = screen.getAllByRole('button').find((b) => b.value === 'trashicon');
     fireEvent.click(deleteButton);
-    //expect DeletePurchaseModal to be activated
+
+    // expect DeletePurchaseModal to be activated
     const header = screen.getByRole('heading', { name: 'Confirm delete' });
     expect(header).toBeInTheDocument();
+
+    // press delete in DeletePurchaseModal
     const deleteBtn = screen.getByRole('button', { name: /delete/i });
-    console.log(deleteBtn);
     fireEvent.click(deleteBtn);
-    await waitForElementToBeRemoved(header);
-    //expect(await screen.findByRole('button', { name: /Resa/i })).not.toBeInTheDocument();
+
+    // expect DeletePurchaseModal to be closed
+    expect(header).not.toBeInTheDocument();
+
+    // expect the purchase-preset to be deleted
+    await waitForElementToBeRemoved(presetToDelete);
+    expect(presetToDelete).not.toBeInTheDocument();
   });
   test.skip('Buy purchase updates all summation-fields', () => {});
   test.skip('Add piggybank saving to a purchase updates all summation-fields', () => {});
