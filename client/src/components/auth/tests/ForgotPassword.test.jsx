@@ -1,14 +1,58 @@
-import { render, screen, fireEvent } from '../../../test-utils/context-wrapper';
+import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor } from '../../../test-utils/context-wrapper';
 import userEvent from '@testing-library/user-event';
 import App from '../../../App';
 import { server } from '../../../mocks/server';
 import { rest } from 'msw';
 
 describe('forgot password modal', () => {
-  test('email is successfully sent', async () => {
+  test.only('email is successfully sent', async () => {
+    // this test fails because loading is not set to false before test ends,because get current user endpoint fails picking up error and dispatch it to reducer // solved
+    server.use(
+      // login endpoint
+      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({
+            errors: [
+              {
+                msg: 'Invalid Credentials',
+              },
+            ],
+          })
+        );
+      }),
+      // get current user via token endpoint
+      //fail to get user and will only try if token is found.
+      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+        return res(
+          ctx.status(500),
+          ctx.json({
+            msg: 'No token, authorization denied',
+          })
+        );
+      }),
+      rest.get('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(ctx.status(401), ctx.json([]));
+      }),
+      rest.post('http://localhost/api/users', (req, res, ctx) => {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            errors: [
+              {
+                value: 'gretsa@icom',
+                msg: 'Please include a valid Email',
+                param: 'email',
+                location: 'body',
+              },
+            ],
+          })
+        );
+      })
+    );
     render(<App />);
-    // go to forgot password modal
-    const loginButton = screen.getByRole('button', { name: /login/i });
+
+    const loginButton = await screen.findByRole('button', { name: /login/i });
     fireEvent.click(loginButton);
     const forgotButton = screen.getByRole('button', { name: /forgot/i });
     fireEvent.click(forgotButton);
