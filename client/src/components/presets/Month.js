@@ -82,7 +82,7 @@ const Month = () => {
           <CategoryBalance />
         </div>
 
-        <div className='monthgrid__PurchasesOrder'>{MonthSum !== null && MonthSum > 0 && <Purchases />}</div>
+        <div className='monthgrid__PurchasesOrder'>{MonthSum !== null && <Purchases />}</div>
 
         <div className='bgmonthright monthgrid__sums'>
           <Sum />

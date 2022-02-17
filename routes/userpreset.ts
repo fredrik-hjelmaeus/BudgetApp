@@ -27,7 +27,6 @@ router.get('/', authMiddleware, async (req, res) => {
 // @access  Private
 router.post(
   '/',
-
   authMiddleware,
   [
     check('name', 'Name is required').not().isEmpty(),

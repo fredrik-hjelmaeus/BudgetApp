@@ -575,7 +575,72 @@ describe('Summation functionality', () => {
     await waitForElementToBeRemoved(presetToDelete);
     expect(presetToDelete).not.toBeInTheDocument();
   });
-  test.skip('Buy purchase updates all summation-fields', () => {});
+  test.only('Buy purchase updates all summation-fields and converts preset-type to overhead expense', async () => {
+    // add overhead preset income so buying button becomes visible
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: 'income',
+            number: 100000,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: 'overhead',
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    const purchaseCheckbox = screen.getByRole('checkbox', { name: /purchase/i });
+    userEvent.type(nameField, 'purchase');
+    userEvent.type(numberField, '10000');
+    userEvent.selectOptions(categoryField, 'Travel');
+    fireEvent.click(purchaseCheckbox);
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    // press buy button
+    const purchasePresetBuyButton = await screen.findByText('BUY');
+    const presets_beforeClickingBUY = await screen.findAllByTestId('presetitem');
+    fireEvent.click(purchasePresetBuyButton);
+
+    // expect purchaseitem to disappear
+    await waitForElementToBeRemoved(purchasePresetBuyButton);
+    expect(purchasePresetBuyButton).not.toBeInTheDocument();
+
+    // expect overhead expense to have been created
+    const presets_afterClickingBUY = await screen.findAllByTestId('presetitem');
+    expect(presets_afterClickingBUY.length - presets_beforeClickingBUY.length).toBe(1);
+    const newPreset = presets_afterClickingBUY.find((p) => p.textContent === '-55000' && p.hasAttribute('data-testid'));
+    expect(newPreset.getAttribute('data-testid')).toEqual('presetitem');
+    expect(newPreset).toBeInTheDocument();
+
+    // expect summation fields to be updated
+    expect(screen.getByText('Month Income:').textContent).toBe('Month Income:    100799');
+    expect(screen.getByText('Month Surplus:').parentElement.children[1].textContent).toBe('45544');
+    expect(screen.getByText('Month Expenses:').textContent).toBe('Month Expenses:    -55255');
+    expect(screen.getByText('Account Balance:').textContent).toBe('Account Balance:589977 ');
+    expect(screen.getByText('Month Balance:').textContent).toBe('Month Balance:45544');
+    expect(screen.getByText('Month Savings:').textContent).toBe('Month Savings: 0');
+
+    const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
+    expect(BalanceByCategory_TravelField).toBe('44745');
+  });
   test.skip('Add piggybank saving to a purchase updates all summation-fields', () => {});
   test.skip('Add saving presetvalues updates all summation-fields', () => {});
   test.skip('Edit saving presetvalues updates all summation-fields', () => {});
