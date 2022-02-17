@@ -7,6 +7,7 @@ const Purchases = () => {
   const presetContext = useContext(PresetContext);
   const { purchases, sendEdit, presets, calcMonthBalance, MonthBalance, piggybanks } = presetContext;
   const { guide } = useContext(GuideContext);
+
   useEffect(() => {
     MonthBalance === null || (piggybanks === [] && calcMonthBalance());
   }, [sendEdit, presets, calcMonthBalance, MonthBalance, piggybanks]);
