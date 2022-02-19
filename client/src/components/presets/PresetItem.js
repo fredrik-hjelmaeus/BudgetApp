@@ -60,7 +60,7 @@ const PresetItem = ({ preset }) => {
 
   // input change is finished and sent
   const onBlur = () => {
-    setInputMode('');
+    setInputMode(''); // TODO: cleanup from this old way to edit presets,when the tests is written
   };
   // init useRef
   const inputNumRef = useRef();
@@ -68,14 +68,12 @@ const PresetItem = ({ preset }) => {
   const inputCategoryRef = useRef();
 
   const onClick = (e) => {
-    // setInputMode(e.target.name);
     setEdit(preset);
     toggleModal('editpreset');
   };
   const onTestClick = (e) => {
     setEdit(preset);
     toggleModal('editpreset');
-    // setInputMode(e.target.name);
   };
 
   // implementation of dropdownmenu for categoryselection

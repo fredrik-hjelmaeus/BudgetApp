@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import PresetContext from '../../context/preset/presetContext';
+import CssContext from '../../context/css/cssContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import piggyicon from '../layout/images/piggybank.svg';
 
@@ -28,9 +29,10 @@ import {
 } from '../layout/images/index';
 
 const MonthSavingsItem = ({ Item, SumOfPreset }) => {
-  console.log(Item);
   const presetContext = useContext(PresetContext);
-  const { presets, deletePreset, month, sendEdit } = presetContext;
+  const cssContext = useContext(CssContext);
+  const { toggleModal } = cssContext;
+  const { presets, deletePreset, month, sendEdit, setEdit } = presetContext;
   const { name, number, category } = Item;
   const getCategoryIcon = (category) => {
     switch (category) {
@@ -90,6 +92,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     type: Item.type,
     piggybank: Item.piggybank,
   });
+
   // state to handle deletebutton-hover
   const [DelbtnColor, setDelbtnColor] = useState(false);
   //on delete button hover
@@ -103,6 +106,12 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const onDelete = () => {
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
     Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
+  };
+  const onEdit = (e) => {
+    console.log(e.target.value);
+    console.log(preset[e.target.value]);
+    setEdit(preset);
+    toggleModal('editpreset');
   };
 
   const deletePiggybankItem = (Item) => {
@@ -146,20 +155,28 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     <div className='monthitem'>
       <div className='namebutton'>
         <h4>
-          <button className={number > 0 ? ' text-primary btn-form no-wrap' : ' text-primary btn-form no-wrap'}>{name}</button>
+          <button
+            onClick={onEdit}
+            value='name'
+            className={number > 0 ? ' text-primary btn-form no-wrap' : ' text-primary btn-form no-wrap'}
+          >
+            {name}
+          </button>
         </h4>
       </div>
       <div>
-        <button className='text-orange btn-form'>{SumOfPreset}</button>
+        <button onClick={onEdit} className='text-orange btn-form' value='number'>
+          {SumOfPreset}
+        </button>
       </div>
       <div>
         <button className='btn-form'>
-          <img src={getCategoryIcon(category)} alt='' style={{ height: '20px', width: '20px' }} />
+          <img src={getCategoryIcon(category)} alt={`${category}_icon`} style={{ height: '20px', width: '20px' }} />
         </button>
       </div>
       {Item.type !== 'savings' && (
         <div>
-          <img src={piggyicon} alt='' style={{ width: '26px' }} />
+          <img src={piggyicon} alt='piggybank_icon' style={{ width: '26px' }} />
         </div>
       )}
       <div>
