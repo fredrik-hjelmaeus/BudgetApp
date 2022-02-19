@@ -7,12 +7,7 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 const AddtoPiggybankModal = ({ Item }) => {
   // preset context
   const presetContext = useContext(PresetContext);
-  const {
-    sendEdit,
-    setActivePiggybank,
-    addtoPiggybanks,
-    MonthBalance,
-  } = presetContext;
+  const { sendEdit, setActivePiggybank, addtoPiggybanks, MonthBalance } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
@@ -35,10 +30,7 @@ const AddtoPiggybankModal = ({ Item }) => {
   // store only savedAmounts in an array
   const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
   // sift through savedAmounts and count totalsum
-  const SumOfPiggybanks = savedAmounts.reduce(
-    (a, b) => parseFloat(a) + parseFloat(b),
-    0
-  );
+  const SumOfPiggybanks = savedAmounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
   const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
 
   // Calc Amount to save
@@ -67,6 +59,7 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   // on submit, add month and amount to save in presetContext.piggybanks
   const onSubmit = () => {
+    console.log('addtopiggybanks ran');
     addtoPiggybanks({
       month: presetContext.month,
       year: presetContext.year,
@@ -97,6 +90,7 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
   const sendMyEdit = async (preset) => {
+    console.log('updating presets', preset);
     await sendEdit(preset);
     toggleModal('');
     setActivePiggybank([]);
@@ -137,20 +131,13 @@ const AddtoPiggybankModal = ({ Item }) => {
           name='number'
           value={piggybank.number}
           onChange={onChange}
+          data-testid='inputamountrange'
         />
-        <button
-          className='text-primary piggybankmodalsubmitbutton'
-          value='submit'
-          onClick={onSubmit}
-        >
+        <button className='text-primary piggybankmodalsubmitbutton' value='submit' onClick={onSubmit}>
           Submit{'  '}
           <PiggybankSVG fill='var(--primary-color)' />
         </button>
-        <button
-          className='btn btn-outline btn-block  p-3'
-          value='delete'
-          onClick={() => toggleModal('')}
-        >
+        <button className='btn btn-outline btn-block  p-3' value='delete' onClick={() => toggleModal('')}>
           Cancel
         </button>
       </div>
