@@ -761,7 +761,7 @@ describe('Summation functionality', () => {
     expect(monthSavings).toBe(' 20000');
   });
 
-  test.only('Add & Edit saving presetvalues updates all summation-fields', async () => {
+  test('Add & Edit saving presetvalues updates all summation-fields', async () => {
     // add overhead preset income so buying button becomes visible
     server.use(
       rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
@@ -835,9 +835,6 @@ describe('Summation functionality', () => {
     const editValueField = await screen.findByLabelText('Number');
     expect(editNameField).toHaveValue('saving');
     expect(editValueField).toHaveValue(20000);
-    //  expect(screen.getByRole('combobox')).toHaveValue('Select an category');
-    //expect(screen.getByRole('checkbox', { name: /overhead/i })).not.toBeChecked();
-    //expect(screen.getByRole('checkbox', { name: /savings/i })).toBeChecked();
     expect(screen.getAllByRole('combobox').length).toBe(2);
 
     //change name and number of preset
@@ -870,7 +867,68 @@ describe('Summation functionality', () => {
     expect(monthSavingsEdit).toBe(' 1000'); // 0 + 1000
   });
 
-  test.skip('Add capital presetvalues updates all summation-fields', () => {});
+  test.only('Add capital presetvalues updates only account balance field', async () => {
+    // create server response where a capital preset is created
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: 'new_added_capital_preset',
+            number: 20000,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: 'capital',
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    const capitalCheckbox = screen.getByRole('checkbox', { name: /capital/i });
+    userEvent.type(nameField, 'notused');
+    userEvent.type(numberField, '20000');
+    userEvent.selectOptions(categoryField, 'Travel');
+    fireEvent.click(capitalCheckbox);
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    //expect form to be reset
+    expect(screen.getByPlaceholderText('Name').textContent).toBe('');
+    expect(screen.getByPlaceholderText('Number').textContent).toBe('');
+
+    // expect account balance to have been updated
+    const AccBal = await screen.findByText('564977'); // 544977 + 20000
+    expect(AccBal).toBeInTheDocument();
+
+    // expect nothing else to have been changed in the summations
+    const newMonthIncomeSum = screen.getByText('799');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+    const monthSurplusValue = screen.getByText('Month Surplus:').parentElement.children[1].textContent;
+    screen.debug(screen.getByText('Month Surplus:').parentElement.parentElement);
+    expect(monthSurplusValue).toBe('544');
+    const monthBalanceValue = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceValue).toBe('Month Balance:544');
+    const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
+    expect(BalanceByCategory_TravelField).toBe('-255');
+    const monthSavings = screen.getByText('Month Savings:').children[0].textContent;
+    expect(monthSavings).toBe(' 0');
+  });
+
   test.skip('Delete saving presetvalues updates all summation-fields', () => {});
   test.skip('Change inside addtopiggybankmodal updates correctly sums everywhere when submitted', () => {});
 });
