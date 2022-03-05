@@ -867,7 +867,7 @@ describe('Summation functionality', () => {
     expect(monthSavingsEdit).toBe(' 1000'); // 0 + 1000
   });
 
-  test.only('Add capital presetvalues updates only account balance field', async () => {
+  test('Add capital presetvalues updates only account balance field', async () => {
     // create server response where a capital preset is created
     server.use(
       rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
@@ -929,7 +929,187 @@ describe('Summation functionality', () => {
     expect(monthSavings).toBe(' 0');
   });
 
-  test.skip('Delete saving presetvalues updates all summation-fields', () => {});
+  test('Delete saving presetvalues updates all summation-fields', async () => {
+    // starting point is month January with expanded preset form setup in beforeEach
+    // go to month may
+    fireEvent.click(await screen.findByRole('button', { name: /april/i }));
+
+    // find the preset
+    const presetToDelete = await screen.findByRole('button', { name: /saving/i });
+
+    // find the deletebutton in the html-tree and click it
+    const presetToDeleteBtn = presetToDelete.parentElement.parentElement.parentElement.children[3].children[0];
+    fireEvent.click(presetToDeleteBtn);
+
+    // expect preset to have been deleted
+    await waitForElementToBeRemoved(presetToDelete);
+    expect(presetToDelete).not.toBeInTheDocument();
+
+    // expect month balance, month savings & account balance to be
+    // Account Balance: 544977 + 456788 = 1001765
+    expect(await screen.findByText('1001765')).toBeInTheDocument();
+    //Month Income:
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('77');
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('0');
+    // Month Balance: -456711 + 456788 = 77
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Month Surplus:77');
+    // Month Savings: 456788 - 456788 = 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
+
+  test.only('Delete piggybank-saving presetvalues updates all summation-fields', async () => {
+    // add overhead preset income
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: 'income',
+            number: 20000,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: 'overhead',
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    const purchaseCheckbox = screen.getByRole('checkbox', { name: /purchase/i });
+    userEvent.type(nameField, 'notused');
+    userEvent.type(numberField, '10000');
+    userEvent.selectOptions(categoryField, 'Travel');
+    fireEvent.click(purchaseCheckbox);
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    //expect form to be reset
+    expect(screen.getByPlaceholderText('Name').textContent).toBe('');
+    expect(screen.getByPlaceholderText('Number').textContent).toBe('');
+
+    //expect purchaseitem to update its button to:
+
+    /*    <button
+    class="btn-moremonthsleft"
+  >
+    2 months
+  </button> */
+
+    // press piggy button
+    const piggybankButton = await screen.findByRole('button', { name: /2 months/i });
+    fireEvent.click(piggybankButton);
+
+    // expect AddtoPiggybankModal to be shown
+    const header = screen.getByRole('heading', { name: 'Amount to save' });
+    expect(header).toBeInTheDocument();
+
+    // change the amount to save value
+    fireEvent.change(screen.getByTestId('inputamountrange'), { target: { value: '20000' } });
+
+    // create the expected server response with a piggybank object added
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+
+    // press submit piggybank save amount
+    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+
+    // expect AddtoPiggybankModal to be closed
+    await waitForElementToBeRemoved(header);
+    expect(header).not.toBeInTheDocument();
+
+    // expect MonthSavingsSummary-component to show up and correct number displayed
+    expect(await screen.findByRole('heading', { name: /month surplus put to savings/i })).toBeInTheDocument();
+
+    // expect to find buttons with the number 20000
+    const presets = await screen.findAllByRole('button', { name: '20000' });
+    // find by class attribute
+    const preset = presets.find((b) => b.getAttribute('class') === 'text-orange btn-form');
+    expect(preset).toBeInTheDocument();
+
+    // expect purchase-preset monthsleft-button to be updated
+    expect(await screen.findByText('64 months')).toBeInTheDocument();
+
+    // expect sum values to have been updated
+    const newMonthIncomeSum = screen.getByText('20799');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+    const AccBal = screen.getByText('564977');
+    expect(AccBal).toBeInTheDocument();
+    const monthSurplusValue = screen.getByText('Month Surplus:').parentElement.children[1].textContent;
+    expect(monthSurplusValue).toBe('20544');
+    const monthBalanceValue = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceValue).toBe('Month Balance:544');
+    const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
+    expect(BalanceByCategory_TravelField).toBe('19745');
+    const monthSavings = screen.getByText('Month Savings:').children[0].textContent;
+    expect(monthSavings).toBe(' 20000');
+
+    // delete piggybank saving
+    // find the deletebutton in the html-tree and click it
+    const presetToDeleteBtn = preset.parentElement.parentElement.children[4].children[0];
+    fireEvent.click(presetToDeleteBtn);
+
+    // expect preset to have been deleted
+    await waitForElementToBeRemoved(preset);
+    expect(preset).not.toBeInTheDocument();
+
+    // expect month balance, month savings & account balance to be
+    // Account Balance: 544977 + 20000 = 564977
+    expect(await screen.findByText('564977')).toBeInTheDocument();
+    //Month Income:unchanged
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('20799');
+    //Month Expenses:unchanged
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-255');
+    // Month surplus: unchanged
+    const MonthSurplus = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthSurplus).toBe('Month Surplus:20544');
+    // Month Balance 544 + 20000 = 20544
+    const monthBalanceField = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceField).toBe('Month Balance:20544');
+    // Month Savings: 20000 - 20000 =  0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+  });
+
   test.skip('Change inside addtopiggybankmodal updates correctly sums everywhere when submitted', () => {});
 });
 
