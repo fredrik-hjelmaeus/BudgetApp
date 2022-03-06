@@ -4,7 +4,7 @@ import CssContext from '../../context/css/cssContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import piggyicon from '../layout/images/piggybank.svg';
 
-import {
+/* import {
   Bankfee,
   Commute,
   Salary,
@@ -26,7 +26,7 @@ import {
   Electricalbill,
   Travel,
   Car,
-} from '../layout/images/index';
+} from '../layout/images/index'; */
 
 const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const presetContext = useContext(PresetContext);
@@ -34,7 +34,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const { toggleModal } = cssContext;
   const { presets, deletePreset, month, sendEdit, setEdit } = presetContext;
   const { name, number, category } = Item;
-  const getCategoryIcon = (category) => {
+  /*  const getCategoryIcon = (category) => {
     switch (category) {
       case 'Commute':
         return Commute;
@@ -81,7 +81,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       default:
         return Commute;
     }
-  };
+  }; */
   const [preset, setPreset] = useState({
     _id: Item._id,
     name: Item.name,
@@ -104,7 +104,6 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     setDelbtnColor(false);
   };
   const onDelete = () => {
-    console.log('DELETEING');
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
     Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
   };
@@ -172,7 +171,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
       </div>
       <div>
         <button className='btn-form'>
-          <img src={getCategoryIcon(category)} alt={`${category}_icon`} style={{ height: '20px', width: '20px' }} />
+          <img src={`/icons/${category}.svg`} alt={`${category} icon`} style={{ height: '20px', width: '20px' }} />
         </button>
       </div>
       {Item.type !== 'savings' && (
