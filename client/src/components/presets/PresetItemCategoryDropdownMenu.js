@@ -1,5 +1,5 @@
 import React from 'react';
-import {
+/* import {
   Bankfee,
   Commute,
   Salary,
@@ -21,10 +21,10 @@ import {
   Electricalbill,
   Travel,
   Car,
-} from '../layout/images/index';
+} from '../layout/images/index'; */
 
 //get categoryicon
-const getCategoryIcon = (category) => {
+/* const getCategoryIcon = (category) => {
   switch (category) {
     case 'Commute':
       return Commute;
@@ -73,7 +73,7 @@ const getCategoryIcon = (category) => {
     default:
       return 'Select Category';
   }
-};
+}; */
 
 const PresetItemCategoryDropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
   const [active, setActive] = React.useState(false);

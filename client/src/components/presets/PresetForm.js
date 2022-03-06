@@ -65,7 +65,19 @@ const PresetForm = () => {
         setAlert('Please fill in both fields', 'danger');
         return;
       } else {
-        addPreset(preset);
+        if (preset.type === 'purchase') {
+          addPreset({
+            name: preset.name,
+            number: Math.abs(preset.number),
+            month: preset.month,
+            year: preset.year,
+            category: preset.category,
+            type: preset.type,
+            piggybank: preset.piggybank,
+          });
+        } else {
+          addPreset(preset);
+        }
         if (preset.name !== '' || preset.number !== '') {
           calcSum();
         }

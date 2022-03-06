@@ -3,6 +3,7 @@ import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
 import DeleteSVG from '../layout/images/DeleteSVG';
 import PresetItemCategoryDropdownMenu from './PresetItemCategoryDropdownMenu';
+import PresetItemCategory from './PresetItemCategory';
 
 const PresetItem = ({ preset }) => {
   const presetContext = useContext(PresetContext);
@@ -149,12 +150,13 @@ const PresetItem = ({ preset }) => {
       </div>
       {/* category */}
 
-      <PresetItemCategoryDropdownMenu
+      {/*      <PresetItemCategoryDropdownMenu
         onDropdownClick={onDropdownClick}
         localpreset={localpreset}
         onClick={onTestClick}
         category={category}
-      />
+      /> */}
+      <PresetItemCategory onDropdownClick={onDropdownClick} localpreset={localpreset} onClick={onTestClick} category={category} />
 
       {/* deletebutton */}
 

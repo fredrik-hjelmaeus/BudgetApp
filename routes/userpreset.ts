@@ -42,11 +42,14 @@ router.post(
     }
     //validering avklarad
 
+    // destructuring
     const { name, number, month, year, category, type, piggybank } = req.body;
+
+    // build object
     try {
       const newPreset = new Preset({
         name,
-        number,
+        number: type === 'purchase' ? Math.abs(number) : number, // purchase should always be positive number when type purchase
         month,
         year,
         category,

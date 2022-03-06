@@ -37,7 +37,7 @@ describe('Summation functionality', () => {
     expect(accountBalanceSum).toBeInTheDocument();
   });
 
-  test('Adding overhead income presetvalue updates all summation-fields', async () => {
+  test('Add preset to overhead income works & updates all summation-fields', async () => {
     // starting point is month January with expanded preset form setup in beforeEach
     // fill in the form and submit
     const nameField = screen.getByPlaceholderText('Name');
@@ -70,7 +70,7 @@ describe('Summation functionality', () => {
     expect(BalanceByCategory_TravelField).toBe('745');
   });
 
-  test('Adding overhead expense presetvalue updates all summation-fields', async () => {
+  test('Add preset to overhead expense works & updates all summation-fields', async () => {
     // starting point is month January with expanded preset form
 
     // override endpoint to respond with expense number
@@ -919,7 +919,6 @@ describe('Summation functionality', () => {
     const newMonthIncomeSum = screen.getByText('799');
     expect(newMonthIncomeSum).toBeInTheDocument();
     const monthSurplusValue = screen.getByText('Month Surplus:').parentElement.children[1].textContent;
-    screen.debug(screen.getByText('Month Surplus:').parentElement.parentElement);
     expect(monthSurplusValue).toBe('544');
     const monthBalanceValue = screen.getByText('Month Balance:').textContent;
     expect(monthBalanceValue).toBe('Month Balance:544');
@@ -962,7 +961,7 @@ describe('Summation functionality', () => {
     expect(MonthSavings).toBe(' 0');
   });
 
-  test.only('Delete piggybank-saving presetvalues updates all summation-fields', async () => {
+  test('Delete piggybank-saving presetvalues updates all summation-fields', async () => {
     // add overhead preset income
     server.use(
       rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
@@ -1110,27 +1109,225 @@ describe('Summation functionality', () => {
     expect(MonthSavings).toBe(' 0');
   });
 
-  test.skip('Change inside addtopiggybankmodal updates correctly sums everywhere when submitted', () => {});
+  test('Change inside addtopiggybankmodal updates correctly sums everywhere when submitted', async () => {
+    // locate and click add to piggybank button
+    fireEvent.click(screen.getByRole('button', { name: /101 months/ }));
+    // expect addtopiggybankmodal to have been opened
+    const modalHeader = await screen.findByRole('heading', { name: /amount to save/i });
+    // create the expected server response with a piggybank object added
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // set amount to save and submit : NOTE that we only press submit and not change the value in slider, just use the default which is max. This is tested in other test above.
+    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+    // expect addtopiggybankmodal to have been closed
+    await waitForElementToBeRemoved(modalHeader);
+    // expect month surplus put to savings to appear and display the savings amount
+    await screen.findByRole('heading', { name: /month surplus put to savings/i });
+    expect(await screen.findByRole('button', { name: /544/i })).toBeInTheDocument();
+    // expect summation changes:
+    // changes month balance from 544 to 0
+    const monthBalanceField = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceField).toBe('Month Balance:0');
+    // changes month savings from 0 to 544
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 544');
+    // no changes to account balance
+    const accountBalance = await screen.findByText(/account balance:/i);
+    expect(accountBalance.children[0].textContent).toBe('544977 ');
+    // month income,surplus and expenses is unchanged
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('799');
+    const MonthSurplus = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthSurplus).toBe('Month Surplus:544');
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-255');
+  });
 });
 
 describe('PresetForm functionality', () => {
-  test.skip('Add preset to overhead income works', () => {});
-  test.skip('Add preset to overhead expenses works', () => {});
-  test.skip('Add preset to purchase works with positive number', () => {});
-  test.skip('Add preset to purchase works and convert with negative number input', () => {});
-  test.skip('Add preset to savings works', () => {});
-  test.skip('Add preset to capital works', () => {});
-  test.skip('Edit preset loads into form and fields gets reset after submitting edit', () => {});
-  test.skip('upload csv-file button activates upload modal', () => {});
-});
+  beforeEach(async () => {
+    // go to month and expand preset form
+    render(<App />);
 
-describe('MonthSummary functionality', () => {
-  test.skip('Field gets deleted when delete button is pressed', () => {});
-  test.skip('Category is updated when changed', () => {});
-  test.skip('Income preset is moved to expense when value is edited', () => {});
-  test.skip('Expense preset is moved to income when value is edited', () => {});
-  test.skip('Buy purchase removes purchasefield and updates monthsummary correctly', () => {});
-  test.skip('Delete purchase removes purchasefield and updates monthsummary correctly', () => {});
+    // go to month
+    const januaryButton = screen.queryByRole('button', { name: /january/i });
+    fireEvent.click(januaryButton);
+
+    // click add to budget button
+    const addToBudgetButton = await screen.findByRole('button', { name: /add to budget/i });
+    fireEvent.click(addToBudgetButton);
+
+    // assert inital month state
+    const sum = await screen.findAllByText('799');
+    expect(sum.length).toBe(1);
+    const expenses = await screen.findAllByText('-255');
+    expect(expenses.length).toBe(3);
+    const BalanceAndSurplus = await screen.findAllByText('544');
+    expect(BalanceAndSurplus.length).toBe(2);
+    const accountBalanceSum = await screen.findByText('544977');
+    const monthSavings = await screen.findByText('0');
+    const purchaseElement = await screen.findByRole('heading', { name: /purchases/i });
+    const purchasePreset = await screen.findByText('55000');
+    const presetElement = await screen.findByText('sadas');
+    expect(presetElement).toBeInTheDocument();
+    expect(purchaseElement).toBeInTheDocument();
+    expect(purchasePreset).toBeInTheDocument();
+    expect(monthSavings).toBeInTheDocument();
+    expect(accountBalanceSum).toBeInTheDocument();
+  });
+  test('Add preset to purchase works with positive number', async () => {
+    // starting point is month January with expanded preset form setup in beforeEach
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    const purchaseCheckbox = screen.getByRole('checkbox', { name: /purchase/i });
+    userEvent.type(nameField, 'purchase');
+    userEvent.type(numberField, '10000');
+    userEvent.selectOptions(categoryField, 'Travel');
+    fireEvent.click(purchaseCheckbox);
+
+    //override server response:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    // expect form fields to be reset
+    expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+    expect(screen.getByRole('combobox')).toHaveValue('Select an category');
+    expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /purchase/i })).not.toBeChecked();
+
+    // expect preset to be added to purchases component
+    const purchaseElement = await screen.findByRole('button', { name: 'purchase' });
+    expect(purchaseElement).toBeInTheDocument();
+    expect(screen.getByText('10000')).toBeInTheDocument();
+    expect(screen.getByText('18 months')).toBeInTheDocument();
+
+    // expect no sum fields to get changed
+    const newMonthIncomeSum = screen.getByText('799');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+    const AccBal = screen.getByText('544977');
+    expect(AccBal).toBeInTheDocument();
+    const monthSurplusValue = screen.getByText('Month Surplus:').parentElement.children[1].textContent;
+    expect(monthSurplusValue).toBe('544');
+    const monthBalanceValue = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceValue).toBe('Month Balance:544');
+    const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
+    expect(BalanceByCategory_TravelField).toBe('-255');
+  });
+  test('Add preset to purchase works and converts negative number input', async () => {
+    // starting point is month January with expanded preset form setup in beforeEach
+    // fill in the form and submit
+    const nameField = screen.getByPlaceholderText('Name');
+    const numberField = screen.getByPlaceholderText('Number');
+    const categoryField = screen.getByRole('combobox');
+    const purchaseCheckbox = screen.getByRole('checkbox', { name: /purchase/i });
+    userEvent.type(nameField, 'purchase');
+    userEvent.type(numberField, '-10000');
+    userEvent.selectOptions(categoryField, 'Travel');
+    fireEvent.click(purchaseCheckbox);
+
+    //override server response:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    // expect form fields to be reset
+    expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+    expect(screen.getByRole('combobox')).toHaveValue('Select an category');
+    expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /purchase/i })).not.toBeChecked();
+
+    // expect preset to be added to purchases component
+    const purchaseElement = await screen.findByRole('button', { name: 'purchase' });
+    expect(purchaseElement).toBeInTheDocument();
+    expect(purchaseElement.parentElement.children[1].textContent).toBe('10000');
+    expect(screen.getByText('18 months')).toBeInTheDocument();
+
+    // expect no sum fields to get changed
+    const newMonthIncomeSum = screen.getByText('799');
+    expect(newMonthIncomeSum).toBeInTheDocument();
+    const AccBal = screen.getByText('544977');
+    expect(AccBal).toBeInTheDocument();
+    const monthSurplusValue = screen.getByText('Month Surplus:').parentElement.children[1].textContent;
+    expect(monthSurplusValue).toBe('544');
+    const monthBalanceValue = screen.getByText('Month Balance:').textContent;
+    expect(monthBalanceValue).toBe('Month Balance:544');
+    const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
+    expect(BalanceByCategory_TravelField).toBe('-255');
+  });
 });
 
 describe('Purchases functionality', () => {
