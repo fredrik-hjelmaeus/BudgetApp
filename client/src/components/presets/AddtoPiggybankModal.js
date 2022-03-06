@@ -90,7 +90,6 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
   const sendMyEdit = async (preset) => {
-    console.log('updating presets', preset);
     await sendEdit(preset);
     toggleModal('');
     setActivePiggybank([]);

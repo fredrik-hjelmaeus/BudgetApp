@@ -111,7 +111,6 @@ const PresetState = (props) => {
 
   // Add preset
   const addPreset = async (preset) => {
-    console.log('addpreset ran');
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -120,7 +119,7 @@ const PresetState = (props) => {
 
     try {
       const res = await axios.post('/api/userpreset', preset, config);
-      console.log(res.data);
+
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err) {
       if (err.response === undefined) {
@@ -159,10 +158,10 @@ const PresetState = (props) => {
         'Content-Type': 'application/json',
       },
     };
-    console.log(preset);
+
     try {
       const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
-      console.log(res.data);
+
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err) {
       console.log(err);
