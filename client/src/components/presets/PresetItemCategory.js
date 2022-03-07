@@ -15,7 +15,6 @@ const PresetItemCategory = ({ localpreset, onClick, category }) => {
             width: '20px',
           }}
           name='edit category'
-          // className={localpreset.markdelete ? 'dropdown__categoryicon__grayedout' : 'dropdown__categoryicon'}
         />
       </button>
     </>
