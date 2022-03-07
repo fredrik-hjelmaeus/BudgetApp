@@ -42,20 +42,37 @@ describe('MonthSummary unit tests', () => {
     // get presets
     const presets = screen.getAllByTestId('presetitem');
     // get deletebutton on the first preset and click it
-    const presetDeleteButton = presets[0].parentElement.parentElement.children[5];
+    const presetDeleteButton = presets[0].parentElement.parentElement.children[4];
     fireEvent.click(presetDeleteButton);
     // expect deletebutton to be gone
     await waitForElementToBeRemoved(presetDeleteButton);
     expect(presetDeleteButton).not.toBeInTheDocument();
   });
 
-  test.only('Category is updated when changed', () => {
+  test('Category is updated when changed', async () => {
     const presets = screen.getAllByTestId('presetitem');
-    // get categoryselect on the first preset and change category
-    const presetCategorySelector = presets[0].parentElement.parentElement.children[4];
-    userEvent.selectOptions(presetCategorySelector, 'Reminderfees');
 
-    screen.debug(presetCategorySelector);
+    // get categoryselect on the first preset and change category
+    const category = presets[0].parentElement.parentElement.children[3];
+
+    //close presetform for easier query selection
+    fireEvent.click(screen.getByTestId('presetform_closebtn'));
+    fireEvent.click(category);
+
+    // expect edit preset modal to be opened
+    // change category and submit
+    const editpresetheader = await screen.findByRole('heading', { name: /edit/i });
+    userEvent.selectOptions(screen.getByRole('combobox'), 'Travel');
+    const submitButton = screen.getByRole('button', { name: /update/i });
+    fireEvent.click(submitButton);
+
+    // check that edit preset modal is closed and the preset is updated with new icon/category
+    expect(editpresetheader).not.toBeInTheDocument();
+    const presetsAgain = await screen.findAllByTestId('presetitem');
+    expect(presetsAgain.length).toBe(3);
+    expect(await screen.findByAltText('Travel icon')).toBeInTheDocument(); // avoids unmounts somehow
+    const typeIcon = presetsAgain[0].parentElement.parentElement.children[3].children[0].getAttribute('alt');
+    expect(typeIcon).toBe('Travel icon');
   });
   test.skip('Income preset is moved to expense when value is edited', () => {});
   test.skip('Expense preset is moved to income when value is edited', () => {});
