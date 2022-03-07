@@ -114,7 +114,9 @@ const PresetForm = () => {
 
   return (
     <Fragment>
-      {expand === true && <button className='btn closebtn mt-1' value='close' onClick={toggleExpand}></button>}
+      {expand === true && (
+        <button className='btn closebtn mt-1' data-testid='presetform_closebtn' value='close' onClick={toggleExpand}></button>
+      )}
       {expand === true && (
         <form
           onSubmit={onSubmit}
