@@ -9,7 +9,7 @@ const PurchaseItem = ({ Item }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops, modal } = cssContext;
 
-  const { setEdit, MonthBalance, sendEdit, month, year } = presetContext;
+  const { setEdit, MonthBalance, sendEdit, month, year, addPreset, deletePreset } = presetContext;
 
   const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState('');
 
@@ -56,8 +56,39 @@ const PurchaseItem = ({ Item }) => {
   });
 
   const onBuy = () => {
-    sendEdit(expensepreset); //switch from type:purchase to type overhead .
-    //addPreset(incomepreset); //switch from type:purchase to type overhead .
+    // go through all Item.piggybank and convert to/create expense presets.
+    Item.piggybank.map((p) => {
+      if (p.savedAmount !== 0) {
+        addPreset({
+          //_id: p._id,
+          name: Item.name,
+          number: p.savedAmount * -1,
+          month: p.month,
+          year: p.year,
+          category: Item.category,
+          type: 'overhead',
+          piggybank: [{ month, year, savedAmount: '' }],
+        });
+      }
+    });
+    // When we press BUY we use the income in this month to fill in what is rest to reach the purchase number
+    // There is no piggybank saving for this so we calculate this by subtracting all saved amounts from purchase number
+    // Then we can create an expense preset for this
+    let counter = 0;
+    const piggybankSumArray = Item.piggybank.map((p) => (counter = counter + p.savedAmount));
+    const piggybanksAmount = piggybankSumArray[piggybankSumArray.length - 1];
+
+    addPreset({
+      name: Item.name,
+      number: (Item.number - piggybanksAmount) * -1,
+      month,
+      year,
+      category: Item.category,
+      type: 'overhead',
+      piggybank: [{ month, year, savedAmount: '' }],
+    });
+    // Delete purchase preset
+    deletePreset(Item._id);
   };
 
   const onSave = () => {
@@ -67,7 +98,6 @@ const PurchaseItem = ({ Item }) => {
   };
 
   const onDelete = () => {
-    console.log('delete purchase', Item);
     //calls on <DeletePurchaseModal>  to activate in Month.js
     //<DeletePurchaseModal> handles the delete of purchase
     toggleModal('deletepurchase');

@@ -74,8 +74,177 @@ describe('MonthSummary unit tests', () => {
     const typeIcon = presetsAgain[0].parentElement.parentElement.children[3].children[0].getAttribute('alt');
     expect(typeIcon).toBe('Travel icon');
   });
-  test.skip('Income preset is moved to expense when value is edited', () => {});
-  test.skip('Expense preset is moved to income when value is edited', () => {});
-  test.skip('Buy purchase removes purchasefield and updates monthsummary correctly', () => {});
+
+  test.only('Buy purchase removes purchasefield and converts piggybank savings to expense downpayment presets', async () => {
+    //Purchase preset Resa 55000 will get 2 piggybank savings added:
+    // add income preset
+    userEvent.type(screen.getByPlaceholderText('Name'), 'piggyone');
+    userEvent.type(screen.getByPlaceholderText('Number'), '10000');
+    userEvent.selectOptions(screen.getByRole('combobox'), 'Travel');
+    //override server response:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+    // make piggybank 10544
+    const piggybankButton = await screen.findByRole('button', { name: /5 months/i });
+    fireEvent.click(piggybankButton);
+    // create the expected server response with a piggybank object added
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    fireEvent.click(await screen.findByRole('button', { name: /submit/i }));
+    // switch to march
+    fireEvent.click(screen.getByRole('button', { name: /march/i }));
+    // add income preset
+    userEvent.type(screen.getByPlaceholderText('Name'), 'piggytwo');
+    userEvent.type(screen.getByPlaceholderText('Number'), '5000');
+    userEvent.selectOptions(screen.getByRole('combobox'), 'Travel');
+    //override server response:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+    // make piggybank 5000
+    fireEvent.click(await screen.findByRole('button', { name: /8 months/i }));
+    // create the expected server response with a piggybank object added
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    fireEvent.click(await screen.findByRole('button', { name: /submit/i }));
+    // switch to may
+    fireEvent.click(screen.getByRole('button', { name: /may/i }));
+    // add income preset
+    userEvent.type(screen.getByPlaceholderText('Name'), 'final_deposit');
+    userEvent.type(screen.getByPlaceholderText('Number'), '50000');
+    userEvent.selectOptions(screen.getByRole('combobox'), 'Travel');
+    //override server response: <-- wrong response atm
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+    // buy purchase resa
+    fireEvent.click(await screen.findByRole('button', { name: /buy/i }));
+    // expect one expense preset created in may: 40000
+    const testtemp = await screen.findAllByTestId('presetitem');
+    console.log(testtemp);
+    expect(await screen.findByRole('button', { name: /40000/i })).toBeInTheDocument();
+    // switch to march
+    fireEvent.click(screen.getByRole('button', { name: /march/i }));
+    // expect one expense preset created in march: 5000
+    expect(await screen.findByRole('button', { name: /5000/i })).toBeInTheDocument();
+    // switch to january
+    fireEvent.click(screen.getByRole('button', { name: /january/i }));
+    // expect one expense preset created in january: 10000
+    expect(await screen.findByRole('button', { name: /10000/i })).toBeInTheDocument();
+  });
   test.skip('Delete purchase removes purchasefield and updates monthsummary correctly', () => {});
 });
