@@ -356,7 +356,7 @@ describe('Summation functionality', () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test('Editing overhead INCOME TO EXPENSE presetvalues updates all summation-fields', async () => {
+  test('Editing overhead INCOME TO EXPENSE presetvalues updates all summation-fields and moves preset', async () => {
     // press preset in monthsummary component
     fireEvent.click(screen.getByRole('button', { name: '444' }));
 
@@ -378,7 +378,7 @@ describe('Summation functionality', () => {
     fireEvent.click(submitChangesButton);
     expect(submitChangesButton).not.toBeInTheDocument();
 
-    // expect preset to have been changed in monthsummary
+    // expect preset to have been moved in monthsummary
     const preset = await screen.findByText('switcher');
     expect(preset.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].textContent).toBe('Expenses');
     expect(preset).toBeInTheDocument();
@@ -399,7 +399,7 @@ describe('Summation functionality', () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(' 0');
   });
-  test('Editing overhead EXPENSE TO INCOME presetvalues updates all summation-fields', async () => {
+  test('Editing overhead EXPENSE TO INCOME presetvalues updates all summation-fields and moves preset', async () => {
     // press preset in monthsummary component
     fireEvent.click(screen.getByRole('button', { name: '-255' }));
 
@@ -421,7 +421,7 @@ describe('Summation functionality', () => {
     fireEvent.click(submitChangesButton);
     expect(submitChangesButton).not.toBeInTheDocument();
 
-    // expect preset to have been changed in monthsummary from expense presets to income presets
+    // expect preset to have been moved in monthsummary from expense presets to income presets
     const preset = await screen.findByText('switcher');
     expect(preset.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].textContent).toBe('Income');
     expect(preset).toBeInTheDocument();
@@ -761,7 +761,7 @@ describe('Summation functionality', () => {
     expect(monthSavings).toBe(' 20000');
   });
 
-  test('Add & Edit saving presetvalues updates all summation-fields', async () => {
+  test.only('Add & Edit saving presetvalues updates all summation-fields', async () => {
     // add overhead preset income so buying button becomes visible
     server.use(
       rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
@@ -809,7 +809,7 @@ describe('Summation functionality', () => {
     expect(await screen.findByRole('heading', { name: /Month Surplus put to Savings/i })).toBeInTheDocument();
     expect(await screen.findByRole('button', { name: /saving/i })).toBeInTheDocument();
     expect(await screen.findByRole('button', { name: /20000/i })).toBeInTheDocument();
-    expect(await screen.findByAltText('Travel_icon')).toBeInTheDocument();
+    expect(await (await screen.findAllByAltText('Travel icon')).find((i) => i.name === 'edit category')).toBeInTheDocument();
 
     // expect sum values to have been updated
     const newMonthIncomeSum = screen.getByText('799');
