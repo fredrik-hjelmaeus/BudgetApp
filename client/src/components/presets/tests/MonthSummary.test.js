@@ -3,8 +3,6 @@ import {
   screen,
   fireEvent,
   waitForElementToBeRemoved,
-  waitFor,
-  act,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
@@ -254,8 +252,6 @@ describe("MonthSummary unit tests", () => {
     // press buy purchase
     fireEvent.click(await screen.findByRole("button", { name: /buy/i }));
     // expect one expense preset created in may: -39456
-    const testtemp = await screen.findAllByTestId("presetitem");
-    console.log(testtemp);
     expect(
       await screen.findByRole("button", { name: /-39456/i })
     ).toBeInTheDocument();
@@ -273,5 +269,4 @@ describe("MonthSummary unit tests", () => {
       await screen.findByRole("button", { name: /-10544/i })
     ).toBeInTheDocument();
   });
-  test.skip("Delete purchase removes purchasefield and updates monthsummary correctly", () => {});
 });
