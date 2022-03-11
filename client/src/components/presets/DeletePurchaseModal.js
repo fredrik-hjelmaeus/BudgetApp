@@ -19,7 +19,7 @@ const DeletePurchaseModal = ({ Item }) => {
   //cancel purchase
   // for every piggybank that is not savedAmount 0,convert to new preset type savings at the month piggybankitem was registred. Then delete purchasepreset
   const onDelete = () => {
-    const FilteredPiggybanks = Item.piggybank.filter((piggybank) => piggybank.savedAmount !== 0);
+    /*   const FilteredPiggybanks = Item.piggybank.filter((piggybank) => piggybank.savedAmount !== 0);
 
     FilteredPiggybanks.map((newSaving) =>
       addPreset({
@@ -31,7 +31,7 @@ const DeletePurchaseModal = ({ Item }) => {
         type: 'savings', //switch type from purchase to savings)
         piggybank: [{ month, year: '2021', savedAmount: '' }],
       })
-    );
+    ); */
     console.log('deleteing purchasepreset: ', Item._id);
     deletePreset(Item._id);
     toggleModal('');
