@@ -764,7 +764,7 @@ describe('Summation functionality', () => {
     expect(monthSavings).toBe(' 20000');
   });
 
-  test.only('Add & Edit saving presetvalues updates all summation-fields', async () => {
+  test('Add & Edit saving presetvalues updates all summation-fields', async () => {
     // add overhead preset income so buying button becomes visible
     server.use(
       rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
@@ -1723,14 +1723,144 @@ describe.only('Purchases interaction', () => {
     expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
 
     // go to earlier month
+    // switch to march
+    fireEvent.click(screen.getByRole('button', { name: /march/i }));
     // expect piggybank saving to have been deleted there aswell
+    expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
+
+    // switch to january
+    fireEvent.click(screen.getByRole('button', { name: /january/i }));
+    //expect piggybank saving to have been deleted here aswell
+    expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
   });
 
-  test.skip('Delete piggybank saving updates purchase-month-estimation', async () => {});
-  test.skip('Purchase displays correct when added', () => {});
+  test('Delete piggybank saving updates purchase-month-estimation', async () => {
+    //Purchase preset Resa 55000 will get 2 piggybank savings added:
+    // add income preset
+    userEvent.type(screen.getByPlaceholderText('Name'), 'piggyone');
+    userEvent.type(screen.getByPlaceholderText('Number'), '10000');
+    userEvent.selectOptions(screen.getByRole('combobox'), 'Travel');
+    //override server response:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+    // add piggybank 10544
+    const piggybankButton = await screen.findByRole('button', {
+      name: /5 months/i,
+    });
+    fireEvent.click(piggybankButton);
+    // create the expected server response with a piggybank object added
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    fireEvent.click(await screen.findByRole('button', { name: /submit/i }));
+
+    // expect a saving to have been created
+    const monthSavingSumPreset = (await screen.findByRole('heading', { name: /month surplus put to savings/i })).parentElement.parentElement
+      .children[1].children[1].children[0].textContent;
+    expect(monthSavingSumPreset).toBe('10544');
+
+    const monthSavingSumDeleteButton = (await screen.findByRole('heading', { name: /month surplus put to savings/i })).parentElement
+      .parentElement.children[1].children[4].children[0];
+
+    // delete this saving
+    fireEvent.click(monthSavingSumDeleteButton);
+
+    // expect saving to disappear
+    await waitForElementToBeRemoved(await screen.findByRole('heading', { name: /month surplus put to savings/i }));
+    expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
+  });
+
+  test.only('Purchases displays/updates correct when edited', async () => {
+    const purchaseNameField = screen.getByTestId('purchaseitem').children[0].children[0];
+    fireEvent.click(purchaseNameField);
+
+    const editNameField = await screen.findByLabelText('Name:');
+    const editValueField = await screen.findByLabelText('Number');
+    expect(editNameField).toHaveValue('Resa');
+    expect(editValueField).toHaveValue(55000);
+    expect(screen.getAllByRole('combobox').length).toBe(2);
+
+    //change name and number of preset
+    userEvent.clear(editNameField);
+    userEvent.clear(editValueField);
+    userEvent.type(editNameField, 'Trip');
+    userEvent.type(editValueField, '25000');
+
+    //submit change
+    const submitChangesButton = await screen.findByRole('button', { name: /update/i });
+    fireEvent.click(submitChangesButton);
+    expect(submitChangesButton).not.toBeInTheDocument();
+
+    // expect preset to have been changed in monthsummary
+    const preset = await screen.findByText('Trip');
+    expect(preset).toBeInTheDocument();
+
+    // summation with new values is correct,
+    //Month Income:
+    const monthIncomeSum = (await screen.findByText('Month Income:')).children[0].textContent;
+    expect(monthIncomeSum).toBe('799');
+    // Account Balance
+    const AccountBalance = (await screen.findByText('Month Income:')).parentElement.children[3].children[0].textContent;
+    expect(AccountBalance).toBe('544977 ');
+    //Month Expenses:
+    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
+    expect(MonthExpenses).toBe('-255');
+    //Month Balance:
+    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    expect(MonthBalance).toBe('Month Surplus:544');
+    //Month Savings: 0
+    const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
+    expect(MonthSavings).toBe(' 0');
+    //Purchases is changed/updated correct
+    const purchaseItem = await (await screen.findByText('Trip')).parentElement.children[1].textContent;
+    expect(purchaseItem).toBe('25000');
+  });
   test.skip('Purchase displays/updates correct when summation of presets change', () => {});
   test.skip('Click on purchase activates edit preset in presetform', () => {});
   test.skip('Click on piggybank or monthsleft button activates AddtoPiggybankModal ', () => {});
   test.skip('Delete purchase button works and removes purchasefield', () => {});
-  test.skip('Buy purchase button works and removes purchasefield', () => {});
 });
