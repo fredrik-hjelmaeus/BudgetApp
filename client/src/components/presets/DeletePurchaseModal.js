@@ -6,7 +6,7 @@ import PiggybankSVG from '../layout/images/PiggybankSVG';
 
 const DeletePurchaseModal = ({ Item }) => {
   const presetContext = useContext(PresetContext);
-  const { addPreset, deletePreset, month } = presetContext;
+  const { deletePreset } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
@@ -17,22 +17,7 @@ const DeletePurchaseModal = ({ Item }) => {
   };
 
   //cancel purchase
-  // for every piggybank that is not savedAmount 0,convert to new preset type savings at the month piggybankitem was registred. Then delete purchasepreset
   const onDelete = () => {
-    /*   const FilteredPiggybanks = Item.piggybank.filter((piggybank) => piggybank.savedAmount !== 0);
-
-    FilteredPiggybanks.map((newSaving) =>
-      addPreset({
-        name: Item.name,
-        number: newSaving.savedAmount,
-        month: newSaving.month,
-        year: newSaving.year,
-        category: Item.category,
-        type: 'savings', //switch type from purchase to savings)
-        piggybank: [{ month, year: '2021', savedAmount: '' }],
-      })
-    ); */
-    console.log('deleteing purchasepreset: ', Item._id);
     deletePreset(Item._id);
     toggleModal('');
   };

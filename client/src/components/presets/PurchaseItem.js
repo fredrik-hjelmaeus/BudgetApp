@@ -170,6 +170,7 @@ const PurchaseItem = ({ Item }) => {
           {Item.number}
         </button>
         <button
+          data-testid='piggybank_icon'
           className='btn text-primary purchasepiggybankbtn'
           value='piggybank'
           name='piggybank'

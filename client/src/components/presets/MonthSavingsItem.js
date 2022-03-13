@@ -108,8 +108,6 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
   };
   const onEdit = (e) => {
-    console.log(e.target.value);
-    console.log(preset[e.target.value]);
     setEdit(preset);
     toggleModal('editpreset');
   };
