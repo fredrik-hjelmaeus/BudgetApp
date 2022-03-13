@@ -617,6 +617,33 @@ describe('Summation functionality', () => {
     fireEvent.click(purchaseCheckbox);
     fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
 
+    // setup addPreset server response that is used when pressing buy button:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
     // press buy button
     const purchasePresetBuyButton = await screen.findByText('BUY');
     const presets_beforeClickingBUY = await screen.findAllByTestId('presetitem');
@@ -1334,7 +1361,7 @@ describe('PresetForm interaction', () => {
   });
 });
 
-describe.only('Purchases interaction', () => {
+describe('Purchases interaction', () => {
   // Setup: logged in user at month January with presetform expanded
   beforeEach(async () => {
     // go to month and expand preset form
@@ -1814,7 +1841,7 @@ describe.only('Purchases interaction', () => {
     expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
   });
 
-  test.only('Purchases displays/updates correct when edited', async () => {
+  test('Purchases displays/updates correct when edited', async () => {
     const purchaseNameField = screen.getByTestId('purchaseitem').children[0].children[0];
     fireEvent.click(purchaseNameField);
 
@@ -1859,8 +1886,74 @@ describe.only('Purchases interaction', () => {
     const purchaseItem = await (await screen.findByText('Trip')).parentElement.children[1].textContent;
     expect(purchaseItem).toBe('25000');
   });
-  test.skip('Purchase displays/updates correct when summation of presets change', () => {});
-  test.skip('Click on purchase activates edit preset in presetform', () => {});
-  test.skip('Click on piggybank or monthsleft button activates AddtoPiggybankModal ', () => {});
-  test.skip('Delete purchase button works and removes purchasefield', () => {});
+  test('Purchase displays/updates correct when summation of presets change', async () => {
+    // Purchase item Resa has number 55000 and 101 months
+
+    // months left is calculated: purchase number - piggybank savings / Month Balance
+    // add income preset
+    userEvent.type(screen.getByPlaceholderText('Name'), 'income_preset');
+    userEvent.type(screen.getByPlaceholderText('Number'), '10000');
+    userEvent.selectOptions(screen.getByRole('combobox'), 'Travel');
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: 'Travel',
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+
+    // expect form fields to be reset
+    expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+
+    // wait for the preset to be created
+    expect(await screen.findByRole('button', { name: /income_preset/i })).toBeInTheDocument();
+
+    // expect new months left calculation to have occured and be 5 months
+    const piggybankButton = await screen.findByRole('button', {
+      name: /5 months/i,
+    });
+    expect(piggybankButton).toBeInTheDocument();
+  });
+  test('Click on purchase activates edit preset', async () => {
+    fireEvent.click(screen.getByRole('button', { name: /resa/i }));
+    expect(await screen.findByRole('heading', { name: /edit/i })).toBeInTheDocument();
+    const editNameField = await screen.findByLabelText('Name:');
+    const editValueField = await screen.findByLabelText('Number');
+    expect(editNameField).toHaveValue('Resa');
+    expect(editValueField).toHaveValue(55000);
+  });
+  test('Click on piggybank or monthsleft button activates AddtoPiggybankModal ', async () => {
+    // unit test of PurchaseItem-component that needs to be asserted outside of component
+    // press piggybank
+    fireEvent.click(screen.getByTestId(/piggybank_icon/i));
+    // expect addtopiggybankmodal to have been opened
+    expect(await screen.findByRole('heading', { name: /amount to save/i })).toBeInTheDocument();
+    // close the modal
+    fireEvent.click(screen.getByRole('button', { name: /cancel/i }));
+    // press monthsleft
+    fireEvent.click(await screen.findByRole('button', { name: /101 months/i }));
+    // expect addtopiggybankmodal to have been opened
+    expect(await screen.findByRole('heading', { name: /amount to save/i })).toBeInTheDocument();
+  });
 });

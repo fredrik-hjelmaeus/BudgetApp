@@ -86,7 +86,6 @@ const PresetItem = ({ preset }) => {
     InputMode === 'categorychanged' && setEdit(localpreset);
     InputMode === 'categorychanged' && setInputMode('');
     if (InputMode === '' && edit !== null) {
-      console.log('this crap ran');
       sendEdit(localpreset);
       cancelEdit();
     }
