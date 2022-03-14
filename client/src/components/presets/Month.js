@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import PresetForm from '../presets/PresetForm';
 import DeletePurchaseModal from './DeletePurchaseModal';
 import AddtoPiggybankModal from './AddtoPiggybankModal';
+import EditPiggybankModal from './EditPiggybankModal';
 import CsvPresetCreateModal from '../csv/CsvPresetCreateModal';
 import Datemenu from '../layout/Datemenu';
 import PresetContext from '../../context/preset/presetContext';
@@ -57,6 +58,7 @@ const Month = () => {
       {csvpresets && modal === '' && <CsvPresetCreateModal />}
       {modal === 'deletepurchase' && <DeletePurchaseModal Item={modalprops} />}
       {modal === 'addtopiggybank' && <AddtoPiggybankModal Item={modalprops} />}
+      {modal === 'editpiggybank' && <EditPiggybankModal Item={modalprops} />}
       <Datemenu />
       {((!isNaN(guide) && parseInt(guide) >= 4) || parseInt(guide) <= 9) && <GuideModal />}
       <div

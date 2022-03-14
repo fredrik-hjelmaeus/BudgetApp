@@ -31,7 +31,7 @@ import piggyicon from '../layout/images/piggybank.svg';
 const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
-  const { toggleModal } = cssContext;
+  const { toggleModal, setModalprops } = cssContext;
   const { presets, deletePreset, month, sendEdit, setEdit } = presetContext;
   const { name, number, category } = Item;
   /*  const getCategoryIcon = (category) => {
@@ -85,7 +85,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   const [preset, setPreset] = useState({
     _id: Item._id,
     name: Item.name,
-    number: Item.number,
+    number: SumOfPreset,
     month: Item.month,
     year: Item.year,
     category: Item.category,
@@ -108,8 +108,13 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
   };
   const onEdit = (e) => {
-    setEdit(preset);
-    toggleModal('editpreset');
+    if (Item.type === 'purchase') {
+      setModalprops(Item);
+      toggleModal('editpiggybank');
+    } else {
+      setEdit(preset);
+      toggleModal('editpreset');
+    }
   };
 
   const deletePiggybankItem = (Item) => {

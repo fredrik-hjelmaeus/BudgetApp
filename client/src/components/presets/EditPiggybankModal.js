@@ -4,10 +4,10 @@ import PresetContext from '../../context/preset/presetContext';
 import CssContext from '../../context/css/cssContext';
 import PiggybankSVG from '../layout/images/PiggybankSVG';
 
-const AddtoPiggybankModal = ({ Item }) => {
+const EditPiggybankModal = ({ Item }) => {
   // preset context
   const presetContext = useContext(PresetContext);
-  const { sendEdit, setActivePiggybank, addtoPiggybanks, MonthBalance } = presetContext;
+  const { sendEdit, setActivePiggybank, addtoPiggybanks, MonthBalance, month } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
@@ -28,20 +28,24 @@ const AddtoPiggybankModal = ({ Item }) => {
   let AmountToSave; //init startvalue
 
   // store only savedAmounts in an array
-  const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
+  const thisMonthsPiggybankSavings = Item.piggybank.filter((p) => p.month === month);
+  const savedAmounts = thisMonthsPiggybankSavings.map((item) => item.savedAmount);
   // sift through savedAmounts and count totalsum
   const SumOfPiggybanks = savedAmounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+  console.log(SumOfPiggybanks + MonthBalance);
+  const max = SumOfPiggybanks + MonthBalance;
+
   const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
-
-  // Calc Amount to save
-  if (parseInt(MonthBalance) > parseInt(SumLeftToSave)) {
-    AmountToSave = SumLeftToSave;
-  } else {
-    AmountToSave = MonthBalance;
-  }
-
+  if (max)
+    if (parseInt(MonthBalance) > parseInt(SumLeftToSave)) {
+      // Calc Amount to save
+      AmountToSave = SumLeftToSave;
+    } else {
+      AmountToSave = MonthBalance;
+    }
+  //console.log(MonthBalance, SumLeftToSave);
   //piggybankstate, local state used for onChange-slider
-  const [piggybank, setPiggybank] = useState({ number: AmountToSave });
+  const [piggybank, setPiggybank] = useState({ number: SumOfPiggybanks });
 
   //when Item changes,set Item to default value of presetContext.piggybanks
   useEffect(() => {
@@ -123,15 +127,7 @@ const AddtoPiggybankModal = ({ Item }) => {
           <h1 className='regular'>Amount to save</h1>
         </div>
         <div className='piggybankmodalnumbername'>{piggybank.number}</div>
-        <input
-          type='range'
-          min='1'
-          max={AmountToSave}
-          name='number'
-          value={piggybank.number}
-          onChange={onChange}
-          data-testid='inputamountrange'
-        />
+        <input type='range' min='1' max={max} name='number' value={piggybank.number} onChange={onChange} data-testid='inputamountrange' />
         <button className='text-primary piggybankmodalsubmitbutton' value='submit' onClick={onSubmit}>
           Submit{'  '}
           <PiggybankSVG fill='var(--primary-color)' />
@@ -144,4 +140,4 @@ const AddtoPiggybankModal = ({ Item }) => {
   );
 };
 
-export default AddtoPiggybankModal;
+export default EditPiggybankModal;
