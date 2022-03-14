@@ -32,7 +32,8 @@ const EditPiggybankModal = ({ Item }) => {
   const savedAmounts = thisMonthsPiggybankSavings.map((item) => item.savedAmount);
   // sift through savedAmounts and count totalsum
   const SumOfPiggybanks = savedAmounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-  console.log(SumOfPiggybanks + MonthBalance);
+  // console.log(SumOfPiggybanks + MonthBalance);
+  //console.log(Item._id, Item.piggybank);
   const max = SumOfPiggybanks + MonthBalance;
 
   const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
@@ -49,6 +50,7 @@ const EditPiggybankModal = ({ Item }) => {
 
   //when Item changes,set Item to default value of presetContext.piggybanks
   useEffect(() => {
+    console.log('modalprops', modalprops.piggybank);
     setActivePiggybank(modalprops.piggybank);
     // eslint-disable-next-line
   }, []);
@@ -62,8 +64,26 @@ const EditPiggybankModal = ({ Item }) => {
   };
 
   // on submit, add month and amount to save in presetContext.piggybanks
-  const onSubmit = () => {
-    //   console.log('addtopiggybanks ran');
+  const onSubmit = async () => {
+    // delete all piggybank savings in this month
+    console.log(piggybank.number);
+    const newPiggybanks = Item.piggybank.filter((p) => p.month !== presetContext.month);
+    // newPiggybanks.push({ month: presetContext.month, year: presetContext.year, savedAmount: parseFloat(piggybank.number) });
+    setActivePiggybank(newPiggybanks);
+    console.log(newPiggybanks);
+    setPreset({
+      ...preset,
+      _id: Item._id,
+      name: Item.name,
+      number: Item.number,
+      month: Item.month,
+      year: Item.year,
+      category: Item.category,
+      type: 'purchase',
+      piggybank: newPiggybanks,
+    });
+    //  await sendEdit(preset);
+    console.log(preset);
     addtoPiggybanks({
       month: presetContext.month,
       year: presetContext.year,
