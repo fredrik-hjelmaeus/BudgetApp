@@ -13,10 +13,9 @@ const EditPreset = () => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
 
-  const { edit, sendEdit, calcSum } = presetContext;
+  const { edit, sendEdit, calcSum, MonthBalance } = presetContext;
   const { setAlert } = alertContext;
   const { toggleModal } = cssContext;
-
   //State
   const [localPreset, setLocalPreset] = useState({
     _id: edit?._id,
@@ -24,17 +23,33 @@ const EditPreset = () => {
     number: edit?.number,
     type: edit?.type,
     category: edit?.category,
+    piggybank: edit?.piggybank,
   });
-  const { name, number, type, category } = localPreset;
+  const { name, number, type, category, piggybank } = localPreset;
+
+  // type is used throughout component to differentiate logic application between normal saving preset and piggybank edit
+  // if type is saving, you can edit name,number,type and category
+  // if type is piggybank saving, you can edit number, but only up to the value month balance allows.
+  const sumOfPiggyAmounts = piggybank.map((p) => p.savedAmount);
+  const maxAllowedSumToBePiggyBankSaved = sumOfPiggyAmounts.reduce((p, c) => p + c, 0) + MonthBalance;
 
   // Logic
-  const onChange = (e) => setLocalPreset({ ...localPreset, [e.target.name]: e.target.value });
+  const onChange = (e) => {
+    /*     if (type === 'purchase' && e.target.name === 'number') {
+      if (e.target.value > maxAllowedSumToBePiggyBankSaved) {
+        setAlert(
+          `You cannot add more to piggybank than what is available in month balance: (${maxAllowedSumToBePiggyBankSaved})`,
+          'danger'
+        );
+      }
+    } */
+    setLocalPreset({ ...localPreset, [e.target.name]: e.target.value });
+  };
 
   const selectChange = (e) => {
     setLocalPreset({ ...localPreset, category: e.target.value });
   };
 
-  // console.log(localPreset);
   const onSubmitEditPreset = (e) => {
     e.preventDefault();
     // client side field validation
@@ -44,7 +59,7 @@ const EditPreset = () => {
     if (category === 'Select an category') {
       setAlert('You need to provide an category', 'danger');
     }
-    //  console.log('sending edit', localPreset);
+
     sendEdit(localPreset);
     calcSum();
     toggleModal('');
@@ -78,6 +93,7 @@ const EditPreset = () => {
                 <input type='name' id='name' placeholder='Name' name='name' value={name} onChange={onChange} required />
               </div>
             </div>
+
             <div className='flexrow '>
               <div>
                 <label className='form-text label' htmlFor='Number'>
