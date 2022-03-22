@@ -1225,6 +1225,7 @@ describe('PresetForm interaction', () => {
     expect(monthSavings).toBeInTheDocument();
     expect(accountBalanceSum).toBeInTheDocument();
   });
+
   test('Add preset to purchase works with positive number', async () => {
     // starting point is month January with expanded preset form setup in beforeEach
     // fill in the form and submit
@@ -1292,6 +1293,7 @@ describe('PresetForm interaction', () => {
     const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
     expect(BalanceByCategory_TravelField).toBe('-255');
   });
+
   test('Add preset to purchase works and converts negative number input', async () => {
     // starting point is month January with expanded preset form setup in beforeEach
     // fill in the form and submit
