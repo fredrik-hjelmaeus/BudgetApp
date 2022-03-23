@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
-import PresetContext from '../../context/preset/presetContext';
-import CssContext from '../../context/css/cssContext';
-import DeleteSVG from '../layout/images/DeleteSVG';
-import piggyicon from '../layout/images/piggybank.svg';
+import React, { useContext, useState, useEffect } from "react";
+import PresetContext from "../../context/preset/presetContext";
+import CssContext from "../../context/css/cssContext";
+import DeleteSVG from "../layout/images/DeleteSVG";
+import piggyicon from "../layout/images/piggybank.svg";
 
 /* import {
   Bankfee,
@@ -105,15 +105,18 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   };
   const onDelete = () => {
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
-    Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
+    Item.type === "savings"
+      ? deletePreset(Item._id)
+      : deletePiggybankItem(Item);
   };
   const onEdit = (e) => {
-    if (Item.type === 'purchase') {
+    console.log("onEdit ran", Item);
+    if (Item.type === "purchase") {
       setModalprops(Item);
-      toggleModal('editpiggybank');
+      toggleModal("editpiggybank");
     } else {
       setEdit(preset);
-      toggleModal('editpreset');
+      toggleModal("editpreset");
     }
   };
 
@@ -155,43 +158,59 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   }, [preset]);
 
   return (
-    <div className='monthitem'>
-      <div className='namebutton'>
+    <div className="monthitem">
+      <div className="namebutton">
         <h4>
           <button
             onClick={onEdit}
-            value='name'
-            className={number > 0 ? ' text-primary btn-form no-wrap' : ' text-primary btn-form no-wrap'}
+            value="name"
+            className={
+              number > 0
+                ? " text-primary btn-form no-wrap"
+                : " text-primary btn-form no-wrap"
+            }
           >
             {name}
           </button>
         </h4>
       </div>
       <div>
-        <button onClick={onEdit} className='text-orange btn-form' value='number'>
+        <button
+          onClick={onEdit}
+          className="text-orange btn-form"
+          value="number"
+        >
           {SumOfPreset}
         </button>
       </div>
       <div>
-        <button className='btn-form'>
-          <img src={`/icons/${category}.svg`} alt={`${category} icon`} style={{ height: '20px', width: '20px' }} />
+        <button className="btn-form">
+          <img
+            src={`/icons/${category}.svg`}
+            alt={`${category} icon`}
+            style={{ height: "20px", width: "20px" }}
+          />
         </button>
       </div>
-      {Item.type !== 'savings' && (
+      {Item.type !== "savings" && (
         <div>
-          <img src={piggyicon} alt='piggybank_icon' style={{ width: '26px' }} />
+          <img src={piggyicon} alt="piggybank_icon" style={{ width: "26px" }} />
         </div>
       )}
       <div>
         <button
-          className='btn text-primary delete'
-          value='delbtn'
+          className="btn text-primary delete"
+          value="delbtn"
           name={name}
           onMouseEnter={onHover}
           onMouseLeave={stopHover}
           onClick={onDelete}
         >
-          {DelbtnColor === true ? <DeleteSVG fill='var(--danger-color)' /> : <DeleteSVG fill='var(--light-color)' />}
+          {DelbtnColor === true ? (
+            <DeleteSVG fill="var(--danger-color)" />
+          ) : (
+            <DeleteSVG fill="var(--light-color)" />
+          )}
         </button>
       </div>
     </div>
