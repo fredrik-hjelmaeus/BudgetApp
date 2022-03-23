@@ -314,12 +314,12 @@ export const handlers = [
       ctx.json({
         _id: '6203e22b2bdb63c78b35b672',
         user: '6203e2152bdb63c78b35b670',
-        name: 'testtest',
-        number: 1000,
-        month: 'January',
+        name: req.body.name,
+        number: req.body.number,
+        month: req.body.month,
         year: 2021,
-        category: 'Travel',
-        type: 'overhead',
+        category: req.body.category,
+        type: req.body.type,
         piggybank: [
           {
             month: 'January',
