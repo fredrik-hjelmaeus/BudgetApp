@@ -17,7 +17,7 @@ describe('MonthSavingsSummary unit tests', () => {
     fireEvent.click(januaryButton);
   });
 
-  test.only('editing number on piggybank saving works correctly', async () => {
+  test('editing number on piggybank saving works correctly', async () => {
     // add income preset
     fireEvent.click(await screen.findByRole('button', { name: /add to budget/i }));
     userEvent.type(await screen.findByPlaceholderText('Name'), 'incomepreset');
@@ -143,8 +143,8 @@ describe('MonthSavingsSummary unit tests', () => {
     const BalanceByCategory_TravelField = screen.getByText('Travel:').children[0].textContent;
     expect(BalanceByCategory_TravelField).toBe('9745');
   });
-  test.skip('should not be able to add more to piggybank in edit when month balance 0 or less', () => {});
-  test.skip('should not be able to add more to saving in edit when month balance 0 or less', () => {});
+
+  test.skip('should not be able to add more to saving in edit when month balance is 0 or less', () => {});
   test.skip('editing category on piggybank saving should not work', async () => {});
   test.skip('deleting piggybank saving works correctly', async () => {});
   test.skip('editing name,number and category on saving works correctly', async () => {
@@ -159,8 +159,6 @@ describe('MonthSavingsSummary unit tests', () => {
     userEvent.type(numberField, '999');
     fireEvent.click(screen.getByRole('button', { name: /update/i }));
 
-    // screen.debug(await (await screen.findByRole('heading', { name: /month surplus put to savings/i })).parentElement.parentElement);
-    //  await waitFor(async () => await screen.findByRole('button', { name: /999/i }));
     const editedSavingPreset = await screen.findByRole('button', {
       name: /999/i,
     });
