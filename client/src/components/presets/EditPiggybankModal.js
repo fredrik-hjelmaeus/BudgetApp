@@ -1,20 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
-import uuid from "uuid";
-import PresetContext from "../../context/preset/presetContext";
-import CssContext from "../../context/css/cssContext";
-import PiggybankSVG from "../layout/images/PiggybankSVG";
+import React, { useContext, useState, useEffect } from 'react';
+import uuid from 'uuid';
+import PresetContext from '../../context/preset/presetContext';
+import CssContext from '../../context/css/cssContext';
+import PiggybankSVG from '../layout/images/PiggybankSVG';
 
 const EditPiggybankModal = ({ Item }) => {
   // preset context
   const presetContext = useContext(PresetContext);
-  const {
-    sendEdit,
-    setActivePiggybank,
-    addtoPiggybanks,
-    MonthBalance,
-    MonthSum,
-    piggybanks,
-  } = presetContext;
+  const { sendEdit, setActivePiggybank, addtoPiggybanks, MonthBalance, MonthSum, piggybanks } = presetContext;
 
   // Css: modal context
   const cssContext = useContext(CssContext);
@@ -28,7 +21,7 @@ const EditPiggybankModal = ({ Item }) => {
     month: Item.month,
     year: Item.year,
     category: Item.category,
-    type: "purchase",
+    type: 'purchase',
     piggybank: Item.piggybank,
   });
 
@@ -37,19 +30,14 @@ const EditPiggybankModal = ({ Item }) => {
   // store only savedAmounts in an array
   const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
 
-  const monthPiggyPresets = Item.piggybank.filter(
-    (item) => item.month === presetContext.month
-  );
+  const monthPiggyPresets = Item.piggybank.filter((item) => item.month === presetContext.month);
   const savedMonthsAmounts = monthPiggyPresets.map((p) => p.savedAmount);
   const piggySum = savedMonthsAmounts.reduce((a, b) => a + b, 0);
   // console.log(MonthSum);
   //  console.log(piggySum);
 
   // sift through savedAmounts and count totalsum
-  const SumOfPiggybanks = savedAmounts.reduce(
-    (a, b) => parseFloat(a) + parseFloat(b),
-    0
-  );
+  const SumOfPiggybanks = savedAmounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
   const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
 
   // Calc Amount to save
@@ -79,9 +67,7 @@ const EditPiggybankModal = ({ Item }) => {
   // on submit, add month and amount to save in presetContext.piggybanks
   const onSubmit = async () => {
     // remove piggybanks in this month
-    const monthPiggyPresets = Item.piggybank.filter(
-      (item) => item.month !== presetContext.month || item.savedAmount === 0
-    );
+    const monthPiggyPresets = Item.piggybank.filter((item) => item.month !== presetContext.month || item.savedAmount === 0);
     monthPiggyPresets.push({
       month: presetContext.month,
       year: parseInt(presetContext.year),
@@ -89,9 +75,9 @@ const EditPiggybankModal = ({ Item }) => {
       //  _id: uuid.v4(),
     });
     // console.log(presetContext.piggybanks);
-    console.log(monthPiggyPresets);
+    // console.log(monthPiggyPresets);
     await setActivePiggybank(monthPiggyPresets);
-    console.log("piggybanks before sendmyedit", piggybanks);
+    //console.log("piggybanks before sendmyedit", piggybanks);
     /*     sendMyEdit({
       _id: Item._id,
       name: Item.name,
@@ -119,15 +105,15 @@ const EditPiggybankModal = ({ Item }) => {
     //  console.log('onsubmit preset:', preset);
   };
   useEffect(() => {
-    console.log(
+    /*     console.log(
       "objs:",
       piggybanks,
       modalprops.piggybank,
       piggybanks === modalprops.piggybank
-    );
+    ); */
     if (piggybanks.length !== 0 && piggybanks !== modalprops.piggybank) {
-      console.log("piggybanks change detected");
-      console.log(piggybanks);
+      //  console.log("piggybanks change detected");
+      // console.log(piggybanks);
       sendMyEdit({
         _id: Item._id,
         name: Item.name,
@@ -135,7 +121,7 @@ const EditPiggybankModal = ({ Item }) => {
         month: Item.month,
         year: Item.year,
         category: Item.category,
-        type: "purchase",
+        type: 'purchase',
         piggybank: piggybanks,
       });
     }
@@ -169,7 +155,7 @@ const EditPiggybankModal = ({ Item }) => {
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
   const sendMyEdit = async (preset) => {
     await sendEdit(preset);
-    toggleModal("");
+    toggleModal('');
     setActivePiggybank([]);
   };
 
@@ -187,43 +173,35 @@ const EditPiggybankModal = ({ Item }) => {
 
   // Close modal
   const onClick = (e) => {
-    toggleModal("");
+    toggleModal('');
   };
 
   return (
-    <div id="myModal" className="modal-register" style={{ display: "block" }}>
-      <div className="modal-content-deletepurchase">
-        <span className="piggybankmodal-objname">
+    <div id='myModal' className='modal-register' style={{ display: 'block' }}>
+      <div className='modal-content-deletepurchase'>
+        <span className='piggybankmodal-objname'>
           {Item.name}
-          <button className="closebtn" value="close" onClick={onClick}></button>
+          <button className='closebtn' value='close' onClick={onClick}></button>
         </span>
 
-        <div className="modalpiggybankheader text-gray">
-          <h1 className="regular">Amount to save</h1>
+        <div className='modalpiggybankheader text-gray'>
+          <h1 className='regular'>Amount to save</h1>
         </div>
-        <div className="piggybankmodalnumbername">{piggybank.number}</div>
+        <div className='piggybankmodalnumbername'>{piggybank.number}</div>
         <input
-          type="range"
-          min="1"
+          type='range'
+          min='1'
           max={MonthSum}
-          name="number"
+          name='number'
           value={piggybank.number}
           onChange={onChange}
-          data-testid="inputamountrange"
+          data-testid='inputamountrange'
         />
-        <button
-          className="text-primary piggybankmodalsubmitbutton"
-          value="submit"
-          onClick={onSubmit}
-        >
-          Submit{"  "}
-          <PiggybankSVG fill="var(--primary-color)" />
+        <button className='text-primary piggybankmodalsubmitbutton' value='submit' onClick={onSubmit}>
+          Submit{'  '}
+          <PiggybankSVG fill='var(--primary-color)' />
         </button>
-        <button
-          className="btn btn-outline btn-block  p-3"
-          value="delete"
-          onClick={() => toggleModal("")}
-        >
+        <button className='btn btn-outline btn-block  p-3' value='delete' onClick={() => toggleModal('')}>
           Cancel
         </button>
       </div>
