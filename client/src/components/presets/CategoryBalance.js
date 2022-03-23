@@ -5,19 +5,14 @@ import SumByCategoryItem from './SumByCategoryItem';
 const CategoryBalance = () => {
   const presetContext = useContext(PresetContext);
 
-  const {
-    month,
-    categorymonthsum,
-    presets,
-    calcCategoryByMonth,
-    year,
-  } = presetContext;
+  const { month, categorymonthsum, presets, calcCategoryByMonth, year } = presetContext;
 
   useEffect(() => {
     if (month !== null && presets !== null) {
       calcCategoryByMonth(month);
     } // eslint-disable-next-line
   }, [month, presets, year]);
+
   return (
     <div className='categorybalance'>
       <h4 className='all-center text-gray'>Balance By Category</h4>
