@@ -457,7 +457,7 @@ const PresetState = (props) => {
               preset.type !== 'capital' &&
               preset.month === month &&
               preset.category === UniqueCatThisMonth[i] &&
-              presetByCatArray.push(preset.number))
+              presetByCatArray.push(parseFloat(preset.number)))
           );
         }); // end inner loop
       } else {
@@ -470,10 +470,11 @@ const PresetState = (props) => {
             preset.type !== 'capital' &&
             preset.month === month &&
             preset.category === UniqueCatThisMonth[i] &&
-            presetByCatArray.push(preset.number)
+            presetByCatArray.push(parseFloat(preset.number))
           );
         }); // end inner loop
       }
+
       SumOfCat = presetByCatArray.reduce((a, b) => a + b, 0);
       let cat = UniqueCatThisMonth[i];
 
