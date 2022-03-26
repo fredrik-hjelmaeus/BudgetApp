@@ -54,13 +54,16 @@ const EditPreset = () => {
     e.preventDefault();
     // client side field validation
     if (type === 'savings' && number > MonthSum) {
-      setAlert('Insufficient Month Surplus for this saving number');
+      setAlert('Insufficient Month Surplus for this saving number', 'danger');
+      return;
     }
     if (name === '' || number === '') {
       setAlert('Name and Number is required fields', 'danger');
+      return;
     }
     if (category === 'Select an category') {
       setAlert('You need to provide an category', 'danger');
+      return;
     }
 
     sendEdit(localPreset);
