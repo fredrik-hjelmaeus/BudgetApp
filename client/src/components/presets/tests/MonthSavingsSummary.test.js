@@ -216,6 +216,9 @@ describe('MonthSavingsSummary unit tests', () => {
     expect(screen.getByRole('combobox')).toHaveValue('Select an category');
     expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
 
+    // close presetform to prevent two alert-messages to be shown later in test
+    fireEvent.click(screen.getByTestId('presetform_closebtn'));
+
     // click saving item to get to edit preset modal
     fireEvent.click(await screen.findByRole('button', { name: /valid_saving_sum/i }));
 
@@ -232,8 +235,9 @@ describe('MonthSavingsSummary unit tests', () => {
     userEvent.type(editPresetNameField, 'invalid_saving_sum');
     fireEvent.click(updateBtn);
 
-    // expect alert message to appear
+    // expect alert message to appear in edit preset
     expect(await screen.findByText('Insufficient Month Surplus for this saving number')).toBeInTheDocument();
+    expect(editPresetNumField).toBeInTheDocument();
   });
   test.skip('editing category on piggybank saving should not work', async () => {});
   test.skip('deleting piggybank saving works correctly', async () => {});
