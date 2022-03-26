@@ -164,7 +164,7 @@ describe('MonthSavingsSummary unit tests', () => {
     expect(BalanceByCategory_TravelField).toBe('9745');
   });
 
-  test.only('should not be able to add more to saving in edit when month balance is 0 or less', async () => {
+  test('should not be able to add more to saving in edit when month balance is 0 or less', async () => {
     // The user we are using has a month surplus of 544
     // Add saving that is 544
     fireEvent.click(await screen.findByRole('button', { name: /add to budget/i }));
@@ -239,24 +239,73 @@ describe('MonthSavingsSummary unit tests', () => {
     expect(await screen.findByText('Insufficient Month Surplus for this saving number')).toBeInTheDocument();
     expect(editPresetNumField).toBeInTheDocument();
   });
+
   test.skip('editing category on piggybank saving should not work', async () => {});
   test.skip('deleting piggybank saving works correctly', async () => {});
-  test.skip('editing name,number and category on saving works correctly', async () => {
+  test.only('editing name,number and category on saving works correctly', async () => {
     // go to april month
     const aprilButton = screen.queryByRole('button', { name: /april/i });
     fireEvent.click(aprilButton);
+
     // click number on saving
     fireEvent.click(await screen.findByRole('button', { name: /456788/i }));
+
+    // edit number
     const numberField = await screen.findByLabelText('Number');
     expect(numberField.value).toBe('456788');
     userEvent.clear(numberField);
-    userEvent.type(numberField, '999');
-    fireEvent.click(screen.getByRole('button', { name: /update/i }));
+    userEvent.type(numberField, '66');
+    const updateBtn = screen.getByRole('button', { name: /update/i });
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
 
-    const editedSavingPreset = await screen.findByRole('button', {
-      name: /999/i,
-    });
-    expect(editedSavingPreset).toBeInTheDocument();
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: req.body.month,
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '6205143125ad67554798451b',
+              },
+            ],
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+
+    // submit edited number
+    fireEvent.click(updateBtn);
+    waitForElementToBeRemoved(updateBtn);
+    expect(updateBtn).not.toBeInTheDocument();
+
+    // expect the number to have been changed
+    expect(await screen.findByRole('button', { name: /66/i })).toBeInTheDocument();
+
+    // click name on saving
+    fireEvent.click(await screen.findByRole('button', { name: /saving/i }));
+
+    // close edit preset
+    const cancelBtn = await screen.findByRole('button', { name: /cancel/i });
+    fireEvent.click(cancelBtn);
+    waitForElementToBeRemoved(cancelBtn);
+    expect(cancelBtn).not.toBeInTheDocument();
+
+    // click category on saving
+    fireEvent.click(screen.getByAltText(/salary icon/i));
+    // expect edit preset to appear
+    expect(await screen.findByRole('button', { name: /cancel/i })).toBeInTheDocument(); // <--- correct test but need implementation in app
   });
   test.skip('deleting saving works correctly', async () => {});
 });
