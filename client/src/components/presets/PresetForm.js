@@ -1,11 +1,11 @@
-import React, { Fragment, useState, useContext, useEffect } from 'react';
-import PresetContext from '../../context/preset/presetContext';
-import GuideContext from '../../context/guide/guideContext';
-import AlertContext from '../../context/alert/alertContext';
-import CssContext from '../../context/css/cssContext';
-import CheckBoxField from './CheckBoxField';
-import SelectField from './SelectField';
-import Alerts from '../layout/Alerts';
+import React, { Fragment, useState, useContext, useEffect } from "react";
+import PresetContext from "../../context/preset/presetContext";
+import GuideContext from "../../context/guide/guideContext";
+import AlertContext from "../../context/alert/alertContext";
+import CssContext from "../../context/css/cssContext";
+import CheckBoxField from "./CheckBoxField";
+import SelectField from "./SelectField";
+import Alerts from "../layout/Alerts";
 
 const PresetForm = () => {
   const alertContext = useContext(AlertContext);
@@ -14,24 +14,25 @@ const PresetForm = () => {
   const guideContext = useContext(GuideContext);
 
   const { guide } = guideContext;
-  const { presets, addPreset, calcSum, month, year, error } = presetContext;
+  const { presets, addPreset, calcSum, month, year, error, MonthSum } =
+    presetContext;
   const { setAlert } = alertContext;
   const { toggleModal } = cssContext;
 
   useEffect(() => {
-    if (guide !== '8' && guide !== '9' && guide !== '10') {
+    if (guide !== "8" && guide !== "9" && guide !== "10") {
       setPreset({
-        name: '',
-        number: '',
+        name: "",
+        number: "",
         month,
         year,
         category,
-        type: 'overhead',
+        type: "overhead",
         piggybank: [{ month, year, savedAmount: 0 }],
       });
     }
 
-    if (error) setAlert(error, 'danger');
+    if (error) setAlert(error, "danger");
     // eslint-disable-next-line
   }, [month, presets, error]);
 
@@ -39,13 +40,13 @@ const PresetForm = () => {
 
   const [preset, setPreset] = useState(
     {
-      name: '',
-      number: '',
+      name: "",
+      number: "",
       month,
       year,
-      category: 'Select an category ^',
-      type: 'overhead',
-      piggybank: [{ month, year, savedAmount: '' }],
+      category: "Select an category ^",
+      type: "overhead",
+      piggybank: [{ month, year, savedAmount: "" }],
     }
     // [presetContext, edit]
   );
@@ -60,12 +61,19 @@ const PresetForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (preset.category !== 'Select an category ^') {
-      if (preset.name === '' || preset.number === '') {
-        setAlert('Please fill in both fields', 'danger');
+    if (preset.type === "savings") {
+      if (preset.number > MonthSum) {
+        setAlert("Insufficient month surplus for this saving", "danger");
+        return;
+      }
+    }
+    console.log("tThis should not be printed if type is savings");
+    if (preset.category !== "Select an category ^") {
+      if (preset.name === "" || preset.number === "") {
+        setAlert("Please fill in both fields", "danger");
         return;
       } else {
-        if (preset.type === 'purchase') {
+        if (preset.type === "purchase") {
           addPreset({
             name: preset.name,
             number: Math.abs(preset.number),
@@ -78,21 +86,21 @@ const PresetForm = () => {
         } else {
           addPreset(preset);
         }
-        if (preset.name !== '' || preset.number !== '') {
+        if (preset.name !== "" || preset.number !== "") {
           calcSum();
         }
       }
 
       setPreset({
-        name: '',
-        number: '',
+        name: "",
+        number: "",
         month,
         year,
-        category: 'Select an category ^',
-        type: 'overhead',
+        category: "Select an category ^",
+        type: "overhead",
       });
     } else {
-      setAlert('Please select an category', 'danger');
+      setAlert("Please select an category", "danger");
     }
   };
 
@@ -102,11 +110,14 @@ const PresetForm = () => {
 
   // expands the budget tab for the guide
   useEffect(() => {
-    guide === '5' && setExpand(false);
-    !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) <= 11 && setExpand(true);
-    guide === '8' && setPreset({ ...preset, type: 'capital' });
-    guide === '9' && setPreset({ ...preset, type: 'savings' });
-    guide === '10' && setPreset({ ...preset, type: 'purchase' });
+    guide === "5" && setExpand(false);
+    !isNaN(guide) &&
+      parseInt(guide) >= 6 &&
+      parseInt(guide) <= 11 &&
+      setExpand(true);
+    guide === "8" && setPreset({ ...preset, type: "capital" });
+    guide === "9" && setPreset({ ...preset, type: "savings" });
+    guide === "10" && setPreset({ ...preset, type: "purchase" });
     // eslint-disable-next-line
   }, [guide]);
 
@@ -115,73 +126,124 @@ const PresetForm = () => {
   return (
     <Fragment>
       {expand === true && (
-        <button className='btn closebtn mt-1' data-testid='presetform_closebtn' value='close' onClick={toggleExpand}></button>
+        <button
+          className="btn closebtn mt-1"
+          data-testid="presetform_closebtn"
+          value="close"
+          onClick={toggleExpand}
+        ></button>
       )}
+      {/* expanded form */}
       {expand === true && (
         <form
           onSubmit={onSubmit}
-          className={!isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 12 ? 'presetform guide__presetform' : 'presetform'}
+          className={
+            !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 12
+              ? "presetform guide__presetform"
+              : "presetform"
+          }
         >
           <Alerts />
-          <h2 className='text-primary all-center presetformtitle'> ADD TO BUDGET</h2>
-          <span className='presetformspan'>
+
+          <h2 className="text-primary all-center presetformtitle">
+            {" "}
+            ADD TO BUDGET
+          </h2>
+
+          <span className="presetformspan">
             <input
-              className={guide === '6' ? 'presetformname guide__presetformname' : 'presetformname'}
-              type='text'
-              placeholder='Name'
-              name='name'
+              className={
+                guide === "6"
+                  ? "presetformname guide__presetformname"
+                  : "presetformname"
+              }
+              type="text"
+              placeholder="Name"
+              name="name"
               value={name}
               onChange={onChange}
             />
             <input
-              className={guide === '6' ? 'presetformnumber guide__presetformnumber' : 'presetformnumber'}
-              type='number'
-              placeholder='Number'
-              name='number'
+              className={
+                guide === "6"
+                  ? "presetformnumber guide__presetformnumber"
+                  : "presetformnumber"
+              }
+              type="number"
+              placeholder="Number"
+              name="number"
               value={number}
               onChange={onChange}
             />
           </span>
-          <SelectField guide={guide} selectChange={selectChange} category={category} />
+
+          <SelectField
+            guide={guide}
+            selectChange={selectChange}
+            category={category}
+          />
+
           <div
-            className='presetform__optionsfield'
+            className="presetform__optionsfield"
             data-tooltip={
-              guide === '8'
-                ? 'To add initial capital to your account, you select capital here. This will be added to your account balance and year summary'
-                : guide === '9'
-                ? 'To add savings from your month surplus, you select savings'
-                : guide === '10'
-                ? 'To setup a purchase plan you select purchase here and fill in the cost of the purchase in Number field.'
+              guide === "8"
+                ? "To add initial capital to your account, you select capital here. This will be added to your account balance and year summary"
+                : guide === "9"
+                ? "To add savings from your month surplus, you select savings"
+                : guide === "10"
+                ? "To setup a purchase plan you select purchase here and fill in the cost of the purchase in Number field."
                 : null
             }
           >
             <CheckBoxField guide={guide} preset={preset} onChange={onChange} />
+
             <div>
               <button
-                data-tooltip={guide === '7' ? 'You can also upload month-transactions from a file' : null}
-                type='button'
-                className={guide === '7' ? 'btn presetform__upload' : 'btn presetform__upload'}
+                data-tooltip={
+                  guide === "7"
+                    ? "You can also upload month-transactions from a file"
+                    : null
+                }
+                type="button"
+                className={
+                  guide === "7"
+                    ? "btn presetform__upload"
+                    : "btn presetform__upload"
+                }
                 onClick={() => {
-                  toggleModal('SelectFile');
+                  toggleModal("SelectFile");
                 }}
               >
-                {' '}
+                {" "}
                 Upload CSV-file
               </button>
             </div>
           </div>
 
           <div>
-            <input type='submit' value={'ADD TO BUDGET'} className='btn btn-presetformadd' />
+            <input
+              type="submit"
+              value={"ADD TO BUDGET"}
+              className="btn btn-presetformadd"
+            />
           </div>
         </form>
       )}
+      {/* closed form */}
       {expand === false && (
-        <div className={guide === '5' ? 'presetformclosed guide__presetformclosed' : 'presetformclosed'}>
+        <div
+          className={
+            guide === "5"
+              ? "presetformclosed guide__presetformclosed"
+              : "presetformclosed"
+          }
+        >
           <button
-            className='btn btn-presetformadd'
+            className="btn btn-presetformadd"
             onClick={toggleExpand}
-            data-tooltip={guide === '5' ? 'To open add to budget you click here' : null}
+            data-tooltip={
+              guide === "5" ? "To open add to budget you click here" : null
+            }
           >
             ADD TO BUDGET
           </button>
