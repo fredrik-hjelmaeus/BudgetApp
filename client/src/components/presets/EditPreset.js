@@ -21,6 +21,7 @@ const EditPreset = () => {
     _id: edit?._id,
     name: edit?.name,
     number: edit?.number,
+    month: edit?.month,
     type: edit?.type,
     category: edit?.category,
     piggybank: edit?.piggybank,
