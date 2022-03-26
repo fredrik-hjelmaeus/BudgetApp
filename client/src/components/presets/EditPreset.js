@@ -13,7 +13,7 @@ const EditPreset = () => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
 
-  const { edit, sendEdit, calcSum, MonthBalance } = presetContext;
+  const { edit, sendEdit, calcSum, MonthBalance, MonthSum } = presetContext;
   const { setAlert } = alertContext;
   const { toggleModal } = cssContext;
   //State
@@ -53,6 +53,9 @@ const EditPreset = () => {
   const onSubmitEditPreset = (e) => {
     e.preventDefault();
     // client side field validation
+    if (type === 'savings' && number > MonthSum) {
+      setAlert('Insufficient Month Surplus for this saving number');
+    }
     if (name === '' || number === '') {
       setAlert('Name and Number is required fields', 'danger');
     }
