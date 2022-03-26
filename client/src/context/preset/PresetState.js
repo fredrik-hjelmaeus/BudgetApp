@@ -116,10 +116,10 @@ const PresetState = (props) => {
         'Content-Type': 'application/json',
       },
     };
-    console.log('preset', preset);
+
     try {
       const res = await axios.post('/api/userpreset', preset, config);
-      console.log(res.data);
+
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err) {
       if (err.response === undefined) {
@@ -128,7 +128,6 @@ const PresetState = (props) => {
           payload: 'Server or you are offline',
         });
       } else {
-        console.log(err);
         dispatch({
           type: PRESET_ERROR,
           payload: err.response.msg,
