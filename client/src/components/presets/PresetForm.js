@@ -37,43 +37,33 @@ const PresetForm = () => {
 
   const [expand, setExpand] = useState(false);
 
-  const [preset, setPreset] = useState(
-    {
-      name: '',
-      number: '',
-      month,
-      year,
-      category: 'Select an category ^',
-      type: 'overhead',
-      piggybank: [{ month, year, savedAmount: '' }],
-    }
-    // [presetContext, edit]
-  );
+  const [preset, setPreset] = useState({
+    name: '',
+    number: '',
+    month,
+    year,
+    category: 'Select an category ^',
+    type: 'overhead',
+    piggybank: [{ month, year, savedAmount: '' }],
+  });
 
   const onChange = (e) => {
     setPreset({ ...preset, [e.target.name]: e.target.value });
-    //  console.log('NAME_NUMBER_TYPE_CHANGE:', preset);
   };
 
-  // console.log('preset:', preset);
   const selectChange = (e) => {
     setPreset({ ...preset, category: e.target.value });
-    //console.log('CATEGORYCHANGE', preset);
   };
 
   const onSubmit = (e) => {
-    //console.log('preset in onSubmit', preset);
     e.preventDefault();
     if (preset.type === 'savings') {
-      //console.log('FOUND SAVINGS', preset.number, MonthSum);
       if (parseFloat(preset.number) > MonthSum) {
-        // console.log('SAVINGS FAILED');
         setAlert('Insufficient month surplus for this saving', 'danger');
         return;
       }
-      // console.log('SAVINGS SUCCESS');
     }
-    //console.log('tThis should not be printed if type is savings and preset.number is more than MonthSum', MonthSum, preset);
+
     if (preset.category !== 'Select an category ^') {
       if (preset.name === '' || preset.number === '') {
         setAlert('Please fill in both fields', 'danger');
