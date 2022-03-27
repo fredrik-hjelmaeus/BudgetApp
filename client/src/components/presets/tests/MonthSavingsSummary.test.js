@@ -189,7 +189,42 @@ describe('MonthSavingsSummary unit tests', () => {
     expect(header).not.toBeInTheDocument();
   });
 
-  test.skip('deleting piggybank saving works correctly', async () => {});
+  test('deleting piggybank saving works correctly', async () => {
+    // See bottom helper functions
+    await addIncomePreset();
+    await createPiggybankSaving();
+
+    // press deletebutton
+    const MonthSavingsComponentTree = screen.getByRole('heading', { name: /month surplus put to savings/i }).parentElement.parentElement;
+    const deleteBtn = MonthSavingsComponentTree.children[1].children[4].children[0];
+    server.use(
+      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: '2022-02-10T13:33:37.780Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    fireEvent.click(deleteBtn);
+
+    // expect piggybank to have been deleted
+    await waitForElementToBeRemoved(deleteBtn);
+    expect(deleteBtn).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
+  });
+
   test('editing name,number and category on saving works correctly', async () => {
     // go to april month
     const aprilButton = screen.queryByRole('button', { name: /april/i });
@@ -255,6 +290,7 @@ describe('MonthSavingsSummary unit tests', () => {
     // expect edit preset to appear
     expect(await screen.findByRole('button', { name: /cancel/i })).toBeInTheDocument(); // <--- correct test but need implementation in app
   });
+
   test.skip('deleting saving works correctly', async () => {});
 });
 
