@@ -107,10 +107,14 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
     Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
   };
+
   const onEdit = (e) => {
+    // purchase means it's piggybank saving. Piggybank saving should not be able to change category or name
     if (Item.type === 'purchase') {
-      setModalprops(Item);
-      toggleModal('editpiggybank');
+      if (e.currentTarget.value !== 'category' && e.currentTarget.value !== 'name') {
+        setModalprops(Item);
+        toggleModal('editpiggybank');
+      }
     } else {
       setEdit(preset);
       toggleModal('editpreset');
@@ -161,7 +165,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
           <button
             onClick={onEdit}
             value='name'
-            className={number > 0 ? ' text-primary btn-form no-wrap' : ' text-primary btn-form no-wrap'}
+            className={Item.type === 'purchase' ? ' text-primary btn-form no-wrap noHover' : ' text-primary btn-form no-wrap'}
           >
             {name}
           </button>
@@ -173,7 +177,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
         </button>
       </div>
       <div>
-        <button className='btn-form'>
+        <button onClick={onEdit} className={Item.type === 'purchase' ? 'btn-form noHover' : 'btn-form '} value='category' name='category'>
           <img src={`/icons/${category}.svg`} alt={`${category} icon`} style={{ height: '20px', width: '20px' }} />
         </button>
       </div>
@@ -197,4 +201,5 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     </div>
   );
 };
+
 export default MonthSavingsItem;

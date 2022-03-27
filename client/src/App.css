@@ -45,6 +45,10 @@ a:hover {
   color: #666;
 }
 
+.noHover {
+  pointer-events: none;
+}
+
 ul {
   list-style: none;
 }
