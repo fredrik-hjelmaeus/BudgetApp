@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor } from '../../../test-utils/context-wrapper';
+import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor, within } from '../../../test-utils/context-wrapper';
 import userEvent from '@testing-library/user-event';
 import App from '../../../App';
 import MonthSummary from '../MonthSummary';
@@ -38,73 +38,9 @@ describe('MonthSavingsSummary unit tests', () => {
   });
 
   test('editing number on piggybank saving works correctly', async () => {
-    // add income preset
-    fireEvent.click(await screen.findByRole('button', { name: /add to budget/i }));
-    userEvent.type(await screen.findByPlaceholderText('Name'), 'incomepreset');
-    userEvent.type(await screen.findByPlaceholderText('Number'), '10000');
-    userEvent.selectOptions(await screen.findByRole('combobox'), 'Travel');
-    //override server response:
-    server.use(
-      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
-        return res(
-          ctx.json({
-            _id: '6203e22b2bdb63c78b35b672',
-            user: '6203e2152bdb63c78b35b670',
-            name: req.body.name,
-            number: req.body.number,
-            month: 'January',
-            year: 2021,
-            category: req.body.category,
-            type: req.body.type,
-            piggybank: [
-              {
-                month: 'January',
-                year: 2021,
-                savedAmount: 0,
-                _id: '61edb1a5c557568270d9349e',
-              },
-            ],
-            date: '2022-02-09T15:47:55.671Z',
-            __v: 0,
-          })
-        );
-      })
-    );
-    // submit form
-    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
-    // expect form fields to be reset
-    expect(screen.getByPlaceholderText('Name')).toHaveValue('');
-    expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
-    expect(screen.getByRole('combobox')).toHaveValue('Select an category');
-    expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /purchase/i })).not.toBeChecked();
-
-    //create piggybank saving
-    fireEvent.click(await screen.findByRole('button', { name: /5 months/i }));
-    server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
-        const { _id } = req.params;
-        return res(
-          ctx.json({
-            _id,
-            user: req.body.user,
-            name: req.body.name,
-            number: req.body.number,
-            month: 'January',
-            year: 2021,
-            category: req.body.category,
-            type: req.body.type,
-            piggybank: req.body.piggybank,
-            date: '2022-02-10T13:33:37.780Z',
-            __v: 0,
-          })
-        );
-      })
-    );
-    const submitBtn = await screen.findByRole('button', { name: /submit/i });
-    fireEvent.click(submitBtn);
-    await waitForElementToBeRemoved(submitBtn);
-    expect(submitBtn).not.toBeInTheDocument();
+    // see bottom helper functions
+    await addIncomePreset();
+    await createPiggybankSaving();
 
     // press number on piggybank saving
     const purchasePresetNumberButton = await screen.findByRole('button', {
@@ -240,9 +176,21 @@ describe('MonthSavingsSummary unit tests', () => {
     expect(editPresetNumField).toBeInTheDocument();
   });
 
-  test.skip('editing category on piggybank saving should not work', async () => {});
+  test('editing category on piggybank saving should not work', async () => {
+    // See bottom helper functions
+    await addIncomePreset();
+    await createPiggybankSaving();
+
+    // press number on piggybank saving
+    const MonthSavingsComponentTree = screen.getByRole('heading', { name: /month surplus put to savings/i }).parentElement.parentElement;
+    const categoryBtn = await within(MonthSavingsComponentTree).findByAltText(/travel/i);
+    fireEvent.click(categoryBtn);
+    const header = screen.queryByRole('heading', { name: 'Amount to save' }); // using query allows heading not to be found but also NOT throw error
+    expect(header).not.toBeInTheDocument();
+  });
+
   test.skip('deleting piggybank saving works correctly', async () => {});
-  test.only('editing name,number and category on saving works correctly', async () => {
+  test('editing name,number and category on saving works correctly', async () => {
     // go to april month
     const aprilButton = screen.queryByRole('button', { name: /april/i });
     fireEvent.click(aprilButton);
@@ -309,3 +257,77 @@ describe('MonthSavingsSummary unit tests', () => {
   });
   test.skip('deleting saving works correctly', async () => {});
 });
+
+// Helper functions, DRY refactor
+const addIncomePreset = async () => {
+  // add income preset
+  fireEvent.click(await screen.findByRole('button', { name: /add to budget/i }));
+  userEvent.type(await screen.findByPlaceholderText('Name'), 'incomepreset');
+  userEvent.type(await screen.findByPlaceholderText('Number'), '10000');
+  userEvent.selectOptions(await screen.findByRole('combobox'), 'Travel');
+  //override server response:
+  server.use(
+    rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+      return res(
+        ctx.json({
+          _id: '6203e22b2bdb63c78b35b672',
+          user: '6203e2152bdb63c78b35b670',
+          name: req.body.name,
+          number: req.body.number,
+          month: 'January',
+          year: 2021,
+          category: req.body.category,
+          type: req.body.type,
+          piggybank: [
+            {
+              month: 'January',
+              year: 2021,
+              savedAmount: 0,
+              _id: '61edb1a5c557568270d9349e',
+            },
+          ],
+          date: '2022-02-09T15:47:55.671Z',
+          __v: 0,
+        })
+      );
+    })
+  );
+  // submit form
+  fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+  // expect form fields to be reset
+  expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+  expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+  expect(screen.getByRole('combobox')).toHaveValue('Select an category');
+  expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
+  expect(screen.getByRole('checkbox', { name: /purchase/i })).not.toBeChecked();
+};
+
+const createPiggybankSaving = async () => {
+  //create piggybank saving
+  fireEvent.click(await screen.findByRole('button', { name: /5 months/i }));
+  server.use(
+    rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      const { _id } = req.params;
+      return res(
+        ctx.json({
+          _id,
+          user: req.body.user,
+          name: req.body.name,
+          number: req.body.number,
+          month: 'January',
+          year: 2021,
+          category: req.body.category,
+          type: req.body.type,
+          piggybank: req.body.piggybank,
+          date: '2022-02-10T13:33:37.780Z',
+          __v: 0,
+        })
+      );
+    })
+  );
+  const submitBtn = await screen.findByRole('button', { name: /submit/i });
+  fireEvent.click(submitBtn);
+  await waitForElementToBeRemoved(submitBtn);
+  expect(submitBtn).not.toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /month surplus put to savings/i })).toBeInTheDocument();
+};
