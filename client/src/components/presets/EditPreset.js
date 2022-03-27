@@ -28,22 +28,8 @@ const EditPreset = () => {
   });
   const { name, number, type, category, piggybank } = localPreset;
 
-  // type is used throughout component to differentiate logic application between normal saving preset and piggybank edit
-  // if type is saving, you can edit name,number,type and category
-  // if type is piggybank saving, you can edit number, but only up to the value month balance allows.
-  const sumOfPiggyAmounts = piggybank.map((p) => p.savedAmount);
-  const maxAllowedSumToBePiggyBankSaved = sumOfPiggyAmounts.reduce((p, c) => p + c, 0) + MonthBalance;
-
   // Logic
   const onChange = (e) => {
-    /*     if (type === 'purchase' && e.target.name === 'number') {
-      if (e.target.value > maxAllowedSumToBePiggyBankSaved) {
-        setAlert(
-          `You cannot add more to piggybank than what is available in month balance: (${maxAllowedSumToBePiggyBankSaved})`,
-          'danger'
-        );
-      }
-    } */
     setLocalPreset({ ...localPreset, [e.target.name]: e.target.value });
   };
 
