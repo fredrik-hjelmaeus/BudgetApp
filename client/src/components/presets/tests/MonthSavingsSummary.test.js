@@ -288,10 +288,62 @@ describe('MonthSavingsSummary unit tests', () => {
     // click category on saving
     fireEvent.click(screen.getByAltText(/salary icon/i));
     // expect edit preset to appear
-    expect(await screen.findByRole('button', { name: /cancel/i })).toBeInTheDocument(); // <--- correct test but need implementation in app
+    expect(await screen.findByRole('button', { name: /cancel/i })).toBeInTheDocument();
   });
 
-  test.skip('deleting saving works correctly', async () => {});
+  test.skip('deleting saving works correctly', async () => {
+    // create saving preset
+    fireEvent.click(await screen.findByRole('button', { name: /add to budget/i }));
+    userEvent.type(await screen.findByPlaceholderText('Name'), 'savingpreset');
+    userEvent.type(await screen.findByPlaceholderText('Number'), '400');
+    userEvent.selectOptions(await screen.findByRole('combobox'), 'Travel');
+    fireEvent.click(screen.getByRole('checkbox', { name: /savings/i }));
+    //override server response:
+    server.use(
+      rest.post('http://localhost/api/userpreset', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: '6203e22b2bdb63c78b35b672',
+            user: '6203e2152bdb63c78b35b670',
+            name: req.body.name,
+            number: req.body.number,
+            month: 'January',
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: 'January',
+                year: 2021,
+                savedAmount: 0,
+                _id: '61edb1a5c557568270d9349e',
+              },
+            ],
+            date: '2022-02-09T15:47:55.671Z',
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole('button', { name: /add to budget/i }));
+    // expect form fields to be reset
+    expect(screen.getByPlaceholderText('Name')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Number')).toHaveValue(null);
+    expect(screen.getByRole('combobox')).toHaveValue('Select an category');
+    expect(screen.getByRole('checkbox', { name: /overhead/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /savings/i })).not.toBeChecked();
+
+    // press deletebutton
+    const MonthSavingsComponentTree = await screen.findByRole('heading', { name: /month surplus put to savings/i });
+    const deleteBtn = MonthSavingsComponentTree.parentElement.parentElement.children[1].children[3].children[0];
+    fireEvent.click(deleteBtn);
+
+    // expect saving to have been deleted
+    await waitForElementToBeRemoved(deleteBtn);
+    expect(deleteBtn).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /month surplus put to savings/i })).not.toBeInTheDocument();
+  });
 });
 
 // Helper functions, DRY refactor
