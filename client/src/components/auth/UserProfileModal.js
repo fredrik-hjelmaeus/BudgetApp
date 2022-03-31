@@ -16,27 +16,19 @@ const UserProfileModal = () => {
   const { setUserExited, setGuide } = useContext(GuideContext);
 
   const { setAlert } = alertContext;
-  const { user, error, clearErrors, updateDetails, updatePassword } =
-    authContext;
+  const { user, errors, clearErrors, updateDetails, updatePassword } = authContext;
 
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
   // UseEffect
   useEffect(() => {
-    if (error === "User already exists") {
-      setAlert(error, "danger");
+    if (errors.length > 0) {
+      //console.log("userprofilemodalerrors:", errors); // TODO: replace this with logging message to report wrong structured error message response
+      errors.map((error) => error && error?.msg && setAlert(error?.msg, "danger"));
       clearErrors();
     }
-    if (error === "Password is incorrect") {
-      setAlert(error, "danger");
-      clearErrors();
-    }
-    if (error === "This email is already in use") {
-      setAlert(error, "danger");
-      clearErrors();
-    } // eslint-disable-next-line
-  }, [error]);
+  }, [errors, clearErrors, setAlert]);
 
   // State
   const [localUser, setLocalUser] = useState({
@@ -52,8 +44,7 @@ const UserProfileModal = () => {
   const [ExpandChangePassword, setExpandChangePassword] = useState(false);
 
   // Logic
-  const onChange = (e) =>
-    setLocalUser({ ...localUser, [e.target.name]: e.target.value });
+  const onChange = (e) => setLocalUser({ ...localUser, [e.target.name]: e.target.value });
 
   const onSubmitProfile = (e) => {
     e.preventDefault();
@@ -75,10 +66,7 @@ const UserProfileModal = () => {
       setAlert("Please enter all fields", "danger");
     }
     if (currentPassword === password) {
-      setAlert(
-        "No changes were made as current password is the same as new password",
-        "danger"
-      );
+      setAlert("No changes were made as current password is the same as new password", "danger");
     }
     updatePassword({ currentPassword, password });
     console.log("submitpass");
@@ -124,11 +112,7 @@ const UserProfileModal = () => {
           {/*Change password button */}
           <button
             type="button"
-            className={
-              ExpandChangePassword
-                ? "form__inputOFF"
-                : "btn btn-light btn-block my-1"
-            }
+            className={ExpandChangePassword ? "form__inputOFF" : "btn btn-light btn-block my-1"}
             value="changepassword"
             onClick={onClickChangePassword}
           >
@@ -143,13 +127,8 @@ const UserProfileModal = () => {
             onChange={onChange}
             onSubmitPassword={onSubmitPassword}
           />
-          <button
-            className={"btn btn-light btn-block my-1"}
-            type="button"
-            onClick={startGuide}
-          >
-            App Guide{" "}
-            <img src={AppGuideIcon} alt="start the app guide icon"></img>
+          <button className={"btn btn-light btn-block my-1"} type="button" onClick={startGuide}>
+            App Guide <img src={AppGuideIcon} alt="start the app guide icon"></img>
           </button>
         </div>
       </div>
