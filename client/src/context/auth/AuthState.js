@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
-import axios from 'axios';
-import AuthContext from './authContext';
-import authReducer from './authReducer';
-import setAuthToken from '../../utils/setAuthToken';
+import React, { useReducer } from "react";
+import axios from "axios";
+import AuthContext from "./authContext";
+import authReducer from "./authReducer";
+import setAuthToken from "../../utils/setAuthToken";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -16,11 +16,11 @@ import {
   FORGOT_FAIL,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
-} from '../types';
+} from "../types";
 
 const AuthState = (props) => {
   const initialState = {
-    token: localStorage.getItem('token'),
+    token: localStorage.getItem("token"),
     isAuthenticated: false,
     loading: true,
     user: null,
@@ -37,14 +37,17 @@ const AuthState = (props) => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get('/api/auth');
+      const res = await axios.get("/api/auth");
 
       dispatch({
         type: USER_LOADED,
         payload: res.data,
       });
     } catch (err) {
-      dispatch({ type: AUTH_ERROR, payload: err.response.data.msg /* err.response.data.errors[0] */ });
+      dispatch({
+        type: AUTH_ERROR,
+        payload: err.response.data.msg /* err.response.data.errors[0] */,
+      });
     }
   };
 
@@ -52,13 +55,13 @@ const AuthState = (props) => {
   const register = async (formData) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        'My_User-Agent': 'react',
+        "Content-Type": "application/json",
+        "My_User-Agent": "react",
       },
     };
 
     try {
-      const res = await axios.post('/api/users', formData, config); //endpoint/url
+      const res = await axios.post("/api/users", formData, config); //endpoint/url
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
@@ -77,13 +80,13 @@ const AuthState = (props) => {
   const login = async (formData) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        'My_User-Agent': 'react',
+        "Content-Type": "application/json",
+        "My_User-Agent": "react",
       },
     };
 
     try {
-      const res = await axios.post('/api/auth', formData, config); //endpoint/url
+      const res = await axios.post("/api/auth", formData, config); //endpoint/url
 
       dispatch({
         type: LOGIN_SUCCESS,
@@ -109,13 +112,17 @@ const AuthState = (props) => {
   const forgotPassword = async (formData) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        'My_User-Agent': 'react',
+        "Content-Type": "application/json",
+        "My_User-Agent": "react",
       },
     };
 
     try {
-      const res = await axios.post('/api/auth/forgotpassword', formData, config);
+      const res = await axios.post(
+        "/api/auth/forgotpassword",
+        formData,
+        config
+      );
 
       dispatch({
         type: FORGOT_SUCCESS,
@@ -135,7 +142,7 @@ const AuthState = (props) => {
 
     try {
       await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
-      console.log('success');
+      console.log("success");
     } catch (err) {
       /*  dispatch({
         type: FORGOT_FAIL,
@@ -147,15 +154,15 @@ const AuthState = (props) => {
 
   //update userdetails
   const updateDetails = async (formData) => {
-    console.log(formData);
+    console.log("form input", formData);
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
     try {
-      await axios.put('/api/auth/updatedetails', formData, config);
-      console.log('success');
+      const res = await axios.put("/api/auth/updatedetails", formData, config);
+      console.log("success", res.data);
       loadUser();
     } catch (err) {
       console.log(err);
@@ -170,11 +177,11 @@ const AuthState = (props) => {
   const updatePassword = async (formData) => {
     console.log(formData);
     const config = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
     try {
-      await axios.put('/api/auth/updatepassword', formData, config);
-      console.log('success');
+      await axios.put("/api/auth/updatepassword", formData, config);
+      console.log("success");
     } catch (err) {
       dispatch({
         type: UPDATE_PASSWORD_FAIL,
