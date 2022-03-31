@@ -4,6 +4,7 @@ import UserProfileModal from "../UserProfileModal";
 
 describe("User Details integration", () => {
   beforeEach(() => {
+    // token is needed here to make sure the user is logged in
     render(<UserProfileModal />);
   });
   test("updates name and email on submitted update", async () => {
