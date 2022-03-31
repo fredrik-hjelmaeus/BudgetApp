@@ -142,7 +142,6 @@ const AuthState = (props) => {
 
     try {
       await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
-      console.log("success");
     } catch (err) {
       /*  dispatch({
         type: FORGOT_FAIL,
@@ -154,15 +153,14 @@ const AuthState = (props) => {
 
   //update userdetails
   const updateDetails = async (formData) => {
-    console.log("form input", formData);
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
-      const res = await axios.put("/api/auth/updatedetails", formData, config);
-      console.log("success", res.data);
+      await axios.put("/api/auth/updatedetails", formData, config);
+
       loadUser();
     } catch (err) {
       console.log(err);
