@@ -333,16 +333,13 @@ export const handlers = [
       })
     );
   }),
-  rest.delete(
-    `http://localhost/api/userpreset/61edb19ec557568270d9349a`,
-    (req, res, ctx) => {
-      return res(
-        ctx.json({
-          msg: "Preset removed",
-        })
-      );
-    }
-  ),
+  rest.delete(`http://localhost/api/userpreset/61edb19ec557568270d9349a`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        msg: "Preset removed",
+      })
+    );
+  }),
   rest.post("http://localhost/api/userpreset/upload", (req, res, ctx) => {
     return res(
       ctx.json([
@@ -419,11 +416,9 @@ export const handlers = [
   rest.put(`http://localhost/api/auth/updatedetails`, (req, res, ctx) => {
     return res(
       ctx.json({
-        _id: "6203e22b2bdb63c78b35b672",
-        user: req.body._id,
+        _id: "61ed72d16f895b1100dbab66",
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
         date: "2022-02-09T15:47:55.671Z",
         __v: 0,
       })

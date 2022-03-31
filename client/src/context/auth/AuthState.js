@@ -32,6 +32,7 @@ const AuthState = (props) => {
 
   // Load User
   const loadUser = async () => {
+    console.log("loadUser called");
     // load token into global headers
     if (localStorage.token) {
       setAuthToken(localStorage.token);
@@ -44,6 +45,7 @@ const AuthState = (props) => {
         payload: res.data,
       });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: AUTH_ERROR,
         payload: err.response.data.msg /* err.response.data.errors[0] */,
@@ -118,11 +120,7 @@ const AuthState = (props) => {
     };
 
     try {
-      const res = await axios.post(
-        "/api/auth/forgotpassword",
-        formData,
-        config
-      );
+      const res = await axios.post("/api/auth/forgotpassword", formData, config);
 
       dispatch({
         type: FORGOT_SUCCESS,
@@ -153,6 +151,7 @@ const AuthState = (props) => {
 
   //update userdetails
   const updateDetails = async (formData) => {
+    console.log(formData);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -160,26 +159,24 @@ const AuthState = (props) => {
     };
     try {
       await axios.put("/api/auth/updatedetails", formData, config);
-
+      //   console.log("updatedetails updated successfully", res.data);
       loadUser();
     } catch (err) {
-      console.log(err);
+      console.log("updatedetailsfail", err.response.data.errors[0].msg);
       dispatch({
         type: UPDATE_DETAILS_FAIL,
-        payload: err.response.data.msg,
+        payload: err.response.data.errors[0],
       });
     }
   };
 
   //update Password
   const updatePassword = async (formData) => {
-    console.log(formData);
     const config = {
       "Content-Type": "application/json",
     };
     try {
       await axios.put("/api/auth/updatepassword", formData, config);
-      console.log("success");
     } catch (err) {
       dispatch({
         type: UPDATE_PASSWORD_FAIL,
