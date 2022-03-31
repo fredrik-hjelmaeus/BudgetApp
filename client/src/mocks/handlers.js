@@ -416,11 +416,11 @@ export const handlers = [
       })
     );
   }),
-  /* rest.put(`http://localhost/api/userdetails`, (req, res, ctx) => {
+  rest.put(`http://localhost/api/auth/updatedetails`, (req, res, ctx) => {
     return res(
       ctx.json({
         _id: "6203e22b2bdb63c78b35b672",
-        user: "6203e2152bdb63c78b35b670",
+        user: req.body._id,
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
@@ -428,14 +428,7 @@ export const handlers = [
         __v: 0,
       })
     );
-  }), */
-  testdata = {
-  date: "2022-01-23T15:22:57.772Z"
-email: "nisse@manpower.se"
-name: "nisses"
-password: "$2a$10$jKmoYfjJbds4lBpu/tTOFeno6I6o/9uQtDFvQEuNIIfDK3YgCbL/6"
-__v: 0
-_id: "61ed72d16f895b1100dbab66"}
+  }),
 ];
 
 //fail to get token:
