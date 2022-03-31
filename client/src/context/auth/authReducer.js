@@ -11,7 +11,7 @@ import {
   FORGOT_SUCCESS,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
-} from '../types';
+} from "../types";
 
 export default (state, action) => {
   switch (action.type) {
@@ -24,7 +24,7 @@ export default (state, action) => {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
         ...action.payload,
@@ -36,7 +36,7 @@ export default (state, action) => {
     case AUTH_ERROR:
     case LOGOUT:
     case FORGOT_FAIL:
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       return {
         ...state,
         token: null,
@@ -57,9 +57,10 @@ export default (state, action) => {
       };
     case UPDATE_PASSWORD_FAIL:
     case UPDATE_DETAILS_FAIL:
+      console.log("eeror:", action.payload);
       return {
         ...state,
-        error: action.payload,
+        errors: [state.errors, action.payload],
       };
 
     default:
