@@ -33,9 +33,11 @@ export const handlers = [
       })
     );
   }),
+  // request password reset sent to email
   rest.post("http://localhost/api/auth/forgotpassword", (req, res, ctx) => {
     return res(ctx.json({ success: true, data: "Email sent" }));
   }),
+  // get presets used in the app guide
   rest.get("http://localhost/api/guide", (req, res, ctx) => {
     return res(
       ctx.json([
@@ -62,6 +64,7 @@ export const handlers = [
       ])
     );
   }),
+  // get one users presets
   rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
     return res(
       ctx.json([
@@ -333,6 +336,7 @@ export const handlers = [
       })
     );
   }),
+  // delete preset
   rest.delete(`http://localhost/api/userpreset/61edb19ec557568270d9349a`, (req, res, ctx) => {
     return res(
       ctx.json({
@@ -340,6 +344,7 @@ export const handlers = [
       })
     );
   }),
+  // upload csv
   rest.post("http://localhost/api/userpreset/upload", (req, res, ctx) => {
     return res(
       ctx.json([
@@ -378,6 +383,7 @@ export const handlers = [
       ])
     );
   }),
+  // edit one preset
   rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
 
@@ -404,6 +410,7 @@ export const handlers = [
       })
     );
   }),
+  // delete one preset by id
   rest.delete(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
 
@@ -413,6 +420,7 @@ export const handlers = [
       })
     );
   }),
+  // update user name and email
   rest.put(`http://localhost/api/auth/updatedetails`, (req, res, ctx) => {
     return res(
       ctx.json({
@@ -424,6 +432,7 @@ export const handlers = [
       })
     );
   }),
+  // update user password
   rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
     return res(
       ctx.json({
@@ -432,32 +441,3 @@ export const handlers = [
     );
   }),
 ];
-
-//fail to get token:
-/*   rest.post('http://localhost/api/auth', (req, res, ctx) => {
-    return res(
-      ctx.status(500),
-      ctx.json({
-        errors: [
-          {
-            msg: 'No token, authorization denied',
-          },
-        ],
-      })
-    );
-  }), */
-// success on getting current user
-
-//fail to get user
-/*   rest.get('http://localhost/api/auth', (req, res, ctx) => {
-    return res(
-      ctx.status(500),
-      ctx.json({
-        errors: [
-          {
-            msg: 'Invalid Credentials',
-          },
-        ],
-      })
-    );
-  }), */
