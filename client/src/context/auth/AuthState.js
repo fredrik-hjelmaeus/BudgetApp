@@ -191,9 +191,10 @@ const AuthState = (props) => {
       });
     } catch (err) {
       console.log(err);
+
       dispatch({
         type: UPDATE_PASSWORD_FAIL,
-        payload: err.response.data.errors[0].msg,
+        payload: err.response.data.errors[0],
       });
     }
   };

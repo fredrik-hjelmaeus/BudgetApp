@@ -54,7 +54,8 @@ describe("User password integration", () => {
     fireEvent.click(await screen.findByRole("button", { name: /dirk/i }));
     fireEvent.click(await screen.findByRole("button", { name: /change password/i }));
   });
-  test.only("user password change happy path", async () => {
+
+  test("user password change happy path", async () => {
     const passwordField = screen.getByPlaceholderText(/current password/i);
     const newPasswordField = screen.getByPlaceholderText("New Password");
     const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
@@ -69,13 +70,29 @@ describe("User password integration", () => {
       expect(await screen.findByText(/password updated/i)).toBeInTheDocument();
     });
   });
-  test("invalid current password", async () => {
+
+  test.only("invalid current password", async () => {
     const currentPasswordField = screen.getByPlaceholderText(/current password/i);
-    const newPasswordField = screen.getByPlaceholderText(/new password/i);
+    const newPasswordField = screen.getByPlaceholderText("New Password");
     const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
     userEvent.type(currentPasswordField, "wrongpassword");
     userEvent.type(newPasswordField, "newpassword1");
     userEvent.type(confirmPasswordField, "newpassword1");
+    server.use(
+      rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({
+            errors: [
+              {
+                msg: "Current Password is incorrect",
+              },
+            ],
+          })
+        );
+      })
+    );
+
     fireEvent.click(screen.getByRole("button", { name: /update password/i }));
     await waitFor(async () => {
       expect(await screen.findByText(/Current Password is incorrect/i)).toBeInTheDocument();
