@@ -71,7 +71,7 @@ describe("User password integration", () => {
     });
   });
 
-  test.only("invalid current password", async () => {
+  test("invalid current password", async () => {
     const currentPasswordField = screen.getByPlaceholderText(/current password/i);
     const newPasswordField = screen.getByPlaceholderText("New Password");
     const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
@@ -98,6 +98,86 @@ describe("User password integration", () => {
       expect(await screen.findByText(/Current Password is incorrect/i)).toBeInTheDocument();
     });
   });
-  test("invalid new password , less than 6 chars", async () => {});
-  test("invalid new password , missing number", async () => {});
+
+  test("invalid new password , less than 6 chars", async () => {
+    const currentPasswordField = screen.getByPlaceholderText(/current password/i);
+    const newPasswordField = screen.getByPlaceholderText("New Password");
+    const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
+    userEvent.type(currentPasswordField, "wrongpassword");
+    userEvent.type(newPasswordField, "new");
+    userEvent.type(confirmPasswordField, "new");
+    server.use(
+      rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({
+            errors: [
+              {
+                value: "test",
+                msg: "must be at least 6 chars long",
+                param: "password",
+                location: "body",
+              },
+              {
+                value: "test",
+                msg: "The password must be 6+ chars long and contain a number",
+                param: "password",
+                location: "body",
+              },
+            ],
+          })
+        );
+      })
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /update password/i }));
+    await waitFor(async () => {
+      expect(await screen.findByText(/must be at least 6 chars long/i)).toBeInTheDocument();
+    });
+  });
+
+  test("invalid new password , missing number", async () => {
+    const currentPasswordField = screen.getByPlaceholderText(/current password/i);
+    const newPasswordField = screen.getByPlaceholderText("New Password");
+    const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
+    userEvent.type(currentPasswordField, "wrongpassword");
+    userEvent.type(newPasswordField, "newpassword");
+    userEvent.type(confirmPasswordField, "newpassword");
+    server.use(
+      rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
+        return res(
+          ctx.status(401),
+          ctx.json({
+            errors: [
+              {
+                value: "test",
+                msg: "The password must be 6+ chars long and contain a number",
+                param: "password",
+                location: "body",
+              },
+            ],
+          })
+        );
+      })
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /update password/i }));
+    await waitFor(async () => {
+      expect(
+        await screen.findByText("The password must be 6+ chars long and contain a number")
+      ).toBeInTheDocument();
+    });
+  });
+});
+
+describe("App Guide start", () => {
+  beforeEach(async () => {
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: /dirk/i }));
+  });
+
+  test("App guide launch", () => {
+    fireEvent.click(screen.getByRole("button", { name: /app guide/i }));
+    expect(screen.getByRole("heading", { name: /app guide/i })).toBeInTheDocument();
+  });
 });

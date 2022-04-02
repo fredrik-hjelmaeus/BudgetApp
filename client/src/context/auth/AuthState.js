@@ -190,8 +190,6 @@ const AuthState = (props) => {
         payload: { msg: "Password updated" },
       });
     } catch (err) {
-      console.log(err);
-
       dispatch({
         type: UPDATE_PASSWORD_FAIL,
         payload: err.response.data.errors[0],
