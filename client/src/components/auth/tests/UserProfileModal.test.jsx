@@ -28,7 +28,7 @@ describe("User Details integration", () => {
     // if toasts were to be implemented we could test and make sure the new user was loaded in AuthState and the toast was displayed
   });
 
-  test.only("shows alert when trying to submit already in use email", async () => {
+  test("shows alert when trying to submit already in use email", async () => {
     const emailField = screen.getByPlaceholderText(/email/i);
     userEvent.clear(emailField);
     userEvent.type(emailField, "newuser@whatever.com");
@@ -46,5 +46,41 @@ describe("User Details integration", () => {
       expect(screen.getByText(/this email is already in use/i)).toBeInTheDocument();
     });
   });
-  test.skip("required field prevents from submitting empty email and name field", () => {});
+});
+
+describe("User password integration", () => {
+  beforeEach(async () => {
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: /dirk/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /change password/i }));
+  });
+  test.only("user password change happy path", async () => {
+    const passwordField = screen.getByPlaceholderText(/current password/i);
+    const newPasswordField = screen.getByPlaceholderText("New Password");
+    const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
+    userEvent.clear(passwordField);
+    userEvent.clear(newPasswordField);
+    userEvent.clear(confirmPasswordField);
+    userEvent.type(passwordField, "password");
+    userEvent.type(newPasswordField, "newpassword");
+    userEvent.type(confirmPasswordField, "newpassword");
+    fireEvent.click(screen.getByRole("button", { name: /update password/i }));
+    await waitFor(async () => {
+      expect(await screen.findByText(/password updated/i)).toBeInTheDocument();
+    });
+  });
+  test("invalid current password", async () => {
+    const currentPasswordField = screen.getByPlaceholderText(/current password/i);
+    const newPasswordField = screen.getByPlaceholderText(/new password/i);
+    const confirmPasswordField = screen.getByPlaceholderText(/confirm new password/i);
+    userEvent.type(currentPasswordField, "wrongpassword");
+    userEvent.type(newPasswordField, "newpassword1");
+    userEvent.type(confirmPasswordField, "newpassword1");
+    fireEvent.click(screen.getByRole("button", { name: /update password/i }));
+    await waitFor(async () => {
+      expect(await screen.findByText(/Current Password is incorrect/i)).toBeInTheDocument();
+    });
+  });
+  test("invalid new password , less than 6 chars", async () => {});
+  test("invalid new password , missing number", async () => {});
 });

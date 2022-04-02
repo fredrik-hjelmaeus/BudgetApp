@@ -16,19 +16,24 @@ const UserProfileModal = () => {
   const { setUserExited, setGuide } = useContext(GuideContext);
 
   const { setAlert } = alertContext;
-  const { user, errors, clearErrors, updateDetails, updatePassword } = authContext;
+  const { user, errors, clearErrors, updateDetails, updatePassword, alerts, clearAlerts } =
+    authContext;
 
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
   // UseEffect
   useEffect(() => {
+    if (alerts.length > 0) {
+      alerts.map((alert) => setAlert(alert.msg, "success"));
+      clearAlerts();
+    }
     if (errors.length > 0) {
       //console.log("userprofilemodalerrors:", errors); // TODO: replace this with logging message to report wrong structured error message response
       errors.map((error) => error && error?.msg && setAlert(error?.msg, "danger"));
       clearErrors();
     }
-  }, [errors, clearErrors, setAlert]);
+  }, [errors, clearErrors, setAlert, alerts, clearAlerts]);
 
   // State
   const [localUser, setLocalUser] = useState({
@@ -56,7 +61,7 @@ const UserProfileModal = () => {
       setAlert("No changes were made", "danger");
       return;
     }
-    console.log("submittingProfile");
+
     updateDetails({ name, email });
   };
 
@@ -69,11 +74,10 @@ const UserProfileModal = () => {
       setAlert("No changes were made as current password is the same as new password", "danger");
     }
     updatePassword({ currentPassword, password });
-    console.log("submitpass");
   };
 
   const onClick = (e) => {
-    console.log("togglemodalran");
+    e.preventDefault();
     toggleModal("");
   };
 
