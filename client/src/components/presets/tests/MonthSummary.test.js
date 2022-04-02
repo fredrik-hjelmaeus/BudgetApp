@@ -51,8 +51,7 @@ describe("MonthSummary unit tests", () => {
     // get presets
     const presets = screen.getAllByTestId("presetitem");
     // get deletebutton on the first preset and click it
-    const presetDeleteButton =
-      presets[0].parentElement.parentElement.children[4];
+    const presetDeleteButton = presets[0].parentElement.parentElement.children[4];
     fireEvent.click(presetDeleteButton);
     // expect deletebutton to be gone
     await waitForElementToBeRemoved(presetDeleteButton);
@@ -84,9 +83,7 @@ describe("MonthSummary unit tests", () => {
     expect(presetsAgain.length).toBe(3);
     expect(await screen.findByAltText("Travel icon")).toBeInTheDocument(); // avoids unmounts somehow
     const typeIcon =
-      presetsAgain[0].parentElement.parentElement.children[3].children[0].getAttribute(
-        "alt"
-      );
+      presetsAgain[0].parentElement.parentElement.children[3].children[0].getAttribute("alt");
     expect(typeIcon).toBe("Travel icon");
   });
 
@@ -252,24 +249,18 @@ describe("MonthSummary unit tests", () => {
     // press buy purchase
     fireEvent.click(await screen.findByRole("button", { name: /buy/i }));
     // expect one expense preset created in may: -39456
-    expect(
-      await screen.findByRole("button", { name: /-39456/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /-39456/i })).toBeInTheDocument();
     // switch to march
     fireEvent.click(screen.getByRole("button", { name: /march/i }));
     // expect one expense preset created in march: 5000
-    expect(
-      await screen.findByRole("button", { name: /-5000/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /-5000/i })).toBeInTheDocument();
     // switch to january
     fireEvent.click(screen.getByRole("button", { name: /january/i }));
     // expect one expense preset created in january: 10000
 
-    expect(
-      await screen.findByRole("button", { name: /-10544/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /-10544/i })).toBeInTheDocument();
   });
-  test.only("Delete purchase works correct", () => {
+  test("Delete purchase works correct", () => {
     // removes purchasepreset and it's piggybank savings.
   });
 });
