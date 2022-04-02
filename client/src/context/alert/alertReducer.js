@@ -1,4 +1,4 @@
-import { SET_ALERT, REMOVE_ALERT } from '../types';
+import { SET_ALERT, REMOVE_ALERT, UPDATE_PASSWORD_SUCCESS } from "../types";
 
 export default (state, action) => {
   switch (action.type) {

@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -16,6 +17,9 @@ import {
   FORGOT_FAIL,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
+  UPDATE_PASSWORD_SUCCESS,
+  CLEAR_ALERTS,
+  UPDATE_DETAILS_SUCCESS,
 } from "../types";
 
 const AuthState = (props) => {
@@ -25,6 +29,7 @@ const AuthState = (props) => {
     loading: true,
     user: null,
     errors: [],
+    alerts: [],
     mailsentmsg: null,
   };
 
@@ -32,7 +37,6 @@ const AuthState = (props) => {
 
   // Load User
   const loadUser = async () => {
-    console.log("loadUser called");
     // load token into global headers
     if (localStorage.token) {
       setAuthToken(localStorage.token);
@@ -151,7 +155,6 @@ const AuthState = (props) => {
 
   //update userdetails
   const updateDetails = async (formData) => {
-    console.log(formData);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -159,7 +162,11 @@ const AuthState = (props) => {
     };
     try {
       await axios.put("/api/auth/updatedetails", formData, config);
-      //   console.log("updatedetails updated successfully", res.data);
+
+      dispatch({
+        type: UPDATE_DETAILS_SUCCESS,
+        payload: { msg: "User details updated" },
+      });
       loadUser();
     } catch (err) {
       console.log("updatedetailsfail", err.response.data.errors[0].msg);
@@ -177,13 +184,21 @@ const AuthState = (props) => {
     };
     try {
       await axios.put("/api/auth/updatepassword", formData, config);
+
+      dispatch({
+        type: UPDATE_PASSWORD_SUCCESS,
+        payload: { msg: "Password updated" },
+      });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: UPDATE_PASSWORD_FAIL,
-        payload: err.response.data.msg,
+        payload: err.response.data.errors[0].msg,
       });
     }
   };
+
+  const clearAlerts = () => dispatch({ type: CLEAR_ALERTS });
 
   return (
     <AuthContext.Provider
@@ -193,6 +208,7 @@ const AuthState = (props) => {
         loading: state.loading,
         user: state.user,
         errors: state.errors,
+        alerts: state.alerts,
         mailsentmsg: state.mailsentmsg,
         register,
         login,
@@ -203,6 +219,7 @@ const AuthState = (props) => {
         resetPassword,
         updateDetails,
         updatePassword,
+        clearAlerts,
       }}
     >
       {props.children}

@@ -424,6 +424,13 @@ export const handlers = [
       })
     );
   }),
+  rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        msg: "Password Updated",
+      })
+    );
+  }),
 ];
 
 //fail to get token:

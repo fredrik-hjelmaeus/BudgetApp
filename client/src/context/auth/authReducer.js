@@ -11,9 +11,12 @@ import {
   FORGOT_SUCCESS,
   UPDATE_PASSWORD_FAIL,
   UPDATE_DETAILS_FAIL,
+  UPDATE_PASSWORD_SUCCESS,
+  CLEAR_ALERTS,
+  UPDATE_DETAILS_SUCCESS,
 } from "../types";
 
-export default (state, action) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case USER_LOADED:
       return {
@@ -57,13 +60,25 @@ export default (state, action) => {
       };
     case UPDATE_PASSWORD_FAIL:
     case UPDATE_DETAILS_FAIL:
-      console.log("eeror:", action.payload);
       return {
         ...state,
         errors: [state.errors, action.payload],
+      };
+    case UPDATE_PASSWORD_SUCCESS:
+    case UPDATE_DETAILS_SUCCESS:
+      return {
+        ...state,
+        alerts: [...state.alerts, action.payload],
+      };
+    case CLEAR_ALERTS:
+      return {
+        ...state,
+        alerts: [],
       };
 
     default:
       return state;
   }
 };
+
+export default authReducer;
