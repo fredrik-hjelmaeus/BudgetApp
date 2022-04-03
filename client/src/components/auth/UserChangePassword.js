@@ -2,6 +2,7 @@ import React from "react";
 
 function UserChangePassword({
   ExpandChangePassword,
+  setExpandChangePassword,
   currentPassword,
   onChange,
   password,
@@ -48,6 +49,13 @@ function UserChangePassword({
         value="register"
       >
         Update Password
+      </button>
+      <button
+        className={!ExpandChangePassword ? "form__inputOFF" : "btn btn-light btn-block my-1"}
+        type="button"
+        onClick={() => setExpandChangePassword(false)}
+      >
+        Back to Profile
       </button>
     </form>
   );

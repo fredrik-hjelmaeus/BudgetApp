@@ -171,7 +171,7 @@ const AuthState = (props) => {
       });
       loadUser();
     } catch (err) {
-      console.log("updatedetailsfail", err.response.data.errors[0].msg);
+      // console.log("updatedetailsfail", err.response.data.errors[0].msg);
       dispatch({
         type: UPDATE_DETAILS_FAIL,
         payload: err.response.data.errors[0],
