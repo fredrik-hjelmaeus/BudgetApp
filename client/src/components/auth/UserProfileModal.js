@@ -106,14 +106,17 @@ const UserProfileModal = () => {
 
         <div className="form-container">
           <Alerts />
-          <UserDetails
-            onSubmitProfile={onSubmitProfile}
-            name={name}
-            email={email}
-            onChange={onChange}
-          />
+          {!ExpandChangePassword && (
+            <UserDetails
+              onSubmitProfile={onSubmitProfile}
+              name={name}
+              email={email}
+              onChange={onChange}
+            />
+          )}
 
           {/*Change password button */}
+
           <button
             type="button"
             className={ExpandChangePassword ? "form__inputOFF" : "btn btn-light btn-block my-1"}
@@ -125,13 +128,18 @@ const UserProfileModal = () => {
 
           <UserChangePassword
             ExpandChangePassword={ExpandChangePassword}
+            setExpandChangePassword={setExpandChangePassword}
             password2={password2}
             currentPassword={currentPassword}
             password={password}
             onChange={onChange}
             onSubmitPassword={onSubmitPassword}
           />
-          <button className={"btn btn-light btn-block my-1"} type="button" onClick={startGuide}>
+          <button
+            className={ExpandChangePassword ? "form__inputOFF" : "btn btn-light btn-block my-1"}
+            type="button"
+            onClick={startGuide}
+          >
             App Guide <img src={AppGuideIcon} alt="start the app guide icon"></img>
           </button>
         </div>
