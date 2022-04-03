@@ -20,6 +20,8 @@ import {
   UPDATE_PASSWORD_SUCCESS,
   CLEAR_ALERTS,
   UPDATE_DETAILS_SUCCESS,
+  RESET_PASSWORD_FAIL,
+  RESET_PASSWORD_SUCCESS,
 } from "../types";
 
 const AuthState = (props) => {
@@ -143,13 +145,13 @@ const AuthState = (props) => {
     const { token } = formData;
 
     try {
-      await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
+      const res = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
+      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data });
     } catch (err) {
-      /*  dispatch({
-        type: FORGOT_FAIL,
-        payload: err.res.data,
-      }); */
-      console.log(err);
+      dispatch({
+        type: RESET_PASSWORD_FAIL,
+        payload: err.response.data.errors[0],
+      });
     }
   };
 
