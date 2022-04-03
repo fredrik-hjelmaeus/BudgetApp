@@ -22,19 +22,6 @@ const UserProfileModal = () => {
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
-  // UseEffect
-  useEffect(() => {
-    if (alerts.length > 0) {
-      alerts.map((alert) => setAlert(alert.msg, "success"));
-      clearAlerts();
-    }
-    if (errors.length > 0) {
-      //console.log("userprofilemodalerrors:", errors); // TODO: replace this with logging message to report wrong structured error message response
-      errors.map((error) => error && error?.msg && setAlert(error?.msg, "danger"));
-      clearErrors();
-    }
-  }, [errors, clearErrors, setAlert, alerts, clearAlerts]);
-
   // State
   const [localUser, setLocalUser] = useState({
     name: user ? user?.name : "",
@@ -43,6 +30,21 @@ const UserProfileModal = () => {
     password: "",
     password2: "",
   });
+
+  // UseEffect
+  useEffect(() => {
+    if (alerts.length > 0) {
+      alerts.map((alert) => setAlert(alert.msg, "success"));
+      clearAlerts();
+      // clear password-related fields
+      setLocalUser({ ...localUser, currentPassword: "", password: "", password2: "" });
+    }
+    if (errors.length > 0) {
+      //console.log("userprofilemodalerrors:", errors); // TODO: replace this with logging message to report wrong structured error message response
+      errors.map((error) => error && error?.msg && setAlert(error?.msg, "danger"));
+      clearErrors();
+    }
+  }, [errors, clearErrors, setAlert, alerts, clearAlerts, localUser]);
 
   const { name, email, password, password2, currentPassword } = localUser;
 

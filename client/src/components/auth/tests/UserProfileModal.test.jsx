@@ -10,7 +10,7 @@ describe("User Details integration", () => {
     fireEvent.click(await screen.findByRole("button", { name: /dirk/i }));
   });
 
-  test.only("updates name and email on submitted update", async () => {
+  test("updates name and email on submitted update", async () => {
     const emailField = screen.getByPlaceholderText(/email/i);
     const nameField = screen.getByPlaceholderText(/name/i);
     userEvent.clear(nameField);
@@ -21,12 +21,11 @@ describe("User Details integration", () => {
     await waitFor(async () => {
       const updatedUserName = await screen.findByLabelText("Name:");
       const updatedEmail = await screen.findByLabelText("Email:");
-      // screen.debug(updatedEmail);
+
       expect(updatedUserName).toHaveValue("test");
       expect(updatedEmail).toHaveValue("test@test.com");
-      expect(screen.findByText("User details updated")).toBeInTheDocument();
+      expect(await screen.findByText("User details updated")).toBeInTheDocument(); // < success alert
     });
-    // if toasts were to be implemented we could test and make sure the new user was loaded in AuthState and the toast was displayed
   });
 
   test("shows alert when trying to submit already in use email", async () => {
@@ -62,6 +61,11 @@ describe("User password integration", () => {
     expect(screen.getByRole("button", { name: /update password/i })).toBeInTheDocument();
   });
 
+  test("clicking back takes you to profile", () => {
+    fireEvent.click(screen.getByRole("button", { name: /back/i }));
+    expect(screen.getByRole("button", { name: /update profile/i })).toBeInTheDocument();
+  });
+
   test("user password change happy path", async () => {
     const passwordField = screen.getByPlaceholderText(/current password/i);
     const newPasswordField = screen.getByPlaceholderText("New Password");
@@ -75,6 +79,9 @@ describe("User password integration", () => {
     fireEvent.click(screen.getByRole("button", { name: /update password/i }));
     await waitFor(async () => {
       expect(await screen.findByText(/password updated/i)).toBeInTheDocument();
+      expect(passwordField).toHaveValue("");
+      expect(newPasswordField).toHaveValue("");
+      expect(confirmPasswordField).toHaveValue("");
     });
   });
 

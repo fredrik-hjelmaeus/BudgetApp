@@ -36,5 +36,4 @@ describe("UserChangePassword unit tests", () => {
     fireEvent.submit(screen.getByRole("button", { name: /update password/i }));
     expect(onSubmitPassword).toHaveBeenCalledTimes(1);
   });
-  test("", () => {});
 });
