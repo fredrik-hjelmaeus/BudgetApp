@@ -14,6 +14,8 @@ import {
   UPDATE_PASSWORD_SUCCESS,
   CLEAR_ALERTS,
   UPDATE_DETAILS_SUCCESS,
+  RESET_PASSWORD_FAIL,
+  RESET_PASSWORD_SUCCESS,
 } from "../types";
 
 const authReducer = (state, action) => {
@@ -60,12 +62,14 @@ const authReducer = (state, action) => {
       };
     case UPDATE_PASSWORD_FAIL:
     case UPDATE_DETAILS_FAIL:
+    case RESET_PASSWORD_FAIL:
       return {
         ...state,
         errors: [state.errors, action.payload],
       };
     case UPDATE_PASSWORD_SUCCESS:
     case UPDATE_DETAILS_SUCCESS:
+    case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         alerts: [...state.alerts, action.payload],
