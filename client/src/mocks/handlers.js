@@ -37,6 +37,9 @@ export const handlers = [
   rest.post("http://localhost/api/auth/forgotpassword", (req, res, ctx) => {
     return res(ctx.json({ success: true, data: "Email sent" }));
   }),
+  rest.put("http://localhost/api/auth/resetpassword/:resettoken", (req, res, ctx) => {
+    return res(ctx.json({ data: "Password Changed" }));
+  }),
   // get presets used in the app guide
   rest.get("http://localhost/api/guide", (req, res, ctx) => {
     return res(
