@@ -49,9 +49,9 @@ import {
   LOGOUT,
   PRESET_CLEAR_ERRORS,
   SET_CAPITAL_LIST,
-} from '../types';
+} from "../types";
 
-export default (state, action) => {
+const presetReducer = (state, action) => {
   switch (action.type) {
     case GET_PRESETS:
       return {
@@ -115,7 +115,9 @@ export default (state, action) => {
     case UPDATE_CSV:
       return {
         ...state,
-        csvpresets: state.csvpresets.map((preset) => (preset.id === action.payload.id ? action.payload : preset)),
+        csvpresets: state.csvpresets.map((preset) =>
+          preset.id === action.payload.id ? action.payload : preset
+        ),
       };
     case REMOVE_CSV:
       return {
@@ -144,7 +146,7 @@ export default (state, action) => {
     case SET_PURCHASE:
       return {
         ...state,
-        purchases: state.presets.filter((preset) => preset.type === 'purchase'),
+        purchases: state.presets.filter((preset) => preset.type === "purchase"),
       };
     case GET_MONTHSAVINGS:
       return {
@@ -155,9 +157,12 @@ export default (state, action) => {
       return {
         ...state,
         monthpiggysavings: state.presets
-          .filter((preset) => preset.type === 'purchase' && preset.piggybank.length !== 0)
+          .filter((preset) => preset.type === "purchase" && preset.piggybank.length !== 0)
           .map((preset) =>
-            preset.piggybank.filter((piggybank) => piggybank.month === action.payload && piggybank.year === parseInt(state.year))
+            preset.piggybank.filter(
+              (piggybank) =>
+                piggybank.month === action.payload && piggybank.year === parseInt(state.year)
+            )
           ),
       };
     case SUM_PIGGYBANKS_MONTH:
@@ -288,7 +293,9 @@ export default (state, action) => {
     case SEND_EDIT:
       return {
         ...state,
-        presets: state.presets?.map((preset) => (preset._id === action.payload._id ? action.payload : preset)),
+        presets: state.presets?.map((preset) =>
+          preset._id === action.payload._id ? action.payload : preset
+        ),
         loading: false,
       };
     case DELETE_PRESET:
@@ -304,9 +311,9 @@ export default (state, action) => {
           (preset) =>
             preset.month === action.payload &&
             preset.number > 0 &&
-            preset.type !== 'savings' &&
-            preset.type !== 'capital' &&
-            preset.type !== 'purchase' &&
+            preset.type !== "savings" &&
+            preset.type !== "capital" &&
+            preset.type !== "purchase" &&
             preset.year.toString() === state.year.toString() // multiple datatypes
         ),
       };
@@ -317,9 +324,9 @@ export default (state, action) => {
           (preset) =>
             preset.month === action.payload &&
             preset.number < 0 &&
-            preset.type !== 'savings' &&
-            preset.type !== 'capital' &&
-            preset.type !== 'purchase' &&
+            preset.type !== "savings" &&
+            preset.type !== "capital" &&
+            preset.type !== "purchase" &&
             preset.year.toString() === state.year.toString() // multiple datatypes
         ),
       };
@@ -353,3 +360,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default presetReducer;

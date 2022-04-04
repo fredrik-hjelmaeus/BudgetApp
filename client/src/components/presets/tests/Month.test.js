@@ -3,8 +3,6 @@ import {
   screen,
   fireEvent,
   waitForElementToBeRemoved,
-  waitFor,
-  act,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
