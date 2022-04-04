@@ -1,12 +1,6 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitForElementToBeRemoved,
-} from "../../../test-utils/context-wrapper";
+import { render, screen, fireEvent } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import EditPreset from "../EditPreset";
-import { server } from "../../../mocks/server";
 
 test("initial state correct", async () => {
   render(<EditPreset />);
@@ -20,9 +14,7 @@ test("initial state correct", async () => {
   expect(screen.getByRole("checkbox", { name: /purchase/i })).not.toBeChecked();
   expect(screen.getByRole("checkbox", { name: /capital/i })).not.toBeChecked();
   expect(screen.getByRole("checkbox", { name: /savings/i })).not.toBeChecked();
-  const closeBtn = (await screen.findAllByRole("button")).find(
-    (b) => b.value === "close"
-  );
+  const closeBtn = (await screen.findAllByRole("button")).find((b) => b.value === "close");
   expect(closeBtn).toBeInTheDocument();
 });
 
