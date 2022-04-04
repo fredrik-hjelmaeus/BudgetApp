@@ -77,8 +77,14 @@ img {
 }
 
 .borderdivider {
+  border: none;
+  background: none;
   border-bottom: 2px solid var(--light-color);
   margin: 5px;
+  cursor: pointer;
+}
+.borderdivider:hover {
+  opacity: 0.2;
 }
 
 .no-wrap {
@@ -189,6 +195,12 @@ img {
   padding: 0.5rem 1rem 0.5rem 1rem;
   border: #ccc 2px solid;
   margin: 0.5rem 0;
+}
+.buttonmode {
+  cursor: pointer;
+}
+.buttonmode:hover {
+  opacity: 0.5;
 }
 .card-piggyItem {
   border: none;

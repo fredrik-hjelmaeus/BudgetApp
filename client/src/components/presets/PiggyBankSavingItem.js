@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
-import piggyicon from '../layout/images/piggybank.svg';
-import PresetContext from '../../context/preset/presetContext';
-import PiggyItem from './PiggyItem';
+import React, { useContext, useState } from "react";
+import piggyicon from "../layout/images/piggybank.svg";
+import PresetContext from "../../context/preset/presetContext";
+import PiggyItem from "./PiggyItem";
+import e from "express";
 
 const PiggyBankSavingItem = ({ purchase }) => {
   const presetContext = useContext(PresetContext);
@@ -9,7 +10,9 @@ const PiggyBankSavingItem = ({ purchase }) => {
   const { name, number, piggybank, _id } = purchase;
 
   /* Look witch year it is and filter out years above this year and savedAmounts that is zero */
-  const filterpiggybanks = piggybank.filter((item, index) => item.year && item.year <= year && index !== 0);
+  const filterpiggybanks = piggybank.filter(
+    (item, index) => item.year && item.year <= year && index !== 0
+  );
 
   /*take the filtered yearlist and create a var for the sums saved */
   const sumoffilteredpiggybanks = filterpiggybanks.map((item) => item.savedAmount);
@@ -34,22 +37,26 @@ const PiggyBankSavingItem = ({ purchase }) => {
 
   return (
     <>
-      <div className='card-piggy'>
-        <div className='no-wrap' style={{ overflow: 'hidden' }}>
+      <button className="card-piggy buttonmode" onClick={onClick}>
+        <div className="no-wrap" style={{ overflow: "hidden" }}>
           {name}
         </div>
-        <div className='flexrow-piggycard'>
-          <img src={piggyicon} alt='' style={{ width: '26px' }} />
-          <button onClick={onClick} className='px text-orange expandbutton'>
-            {totalsum}
-          </button>
-          <div className='text-light'>of</div>
-          <div className='text-gray px'>({number})</div>
+        <div className="flexrow-piggycard">
+          <img src={piggyicon} alt="" style={{ width: "26px" }} />
+          <div className="px text-orange expandbutton">{totalsum}</div>
+          <div className="text-light">of</div>
+          <div className="text-gray px">({number})</div>
         </div>
-      </div>
+      </button>
       {showIndividualPiggyItems &&
         filterpiggybanks &&
-        filterpiggybanks.map((piggyItem) => <PiggyItem onPiggyItemDelete={onPiggyItemDelete} piggyItem={piggyItem} key={piggyItem._id} />)}
+        filterpiggybanks.map((piggyItem) => (
+          <PiggyItem
+            onPiggyItemDelete={onPiggyItemDelete}
+            piggyItem={piggyItem}
+            key={piggyItem._id}
+          />
+        ))}
     </>
   );
 };

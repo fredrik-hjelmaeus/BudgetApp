@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitForElementToBeRemoved,
-  waitFor,
-} from "../../../test-utils/context-wrapper";
+import { render, screen, fireEvent } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
 import { server } from "../../../mocks/server";
