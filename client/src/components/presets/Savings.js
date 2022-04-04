@@ -57,7 +57,9 @@ const Savings = () => {
             </div>
             <div>Piggybank Purchase Savings</div>
           </div>
-          <div>{/*  <PiggybankSavings /> */}</div>
+          <div>
+            <PiggybankSavings />
+          </div>
         </div>
       </div>
     </div>
