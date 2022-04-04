@@ -1,6 +1,6 @@
-import React, { Fragment, useContext, useEffect } from 'react';
-import PiggyBankSavingItem from './PiggyBankSavingItem';
-import PresetContext from '../../context/preset/presetContext';
+import React, { Fragment, useContext, useEffect } from "react";
+import PiggyBankSavingItem from "./PiggyBankSavingItem";
+import PresetContext from "../../context/preset/presetContext";
 
 const PiggybankSavings = () => {
   const presetContext = useContext(PresetContext);
@@ -13,6 +13,11 @@ const PiggybankSavings = () => {
     // eslint-disable-next-line
   }, [presets]);
 
-  return <Fragment>{purchases && purchases.map((purchase) => <PiggyBankSavingItem key={purchase._id} purchase={purchase} />)}</Fragment>;
+  return (
+    <Fragment>
+      {purchases &&
+        purchases.map((purchase) => <PiggyBankSavingItem key={purchase._id} purchase={purchase} />)}
+    </Fragment>
+  );
 };
 export default PiggybankSavings;

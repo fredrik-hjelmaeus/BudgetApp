@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import piggyicon from "../layout/images/piggybank.svg";
 import PresetContext from "../../context/preset/presetContext";
 import PiggyItem from "./PiggyItem";
-import e from "express";
 
 const PiggyBankSavingItem = ({ purchase }) => {
   const presetContext = useContext(PresetContext);
@@ -37,8 +36,8 @@ const PiggyBankSavingItem = ({ purchase }) => {
 
   return (
     <>
-      <button className="card-piggy buttonmode" onClick={onClick}>
-        <div className="no-wrap" style={{ overflow: "hidden" }}>
+      <button className="card-piggy card-piggybanksavingitem" onClick={onClick}>
+        <div className="no-wrap piggybanksavingname" style={{ overflow: "hidden" }}>
           {name}
         </div>
         <div className="flexrow-piggycard">
