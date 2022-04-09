@@ -13,6 +13,7 @@ const Savings = () => {
     presetContext;
   const [showIndividualSavingsList, setShowIndividualSavingsList] = useState(false);
   const [showCapitalItems, setShowCapitalItems] = useState(false);
+
   useEffect(() => {
     getSavingsList();
     getCapitalList();
