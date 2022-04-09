@@ -100,6 +100,7 @@ const PresetState = (props) => {
   const getPresets = async () => {
     try {
       const res = await axios.get("/api/userpreset");
+
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err) {
       dispatch({

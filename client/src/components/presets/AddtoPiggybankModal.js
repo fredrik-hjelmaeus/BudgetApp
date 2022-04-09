@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from "react";
 
-import PresetContext from '../../context/preset/presetContext';
-import CssContext from '../../context/css/cssContext';
-import PiggybankSVG from '../layout/images/PiggybankSVG';
+import PresetContext from "../../context/preset/presetContext";
+import CssContext from "../../context/css/cssContext";
+import PiggybankSVG from "../layout/images/PiggybankSVG";
 
 const AddtoPiggybankModal = ({ Item }) => {
   // preset context
@@ -21,7 +21,7 @@ const AddtoPiggybankModal = ({ Item }) => {
     month: Item.month,
     year: Item.year,
     category: Item.category,
-    type: 'purchase',
+    type: "purchase",
     piggybank: Item.piggybank,
   });
 
@@ -59,6 +59,7 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   // on submit, add month and amount to save in presetContext.piggybanks
   const onSubmit = () => {
+    // console.log("add to piggybanks ran");
     addtoPiggybanks({
       month: presetContext.month,
       year: presetContext.year,
@@ -81,7 +82,7 @@ const AddtoPiggybankModal = ({ Item }) => {
         month: Item.month,
         year: Item.year,
         category: Item.category,
-        type: 'purchase',
+        type: "purchase",
         piggybank: presetContext.piggybanks,
       });
     } // eslint-disable-next-line
@@ -90,7 +91,7 @@ const AddtoPiggybankModal = ({ Item }) => {
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
   const sendMyEdit = async (preset) => {
     await sendEdit(preset);
-    toggleModal('');
+    toggleModal("");
     setActivePiggybank([]);
   };
 
@@ -107,35 +108,43 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   // Close modal
   const onClick = (e) => {
-    toggleModal('');
+    toggleModal("");
   };
 
   return (
-    <div id='myModal' className='modal-register' style={{ display: 'block' }}>
-      <div className='modal-content-deletepurchase'>
-        <span className='piggybankmodal-objname'>
+    <div id="myModal" className="modal-register" style={{ display: "block" }}>
+      <div className="modal-content-deletepurchase">
+        <span className="piggybankmodal-objname">
           {Item.name}
-          <button className='closebtn' value='close' onClick={onClick}></button>
+          <button className="closebtn" value="close" onClick={onClick}></button>
         </span>
 
-        <div className='modalpiggybankheader text-gray'>
-          <h1 className='regular'>Amount to save</h1>
+        <div className="modalpiggybankheader text-gray">
+          <h1 className="regular">Amount to save</h1>
         </div>
-        <div className='piggybankmodalnumbername'>{piggybank.number}</div>
+        <div className="piggybankmodalnumbername">{piggybank.number}</div>
         <input
-          type='range'
-          min='1'
+          type="range"
+          min="1"
           max={AmountToSave}
-          name='number'
+          name="number"
           value={piggybank.number}
           onChange={onChange}
-          data-testid='inputamountrange'
+          data-testid="inputamountrange"
         />
-        <button className='text-primary piggybankmodalsubmitbutton' value='submit' onClick={onSubmit}>
-          Submit{'  '}
-          <PiggybankSVG fill='var(--primary-color)' />
+        <button
+          className="text-primary piggybankmodalsubmitbutton"
+          value="submit"
+          onClick={onSubmit}
+        >
+          Submit{"  "}
+          <PiggybankSVG fill="var(--primary-color)" />
         </button>
-        <button className='btn btn-outline btn-block  p-3' value='delete' onClick={() => toggleModal('')}>
+        <button
+          className="btn btn-outline btn-block  p-3"
+          value="delete"
+          onClick={() => toggleModal("")}
+        >
           Cancel
         </button>
       </div>
