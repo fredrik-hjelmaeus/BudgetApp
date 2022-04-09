@@ -340,13 +340,13 @@ export const handlers = [
     );
   }),
   // delete preset
-  rest.delete(`http://localhost/api/userpreset/61edb19ec557568270d9349a`, (req, res, ctx) => {
+  /*   rest.delete(`http://localhost/api/userpreset/61edb19ec557568270d9349a`, (req, res, ctx) => {
     return res(
       ctx.json({
         msg: "Preset removed",
       })
     );
-  }),
+  }), */
   // upload csv
   rest.post("http://localhost/api/userpreset/upload", (req, res, ctx) => {
     return res(
@@ -416,7 +416,7 @@ export const handlers = [
   // delete one preset by id
   rest.delete(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
-
+    console.log("deleting preset", _id);
     return res(
       ctx.json({
         msg: "Preset removed",

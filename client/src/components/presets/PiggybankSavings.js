@@ -9,6 +9,7 @@ const PiggybankSavings = () => {
   useEffect(() => {
     // important to check if presets exists as this sideeffect is
     // first to run in some occasions. For example when user press exit on guide in mobile version.
+
     presets && setPurchase();
     // eslint-disable-next-line
   }, [presets]);
