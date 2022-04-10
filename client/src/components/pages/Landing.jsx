@@ -1,10 +1,10 @@
-import React, { useEffect, useContext } from 'react';
-import CssContext from '../../context/css/cssContext';
-import Logo from '../layout/Logo';
-import LoginModal from '../auth/LoginModal';
-import RegisterModal from '../auth/RegisterModal';
-import ForgotPassword from '../auth/ForgotPassword';
-import AuthContext from '../../context/auth/authContext';
+import React, { useEffect, useContext } from "react";
+import CssContext from "../../context/css/cssContext";
+import Logo from "../layout/Logo";
+import LoginModal from "../auth/LoginModal";
+import RegisterModal from "../auth/RegisterModal";
+import ForgotPassword from "../auth/ForgotPassword";
+import AuthContext from "../../context/auth/authContext";
 
 const Landing = (props) => {
   const cssContext = useContext(CssContext);
@@ -22,13 +22,13 @@ const Landing = (props) => {
     }
 
     if (user && isAuthenticated) {
-      props.history.push('/');
+      props.history.push("/");
     }
 
     toggleNavbar(true);
 
     return () => {
-      toggleModal('');
+      toggleModal("");
     };
     // eslint-disable-next-line
   }, [token, isAuthenticated, user]);
@@ -38,29 +38,29 @@ const Landing = (props) => {
   };
 
   return (
-    <div className='Landing__showcase'>
-      {modal === 'login' && <LoginModal />}
-      {modal === 'register' && <RegisterModal />}
-      {modal === 'forgot' && <ForgotPassword />}
-      {modal === '' && (
-        <div className='Landing'>
+    <div className="Landing__showcase">
+      {modal === "login" && <LoginModal />}
+      {modal === "register" && <RegisterModal />}
+      {modal === "forgot" && <ForgotPassword />}
+      {modal === "" && (
+        <div className="Landing">
           <Logo />
 
           <div>
             <textarea
-              className='Landing__textarea text-left text-light '
-              name='description'
-              defaultValue='An app that helps you organize your economy.'
+              className="Landing__textarea text-left text-light "
+              name="description"
+              defaultValue="An app that helps you organize your economy."
             ></textarea>
           </div>
           <div>
-            {' '}
-            <button className='Landing__btn__white all-center' value='login' onClick={onClick}>
+            {" "}
+            <button className="Landing__btn__white all-center" value="login" onClick={onClick}>
               LOGIN
             </button>
           </div>
           <div>
-            <button className='Landing__btn__black all-center' value='register' onClick={onClick}>
+            <button className="Landing__btn__black all-center" value="register" onClick={onClick}>
               Register
             </button>
           </div>
