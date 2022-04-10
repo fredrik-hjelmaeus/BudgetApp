@@ -1,7 +1,7 @@
-import React, { useEffect, Fragment, useState, useContext } from 'react';
-import Chart from 'react-apexcharts';
-import PresetContext from '../../context/preset/presetContext';
-import CssContext from '../../context/css/cssContext';
+import React, { useEffect, Fragment, useState, useContext } from "react";
+import Chart from "react-apexcharts";
+import PresetContext from "../../context/preset/presetContext";
+import CssContext from "../../context/css/cssContext";
 
 const BarChart = () => {
   const presetContext = useContext(PresetContext);
@@ -12,7 +12,7 @@ const BarChart = () => {
   /* const [barheight, setBarheight] = useState(''); */
   const [options, setOptions] = useState({});
   const [series, setSeries] = useState([
-    { name: 'Monthly Balance', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    { name: "Monthly Balance", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
   ]);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const BarChart = () => {
         sparkline: {
           enabled: true,
         },
-        background: '#fff',
+        background: "#fff",
       },
       // ritar baslinjen
       annotations: {
@@ -33,8 +33,8 @@ const BarChart = () => {
           {
             y: 0,
             strokeDashArray: 0,
-            borderColor: '#000',
-            fillColor: '#c2c2c2',
+            borderColor: "#000",
+            fillColor: "#c2c2c2",
             opacity: 0.8,
             offsetX: 0,
             offsetY: 0,
@@ -44,18 +44,18 @@ const BarChart = () => {
       // lägger in kategorier som styr antalet staplar som visas
       xaxis: {
         categories: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December',
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
         ],
 
         // labels är text på x-axeln, döljs
@@ -69,7 +69,7 @@ const BarChart = () => {
         // x-axelns linje, döljs
         axisBorder: {
           show: false,
-          color: '#000000',
+          color: "#000000",
           offsetY: -74,
         },
       },
@@ -86,14 +86,14 @@ const BarChart = () => {
       },
       // färg på staplarna
       fill: {
-        colors: ['#000'],
+        colors: ["#000"],
       },
       // visuella hjälplinjer i stapelytan
       grid: {
         show: false,
-        borderColor: '#000000',
+        borderColor: "#000000",
         strokeDashArray: 0,
-        position: 'back',
+        position: "back",
         xaxis: {
           lines: {
             show: true,
@@ -104,11 +104,11 @@ const BarChart = () => {
             show: false,
           },
           row: {
-            colors: ['#333333'],
+            colors: ["#333333"],
             opacity: 1,
           },
           column: {
-            colors: ['#333333'],
+            colors: ["#333333"],
             opacity: 1,
           },
           padding: {
@@ -125,7 +125,7 @@ const BarChart = () => {
     }); // end setOptions
     setSeries([
       {
-        name: 'Monthly Balance',
+        name: "Monthly Balance",
         data: AllMonthSum,
       },
     ]);
@@ -136,9 +136,9 @@ const BarChart = () => {
       <Chart
         options={options}
         series={series}
-        type='bar'
-        height={dimensions.width > 700 ? '230px' : '80%'}
-        width='100%'
+        type="bar"
+        height={dimensions.width > 700 ? "230px" : "80%"}
+        width="100%"
       />
     </Fragment>
   );

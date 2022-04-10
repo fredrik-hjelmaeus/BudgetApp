@@ -9,6 +9,7 @@ import App from "../../../App";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
 import path from "path";
+import React from "react";
 
 // Integration tests of user interaction triggered from presetform,purchases,monthsummary or monthsavingssummary.
 // The result of such interaction affects summations and display in multiple month components
