@@ -6,11 +6,12 @@ describe("guide functionality", () => {
     render(<App />);
     // make sure we are logged in
     expect(await screen.findByRole("button", { name: /dirk/i })).toBeInTheDocument();
-  });
-  test("walkthrough displays all instruction-steps", async () => {
     fireEvent.click(await screen.findByRole("button", { name: /dirk/i }));
     fireEvent.click(await screen.findByRole("button", { name: /app guide/i }));
     fireEvent.click(await screen.findByRole("button", { name: /start/i }));
+  });
+
+  test("walkthrough displays all instruction-steps", async () => {
     // step 1
     const div = await (
       await screen.findByRole("button", { name: /2021/i })
@@ -114,7 +115,40 @@ describe("guide functionality", () => {
     expect(screen.getByText(/guide complete/i)).toBeInTheDocument();
   });
 
-  test("jumping with navigation-button-dots work", () => {});
+  test("jumping with navigation-button-dots work", async () => {
+    // Testing DotStepsMenu-component and it's communication with the context through setGuide
+    // NOTE that steps below do no correlate with my naming of steps in the comments of the walkthrough-test above.
+    // Jump to step 7
+    fireEvent.click(screen.getByLabelText("Guide-step 7"));
+    expect(
+      screen.getByRole("button", { name: /upload csv-file/i }).getAttribute("data-tooltip")
+    ).toBe("You can also upload month-transactions from a file");
+    expect(screen.getByText(/add to budget: upload csv/i)).toBeInTheDocument();
+    // Jump to step 4
+    fireEvent.click(screen.getByLabelText("Guide-step 4"));
+    const btn2 = await screen.findByRole("button", { name: /january/i });
+    expect(btn2.getAttribute("data-tooltip")).toBe(
+      "Here you navigate to Month by pressing any month"
+    );
+    expect(screen.getByText(/under month you will find a statistic summary/i)).toBeInTheDocument();
+    // Jump to step 14
+    fireEvent.click(screen.getByLabelText("Guide-step 14"));
+    expect(screen.getByRole("button", { name: /expense/i }).getAttribute("data-tooltip")).toBe(
+      "To get to Expense Summary you press here"
+    );
+    expect(
+      screen.getByText(/under expense summary in year-tab, you get a good overview/i)
+    ).toBeInTheDocument();
+    // Jump to step 2
+    fireEvent.click(screen.getByLabelText("Guide-step 2"));
+    const div = await (
+      await screen.findByRole("button", { name: /2021/i })
+    ).parentElement.parentElement;
+    expect(div.getAttribute("data-tooltip")).toBe(
+      "This is the datemenu. Here you navigate in your timeline"
+    );
+    expect(await screen.findByText(/the date-menu is your main/i)).toBeInTheDocument();
+  });
   test("going back with previous button works", () => {});
   test("pressing exit removes guide and its temp-presets", () => {});
 });
