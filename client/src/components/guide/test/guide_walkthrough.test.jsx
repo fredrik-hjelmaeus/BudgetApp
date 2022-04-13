@@ -149,6 +149,26 @@ describe("guide functionality", () => {
     );
     expect(await screen.findByText(/the date-menu is your main/i)).toBeInTheDocument();
   });
-  test("going back with previous button works", () => {});
-  test("pressing exit removes guide and its temp-presets", () => {});
+
+  test("going back with previous button works", async () => {
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    fireEvent.click(screen.getByRole("button", { name: /previous/i }));
+    const btn = await screen.findByRole("button", { name: /2021/i });
+    expect(btn.getAttribute("data-tooltip")).toBe("Here you navigate to Year");
+    expect(
+      screen.getByText(/under year you will find a statistic summary for the year/i)
+    ).toBeInTheDocument();
+  });
+
+  test("pressing exit removes guide and its temp-presets", async () => {
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    fireEvent.click(screen.getByRole("button", { name: /exit/i }));
+    expect(
+      await (
+        await screen.findByText("Year Summary:")
+      ).parentElement.children[1].textContent
+    ).toBe("990543");
+  });
 });
