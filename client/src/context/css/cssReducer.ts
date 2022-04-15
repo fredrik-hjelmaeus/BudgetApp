@@ -5,15 +5,15 @@ import {
   SET_MODAL_PROPS,
   SET_DIMENSIONS,
 } from "../types";
-import { CssContextType } from "./cssContext";
+
 type ActionType =
   | { type: typeof HIDE_NAVBAR; payload: boolean }
-  | { type: typeof TOGGLE_MODAL; payload: { modal: string; modalprops: object } }
+  | { type: typeof TOGGLE_MODAL; payload: string }
   | { type: typeof SET_YEARSUMMARY; payload: string }
   | { type: typeof SET_MODAL_PROPS; payload: object }
-  | { type: typeof SET_DIMENSIONS; payload: { height: number; width: number } };
+  | { type: typeof SET_DIMENSIONS };
 
-const cssReducer = (state: typeof initialState, action: ActionType) => {
+const cssReducer = (state: any, action: ActionType) => {
   switch (action.type) {
     case HIDE_NAVBAR:
       return {

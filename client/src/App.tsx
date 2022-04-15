@@ -12,7 +12,8 @@ import ResetPassword from "./components/auth/ResetPassword";
 import PresetState from "./context/preset/PresetState";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
-import CssState from "./context/css/CssState";
+
+import CssContext from "./context/css/cssContext";
 
 import GuideState from "./context/guide/GuideState";
 import DateState from "./context/date/DateState";
@@ -28,7 +29,7 @@ const App = () => {
       <PresetState>
         <DateState>
           <AlertState>
-            <CssState>
+            <CssContext>
               <GuideState>
                 <Router>
                   <Fragment>
@@ -45,7 +46,7 @@ const App = () => {
                   </Fragment>
                 </Router>
               </GuideState>
-            </CssState>
+            </CssContext>
           </AlertState>
         </DateState>
       </PresetState>
