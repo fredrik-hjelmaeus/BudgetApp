@@ -1,14 +1,20 @@
-import React, { useReducer } from 'react';
-import CssContext from './cssContext';
-import cssReducer from './cssReducer';
-import { HIDE_NAVBAR, TOGGLE_MODAL, SET_YEARSUMMARY, SET_MODAL_PROPS, SET_DIMENSIONS } from '../types';
+import React, { useReducer } from "react";
+import CssContext from "./cssContext";
+import cssReducer from "./cssReducer";
+import {
+  HIDE_NAVBAR,
+  TOGGLE_MODAL,
+  SET_YEARSUMMARY,
+  SET_MODAL_PROPS,
+  SET_DIMENSIONS,
+} from "../types";
 
 const CssState = (props) => {
   const initialState = {
     navbar: true,
-    modal: '',
+    modal: "",
     modalprops: null,
-    yearsummary: 'balance',
+    yearsummary: "balance",
     dimensions: {
       height: window.innerHeight,
       width: window.innerWidth,
