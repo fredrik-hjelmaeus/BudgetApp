@@ -1,12 +1,13 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, MouseEvent } from "react";
 import CssContext from "../../context/css/cssContext";
 import Logo from "../layout/Logo";
 import LoginModal from "../auth/LoginModal";
 import RegisterModal from "../auth/RegisterModal";
 import ForgotPassword from "../auth/ForgotPassword";
 import AuthContext from "../../context/auth/authContext";
+import { RouteComponentProps } from "react-router-dom";
 
-const Landing = (props) => {
+const Landing = (props: RouteComponentProps) => {
   const cssContext = useContext(CssContext);
   const authContext = useContext(AuthContext);
   const { toggleNavbar, toggleModal, modal } = cssContext;
@@ -33,8 +34,9 @@ const Landing = (props) => {
     // eslint-disable-next-line
   }, [token, isAuthenticated, user]);
 
-  const onClick = (e) => {
-    toggleModal(e.target.value);
+  const onClick = (e: MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLInputElement;
+    toggleModal(target.value);
   };
 
   return (
