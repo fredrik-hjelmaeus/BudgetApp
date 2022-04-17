@@ -1,5 +1,4 @@
-import React, { useReducer } from "react";
-import axios from "axios";
+import React, { ReactNode, useReducer } from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
@@ -24,7 +23,7 @@ import {
   RESET_PASSWORD_SUCCESS,
 } from "../types";
 
-const AuthState = (props) => {
+const AuthState = (props: { children: ReactNode }) => {
   const initialState = {
     token: localStorage.getItem("token"),
     isAuthenticated: false,
@@ -60,7 +59,7 @@ const AuthState = (props) => {
   };
 
   // Register User
-  const register = async (formData) => {
+  const register = async (formData: { token: string; user: object }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
