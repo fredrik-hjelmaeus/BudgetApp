@@ -17,8 +17,27 @@ import {
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_SUCCESS,
 } from "../types";
+import { IAuthContext } from "./authContext";
+type ActionType =
+  | { type: typeof USER_LOADED; payload: object }
+  | { type: typeof REGISTER_SUCCESS; payload: object }
+  | { type: typeof REGISTER_FAIL; payload: Array<string> }
+  | { type: typeof LOGIN_SUCCESS; payload: object }
+  | { type: typeof LOGIN_FAIL; payload: string }
+  | { type: typeof AUTH_ERROR; payload: string }
+  | { type: typeof LOGOUT }
+  | { type: typeof FORGOT_FAIL; payload: string }
+  | { type: typeof FORGOT_SUCCESS; payload: string }
+  | { type: typeof UPDATE_PASSWORD_FAIL; payload: string }
+  | { type: typeof UPDATE_DETAILS_FAIL; payload: string }
+  | { type: typeof UPDATE_PASSWORD_SUCCESS; payload: string }
+  | { type: typeof CLEAR_ERRORS }
+  | { type: typeof CLEAR_ALERTS }
+  | { type: typeof UPDATE_DETAILS_SUCCESS; payload: string }
+  | { type: typeof RESET_PASSWORD_FAIL; payload: string }
+  | { type: typeof RESET_PASSWORD_SUCCESS; payload: string };
 
-const authReducer = (state, action) => {
+const authReducer = (state: IAuthContext, action: ActionType) => {
   switch (action.type) {
     case USER_LOADED:
       return {

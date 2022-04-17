@@ -1,4 +1,5 @@
-import React, { useReducer, createContext, ReactNode } from "react";
+import React, { useReducer, ReactNode } from "react";
+import CssContext from "./cssContext";
 import cssReducer from "./cssReducer";
 import {
   HIDE_NAVBAR,
@@ -8,27 +9,8 @@ import {
   SET_DIMENSIONS,
 } from "../types";
 
-// Blueprint for the data we want to store in the context
-interface ICssContext {
-  navbar: boolean;
-  modal: string;
-  modalprops: string | null;
-  yearsummary: string;
-  dimensions: {
-    height: number;
-    width: number;
-  };
-  toggleNavbar: (navbar: boolean) => void;
-  toggleModal: (modal: string) => void;
-  setYearSummary: (yearsummary: string) => void;
-  setModalprops: (props: string | null) => void;
-  setDimensions: () => void;
-}
-
-const cssContext = createContext<ICssContext | null>(null);
-
 // Provider in your app with Reducer
-const CssContext = (props: { children: ReactNode }) => {
+const CssState = (props: { children: ReactNode }) => {
   const initialState = {
     navbar: true,
     modal: "",
@@ -48,10 +30,14 @@ const CssContext = (props: { children: ReactNode }) => {
   const toggleModal = (modal: string) => dispatch({ type: TOGGLE_MODAL, payload: modal });
 
   // set modal props
-  const setModalprops = (props: any) => dispatch({ type: SET_MODAL_PROPS, payload: props });
+  const setModalprops = (props: object | null) => {
+    if (props) {
+      dispatch({ type: SET_MODAL_PROPS, payload: props });
+    }
+  };
 
   // Set Yearsummary
-  const setYearSummary = (yearsummary: any) => {
+  const setYearSummary = (yearsummary: string) => {
     dispatch({ type: SET_YEARSUMMARY, payload: yearsummary });
   };
 
@@ -60,7 +46,7 @@ const CssContext = (props: { children: ReactNode }) => {
     dispatch({ type: SET_DIMENSIONS });
   };
   return (
-    <cssContext.Provider
+    <CssContext.Provider
       value={{
         navbar: state.navbar,
         modal: state.modal,
@@ -75,8 +61,8 @@ const CssContext = (props: { children: ReactNode }) => {
       }}
     >
       {props.children}
-    </cssContext.Provider>
+    </CssContext.Provider>
   );
 };
 
-export default CssContext;
+export default CssState;

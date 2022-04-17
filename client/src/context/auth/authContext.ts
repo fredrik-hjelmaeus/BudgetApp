@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-type AuthContextType = {
+export interface IAuthContext {
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
@@ -18,9 +18,9 @@ type AuthContextType = {
   updateDetails(details: object): void;
   updatePassword(password: string): void;
   clearAlerts(): void;
-};
+}
 
-const authContext = createContext<AuthContextType>({
+const authContext = createContext<IAuthContext | null>({
   token: null,
   isAuthenticated: false,
   loading: true,
