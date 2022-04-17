@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ICssContext } from "../../types/ICssContext";
+import { ICssContext } from "../../frontend-types/ICssContext";
 
 const cssContext = createContext<ICssContext | null>(null);
 
