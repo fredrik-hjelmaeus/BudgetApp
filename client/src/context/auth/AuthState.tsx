@@ -2,6 +2,7 @@ import React, { ReactNode, useReducer } from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
+import axios, { AxiosResponse } from "axios";
 
 import {
   REGISTER_SUCCESS,
@@ -22,6 +23,7 @@ import {
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_SUCCESS,
 } from "../types";
+import { IErrorResponseFromBackend } from "../../frontend-types/IErrorResponseFromBackend";
 
 const AuthState = (props: { children: ReactNode }) => {
   const initialState = {
@@ -43,18 +45,21 @@ const AuthState = (props: { children: ReactNode }) => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get("/api/auth");
+      const res:AxiosResponse = await axios.get("/api/auth");
 
       dispatch({
         type: USER_LOADED,
         payload: res.data,
       });
-    } catch (err) {
+    } catch (err:IErrorResponseFromBackend) {
       console.log(err);
-      dispatch({
-        type: AUTH_ERROR,
-        payload: err.response.data.msg /* err.response.data.errors[0] */,
-      });
+      
+
+        dispatch({
+          type: AUTH_ERROR,
+          payload: err.response.data.msg /* err.response.data.errors[0] */,
+        });
+      }
     }
   };
 
