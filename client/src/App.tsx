@@ -13,7 +13,7 @@ import PresetState from "./context/preset/PresetState";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
 
-import CssContext from "./context/css/cssContext";
+import CssState from "./context/css/CssState";
 
 import GuideState from "./context/guide/GuideState";
 import DateState from "./context/date/DateState";
@@ -29,7 +29,7 @@ const App = () => {
       <PresetState>
         <DateState>
           <AlertState>
-            <CssContext>
+            <CssState>
               <GuideState>
                 <Router>
                   <Fragment>
@@ -46,7 +46,7 @@ const App = () => {
                   </Fragment>
                 </Router>
               </GuideState>
-            </CssContext>
+            </CssState>
           </AlertState>
         </DateState>
       </PresetState>
