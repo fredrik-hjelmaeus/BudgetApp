@@ -1,19 +1,25 @@
-export interface IAuthContext {
+import { ILoginFormData } from "./ILoginFormData";
+import { IRegisterFormData } from "./IRegisterFormData";
+
+export interface IAuthState {
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  user: object | null;
-  errors: Array<string>;
+  user: any;
+  errors: any[];
   alerts: Array<string>;
   mailsentmsg: string | null;
-  register(token: string, user: object): void;
-  login(token: string, user: object): void;
+}
+
+export interface IAuthContext extends IAuthState {
+  register(formData: IRegisterFormData): Promise<void>;
+  login(formData: ILoginFormData): Promise<void>;
   logout(): void;
   clearErrors(): void;
   loadUser(): void;
-  forgotPassword(email: string): void;
-  resetPassword(token: string, password: string): void;
+  forgotPassword(formData: { email: string }): Promise<void>;
+  resetPassword(formData: { token: string; password: string }): Promise<void>;
   updateDetails(details: object): void;
-  updatePassword(password: string): void;
+  updatePassword(formData: { currentPassword: string; password: string }): Promise<void>;
   clearAlerts(): void;
 }
