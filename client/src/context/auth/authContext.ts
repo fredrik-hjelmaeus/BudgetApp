@@ -1,5 +1,6 @@
 import { createContext } from "react";
-import { IAuthContext } from "../../types/IAuthContext";
+import { IAuthContext } from "../../frontend-types/IAuthContext";
+import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 
 const authContext = createContext<IAuthContext | null>({
   token: null,
@@ -9,7 +10,7 @@ const authContext = createContext<IAuthContext | null>({
   errors: [],
   alerts: [],
   mailsentmsg: null,
-  register: () => {},
+  register: (formData: IRegisterFormData) => Promise.resolve(),
   login: () => {},
   logout: () => {},
   clearErrors: () => {},
