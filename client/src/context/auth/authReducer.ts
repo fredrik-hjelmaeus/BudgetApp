@@ -19,18 +19,16 @@ import {
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_SUCCESS,
 } from "../types";
-type testTemp = {
-  token: string;
-};
+
 type ActionType =
   | { type: typeof USER_LOADED; payload: object }
-  | { type: typeof REGISTER_SUCCESS; payload: object }
+  | { type: typeof REGISTER_SUCCESS; payload: string }
   | { type: typeof REGISTER_FAIL; payload: Array<string> }
-  | { type: typeof LOGIN_SUCCESS; payload: testTemp }
-  | { type: typeof LOGIN_FAIL; payload: string }
+  | { type: typeof LOGIN_SUCCESS; payload: string }
+  | { type: typeof LOGIN_FAIL; payload: Array<string> }
   | { type: typeof AUTH_ERROR; payload: string }
   | { type: typeof LOGOUT }
-  | { type: typeof FORGOT_FAIL; payload: string }
+  | { type: typeof FORGOT_FAIL; payload: Array<string> }
   | { type: typeof FORGOT_SUCCESS; payload: string }
   | { type: typeof UPDATE_PASSWORD_FAIL; payload: string }
   | { type: typeof UPDATE_DETAILS_FAIL; payload: string }
@@ -52,17 +50,16 @@ const authReducer = (state: IAuthState, action: ActionType) => {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("token", action.payload);
       return {
         ...state,
-        ...action.payload,
+        // ...action.payload,
         isAuthenticated: true,
         loading: false,
       };
     case REGISTER_FAIL:
     case LOGIN_FAIL:
     case AUTH_ERROR:
-    case LOGOUT:
     case FORGOT_FAIL:
       localStorage.removeItem("token");
       return {
@@ -72,6 +69,15 @@ const authReducer = (state: IAuthState, action: ActionType) => {
         loading: false,
         user: null,
         errors: [...state.errors, action.payload],
+      };
+    case LOGOUT:
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        user: null,
       };
     case CLEAR_ERRORS:
       return {

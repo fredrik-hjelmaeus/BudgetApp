@@ -3,7 +3,6 @@ import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from "axios";
-
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -26,10 +25,6 @@ import {
 import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 import { IAuthState } from "../../frontend-types/IAuthContext";
 import { ILoginFormData } from "../../frontend-types/ILoginFormData";
-
-export interface tempTest {
-  token: string;
-}
 
 const AuthState = (props: { children: ReactNode }) => {
   const initialState: IAuthState = {
@@ -108,13 +103,13 @@ const AuthState = (props: { children: ReactNode }) => {
     };
 
     try {
-      const res: AxiosResponse<tempTest> = await axios.post("/api/auth", formData, config); //endpoint/url
-
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
-
+      const res: AxiosResponse = await axios.post("/api/auth", formData, config); //endpoint/url
+      if (res.data.token) {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data.token,
+        });
+      }
       loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
