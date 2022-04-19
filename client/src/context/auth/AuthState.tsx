@@ -176,7 +176,7 @@ const AuthState = (props: { children: ReactNode }) => {
   };
 
   //update userdetails
-  const updateDetails = async (formData: { name: string; email: string }) => {
+  const updateDetails = async (formData: { name: string; email: string }): Promise<void> => {
     const config = {
       headers: {
         "Content-Type": "application/json",
