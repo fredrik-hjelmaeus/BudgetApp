@@ -14,8 +14,6 @@ import {
   CLEAR_PRESETS,
   GET_PRESETS,
   ADD_MONTH,
-  FILTER_PRESETS,
-  CLEAR_FILTER,
   FILTER_POSNUMANDMONTH,
   FILTER_NEGNUMANDMONTH,
   POSMONTHSUM,
@@ -30,8 +28,6 @@ import {
   SET_CAPITAL_LIST,
   CALCCAPITAL,
   SET_PURCHASE,
-  CATEGORYSUMONLYBYYEAR,
-  CATEGORY_NAMEONLY_BYYEAR,
   CATEGORY_NAMEONLYPOSNUM_BYYEAR,
   CATEGORY_SUMONLYPOSNUM_BYYEAR,
   CATEGORY_SUMONLYNEGNUM_BYYEAR,
@@ -62,7 +58,6 @@ const PresetState = (props) => {
     edit: null,
     error: null,
     month: null, // year implemented. Only indirect affects
-    filtered: null, // not used atm
     MonthSum: null, // year implemented
     AllMonthSum: [], // year implemented
     PosMonthSum: null, // gets data from filteredmonthandnegnum
@@ -75,8 +70,7 @@ const PresetState = (props) => {
     yearsum: null, // year implemented
     savings: null, // year not used
     capital: null, // year not used
-    categorysumonlybyyear: null, // year implemented  but NOT used atm.
-    categorynameonlybyyear: null, // year implemented  but NOT used atm.
+
     categorynameonlyposnumbyyear: null, // year implemented
     categorynameonlynegnumbyyear: null, // year implemented
     categorysumonlyposnumbyyear: null, // year implemented
@@ -241,11 +235,6 @@ const PresetState = (props) => {
     dispatch({ type: CANCEL_EDIT });
   };
 
-  // Filter presets
-  const filterPresets = (month) => {
-    dispatch({ type: FILTER_PRESETS, payload: month });
-  };
-
   // Filter out all presets with positive numbers and provided month and year
   const filterOutPositiveNumsAndMonth = (month) => {
     dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
@@ -254,11 +243,6 @@ const PresetState = (props) => {
   // Filter out all presets with negative numbers and provided month
   const filterOutNegativeNumsAndMonth = (month) => {
     dispatch({ type: FILTER_NEGNUMANDMONTH, payload: month });
-  };
-
-  // clear filter
-  const clearFilter = () => {
-    dispatch({ type: CLEAR_FILTER });
   };
 
   const setPurchase = () => {
@@ -444,7 +428,7 @@ const PresetState = (props) => {
     for (let i = 0; i < UniqueCatThisMonth.length; i++) {
       let presetByCatArray = [];
       let SumOfCat;
-      let CatAndSumList = [];
+      let CatAndSumList: ICatAndSumItem = [];
 
       // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
       if (state.year === "2019" || state.year === 2019) {
@@ -565,61 +549,6 @@ const PresetState = (props) => {
       MajorArray.push(CatAndSumList);
     }
     dispatch({ type: CATEGORYYEARSUM, payload: MajorArray });
-  };
-
-  // calculate sum of provided category and year and put _only_ the sum in an array.
-  const calcCategorySumOnlyByYear = () => {
-    // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
-    let categoriesArray = [];
-    if (state.year === "2019" || state.year === 2019) {
-      state.presets?.map((preset) => {
-        return (
-          preset.year === undefined ||
-          (parseInt(preset.year) === parseInt("2019") &&
-            preset.type !== null &&
-            preset.type !== "purchase" &&
-            preset.type !== "savings" &&
-            preset.type !== "capital" &&
-            categoriesArray.push(preset.category))
-        );
-      });
-    } else {
-      state.presets?.map((preset) => {
-        return (
-          parseInt(preset.year) === parseInt(state.year) &&
-          preset.type !== null &&
-          preset.type !== "purchase" &&
-          preset.type !== "savings" &&
-          preset.type !== "capital" &&
-          categoriesArray.push(preset.category)
-        );
-      });
-    }
-    let UniqueCatThisMonth = categoriesArray.filter(function (item, i, ar) {
-      return ar.indexOf(item) === i;
-    });
-
-    let MajorArray = [];
-
-    for (let i = 0; i < UniqueCatThisMonth.length; i++) {
-      let presetByCatArray = [];
-      let SumOfCat;
-
-      // Inner loop som itererar igenom varje preset och stämmer månad och kategori(i) lägg till i array.
-      state.presets?.map((preset) => {
-        return (
-          preset.type !== null &&
-          preset.type !== "purchase" &&
-          preset.type !== "savings" &&
-          preset.type !== "capital" &&
-          preset.category === UniqueCatThisMonth[i] &&
-          presetByCatArray.push(preset.number)
-        );
-      }); // end inner loop
-      SumOfCat = presetByCatArray.reduce((a, b) => a + b, 0);
-      MajorArray.push(SumOfCat);
-    }
-    dispatch({ type: CATEGORYSUMONLYBYYEAR, payload: MajorArray });
   };
 
   // calculate sum of provided category and year and put _only_ the _POSITIVE_ sum in an array.
@@ -770,41 +699,6 @@ const PresetState = (props) => {
       MajorArray.push(Math.abs(SumOfCat));
     }
     dispatch({ type: CATEGORY_SUMONLYNEGNUM_BYYEAR, payload: MajorArray });
-  };
-
-  // get ONLY categoryNAME by year to use in apexcharts
-  const setCategoryNameOnlyByYear = () => {
-    // array som håller presets kategorier och ska itereras igenom för att hitta alla unika categorier denna månad
-    let categoriesArray = [];
-    if (state.year === "2019" || state.year === 2019) {
-      state.presets?.map((preset) => {
-        return (
-          preset.year === undefined ||
-          (parseInt(preset.year) === parseInt("2019") &&
-            preset.type !== null &&
-            preset.type !== "purchase" &&
-            preset.type !== "savings" &&
-            preset.type !== "capital" &&
-            categoriesArray.push(preset.category))
-        );
-      });
-    } else {
-      state.presets?.map((preset) => {
-        return (
-          parseInt(preset.year) === parseInt(state.year) &&
-          preset.type !== null &&
-          preset.type !== "purchase" &&
-          preset.type !== "savings" &&
-          preset.type !== "capital" &&
-          categoriesArray.push(preset.category)
-        );
-      });
-    }
-    let UniqueCatThisMonth = categoriesArray.filter(function (item, i, ar) {
-      return ar.indexOf(item) === i;
-    });
-
-    dispatch({ type: CATEGORY_NAMEONLY_BYYEAR, payload: UniqueCatThisMonth });
   };
 
   // get POSITIVE ONLY categoryNAME by year to use in apexcharts
@@ -1100,8 +994,6 @@ const PresetState = (props) => {
         NegMonthSum: state.NegMonthSum,
         categorymonthsum: state.categorymonthsum,
         categoryyearsum: state.categoryyearsum,
-        categorysumonlybyyear: state.categorysumonlybyyear,
-        categorynameonlybyyear: state.categorynameonlybyyear,
         year: state.year,
         yearsum: state.yearsum,
         savings: state.savings,
@@ -1131,9 +1023,6 @@ const PresetState = (props) => {
         getPresets,
         clearPresets,
         addMonth,
-        filterPresets,
-        filtered: state.filtered,
-        clearFilter,
         calcMonthSum,
         filterOutPositiveNumsAndMonth,
         filterOutNegativeNumsAndMonth,
@@ -1147,8 +1036,6 @@ const PresetState = (props) => {
         calcSavings,
         calcCapital,
         setPurchase,
-        calcCategorySumOnlyByYear,
-        setCategoryNameOnlyByYear,
         setCategoryNameOnlyPosNumByYear,
         setCategoryNameOnlyNegNumByYear,
         calcCategorySumOnlyPosNumByYear,
