@@ -9,8 +9,6 @@ import {
   PRESET_ERROR,
   CLEAR_PRESETS,
   ADD_MONTH,
-  FILTER_PRESETS,
-  CLEAR_FILTER,
   MONTHSUM,
   FILTER_POSNUMANDMONTH,
   FILTER_NEGNUMANDMONTH,
@@ -25,8 +23,6 @@ import {
   SET_SAVINGS_LIST,
   CALCCAPITAL,
   SET_PURCHASE,
-  CATEGORYSUMONLYBYYEAR,
-  CATEGORY_NAMEONLY_BYYEAR,
   CATEGORY_NAMEONLYPOSNUM_BYYEAR,
   CATEGORY_SUMONLYPOSNUM_BYYEAR,
   CATEGORY_SUMONLYNEGNUM_BYYEAR,
@@ -84,11 +80,6 @@ const presetReducer = (state, action) => {
         csvpresets: null,
         //year: '2019',
         month: null,
-      };
-    case CLEAR_FILTER:
-      return {
-        ...state,
-        filtered: null,
       };
     case SET_YEAR:
       return {
@@ -225,11 +216,7 @@ const presetReducer = (state, action) => {
         ...state,
         categorymonthsum: action.payload,
       };
-    case CATEGORY_NAMEONLY_BYYEAR:
-      return {
-        ...state,
-        categorynameonlybyyear: action.payload,
-      };
+
     case CATEGORY_NAMEONLYPOSNUM_BYYEAR:
       return {
         ...state,
@@ -240,11 +227,7 @@ const presetReducer = (state, action) => {
         ...state,
         categorynameonlynegnumbyyear: action.payload,
       };
-    case CATEGORYSUMONLYBYYEAR:
-      return {
-        ...state,
-        categorysumonlybyyear: action.payload,
-      };
+
     case CATEGORY_SUMONLYPOSNUM_BYYEAR:
       return {
         ...state,
@@ -331,11 +314,6 @@ const presetReducer = (state, action) => {
         ),
       };
 
-    case FILTER_PRESETS:
-      return {
-        ...state,
-        filtered: state.presets.filter((preset) => preset.month === action.payload),
-      };
     case EDIT_PRESET:
       return {
         ...state,
