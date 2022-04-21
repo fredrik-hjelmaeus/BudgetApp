@@ -56,19 +56,25 @@ import { ICategoryAndSumItem } from "../../frontend-types/ICategoryAndSumItem";
 const PresetState = (props: { children: ReactNode }) => {
   const initialState: IPresetState = {
     presets: null,
-    /*  sum: null,
+    loading: true,
     edit: null,
-    error: null,
+    sum: null,
     month: null, // year implemented. Only indirect affects
+    error: null,
     MonthSum: null, // year implemented
+    year: null, // year implemented. needs more strict control of datatype. it changes between string and number
+    filteredmonthandposnum: null, // year implemented
+    filteredmonthandnegnum: null, // year implemented
+    /*  
+    
+   
     AllMonthSum: [], // year implemented
     PosMonthSum: null, // gets data from filteredmonthandnegnum
     NegMonthSum: null, // gets data from filteredmonthandposnum
-    filteredmonthandposnum: null, // year implemented
-    filteredmonthandnegnum: null, // year implemented
+  
     categorymonthsum: [], // year implemented
     categoryyearsum: [], // year implemented
-    year: null, // year implemented. needs more strict control of datatype. it changes between string and number
+   
     yearsum: null, // year implemented
     savings: null, // year not used
     capital: null, // year not used
@@ -119,9 +125,8 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.post("/api/userpreset", preset, config);
-      if (res.data) {
-        dispatch({ type: ADD_PRESET, payload: res.data });
-      }
+
+      dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         if (err.response === undefined) {
@@ -140,28 +145,27 @@ const PresetState = (props: { children: ReactNode }) => {
       }
     }
   };
-  /*  // Delete preset
-  const deletePreset:IPresetContext["deletePreset"] = async (id) => {
+  // Delete preset
+  const deletePreset: IPresetContext["deletePreset"] = async (id) => {
     try {
       await axios.delete(`/api/userpreset/${id}`);
       dispatch({
         type: DELETE_PRESET,
         payload: id,
       });
-    } catch (err:unknown | AxiosError) {
-      if(axios.isAxiosError(err)) {
+    } catch (err: unknown | AxiosError) {
+      if (axios.isAxiosError(err)) {
         dispatch({
           type: PRESET_ERROR,
           payload: err?.response?.data.msg,
         });
-      }else{
-        console.log(err)
+      } else {
+        console.log(err);
       }
     }
   };
-
   // send edit
-  const sendEdit:IPresetContext["sendEdit"] = async (preset) => {
+  const sendEdit: IPresetContext["sendEdit"] = async (preset) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -169,25 +173,137 @@ const PresetState = (props: { children: ReactNode }) => {
     };
 
     try {
-      const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
+      const res = await axios.put(`/api/userpreset/${preset.id}`, preset, config);
 
       dispatch({ type: SEND_EDIT, payload: res.data });
-    } catch (err:unknown | AxiosError) {
+    } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         dispatch({
           type: PRESET_ERROR,
           payload: err?.response?.data.msg,
         });
-      } else {console.log(err);}
-      
-    
+      } else {
+        console.log(err);
+      }
     }
     //Recalc ALL
     resetSums();
     preset.type !== "purchase" && calcSum();
-    filterOutPositiveNumsAndMonth(state.month);
-    filterOutNegativeNumsAndMonth(state.month);
+    state.month && filterOutPositiveNumsAndMonth(state.month);
+    state.month && filterOutNegativeNumsAndMonth(state.month);
   };
+  // edit preset
+  const setEdit: IPresetContext["setEdit"] = (preset) => {
+    dispatch({ type: EDIT_PRESET, payload: preset });
+  };
+
+  // cancel edit preset
+  const cancelEdit: IPresetContext["cancelEdit"] = () => {
+    dispatch({ type: CANCEL_EDIT });
+  };
+
+  // Clear presets
+  const clearPresets: IPresetContext["clearPresets"] = () => {
+    dispatch({ type: CLEAR_PRESETS });
+  };
+
+  const calcSum: IPresetContext["calcSum"] = () => {
+    let TotalSum = 0;
+
+    const dispatchSum = (sumArray: number[]) => {
+      // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
+      if (sumArray.length !== 0) {
+        TotalSum = sumArray.reduce((a, b) => a + b, 0);
+        dispatch({ type: SUM, payload: TotalSum });
+      } else {
+        dispatch({ type: SUM, payload: 0 });
+      }
+    };
+    const sumArray: number[] = [];
+    state.presets?.map((preset: IPreset) => {
+      if (preset.type !== "purchase" && preset.type !== "savings") {
+        return sumArray.push(preset.number);
+      } else {
+        if (preset.type === "savings") {
+          return sumArray.push(preset.number * -1);
+        }
+      }
+    });
+
+    dispatchSum(sumArray);
+  };
+
+  // Add month-val coming from Datemenu
+  const addMonth: IPresetContext["addMonth"] = (month) => {
+    dispatch({ type: ADD_MONTH, payload: month });
+  };
+
+  // Calc month sum
+  const calcMonthSum: IPresetContext["calcMonthSum"] = (month) => {
+    //array att iterera igenom
+    let presetArray: number[] = [];
+    //håller uträknade summan
+    let TotalMonthSum = 0;
+    if (state.year === 2019) {
+      state.presets?.map((preset: IPreset) => {
+        return (
+          preset.year === undefined ||
+          (preset.year === parseInt("2019") &&
+            preset.month === month &&
+            preset.type !== "savings" &&
+            preset.type !== "capital" &&
+            preset.type !== "purchase" &&
+            presetArray.push(preset.number))
+        );
+      });
+    } else {
+      state.presets?.map((preset: IPreset) => {
+        return (
+          preset.year === state.year &&
+          preset.month === month &&
+          preset.type !== "savings" &&
+          preset.type !== "capital" &&
+          preset.type !== "purchase" &&
+          presetArray.push(preset.number)
+        );
+      });
+    }
+    // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
+    if (presetArray.length !== 0) {
+      TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
+      dispatch({ type: MONTHSUM, payload: TotalMonthSum });
+    } else {
+      TotalMonthSum = 0;
+      dispatch({ type: MONTHSUM, payload: TotalMonthSum });
+    }
+  };
+
+  // set year when yearbutton is pressed in datemenucomponent
+  const setYear: IPresetContext["setYear"] = (year) => {
+    dispatch({ type: SET_YEAR, payload: year });
+  };
+
+  // Reset Sums before recalc
+  const resetSums: IPresetContext["resetSums"] = () => {
+    dispatch({ type: RESET_SUMS });
+  };
+
+  // Filter out all presets with positive numbers and provided month and year
+  const filterOutPositiveNumsAndMonth: IPresetContext["filterOutPositiveNumsAndMonth"] = (
+    month
+  ) => {
+    dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
+  };
+
+  // Filter out all presets with negative numbers and provided month
+  const filterOutNegativeNumsAndMonth: IPresetContext["filterOutNegativeNumsAndMonth"] = (
+    month
+  ) => {
+    dispatch({ type: FILTER_NEGNUMANDMONTH, payload: month });
+  };
+  /*  
+
+ 
 
   // Upload CSV
   const uploadCSV:IPresetContext["uploadCSV"] = async (formData) => {
@@ -226,45 +342,14 @@ const PresetState = (props: { children: ReactNode }) => {
   const clearCsv:IPresetContext["clearCsv"] = () => {
     dispatch({ type: CLEAR_CSV });
   };
-  // Add month-val coming from Datemenu
-  const addMonth:IPresetContext["addMonth"] = (month) => {
-    dispatch({ type: ADD_MONTH, payload: month });
-  };
 
-  // set year when yearbutton is pressed in datemenucomponent
-  const setYear:IPresetContext["setYear"] = (year) => {
-    dispatch({ type: SET_YEAR, payload: year });
-  };
+  
 
-  // Clear presets
-  const clearPresets:IPresetContext["clearPresets"] = () => {
-    dispatch({ type: CLEAR_PRESETS });
-  };
+ 
 
-  // Reset Sums before recalc
-  const resetSums:IPresetContext["resetSums"] = () => {
-    dispatch({ RESET_SUMS });
-  };
+  
 
-  // edit preset
-  const setEdit:IPresetContext["setEdit"] = (preset) => {
-    dispatch({ type: EDIT_PRESET, payload: preset });
-  };
-
-  // cancel edit preset
-  const cancelEdit:IPresetContext["cancelEdit"] = () => {
-    dispatch({ type: CANCEL_EDIT });
-  };
-
-  // Filter out all presets with positive numbers and provided month and year
-  const filterOutPositiveNumsAndMonth:IPresetContext["filterOutPositiveNumsAndMonth"] = (month) => {
-    dispatch({ type: FILTER_POSNUMANDMONTH, payload: month });
-  };
-
-  // Filter out all presets with negative numbers and provided month
-  const filterOutNegativeNumsAndMonth:IPresetContext["filterOutNegativeNumsAndMonth"] = (month) => {
-    dispatch({ type: FILTER_NEGNUMANDMONTH, payload: month });
-  };
+  
 
   const setPurchase:IPresetContext["setPurchase"] = () => {
     dispatch({ type: SET_PURCHASE });
@@ -276,31 +361,7 @@ const PresetState = (props: { children: ReactNode }) => {
    
    
 
-  const calcSum:IPresetContext["calcSum"] = () => {
-    let TotalSum = 0;
-
-    const dispatchSum = (sumArray: number[]) => {
-      // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
-      if (sumArray.length !== 0) {
-        TotalSum = sumArray.reduce((a, b) => a + b, 0);
-        dispatch({ type: SUM, payload: TotalSum });
-      } else {
-        dispatch({ type: SUM, payload: 0 });
-      }
-    };
-    const sumArray:number[] = [];
-    state.presets?.map((preset:IPreset) => {
-      if (preset.type !== "purchase" && preset.type !== "savings") {
-        return sumArray.push(preset.number);
-      } else {
-        if (preset.type === "savings") {
-          return sumArray.push(preset.number * -1);
-        }
-      }
-    });
-
-    dispatchSum(sumArray);
-  };
+  
 
   // Calc _ALL_ months sum
   const calcAllMonthSum:IPresetContext["calcAllMonthSum"] = (montharray) => {
@@ -348,45 +409,7 @@ const PresetState = (props: { children: ReactNode }) => {
     });
   };
 
-  // Calc month sum
-  const calcMonthSum:IPresetContext["calcMonthSum"] = (month) => {
-    //array att iterera igenom
-    let presetArray:number[] = [];
-    //håller uträknade summan
-    let TotalMonthSum = 0;
-    if (state.year === "2019" || state.year === 2019) {
-      state.presets?.map((preset:IPreset) => {
-        return (
-          preset.year === undefined ||
-          (preset.year === parseInt("2019") &&
-            preset.month === month &&
-            preset.type !== "savings" &&
-            preset.type !== "capital" &&
-            preset.type !== "purchase" &&
-            presetArray.push(preset.number))
-        );
-      });
-    } else {
-      state.presets?.map((preset:IPreset) => {
-        return (
-          preset.year === parseInt(state.year) &&
-          preset.month === month &&
-          preset.type !== "savings" &&
-          preset.type !== "capital" &&
-          preset.type !== "purchase" &&
-          presetArray.push(preset.number)
-        );
-      });
-    }
-    // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
-    if (presetArray.length !== 0) {
-      TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
-      dispatch({ type: MONTHSUM, payload: TotalMonthSum });
-    } else {
-      TotalMonthSum = 0;
-      dispatch({ type: MONTHSUM, payload: TotalMonthSum });
-    }
-  };
+ 
 
   // Calc Positive month sum
   const calcPosMonth:IPresetContext["calcPosMonth"] = () => {
@@ -1005,18 +1028,22 @@ const PresetState = (props: { children: ReactNode }) => {
     <PresetContext.Provider
       value={{
         presets: state.presets,
-        /*    edit: state.edit,
-        error: state.error,
+        edit: state.edit,
+        loading: state.loading,
         sum: state.sum,
         month: state.month,
+        error: state.error,
         MonthSum: state.MonthSum,
+        year: state.year,
         filteredmonthandposnum: state.filteredmonthandposnum,
         filteredmonthandnegnum: state.filteredmonthandnegnum,
+        /*   
+        
         PosMonthSum: state.PosMonthSum,
         NegMonthSum: state.NegMonthSum,
         categorymonthsum: state.categorymonthsum,
         categoryyearsum: state.categoryyearsum,
-        year: state.year,
+       
         yearsum: state.yearsum,
         savings: state.savings,
         capital: state.capital,
@@ -1036,24 +1063,31 @@ const PresetState = (props: { children: ReactNode }) => {
         doSubmitCsv: state.doSubmitCsv,
         savingsList: state.savingsList,
         capitalList: state.capitalList,
+       
+       
+        
+        
+          */
         calcSum,
-        deletePreset,
-        setEdit,
         cancelEdit,
-        sendEdit,  */
+        setEdit,
+        sendEdit,
         getPresets,
         addPreset,
-        /*   clearPresets,
+        deletePreset,
+        clearPresets,
         addMonth,
         calcMonthSum,
+        setYear,
         filterOutPositiveNumsAndMonth,
         filterOutNegativeNumsAndMonth,
+        resetSums,
+        /*   
         calcPosMonth,
         calcNegMonth,
         calcCategoryByMonth,
         calcCategoryByYear,
-        resetSums,
-        setYear,
+       
         calcYearsum,
         calcSavings,
         calcCapital,
