@@ -54,22 +54,31 @@ import {
 type ActionType =
   | { type: typeof GET_PRESETS; payload: IPreset[] }
   | { type: typeof PRESET_ERROR; payload: string }
-  | { type: typeof ADD_PRESET; payload: IPreset };
-/*  | { type: typeof DELETE_PRESET; payload: string };
- | { type: typeof EDIT_PRESET; payload: IPreset }
+  | { type: typeof ADD_PRESET; payload: IPreset }
+  | { type: typeof DELETE_PRESET; payload: string }
+  | { type: typeof EDIT_PRESET; payload: IPreset }
   | { type: typeof CANCEL_EDIT }
   | { type: typeof SEND_EDIT; payload: IPreset }
-  | { type: typeof SUM; payload: number }
   | { type: typeof CLEAR_PRESETS }
+  | { type: typeof SUM; payload: number }
   | { type: typeof ADD_MONTH; payload: string }
   | { type: typeof MONTHSUM; payload: number }
+  | { type: typeof SET_YEAR; payload: number }
   | { type: typeof FILTER_POSNUMANDMONTH; payload: string }
   | { type: typeof FILTER_NEGNUMANDMONTH; payload: string }
+  | { type: typeof RESET_SUMS };
+/*  
+ 
+  
+
+ 
+  
+  
   | { type: typeof POSMONTHSUM; payload: number }
   | { type: typeof NEGMONTHSUM; payload: number }
   | { type: typeof CATEGORYMONTHSUM; payload: Array<ICategoryAndSumItem> }
-  | { type: typeof RESET_SUMS }
-  | { type: typeof SET_YEAR; payload: number }
+  
+  
   | { type: typeof CATEGORYYEARSUM; payload: Array<ICategoryAndSumItem> }
   | { type: typeof YEARSUM; payload: number }
   | { type: typeof CALCSAVINGS; payload: number }
@@ -99,7 +108,7 @@ type ActionType =
   | { type: typeof PRESET_CLEAR_ERRORS }
   | { type: typeof SET_CAPITAL_LIST; payload: Array<IPreset> }; */
 
-const presetReducer = (state: IPresetState, action: ActionType) => {
+function presetReducer(state: IPresetState, action: ActionType) {
   switch (action.type) {
     case GET_PRESETS:
       return {
@@ -118,7 +127,33 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         presets: state.presets && [...state.presets, action.payload],
         loading: false,
       };
-    /*   case LOGOUT:
+    case DELETE_PRESET:
+      return {
+        ...state,
+        presets: state.presets && state.presets?.filter((preset) => preset.id !== action.payload),
+        loading: false,
+      };
+    case SEND_EDIT:
+      return {
+        ...state,
+        presets:
+          state.presets &&
+          state.presets?.map((preset) =>
+            preset.id === action.payload.id ? action.payload : preset
+          ),
+        loading: false,
+      };
+    case EDIT_PRESET:
+      return {
+        ...state,
+        edit: action.payload,
+      };
+    case CANCEL_EDIT:
+      return {
+        ...state,
+        edit: null,
+      };
+    //case LOGOUT:
     case CLEAR_PRESETS:
       return {
         ...state,
@@ -144,6 +179,11 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         //year: '2019',
         month: null,
       };
+    case SUM:
+      return {
+        ...state,
+        sum: action.payload,
+      };
     case SET_YEAR:
       return {
         ...state,
@@ -155,7 +195,53 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         month: action.payload,
       };
-
+    case MONTHSUM:
+      return {
+        ...state,
+        MonthSum: action.payload,
+      };
+    case FILTER_POSNUMANDMONTH:
+      return {
+        ...state,
+        filteredmonthandposnum:
+          state.presets &&
+          state.presets.filter(
+            (preset) =>
+              preset.month === action.payload &&
+              preset.number > 0 &&
+              preset.type !== "savings" &&
+              preset.type !== "capital" &&
+              preset.type !== "purchase" &&
+              preset.year.toString() === state.year?.toString() // multiple datatypes
+          ),
+      };
+    case FILTER_NEGNUMANDMONTH:
+      return {
+        ...state,
+        filteredmonthandnegnum:
+          state.presets &&
+          state.presets.filter(
+            (preset) =>
+              preset.month === action.payload &&
+              preset.number < 0 &&
+              preset.type !== "savings" &&
+              preset.type !== "capital" &&
+              preset.type !== "purchase" &&
+              preset.year.toString() === state.year?.toString() // multiple datatypes
+          ),
+      };
+    case RESET_SUMS:
+      return {
+        ...state,
+        sum: null,
+        MonthSum: null,
+        PosMonthSum: null,
+        NegMonthSum: null,
+        categorymonthsum: null,
+      };
+    /*   
+    
+ 
     case UPLOAD_CSV:
       return {
         ...state,
@@ -183,15 +269,7 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         doSubmitCsv: action.payload,
       };
-    case RESET_SUMS:
-      return {
-        ...state,
-        sum: null,
-        MonthSum: null,
-        PosMonthSum: null,
-        NegMonthSum: null,
-        categorymonthsum: null,
-      };
+   
     case SET_PURCHASE:
       return {
         ...state,
@@ -234,11 +312,7 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         piggybanks: [...state.piggybanks, action.payload],
       };
-    case SUM:
-      return {
-        ...state,
-        sum: action.payload,
-      };
+   
     case YEARSUM:
       return {
         ...state,
@@ -254,11 +328,7 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         AllMonthSum: [...state.AllMonthSum, action.payload],
       };
-    case MONTHSUM:
-      return {
-        ...state,
-        MonthSum: action.payload,
-      };
+   
     case POSMONTHSUM:
       return {
         ...state,
@@ -274,7 +344,7 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         categorymonthsum: action.payload,
       };
-
+ 
     case CATEGORY_NAMEONLYPOSNUM_BYYEAR:
       return {
         ...state,
@@ -285,7 +355,7 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         categorynameonlynegnumbyyear: action.payload,
       };
-
+ 
     case CATEGORY_SUMONLYPOSNUM_BYYEAR:
       return {
         ...state,
@@ -331,58 +401,12 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
         ...state,
         MonthBalance: action.payload,
       };
-    case SEND_EDIT:
-      return {
-        ...state,
-        presets: state.presets?.map((preset) =>
-          preset._id === action.payload._id ? action.payload : preset
-        ),
-        loading: false,
-      };
-    case DELETE_PRESET:
-      return {
-        ...state,
-        presets: state.presets.filter((preset) => preset._id !== action.payload),
-        loading: false,
-      };
-    case FILTER_POSNUMANDMONTH:
-      return {
-        ...state,
-        filteredmonthandposnum: state.presets.filter(
-          (preset) =>
-            preset.month === action.payload &&
-            preset.number > 0 &&
-            preset.type !== "savings" &&
-            preset.type !== "capital" &&
-            preset.type !== "purchase" &&
-            preset.year.toString() === state.year.toString() // multiple datatypes
-        ),
-      };
-    case FILTER_NEGNUMANDMONTH:
-      return {
-        ...state,
-        filteredmonthandnegnum: state.presets.filter(
-          (preset) =>
-            preset.month === action.payload &&
-            preset.number < 0 &&
-            preset.type !== "savings" &&
-            preset.type !== "capital" &&
-            preset.type !== "purchase" &&
-            preset.year.toString() === state.year.toString() // multiple datatypes
-        ),
-      };
-
-    case EDIT_PRESET:
-      return {
-        ...state,
-        edit: action.payload,
-      };
-    case CANCEL_EDIT:
-      return {
-        ...state,
-        edit: null,
-      };
-
+   
+    
+   
+ 
+    
+ 
     case PRESET_CLEAR_ERRORS:
       return {
         ...state,
@@ -391,6 +415,6 @@ const presetReducer = (state: IPresetState, action: ActionType) => {
     default:
       return state;
   }
-};
+}
 
 export default presetReducer;

@@ -5,19 +5,26 @@ import { IUploadCsv } from "./IUploadCsv";
 
 export interface IPresetState {
   presets: null | IPreset[];
-  /*  sum: null | number; // sum of all presets
+  loading: boolean;
   edit: null | IPreset;
-  error: null | string; // TODO: change to string[]
+  sum: null | number; // sum of all presets
   month: null | string; // "January"
+  error: null | string; // TODO: change to string[]
   MonthSum: null | number; // sum of all presets in the current/active month
+  year: null | number; // TODO: needs more strict control of datatype. it changes between string and number
+  filteredmonthandposnum: null | IPreset[]; // positive presets in the current/active month
+  filteredmonthandnegnum: null | IPreset[]; // negative presets in the current/active month
+  /*  
+ 
+ 
+  
   AllMonthSum: number[]; // sum of all presets in all months for the current/active year
   PosMonthSum: null | number; // gets data from filteredmonthandnegnum
   NegMonthSum: null | number; // gets data from filteredmonthandposnum
-  filteredmonthandposnum: null | IPreset[]; // positive presets in the current/active month
-  filteredmonthandnegnum: null | IPreset[]; // negative presets in the current/active month
+ 
   categorymonthsum: ICategoryAndSumItem[]; // sum of all presets in the current/active month by category
   categoryyearsum: ICategoryAndSumItem[]; // sum of all presets in the current/active year by category
-  year: null | number; // TODO: needs more strict control of datatype. it changes between string and number
+ 
   yearsum: null | number; // sum of all presets in the current/active year
   savings: null | number; // Sum of all savings
   capital: null | number; // Sum of all capital
@@ -41,23 +48,30 @@ export interface IPresetState {
 export interface IPresetContext extends IPresetState {
   addPreset(preset: IPreset): void;
   getPresets(): Promise<void>;
-  /* calcSum(): void;
   deletePreset(id: string): Promise<void>;
   setEdit(preset: IPreset): void;
   cancelEdit(): void;
   sendEdit(preset: IPreset): Promise<void>; // Should be named updatePreset ?. It sends the edit-preset.
-  
   clearPresets(): void;
+  calcSum(): void;
   addMonth(month: string): void;
   calcMonthSum(month: string): void;
+  setYear(year: number): void;
   filterOutPositiveNumsAndMonth(month: string): void;
   filterOutNegativeNumsAndMonth(month: string): void;
+  resetSums(): void;
+  /*
+  
+ 
+  
+  
+ 
+  
   calcPosMonth(): void;
   calcNegMonth(): void;
   calcCategoryByMonth(month: string): void;
   calcCategoryByYear(): void;
-  resetSums(): void;
-  setYear(year: number): void;
+  
   calcYearsum(year: number): void;
   calcSavings(): void;
   calcCapital(): void;
