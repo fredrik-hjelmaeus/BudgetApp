@@ -1,7 +1,7 @@
 import { ICategoryAndSumItem } from "../../frontend-types/ICategoryAndSumItem";
 import { IPiggybank } from "../../frontend-types/IPiggybank";
 import { IPreset } from "../../frontend-types/IPreset";
-import { IPresetContext, IPresetState } from "../../frontend-types/IPresetContext";
+import { IPresetState } from "../../frontend-types/IPresetContext";
 import {
   GET_PRESETS,
   ADD_PRESET,
@@ -66,47 +66,38 @@ type ActionType =
   | { type: typeof SET_YEAR; payload: number }
   | { type: typeof FILTER_POSNUMANDMONTH; payload: string }
   | { type: typeof FILTER_NEGNUMANDMONTH; payload: string }
-  | { type: typeof RESET_SUMS };
-/*  
- 
-  
-
- 
-  
-  
+  | { type: typeof RESET_SUMS }
   | { type: typeof POSMONTHSUM; payload: number }
   | { type: typeof NEGMONTHSUM; payload: number }
   | { type: typeof CATEGORYMONTHSUM; payload: Array<ICategoryAndSumItem> }
-  
-  
   | { type: typeof CATEGORYYEARSUM; payload: Array<ICategoryAndSumItem> }
-  | { type: typeof YEARSUM; payload: number }
-  | { type: typeof CALCSAVINGS; payload: number }
-  | { type: typeof SET_SAVINGS_LIST; payload: Array<IPreset> }
-  | { type: typeof CALCCAPITAL; payload: number }
-  | { type: typeof SET_PURCHASE }
-  | { type: typeof CATEGORY_NAMEONLYPOSNUM_BYYEAR; payload: string[] }
-  | { type: typeof CATEGORY_SUMONLYPOSNUM_BYYEAR; payload: string[] }
-  | { type: typeof CATEGORY_SUMONLYNEGNUM_BYYEAR; payload: number[] }
-  | { type: typeof CATEGORY_NAMEONLYNEGNUM_BYYEAR; payload: string[] }
+  | { type: typeof UPLOAD_CSV; payload: Array<IPreset> }
   | { type: typeof SET_ALLMONTHSUM; payload: number }
   | { type: typeof RESET_ALLMONTHSUM }
+  | { type: typeof YEARSUM; payload: number }
+  | { type: typeof CALCSAVINGS; payload: number }
+  | { type: typeof CALCCAPITAL; payload: number }
+  | { type: typeof CATEGORY_NAMEONLYNEGNUM_BYYEAR; payload: string[] }
+  | { type: typeof CATEGORY_NAMEONLYPOSNUM_BYYEAR; payload: string[] }
+  | { type: typeof SET_PURCHASE }
+  | { type: typeof CATEGORY_SUMONLYPOSNUM_BYYEAR; payload: number[] }
+  | { type: typeof CATEGORY_SUMONLYNEGNUM_BYYEAR; payload: number[] }
   | { type: typeof ADDTO_PIGGYBANK; payload: IPiggybank }
   | { type: typeof SET_ACTIVE_PIGGYBANK; payload: IPiggybank[] }
   | { type: typeof CLEAR_PIGGYBANKS }
-  | { type: typeof CALC_MONTH_SAVINGS; payload: number }
+  | { type: typeof GET_MONTHPIGGYSAVINGS; payload: Array<IPiggybank[]> | 0 }
   | { type: typeof GET_MONTHSAVINGS; payload: Array<IPreset> }
-  | { type: typeof GET_MONTHPIGGYSAVINGS; payload: string }
+  | { type: typeof CALC_MONTH_SAVINGS; payload: number }
   | { type: typeof SUM_PIGGYBANKS_MONTH; payload: number }
   | { type: typeof CALC_MONTH_BALANCE; payload: number }
-  | { type: typeof UPLOAD_CSV; payload: Array<IPreset> }
-  | { type: typeof UPDATE_CSV; payload: IPreset }
   | { type: typeof SUBMIT_CSV; payload: string }
-  | { type: typeof CLEAR_CSV }
+  | { type: typeof SET_SAVINGS_LIST; payload: Array<IPreset> }
+  | { type: typeof UPDATE_CSV; payload: IPreset }
+  | { type: typeof SET_CAPITAL_LIST; payload: Array<IPreset> }
   | { type: typeof REMOVE_CSV; payload: IPreset }
-  | { type: typeof LOGOUT }
+  | { type: typeof CLEAR_CSV }
   | { type: typeof PRESET_CLEAR_ERRORS }
-  | { type: typeof SET_CAPITAL_LIST; payload: Array<IPreset> }; */
+  | { type: typeof LOGOUT };
 
 function presetReducer(state: IPresetState, action: ActionType) {
   switch (action.type) {
@@ -239,96 +230,22 @@ function presetReducer(state: IPresetState, action: ActionType) {
         NegMonthSum: null,
         categorymonthsum: null,
       };
-    /*   
-    
- 
+
     case UPLOAD_CSV:
       return {
         ...state,
         csvpresets: action.payload,
-      };
-    case UPDATE_CSV:
-      return {
-        ...state,
-        csvpresets: state.csvpresets.map((preset) =>
-          preset.id === action.payload.id ? action.payload : preset
-        ),
-      };
-    case REMOVE_CSV:
-      return {
-        ...state,
-        csvpresets: state.csvpresets.filter((preset) => preset.id === action.payload.id),
-      };
-    case CLEAR_CSV:
-      return {
-        ...state,
-        csvpresets: null,
-      };
-    case SUBMIT_CSV:
-      return {
-        ...state,
-        doSubmitCsv: action.payload,
-      };
-   
-    case SET_PURCHASE:
-      return {
-        ...state,
-        purchases: state.presets.filter((preset) => preset.type === "purchase"),
-      };
-    case GET_MONTHSAVINGS:
-      return {
-        ...state,
-        monthsavingspresets: action.payload,
-      };
-    case GET_MONTHPIGGYSAVINGS:
-      return {
-        ...state,
-        monthpiggysavings: state.presets
-          .filter((preset) => preset.type === "purchase" && preset.piggybank.length !== 0)
-          .map((preset) =>
-            preset.piggybank.filter(
-              (piggybank) =>
-                piggybank.month === action.payload && piggybank.year === parseInt(state.year)
-            )
-          ),
-      };
-    case SUM_PIGGYBANKS_MONTH:
-      return {
-        ...state,
-        SumPiggybanksMonth: action.payload,
-      };
-    case SET_ACTIVE_PIGGYBANK:
-      return {
-        ...state,
-        piggybanks: action.payload,
-      };
-    case CLEAR_PIGGYBANKS:
-      return {
-        ...state,
-        piggybanks: null,
-      };
-    case ADDTO_PIGGYBANK:
-      return {
-        ...state,
-        piggybanks: [...state.piggybanks, action.payload],
-      };
-   
-    case YEARSUM:
-      return {
-        ...state,
-        yearsum: action.payload,
-      };
-    case RESET_ALLMONTHSUM:
-      return {
-        ...state,
-        AllMonthSum: [],
       };
     case SET_ALLMONTHSUM:
       return {
         ...state,
         AllMonthSum: [...state.AllMonthSum, action.payload],
       };
-   
+    case RESET_ALLMONTHSUM:
+      return {
+        ...state,
+        AllMonthSum: [],
+      };
     case POSMONTHSUM:
       return {
         ...state,
@@ -342,20 +259,43 @@ function presetReducer(state: IPresetState, action: ActionType) {
     case CATEGORYMONTHSUM:
       return {
         ...state,
-        categorymonthsum: action.payload,
+        categorymonthsum: state.categorymonthsum && action.payload,
       };
- 
-    case CATEGORY_NAMEONLYPOSNUM_BYYEAR:
+    case CATEGORYYEARSUM:
       return {
         ...state,
-        categorynameonlyposnumbyyear: action.payload,
+        categoryyearsum: action.payload,
+      };
+    case YEARSUM:
+      return {
+        ...state,
+        yearsum: action.payload,
+      };
+    case CALCSAVINGS:
+      return {
+        ...state,
+        savings: action.payload,
+      };
+    case CALCCAPITAL:
+      return {
+        ...state,
+        capital: action.payload,
       };
     case CATEGORY_NAMEONLYNEGNUM_BYYEAR:
       return {
         ...state,
         categorynameonlynegnumbyyear: action.payload,
       };
- 
+    case CATEGORY_NAMEONLYPOSNUM_BYYEAR:
+      return {
+        ...state,
+        categorynameonlyposnumbyyear: action.payload,
+      };
+    case SET_PURCHASE:
+      return {
+        ...state,
+        purchases: state.presets && state.presets.filter((preset) => preset.type === "purchase"),
+      };
     case CATEGORY_SUMONLYPOSNUM_BYYEAR:
       return {
         ...state,
@@ -366,52 +306,98 @@ function presetReducer(state: IPresetState, action: ActionType) {
         ...state,
         categorysumonlynegnumbyyear: action.payload,
       };
-    case CATEGORYYEARSUM:
+    case ADDTO_PIGGYBANK:
       return {
         ...state,
-        categoryyearsum: action.payload,
+        piggybanks: [...state.piggybanks, action.payload],
       };
-    case CALCSAVINGS:
+    case SET_ACTIVE_PIGGYBANK:
       return {
         ...state,
-        savings: action.payload,
+        piggybanks: action.payload,
       };
-    case SET_SAVINGS_LIST:
+    case CLEAR_PIGGYBANKS:
       return {
         ...state,
-        savingsList: action.payload,
+        piggybanks: [],
       };
-    case SET_CAPITAL_LIST:
+    case GET_MONTHPIGGYSAVINGS:
       return {
         ...state,
-        capitalList: action.payload,
+        monthpiggysavings: action.payload,
+        /* state.presets &&
+          state.year &&
+          action.payload &&
+          state.presets
+            .filter((preset) => preset.type === "purchase" && preset.piggybank.length !== 0)
+            .map((preset) =>
+              preset.piggybank.filter(
+                (piggybank) => piggybank.month === action.payload && piggybank.year === state.year
+              )
+            ),  */
+      };
+    case GET_MONTHSAVINGS:
+      return {
+        ...state,
+        monthsavingspresets: action.payload,
+      };
+
+    case SUM_PIGGYBANKS_MONTH:
+      return {
+        ...state,
+        SumPiggybanksMonth: action.payload,
       };
     case CALC_MONTH_SAVINGS:
       return {
         ...state,
         monthsavings: action.payload,
       };
-    case CALCCAPITAL:
-      return {
-        ...state,
-        capital: action.payload,
-      };
     case CALC_MONTH_BALANCE:
       return {
         ...state,
         MonthBalance: action.payload,
       };
-   
-    
-   
- 
-    
- 
+    case SUBMIT_CSV:
+      return {
+        ...state,
+        doSubmitCsv: action.payload,
+      };
+    case SET_SAVINGS_LIST:
+      return {
+        ...state,
+        savingsList: action.payload,
+      };
+    case UPDATE_CSV:
+      return {
+        ...state,
+        csvpresets:
+          state.csvpresets &&
+          state.csvpresets.map((preset) =>
+            preset.id === action.payload.id ? action.payload : preset
+          ),
+      };
+    case SET_CAPITAL_LIST:
+      return {
+        ...state,
+        capitalList: action.payload,
+      };
+    case REMOVE_CSV:
+      return {
+        ...state,
+        csvpresets:
+          state.csvpresets && state.csvpresets.filter((preset) => preset.id === action.payload.id),
+      };
     case PRESET_CLEAR_ERRORS:
       return {
         ...state,
         error: null,
-      };*/
+      };
+    case CLEAR_CSV:
+      return {
+        ...state,
+        csvpresets: null,
+      };
+
     default:
       return state;
   }
