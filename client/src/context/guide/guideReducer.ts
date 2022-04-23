@@ -1,5 +1,6 @@
 import { SET_GUIDE, TOGGLE_EXIT } from "../types";
 import { IGuideState } from "../../frontend-types/IGuideContext";
+
 type ActionType =
   | { type: typeof TOGGLE_EXIT; payload: boolean }
   | { type: typeof SET_GUIDE; payload: string };
