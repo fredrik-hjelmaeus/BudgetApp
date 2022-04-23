@@ -3,7 +3,7 @@ import { IAuthContext } from "../../frontend-types/IAuthContext";
 import { ILoginFormData } from "../../frontend-types/ILoginFormData";
 import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 
-const authContext = createContext<IAuthContext | null>({
+const authContext = createContext<IAuthContext>({
   token: null,
   isAuthenticated: false,
   loading: true,
