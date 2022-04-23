@@ -14,35 +14,30 @@ export interface IPresetState {
   year: null | number; // TODO: needs more strict control of datatype. it changes between string and number
   filteredmonthandposnum: null | IPreset[]; // positive presets in the current/active month
   filteredmonthandnegnum: null | IPreset[]; // negative presets in the current/active month
-  /*  
- 
- 
-  
+  csvpresets: null | IPreset[]; // used to store preset values from csv-file in stagingarea
   AllMonthSum: number[]; // sum of all presets in all months for the current/active year
   PosMonthSum: null | number; // gets data from filteredmonthandnegnum
   NegMonthSum: null | number; // gets data from filteredmonthandposnum
- 
-  categorymonthsum: ICategoryAndSumItem[]; // sum of all presets in the current/active month by category
+  categorymonthsum: ICategoryAndSumItem[] | null; // sum of all presets in the current/active month by category
   categoryyearsum: ICategoryAndSumItem[]; // sum of all presets in the current/active year by category
- 
   yearsum: null | number; // sum of all presets in the current/active year
   savings: null | number; // Sum of all savings
   capital: null | number; // Sum of all capital
   categorynameonlyposnumbyyear: null | string[]; // used in donut chart, setter fn name is setCategoryNameOnlyPosNumByYear
   categorynameonlynegnumbyyear: null | string[]; // used in donut chart, setter fn name is setCategoryNameOnlyNegNumByYear
+  purchases: null | IPreset[]; // list of all purchases
   categorysumonlyposnumbyyear: null | number[]; // used in donut chart, setter fn name is calcCategorySumOnlyPosNumByYear
   categorysumonlynegnumbyyear: null | number[]; // used in donut char, setter fn name is calcCategorySumOnlyNegNumByYear
   piggybanks: IPiggybank[]; // used when editing piggybanks on one preset. Holds the edit values.
+  // TODO: below monthpiggysavings should be more specific in its datatype
+  monthpiggysavings: IPiggybank[][] | [] | 0; //IPreset[]; // purchase presets with piggybanksavings added this month,setter: getMonthPiggySavings
   monthsavings: null | number; // holds savings by month
   monthsavingspresets: null | IPreset[]; // presets with savings added this month , setter: getMonthSavings
-  monthpiggysavings: null | IPreset[]; // purchase presets with piggybanksavings added this month,setter: getMonthPiggySavings
   SumPiggybanksMonth: number; //  Sum of all piggybanks in current/active month, setter: setTotalOfAllPiggybanksThisMonth
   MonthBalance: null | number; // Sum of MonthSum-monthsavings-SumPiggybanksMonth, setter:calcMonthBalance
-  purchases: null | IPreset[]; // list of all purchases
-  csvpresets: null | IPreset[]; // used to store preset values from csv-file in stagingarea
   doSubmitCsv: string;
   savingsList: IPreset[]; // List of savings, setter: getSavingsList
-  capitalList: IPreset[]; // List of capital, setter: getCapitalList */
+  capitalList: IPreset[]; // List of capital, setter: getCapitalList
 }
 
 export interface IPresetContext extends IPresetState {
@@ -60,41 +55,34 @@ export interface IPresetContext extends IPresetState {
   filterOutPositiveNumsAndMonth(month: string): void;
   filterOutNegativeNumsAndMonth(month: string): void;
   resetSums(): void;
-  /*
-  
- 
-  
-  
- 
-  
+  uploadCSV(formData: IUploadCsv): Promise<void>;
   calcPosMonth(): void;
   calcNegMonth(): void;
   calcCategoryByMonth(month: string): void;
   calcCategoryByYear(): void;
-  
   calcYearsum(year: number): void;
   calcSavings(): void;
   calcCapital(): void;
-  setPurchase(): void;
   setCategoryNameOnlyPosNumByYear(): void;
   setCategoryNameOnlyNegNumByYear(): void;
+  setPurchase(): void;
   calcCategorySumOnlyPosNumByYear(): void;
   calcCategorySumOnlyNegNumByYear(): void;
   calcAllMonthSum(montharray: string[]): void;
   addtoPiggybanks(object: IPiggybank): void;
   setActivePiggybank(piggybankArray: IPiggybank[]): void;
   clearPiggybanks(): void;
-  calcMonthSavings(): void;
+  getMonthPiggySavings(month: string): void;
   getMonthSavings(month: string): void;
-  getMonthPiggySavings(): void;
+  calcMonthSavings(): void;
   setTotalOfAllPiggybanksThisMonth(Sum: number): void;
   calcMonthBalance(): void;
-  uploadCSV(formData: IUploadCsv): Promise<void>;
+  submitCsvItems(string: string): void;
   getSavingsList(): void;
   getCapitalList(): void;
   updateCsvPresets(preset: IPreset): void;
   removeCSV(preset: IPreset): void;
   clearCsv(): void;
-  submitCsvItems(string: string): void;
-  getGuidePresets(): void; */
+  getGuidePresets(): void;
+  clearPresetErrors(): void;
 }
