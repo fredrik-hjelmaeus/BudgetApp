@@ -1,5 +1,15 @@
 import React from "react";
 
+interface UserChangePasswordProps {
+  ExpandChangePassword: boolean;
+  setExpandChangePassword: (ExpandChangePassword: boolean) => void;
+  currentPassword: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  password: string;
+  password2: string;
+  onSubmitPassword: React.FormEventHandler<HTMLFormElement>;
+}
+
 function UserChangePassword({
   ExpandChangePassword,
   setExpandChangePassword,
@@ -8,7 +18,7 @@ function UserChangePassword({
   password,
   password2,
   onSubmitPassword,
-}) {
+}: UserChangePasswordProps) {
   return (
     <form onSubmit={onSubmitPassword}>
       <div className={!ExpandChangePassword ? "form__inputOFF" : "form-text"}>
@@ -39,7 +49,7 @@ function UserChangePassword({
           value={password2}
           onChange={onChange}
           required
-          minLength="6"
+          minLength={6}
         />
       </div>
 
