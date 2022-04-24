@@ -161,8 +161,8 @@ const AuthState = (props: { children: ReactNode }) => {
     const { token } = formData;
 
     try {
-      const res: AxiosResponse = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
-      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data });
+      await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
+      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: "Email sent" });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         dispatch({

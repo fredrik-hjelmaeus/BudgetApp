@@ -43,7 +43,9 @@ const Landing = (props: RouteComponentProps) => {
     <div className="Landing__showcase">
       {modal === "login" && <LoginModal />}
       {modal === "register" && <RegisterModal />}
-      {modal === "forgot" && <ForgotPassword />}
+      {modal === "forgot" && (
+        <ForgotPassword history={props.history} location={props.location} match={props.match} />
+      )}
       {modal === "" && (
         <div className="Landing">
           <Logo />

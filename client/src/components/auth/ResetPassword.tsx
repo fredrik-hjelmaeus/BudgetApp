@@ -1,12 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
-import { withRouter } from "react-router-dom";
-import personicon from "../layout/images/person.svg";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+//import personicon from "../layout/images/person.svg";
 import { Redirect } from "react-router-dom";
 import Alerts from "../layout/Alerts";
+import PersonIcon from "../layout/images/PersonIcon";
 
-export const ResetPassword = (props) => {
+// See link for info on route-props:
+// https://www.pluralsight.com/guides/react-router-typescript
+type TParams = {
+  id: string;
+};
+
+export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
@@ -15,7 +22,7 @@ export const ResetPassword = (props) => {
   const { errors, clearErrors, resetPassword, alerts, clearAlerts } = authContext;
 
   const [user, setUser] = useState({
-    token: props.match.params.id,
+    token: match.params.id,
     password: "",
     password2: "",
   });
@@ -30,8 +37,8 @@ export const ResetPassword = (props) => {
     }
     if (alerts.length > 0) {
       alerts.map(
-        (alert) => alert.data === "Password Changed" && setPasswordSent(true),
-        setAlert(alert.data, "success")
+        (alert) => alert === "Password Changed" && setPasswordSent(true),
+        setAlert("Password Changed", "success")
       );
       clearAlerts();
     }
@@ -39,9 +46,10 @@ export const ResetPassword = (props) => {
 
   const { token, password, password2 } = user;
 
-  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (password === "") {
       setAlert("Please fill in all fields", "danger");
@@ -56,7 +64,7 @@ export const ResetPassword = (props) => {
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext; */
 
-  const onClick = (e) => {
+  const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     //toggleModal(e.target.value);
     setRedir(true);
   };
@@ -73,7 +81,11 @@ export const ResetPassword = (props) => {
               <button className="closebtn" value="" onClick={onClick}></button>
             </span>
             <div className="modalloginheader">
-              <img src={personicon} alt="img"></img>
+              <div className="modalloginicon">
+                {/* TODO: styling might be missing on PersonIcon, look in that component */}
+                <PersonIcon />
+              </div>
+              {/*  <img src={personicon} alt="img"></img> */}
               <h1>Reset Password</h1>
             </div>
             <Alerts />
