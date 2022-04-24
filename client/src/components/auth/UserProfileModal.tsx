@@ -3,11 +3,13 @@ import AlertContext from "../../context/alert/alertContext";
 import AuthContext from "../../context/auth/authContext";
 import CssContext from "../../context/css/cssContext";
 import GuideContext from "../../context/guide/guideContext";
-import personicon from "../layout/images/person.svg";
-import AppGuideIcon from "../layout/images/AppGuideIcon.svg";
+//import personicon from "../layout/images/person.svg";
+//import AppGuideIcon from "../layout/images/AppGuideIcon.svg";
 import Alerts from "../layout/Alerts";
 import UserDetails from "./UserDetails";
 import UserChangePassword from "./UserChangePassword";
+import PersonIcon from "../layout/images/PersonIcon";
+import GuideIcon from "../layout/images/GuideIcon";
 
 const UserProfileModal = () => {
   // Context
@@ -34,7 +36,7 @@ const UserProfileModal = () => {
   // UseEffect
   useEffect(() => {
     if (alerts.length > 0) {
-      alerts.map((alert) => setAlert(alert.msg, "success"));
+      alerts.map((alert) => setAlert(alert, "success"));
       clearAlerts();
       // clear password-related fields
       setLocalUser({ ...localUser, currentPassword: "", password: "", password2: "" });
@@ -51,9 +53,10 @@ const UserProfileModal = () => {
   const [ExpandChangePassword, setExpandChangePassword] = useState(false);
 
   // Logic
-  const onChange = (e) => setLocalUser({ ...localUser, [e.target.name]: e.target.value });
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    setLocalUser({ ...localUser, [e.target.name]: e.target.value });
 
-  const onSubmitProfile = (e) => {
+  const onSubmitProfile = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (name === "" || email === "") {
       setAlert("Please enter all fields", "danger");
@@ -67,7 +70,7 @@ const UserProfileModal = () => {
     updateDetails({ name, email });
   };
 
-  const onSubmitPassword = (e) => {
+  const onSubmitPassword = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (currentPassword === "" || password === "" || password2 === "") {
       setAlert("Please enter all fields", "danger");
@@ -78,7 +81,7 @@ const UserProfileModal = () => {
     updatePassword({ currentPassword, password });
   };
 
-  const onClick = (e) => {
+  const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     toggleModal("");
   };
@@ -102,7 +105,11 @@ const UserProfileModal = () => {
         </span>
 
         <div className="modalloginheader">
-          <img src={personicon} alt="img"></img>
+          <div className="modalloginicon">
+            {/* TODO: styling might be missing on PersonIcon, look in that component */}
+            <PersonIcon />
+          </div>
+          {/* <img src={personicon} alt="img"></img> */}
           <h1>User Profile</h1>
         </div>
 
@@ -142,7 +149,8 @@ const UserProfileModal = () => {
             type="button"
             onClick={startGuide}
           >
-            App Guide <img src={AppGuideIcon} alt="start the app guide icon"></img>
+            App Guide <GuideIcon />
+            {/* <img src={AppGuideIcon} alt="start the app guide icon"></img> */}
           </button>
         </div>
       </div>
