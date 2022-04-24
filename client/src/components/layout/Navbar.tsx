@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../context/auth/authContext";
 import PresetContext from "../../context/preset/presetContext";
 import CssContext from "../../context/css/cssContext";
-import logoicon2 from "./logo/logo_color.svg";
-import personicon from "../layout/images/person.svg";
-import logouticon from "../layout/images/logout.svg";
+//import logoicon2 from "./logo/logo_color.svg";
+//import personicon from "../layout/images/person.svg";
+//import logouticon from "../layout/images/logout.svg";
+import PersonIcon from "./images/PersonIcon";
+import Logo from "./Logo";
+import LogoutIcon from "./images/LogoutIcon";
 
-const Navbar = ({ title }) => {
+const Navbar = ({ title }: { title?: string }) => {
   const authContext = useContext(AuthContext);
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
@@ -16,17 +19,21 @@ const Navbar = ({ title }) => {
   const { clearPresets } = presetContext;
   const { toggleModal } = cssContext;
 
-  const onLogout = () => {
+  const onLogout: React.MouseEventHandler<HTMLButtonElement> = () => {
     clearPresets();
     logout();
   };
-  const onUserClick = (e) => {
+  const onUserClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     toggleModal("profile");
   };
   const authLinks = (
     <Fragment>
       <li className="navbar__username navbar__titlenudge">
-        <img src={personicon} alt="img" style={{ width: "16px" }} className="inverted"></img>
+        <div style={{ width: "16px" }} className="inverted">
+          {/* TODO: styling might be missing on PersonIcon, look in that component */}
+          <PersonIcon />
+        </div>
+        {/*  <img src={personicon} alt="img" style={{ width: "16px" }} className="inverted"></img> */}
         <button className="btn-user" onClick={onUserClick}>
           {user && user.name.toUpperCase()}
         </button>
@@ -34,12 +41,12 @@ const Navbar = ({ title }) => {
       <li>
         <button
           onClick={onLogout}
-          href="/Landing"
+          // href="/Landing" TODO: was this used for tooltip on hover?
           name="logout"
           value="logout"
           className=" btn navbar__logout "
         >
-          <img
+          {/* <img
             src={logouticon}
             alt="logout_button_image"
             style={{
@@ -48,7 +55,9 @@ const Navbar = ({ title }) => {
               bottom: "0.1rem",
               backgroundColor: "none",
             }}
-          ></img>
+          ></img> */}
+          <LogoutIcon />
+          {/* TODO: LogoutIcon probably missing some styling  */}
         </button>
       </li>
     </Fragment>
@@ -70,7 +79,7 @@ const Navbar = ({ title }) => {
       <div className="navbar bg-dark">
         <div className="navbar__inside">
           <h1 className="x-large navbar__titlenudge">
-            <img
+            {/* <img 
               className="navbar__icon"
               src={logoicon2}
               alt="logo"
@@ -80,8 +89,8 @@ const Navbar = ({ title }) => {
                 position: "relative",
                 top: "0.75rem",
               }}
-            />{" "}
-            <span className="navbar__title"> {title}</span>
+            /> */}
+            <Logo /> <span className="navbar__title"> {title}</span>
           </h1>
           <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
         </div>
