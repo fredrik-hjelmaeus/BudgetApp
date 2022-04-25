@@ -26,6 +26,7 @@ const Navbar = ({ title }: { title?: string }) => {
   const onUserClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     toggleModal("profile");
   };
+
   const authLinks = (
     <Fragment>
       <li className="navbar__username navbar__titlenudge">
@@ -75,11 +76,12 @@ const Navbar = ({ title }: { title?: string }) => {
   );
 
   return (
-    cssContext.navbar && (
-      <div className="navbar bg-dark">
-        <div className="navbar__inside">
-          <h1 className="x-large navbar__titlenudge">
-            {/* <img 
+    <>
+      {cssContext.navbar && (
+        <div className="navbar bg-dark">
+          <div className="navbar__inside">
+            <h1 className="x-large navbar__titlenudge">
+              {/* <img 
               className="navbar__icon"
               src={logoicon2}
               alt="logo"
@@ -90,12 +92,13 @@ const Navbar = ({ title }: { title?: string }) => {
                 top: "0.75rem",
               }}
             /> */}
-            <Logo /> <span className="navbar__title"> {title}</span>
-          </h1>
-          <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
+              <Logo /> <span className="navbar__title"> {title}</span>
+            </h1>
+            <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
+          </div>
         </div>
-      </div>
-    )
+      )}
+    </>
   );
 };
 
