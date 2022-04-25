@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import CssContext from "../../context/css/cssContext";
 //import personicon from "../layout/images/person.svg";
 import Alerts from "../layout/Alerts";
 import PersonIcon from "../layout/images/PersonIcon";
 
-export const LoginModal = (props: RouteComponentProps) => {
+export const LoginModal = () => {
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
@@ -26,7 +26,6 @@ export const LoginModal = (props: RouteComponentProps) => {
     let isMounted = true;
     if (authContext?.isAuthenticated && isMounted) {
       toggleModal("");
-      props.history.push("/");
     }
 
     if (errors.length > 0 && isMounted) {
@@ -41,7 +40,7 @@ export const LoginModal = (props: RouteComponentProps) => {
     };
 
     // eslint-disable-next-line
-  }, [errors, isAuthenticated, props.history]);
+  }, [errors, isAuthenticated]);
 
   const { email, password } = user;
 
@@ -67,6 +66,9 @@ export const LoginModal = (props: RouteComponentProps) => {
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     toggleModal(e.currentTarget.value);
   };
+
+  if (isAuthenticated) return <Navigate to="/" />;
+
   // modal activates, onClick deactivates modal, valid loginsubmit redirects by backend
   return (
     <React.Fragment>
@@ -128,6 +130,5 @@ export const LoginModal = (props: RouteComponentProps) => {
     </React.Fragment>
   );
 };
-//withRouter because loginmodal is child of landing and not directly connected to App.js
-//so it is not inheriting props.history as Landing.js does because it is direct child to App.js
-export default withRouter(LoginModal);
+
+export default LoginModal;

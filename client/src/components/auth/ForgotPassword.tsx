@@ -1,16 +1,14 @@
-import React, { useState, useContext, useEffect, ReactComponentElement } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
-import { RouteComponentProps } from "react-router-dom";
 import CssContext from "../../context/css/cssContext";
 //import personicon from '../layout/images/person.svg';
 import PersonIcon from "../layout/images/PersonIcon";
 import ForgotMailInput from "./ForgotMailInput";
 import ForgotMailSent from "./ForgotMailSent";
 import Alerts from "../layout/Alerts";
-import { StaticContext } from "react-router";
 
-export const ForgotPassword = (props: RouteComponentProps<{}, StaticContext, unknown>) => {
+export const ForgotPassword = () => {
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);

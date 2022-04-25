@@ -5,9 +5,9 @@ import LoginModal from "../auth/LoginModal";
 import RegisterModal from "../auth/RegisterModal";
 import ForgotPassword from "../auth/ForgotPassword";
 import AuthContext from "../../context/auth/authContext";
-import { RouteComponentProps } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-const Landing = (props: RouteComponentProps) => {
+const Landing = () => {
   const cssContext = useContext(CssContext);
   const authContext = useContext(AuthContext);
   const { toggleNavbar, toggleModal, modal } = cssContext;
@@ -23,7 +23,7 @@ const Landing = (props: RouteComponentProps) => {
     }
 
     if (user && isAuthenticated) {
-      props.history.push("/");
+      <Navigate to="/" />;
     }
 
     toggleNavbar(true);
@@ -43,9 +43,7 @@ const Landing = (props: RouteComponentProps) => {
     <div className="Landing__showcase">
       {modal === "login" && <LoginModal />}
       {modal === "register" && <RegisterModal />}
-      {modal === "forgot" && (
-        <ForgotPassword history={props.history} location={props.location} match={props.match} />
-      )}
+      {modal === "forgot" && <ForgotPassword />}
       {modal === "" && (
         <div className="Landing">
           <Logo />

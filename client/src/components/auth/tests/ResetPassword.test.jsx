@@ -14,7 +14,7 @@ describe("Reset Password", () => {
     //props.match.params.id
   };
   beforeEach(() => {
-    render(<ResetPassword props={props} />);
+    render(<ResetPassword props={props} />); // TODO: probably not working since react-router-dom update to v6.
   });
   test("happy path,valid password provided", async () => {
     const heading = screen.getByRole("heading", { name: "Reset Password" });
