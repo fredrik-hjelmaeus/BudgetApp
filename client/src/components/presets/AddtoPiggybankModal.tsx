@@ -3,8 +3,9 @@ import React, { useContext, useState, useEffect } from "react";
 import PresetContext from "../../context/preset/presetContext";
 import CssContext from "../../context/css/cssContext";
 import PiggybankSVG from "../layout/images/PiggybankSVG";
+import { IPreset } from "../../frontend-types/IPreset";
 
-const AddtoPiggybankModal = ({ Item }) => {
+const AddtoPiggybankModal = ({ Item }: { Item: IPreset }) => {
   // preset context
   const presetContext = useContext(PresetContext);
   const { sendEdit, setActivePiggybank, addtoPiggybanks, MonthBalance } = presetContext;
@@ -15,7 +16,7 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   //preset/item local state
   const [preset, setPreset] = useState({
-    _id: Item._id,
+    id: Item.id,
     name: Item.name,
     number: Item.number,
     month: Item.month,
@@ -30,11 +31,11 @@ const AddtoPiggybankModal = ({ Item }) => {
   // store only savedAmounts in an array
   const savedAmounts = Item.piggybank.map((item) => item.savedAmount);
   // sift through savedAmounts and count totalsum
-  const SumOfPiggybanks = savedAmounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-  const SumLeftToSave = parseFloat(Item.number) - parseFloat(SumOfPiggybanks);
+  const SumOfPiggybanks = savedAmounts.reduce((a, b) => a + b, 0);
+  const SumLeftToSave = Item.number - SumOfPiggybanks;
 
   // Calc Amount to save
-  if (parseInt(MonthBalance) > parseInt(SumLeftToSave)) {
+  if (MonthBalance && MonthBalance > SumLeftToSave) {
     AmountToSave = SumLeftToSave;
   } else {
     AmountToSave = MonthBalance;
@@ -45,12 +46,12 @@ const AddtoPiggybankModal = ({ Item }) => {
 
   //when Item changes,set Item to default value of presetContext.piggybanks
   useEffect(() => {
-    setActivePiggybank(modalprops.piggybank);
+    modalprops && setActivePiggybank(modalprops.piggybank);
     // eslint-disable-next-line
   }, []);
 
   // sets value from amount to save slider
-  const onChange = (e) => {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setPiggybank({
       ...piggybank,
       [e.target.name]: e.target.value,
@@ -58,12 +59,12 @@ const AddtoPiggybankModal = ({ Item }) => {
   };
 
   // on submit, add month and amount to save in presetContext.piggybanks
-  const onSubmit = () => {
+  const onSubmit: React.MouseEventHandler<HTMLButtonElement> = () => {
     // console.log("add to piggybanks ran");
     addtoPiggybanks({
-      month: presetContext.month,
-      year: presetContext.year,
-      savedAmount: parseFloat(piggybank.number),
+      month: presetContext.month ? presetContext.month : "",
+      year: presetContext.year ? presetContext.year : 0,
+      savedAmount: piggybank.number ? piggybank.number : 0,
     });
   };
 
@@ -72,11 +73,11 @@ const AddtoPiggybankModal = ({ Item }) => {
     if (
       presetContext.piggybanks.length !== undefined &&
       presetContext.piggybanks.length !== 0 &&
-      presetContext.piggybanks.length !== modalprops.piggybank.length
+      presetContext.piggybanks.length !== modalprops?.piggybank.length
     ) {
       setPreset({
         ...preset,
-        _id: Item._id,
+        id: Item.id,
         name: Item.name,
         number: Item.number,
         month: Item.month,
@@ -86,10 +87,10 @@ const AddtoPiggybankModal = ({ Item }) => {
         piggybank: presetContext.piggybanks,
       });
     } // eslint-disable-next-line
-  }, [presetContext.piggybanks, modalprops.piggybank.length]);
+  }, [presetContext.piggybanks, modalprops?.piggybank.length]);
 
   // on sending preset to database,wait and then close modal first then reset/unload presetContext.piggybanks
-  const sendMyEdit = async (preset) => {
+  const sendMyEdit = async (preset: IPreset) => {
     await sendEdit(preset);
     toggleModal("");
     setActivePiggybank([]);
@@ -100,14 +101,14 @@ const AddtoPiggybankModal = ({ Item }) => {
     if (
       presetContext.piggybanks.length !== undefined &&
       presetContext.piggybanks.length !== 0 &&
-      presetContext.piggybanks.length !== modalprops.piggybank.length
+      presetContext.piggybanks.length !== modalprops?.piggybank.length
     ) {
       sendMyEdit(preset);
     } // eslint-disable-next-line
   }, [preset]);
 
   // Close modal
-  const onClick = (e) => {
+  const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     toggleModal("");
   };
 
@@ -126,9 +127,9 @@ const AddtoPiggybankModal = ({ Item }) => {
         <input
           type="range"
           min="1"
-          max={AmountToSave}
+          max={AmountToSave ? AmountToSave : 0}
           name="number"
-          value={piggybank.number}
+          value={piggybank.number ? piggybank.number : 0}
           onChange={onChange}
           data-testid="inputamountrange"
         />
