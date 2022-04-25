@@ -2,12 +2,12 @@ import React, { useState, useContext, useEffect } from "react";
 import AlertContext from "../../context/alert/alertContext";
 import AuthContext from "../../context/auth/authContext";
 import CssContext from "../../context/css/cssContext";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 //import personicon from '../layout/images/person.svg';
 import PersonIcon from "../layout/images/PersonIcon";
 import Alerts from "../layout/Alerts";
 
-const RegisterModal = (props: RouteComponentProps) => {
+const RegisterModal = () => {
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
@@ -18,7 +18,6 @@ const RegisterModal = (props: RouteComponentProps) => {
     let isMounted = true;
     if (isAuthenticated) {
       isMounted && toggleModal("");
-      props.history.push("/");
     }
     if (errors.length > 0 && isMounted) {
       //console.log('registermodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
@@ -29,7 +28,7 @@ const RegisterModal = (props: RouteComponentProps) => {
       // cancel the subscription
       isMounted = false;
     };
-  }, [errors, isAuthenticated, props.history]);
+  }, [errors, isAuthenticated]);
 
   const [user, setUser] = useState({
     name: "",
@@ -65,6 +64,8 @@ const RegisterModal = (props: RouteComponentProps) => {
   const onClick = () => {
     toggleModal("");
   };
+
+  if (isAuthenticated) return <Navigate to="/" />;
 
   return (
     <div id="myModal" className="modal-register" style={{ display: "block" }}>
@@ -137,6 +138,5 @@ const RegisterModal = (props: RouteComponentProps) => {
     </div>
   );
 };
-//withRouter because registermodal is child of landing and not directly connected to App.js
-//so it is not inheriting props.history as Landing.js does because it is direct child to App.js
-export default withRouter(RegisterModal);
+
+export default RegisterModal;

@@ -1,19 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 //import personicon from "../layout/images/person.svg";
-import { Redirect } from "react-router-dom";
+
 import Alerts from "../layout/Alerts";
 import PersonIcon from "../layout/images/PersonIcon";
 
-// See link for info on route-props:
-// https://www.pluralsight.com/guides/react-router-typescript
-type TParams = {
-  id: string;
-};
+export const ResetPassword = () => {
+  const params = useParams(); // TODO : confirm this works, react router dom v6 new stuff.
 
-export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
@@ -22,7 +18,7 @@ export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
   const { errors, clearErrors, resetPassword, alerts, clearAlerts } = authContext;
 
   const [user, setUser] = useState({
-    token: match.params.id,
+    token: params.id,
     password: "",
     password2: "",
   });
@@ -42,7 +38,10 @@ export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
       );
       clearAlerts();
     }
-  }, [errors, clearErrors, setAlert, alerts, clearAlerts]);
+    if (!params.id) {
+      setRedir(true);
+    }
+  }, [errors, clearErrors, setAlert, alerts, clearAlerts, params]);
 
   const { token, password, password2 } = user;
 
@@ -54,7 +53,7 @@ export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
     if (password === "") {
       setAlert("Please fill in all fields", "danger");
     } else if (password === password2) {
-      resetPassword({ token, password });
+      token && resetPassword({ token, password });
     } else {
       setAlert("Passwords do not match", "danger");
     }
@@ -71,7 +70,7 @@ export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
   // modal activates, onClick deactivates modal, valid loginsubmit redirects by backend
 
   if (redir) {
-    return <Redirect to="/Landing" />;
+    return <Navigate to="/Landing" />;
   } else {
     return (
       <React.Fragment>
@@ -138,6 +137,5 @@ export const ResetPassword = ({ match }: RouteComponentProps<TParams>) => {
     );
   }
 };
-//withRouter because loginmodal is child of landing and not directly connected to App.js
-//so it is not inheriting props.history as Landing.js does because it is direct child to App.js
-export default withRouter(ResetPassword);
+
+export default ResetPassword;
