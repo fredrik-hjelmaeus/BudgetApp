@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { IPreset } from "../../frontend-types/IPreset";
 /* import {
   Bankfee,
   Commute,
@@ -74,13 +75,32 @@ import React from 'react';
       return 'Select Category';
   }
 }; */
+interface PresetItemCategoryDropdownMenuProps {
+  onDropdownClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  localpreset: IPreset;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  category: string;
+}
 
-const PresetItemCategoryDropdownMenu = ({ onDropdownClick, localpreset, onClick, category }) => {
+const PresetItemCategoryDropdownMenu = ({
+  onDropdownClick,
+  localpreset,
+  onClick,
+  category,
+}: PresetItemCategoryDropdownMenuProps) => {
   const [active, setActive] = React.useState(false);
   // localpreset.markdelete !== undefined && console.log(localpreset.markdelete);
   return (
     <>
-      <div className={localpreset.markdelete === false ? 'dropdown' : localpreset.markdelete ? 'dropdown disable__hover' : 'dropdown'}>
+      <div
+        className={
+          localpreset.markdelete === false
+            ? "dropdown"
+            : localpreset.markdelete
+            ? "dropdown disable__hover"
+            : "dropdown"
+        }
+      >
         {/*  <button
         onClick={onClick}
       
@@ -118,75 +138,75 @@ const PresetItemCategoryDropdownMenu = ({ onDropdownClick, localpreset, onClick,
         )}
       </button> */}
       </div>
-      <button onClick={onClick} className='dropbtn'>
+      <button onClick={onClick} className="dropbtn">
         t
       </button>
 
-      <div className={active ? 'dropdown-content dropdown-active' : 'dropdown-content'}>
-        <button name='Commute' onClick={onDropdownClick}>
+      <div className={active ? "dropdown-content dropdown-active" : "dropdown-content"}>
+        <button name="Commute" onClick={onDropdownClick}>
           Commute
         </button>
-        <button name='Car' onClick={onDropdownClick}>
+        <button name="Car" onClick={onDropdownClick}>
           Car
         </button>
-        <button name='Travel' onClick={onDropdownClick}>
+        <button name="Travel" onClick={onDropdownClick}>
           Travel
         </button>
-        <button name='Food' onClick={onDropdownClick}>
+        <button name="Food" onClick={onDropdownClick}>
           Food
         </button>
-        <button name='Housing' onClick={onDropdownClick}>
+        <button name="Housing" onClick={onDropdownClick}>
           Housing
         </button>
-        <button name='Insurance' onClick={onDropdownClick}>
+        <button name="Insurance" onClick={onDropdownClick}>
           Insurance
         </button>
-        <button name='Child benefit' onClick={onDropdownClick}>
+        <button name="Child benefit" onClick={onDropdownClick}>
           Child Benefit
         </button>
-        <button name='Childcare' onClick={onDropdownClick}>
+        <button name="Childcare" onClick={onDropdownClick}>
           Childcare
         </button>
-        <button name='Salary' onClick={onDropdownClick}>
+        <button name="Salary" onClick={onDropdownClick}>
           Salary
         </button>
-        <button name='Sport Activities' onClick={onDropdownClick}>
+        <button name="Sport Activities" onClick={onDropdownClick}>
           Sport Activities
         </button>
-        <button name='Clothing' onClick={onDropdownClick}>
+        <button name="Clothing" onClick={onDropdownClick}>
           Clothing
         </button>
-        <button name='Entertainment Electronics' onClick={onDropdownClick}>
+        <button name="Entertainment Electronics" onClick={onDropdownClick}>
           Entertainment Electronics
         </button>
-        <button name='Entertainment Subscriptions' onClick={onDropdownClick}>
+        <button name="Entertainment Subscriptions" onClick={onDropdownClick}>
           Entertainment Subscriptions
         </button>
-        <button name='Entertainment Hobby' onClick={onDropdownClick}>
+        <button name="Entertainment Hobby" onClick={onDropdownClick}>
           Entertainment Hobby
         </button>
-        <button name='Phone' onClick={onDropdownClick}>
+        <button name="Phone" onClick={onDropdownClick}>
           Phone
         </button>
-        <button name='Internet' onClick={onDropdownClick}>
+        <button name="Internet" onClick={onDropdownClick}>
           Internet
         </button>
-        <button name='Computer' onClick={onDropdownClick}>
+        <button name="Computer" onClick={onDropdownClick}>
           Computer
         </button>
-        <button name='Giving' onClick={onDropdownClick}>
+        <button name="Giving" onClick={onDropdownClick}>
           Giving
         </button>
-        <button name='Student loan' onClick={onDropdownClick}>
+        <button name="Student loan" onClick={onDropdownClick}>
           Student loan
         </button>
-        <button name='Electrical bill' onClick={onDropdownClick}>
+        <button name="Electrical bill" onClick={onDropdownClick}>
           Electrical bill
         </button>
-        <button name='Bank fee' onClick={onDropdownClick}>
+        <button name="Bank fee" onClick={onDropdownClick}>
           Bank fee
         </button>
-        <button name='Reminder Fee' onClick={onDropdownClick}>
+        <button name="Reminder Fee" onClick={onDropdownClick}>
           Reminder Fee
         </button>
       </div>
