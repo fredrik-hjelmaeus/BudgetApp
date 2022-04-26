@@ -1,8 +1,8 @@
-import React, { Fragment, useContext } from 'react';
-import PresetContext from '../../context/preset/presetContext';
-import PresetItem from './PresetItem';
-import Spinner from '../layout/Spinner';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React, { Fragment, useContext } from "react";
+import PresetContext from "../../context/preset/presetContext";
+import PresetItem from "./PresetItem";
+import Spinner from "../layout/Spinner";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const PresetNegativeFilter = () => {
   const presetContext = useContext(PresetContext);
@@ -26,11 +26,12 @@ const PresetNegativeFilter = () => {
     <Fragment>
       {filteredmonthandnegnum && !loading ? (
         <TransitionGroup>
-          {reverseSort.map((preset) => (
-            <CSSTransition key={preset._id} timeout={500} classNames='item'>
-              <PresetItem preset={preset} />
-            </CSSTransition>
-          ))}
+          {reverseSort &&
+            reverseSort.map((preset) => (
+              <CSSTransition key={preset.id} timeout={500} classNames="item">
+                <PresetItem preset={preset} />
+              </CSSTransition>
+            ))}
         </TransitionGroup>
       ) : (
         <Spinner />
