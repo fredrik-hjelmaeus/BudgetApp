@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from "react";
 import PresetContext from "../../context/preset/presetContext";
 import CssContext from "../../context/css/cssContext";
 import DeleteSVG from "../layout/images/DeleteSVG";
-import PresetItemCategoryDropdownMenu from "./PresetItemCategoryDropdownMenu";
+//import PresetItemCategoryDropdownMenu from "./PresetItemCategoryDropdownMenu"; TODO: OBSOLETE?
 import PresetItemCategory from "./PresetItemCategory";
 import { IPreset } from "../../frontend-types/IPreset";
 
@@ -11,7 +11,7 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
   const cssContext = useContext(CssContext);
   const { toggleModal } = cssContext;
 
-  const { deletePreset, setEdit, cancelEdit, calcSum, edit, sendEdit } = presetContext;
+  const { deletePreset, setEdit, cancelEdit, calcSum, edit } = presetContext;
 
   const { id, name, number, category, month, year, piggybank } = preset;
 
@@ -69,7 +69,7 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
   // useRef<HTMLHeadingElement>(null)
   const inputNumRef = useRef<HTMLInputElement>(null);
   const inputNameRef = useRef<HTMLInputElement>(null);
-  const inputCategoryRef = useRef<HTMLInputElement>(null);
+  //const inputCategoryRef = useRef<HTMLInputElement>(null);
 
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     setEdit(preset);
@@ -82,8 +82,7 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
   };
 
   // implementation of dropdownmenu for categoryselection
-
-  useEffect(() => {
+  /* useEffect(() => {
     InputMode === "number" && inputNumRef !== undefined && inputNumRef?.current?.focus();
     InputMode === "name" && inputNameRef?.current?.focus();
 
@@ -100,8 +99,7 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
   const onDropdownClick: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setlocalPreset({ ...localpreset, category: e.target.name });
     setInputMode("categorychanged");
-  };
-
+  }; */
   // END of implementation of dropdownmenu for categoryselection
 
   return (
@@ -164,7 +162,7 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
         category={category}
       /> */}
       <PresetItemCategory
-        onDropdownClick={onDropdownClick}
+        //   onDropdownClick={onDropdownClick}
         localpreset={localpreset}
         onClick={onTestClick}
         category={category}
