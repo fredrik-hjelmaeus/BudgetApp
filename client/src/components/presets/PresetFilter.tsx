@@ -1,13 +1,20 @@
-import React, { Fragment, useContext, useEffect } from 'react';
-import PresetContext from '../../context/preset/presetContext';
-import PresetItem from './PresetItem';
-import Spinner from '../layout/Spinner';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React, { Fragment, useContext, useEffect } from "react";
+import PresetContext from "../../context/preset/presetContext";
+import PresetItem from "./PresetItem";
+import Spinner from "../layout/Spinner";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const PresetFilter = () => {
   const presetContext = useContext(PresetContext);
-  const { year, month, filteredmonthandposnum, loading, presets, filterOutNegativeNumsAndMonth, filterOutPositiveNumsAndMonth } =
-    presetContext;
+  const {
+    year,
+    month,
+    filteredmonthandposnum,
+    loading,
+    presets,
+    filterOutNegativeNumsAndMonth,
+    filterOutPositiveNumsAndMonth,
+  } = presetContext;
 
   useEffect(() => {
     if (month !== null && presets !== null && year !== null) {
@@ -34,11 +41,13 @@ const PresetFilter = () => {
     <Fragment>
       {filteredmonthandposnum && !loading ? (
         <TransitionGroup>
-          {sortItemsByNum.map((preset) => (
-            <CSSTransition key={preset._id} timeout={250} classNames='item'>
-              <PresetItem preset={preset} />
-            </CSSTransition>
-          ))}
+          {sortItemsByNum &&
+            sortItemsByNum.map((preset) => (
+              <CSSTransition key={preset.id} timeout={250} classNames="item">
+                {/* TODO: changed from preset._id to preset.id, ok? */}{" "}
+                <PresetItem preset={preset} />
+              </CSSTransition>
+            ))}
         </TransitionGroup>
       ) : (
         <Spinner />
