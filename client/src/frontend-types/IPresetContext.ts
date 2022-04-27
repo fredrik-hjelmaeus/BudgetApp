@@ -1,4 +1,6 @@
+import { INewPreset } from "../../../middleware/INewPreset";
 import { ICategoryAndSumItem } from "./ICategoryAndSumItem";
+import { ICsvPresetItem } from "./ICsvPresetItem";
 import { IPiggybank } from "./IPiggybank";
 import { IPreset } from "./IPreset";
 import { IUploadCsv } from "./IUploadCsv";
@@ -14,7 +16,7 @@ export interface IPresetState {
   year: null | number; // TODO: needs more strict control of datatype. it changes between string and number
   filteredmonthandposnum: null | IPreset[]; // positive presets in the current/active month
   filteredmonthandnegnum: null | IPreset[]; // negative presets in the current/active month
-  csvpresets: null | IPreset[]; // used to store preset values from csv-file in stagingarea
+  csvpresets: null | INewPreset[] | ICsvPresetItem[]; // used to store preset values from csv-file in stagingarea
   AllMonthSum: number[]; // sum of all presets in all months for the current/active year
   PosMonthSum: null | number; // gets data from filteredmonthandnegnum
   NegMonthSum: null | number; // gets data from filteredmonthandposnum
@@ -80,8 +82,8 @@ export interface IPresetContext extends IPresetState {
   submitCsvItems(string: string): void;
   getSavingsList(): void;
   getCapitalList(): void;
-  updateCsvPresets(preset: IPreset): void;
-  removeCSV(preset: IPreset): void;
+  updateCsvPresets(preset: INewPreset | ICsvPresetItem): void;
+  removeCSV(id: string): void;
   clearCsv(): void;
   getGuidePresets(): void;
   clearPresetErrors(): void;
