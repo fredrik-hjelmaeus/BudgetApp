@@ -1,4 +1,6 @@
+import { INewPreset } from "../../../../middleware/INewPreset";
 import { ICategoryAndSumItem } from "../../frontend-types/ICategoryAndSumItem";
+import { ICsvPresetItem } from "../../frontend-types/ICsvPresetItem";
 import { IPiggybank } from "../../frontend-types/IPiggybank";
 import { IPreset } from "../../frontend-types/IPreset";
 import { IPresetState } from "../../frontend-types/IPresetContext";
@@ -71,7 +73,7 @@ type ActionType =
   | { type: typeof NEGMONTHSUM; payload: number }
   | { type: typeof CATEGORYMONTHSUM; payload: Array<ICategoryAndSumItem> }
   | { type: typeof CATEGORYYEARSUM; payload: Array<ICategoryAndSumItem> }
-  | { type: typeof UPLOAD_CSV; payload: Array<IPreset> }
+  | { type: typeof UPLOAD_CSV; payload: Array<INewPreset> }
   | { type: typeof SET_ALLMONTHSUM; payload: number }
   | { type: typeof RESET_ALLMONTHSUM }
   | { type: typeof YEARSUM; payload: number }
@@ -92,9 +94,9 @@ type ActionType =
   | { type: typeof CALC_MONTH_BALANCE; payload: number }
   | { type: typeof SUBMIT_CSV; payload: string }
   | { type: typeof SET_SAVINGS_LIST; payload: Array<IPreset> }
-  | { type: typeof UPDATE_CSV; payload: IPreset }
+  | { type: typeof UPDATE_CSV; payload: ICsvPresetItem | INewPreset }
   | { type: typeof SET_CAPITAL_LIST; payload: Array<IPreset> }
-  | { type: typeof REMOVE_CSV; payload: IPreset }
+  | { type: typeof REMOVE_CSV; payload: string }
   | { type: typeof CLEAR_CSV }
   | { type: typeof PRESET_CLEAR_ERRORS }
   | { type: typeof LOGOUT };
@@ -385,7 +387,10 @@ function presetReducer(state: IPresetState, action: ActionType) {
       return {
         ...state,
         csvpresets:
-          state.csvpresets && state.csvpresets.filter((preset) => preset.id === action.payload.id),
+         
+
+            state.csvpresets && state.csvpresets.filter((preset) => preset.id === action.payload)),
+          
       };
     case PRESET_CLEAR_ERRORS:
       return {

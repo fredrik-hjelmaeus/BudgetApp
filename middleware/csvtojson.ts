@@ -1,9 +1,10 @@
-import csv from 'csvtojson';
-import { NextFunction, Request, Response } from 'express';
-import { UploadedFile } from 'express-fileupload';
-import fs from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-const ofx = require('ofx'); // not migrated to ts
+import csv from "csvtojson";
+import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import { INewPreset } from "./INewPreset";
+const ofx = require("ofx"); // not migrated to ts
 
 // DATA STRUCTURE OF req.files:
 // RFC4180 is the delimiter the user pressed.
@@ -22,13 +23,6 @@ const ofx = require('ofx'); // not migrated to ts
        }
      } 
 */
-
-interface INewPreset {
-  number?: number;
-  name?: string;
-  row?: string;
-  id: string;
-}
 
 // Extending Express Request object with newpresets.
 // So req.newspresets can hold the extracted csv-file-data and send it to next middleware.
@@ -58,12 +52,12 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
 
   // Check if file was provided in the formdata
   if (!req.files) {
-    return res.status(400).send('No File Uploaded');
+    return res.status(400).send("No File Uploaded");
   }
 
   // Check if an object was provided in the formdata
   if (!Object.getOwnPropertyNames(req.files)) {
-    return res.status(400).send('Invalid data');
+    return res.status(400).send("Invalid data");
   }
   //  Set objectname as filetype
   const filetype: string = Object.getOwnPropertyNames(req.files)[0];
@@ -72,31 +66,31 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
 
   // Compare fileextension with provided filetype
   //ofx
-  if (filetype === 'ofx' && !file.name.endsWith('ofx')) {
-    return res.status(400).send('Wrong filetype, only accepts ofx!');
+  if (filetype === "ofx" && !file.name.endsWith("ofx")) {
+    return res.status(400).send("Wrong filetype, only accepts ofx!");
   }
   if (
-    (filetype === 'RFC4180' && !file.name.endsWith('csv')) ||
-    (filetype === 'swedbank' && !file.name.endsWith('csv')) ||
-    (filetype === 'nordea' && !file.name.endsWith('csv')) ||
-    (filetype === 'handelsbanken' && !file.name.endsWith('csv'))
+    (filetype === "RFC4180" && !file.name.endsWith("csv")) ||
+    (filetype === "swedbank" && !file.name.endsWith("csv")) ||
+    (filetype === "nordea" && !file.name.endsWith("csv")) ||
+    (filetype === "handelsbanken" && !file.name.endsWith("csv"))
   ) {
-    return res.status(400).send('Wrong filetype, only accepts csv!');
+    return res.status(400).send("Wrong filetype, only accepts csv!");
   }
 
   // Check what filetype-button the user pressed,set deLimit and return file
   function setDelimiter(type: string) {
     switch (type) {
-      case 'RFC4180':
+      case "RFC4180":
         return {};
-      case 'nordea':
-        return { delimiter: [';', ';;', ';;;'] };
-      case 'swedbank':
-        return { delimiter: [',', ',,', ',,,'] };
-      case 'handelsbanken':
-        return { delimiter: [',', ',,', ',,,'] };
+      case "nordea":
+        return { delimiter: [";", ";;", ";;;"] };
+      case "swedbank":
+        return { delimiter: [",", ",,", ",,,"] };
+      case "handelsbanken":
+        return { delimiter: [",", ",,", ",,,"] };
       default:
-        console.log('default');
+        console.log("default");
         break;
     }
   }
@@ -119,7 +113,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
   // Push new values to array
   const pushData = (filetype: string, source: any[] | []) => {
     //nordea
-    if (filetype === 'nordea') {
+    if (filetype === "nordea") {
       source.map((preset) => {
         const newNordeaObj: INewPreset = {
           number: preset.Belopp,
@@ -131,14 +125,14 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     }
 
     // handelsbanken
-    if (filetype === 'handelsbanken') {
+    if (filetype === "handelsbanken") {
       source.map((preset) => {
         const numberValues = Object.values(preset)[6] as number[];
         const lastNumberValue = numberValues[numberValues.length - 1];
         const nameValue = Object.values(preset)[7] as string;
 
         if (nameValue.length === 0 || lastNumberValue === undefined) {
-          return res.status(400).send('File does not contain valid Handelsbanken-values!');
+          return res.status(400).send("File does not contain valid Handelsbanken-values!");
         }
 
         const newHandelsbankenObj: INewPreset = {
@@ -151,18 +145,18 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     }
 
     // swedbank
-    if (filetype === 'swedbank') {
+    if (filetype === "swedbank") {
       source.slice(1).map((row) =>
         newpresets.push({
-          number: Number(JSON.stringify(row).split(',')[10]),
-          name: JSON.stringify(row).split(',')[9],
+          number: Number(JSON.stringify(row).split(",")[10]),
+          name: JSON.stringify(row).split(",")[9],
           id: uuidv4(),
         })
       );
     }
 
     // RFC4180
-    if (filetype === 'RFC4180') {
+    if (filetype === "RFC4180") {
       source.map((row) =>
         newpresets.push({
           row,
@@ -172,7 +166,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     }
 
     // OFX
-    if (filetype === 'ofx') {
+    if (filetype === "ofx") {
       source.map((obj) =>
         newpresets.push({
           number: obj.value,
@@ -193,14 +187,14 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     value: number;
   }
   const runConversion = async (filetype: string, file: UploadedFile) => {
-    if (filetype === 'ofx') {
-      if (!file.name.endsWith('ofx')) {
+    if (filetype === "ofx") {
+      if (!file.name.endsWith("ofx")) {
         await deleteFile(`${__dirname}/${file.name}`);
-        return res.status(400).send('Invalid OFX file!');
+        return res.status(400).send("Invalid OFX file!");
       }
       let tempArr: ofxTransactionRow[] = [];
       let validOfx = true;
-      fs.readFile(`${__dirname}/${file.name}`, 'utf8', function (err, ofxData) {
+      fs.readFile(`${__dirname}/${file.name}`, "utf8", function (err, ofxData) {
         if (err) {
           throw err;
         }
@@ -212,16 +206,19 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
               validOfx = false;
             }
 
-            const transaction: ofxTransactionRow = { description: field.TRNTYPE, value: field.TRNAMT };
+            const transaction: ofxTransactionRow = {
+              description: field.TRNTYPE,
+              value: field.TRNAMT,
+            };
             tempArr.push(transaction);
           });
           if (!validOfx) {
             deleteFile(`${__dirname}/${file.name}`);
-            return res.status(400).send('Invalid OFX file!');
+            return res.status(400).send("Invalid OFX file!");
           }
         } catch (err) {
           console.log(err);
-          return res.status(400).send('Invalid OFX file!');
+          return res.status(400).send("Invalid OFX file!");
         }
 
         pushData(filetype, tempArr);
@@ -234,39 +231,39 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
           .fromFile(`${__dirname}/${file.name}`)
           .then((source: any[]) => {
             // Validation of data by filetype
-            if (filetype === 'swedbank') {
+            if (filetype === "swedbank") {
               // here we need to check source[1] as fields with citation "" may have , in them.
-              const belopp = JSON.stringify(source[1]).split(',')[10];
-              const beskrivning = JSON.stringify(source[1]).split(',')[9];
-              if (typeof beskrivning !== 'string') {
+              const belopp = JSON.stringify(source[1]).split(",")[10];
+              const beskrivning = JSON.stringify(source[1]).split(",")[9];
+              if (typeof beskrivning !== "string") {
                 deleteFile(`${__dirname}/${file.name}`);
-                return res.status(400).send('CSV does not contain valid Swedbank-values!');
+                return res.status(400).send("CSV does not contain valid Swedbank-values!");
               }
-              if (typeof belopp !== 'string') {
+              if (typeof belopp !== "string") {
                 deleteFile(`${__dirname}/${file.name}`);
-                return res.status(400).send('CSV does not contain valid Swedbank-values!');
+                return res.status(400).send("CSV does not contain valid Swedbank-values!");
               }
               const numberBelopp: number = parseFloat(belopp);
               if (isNaN(numberBelopp)) {
                 deleteFile(`${__dirname}/${file.name}`);
-                return res.status(400).send('CSV does not contain valid Swedbank-values!');
+                return res.status(400).send("CSV does not contain valid Swedbank-values!");
               }
             }
-            if (filetype === 'nordea') {
+            if (filetype === "nordea") {
               // Check for new Nordea-csv
               if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
                 deleteFile(`${__dirname}/${file.name}`);
-                return res.status(400).send('CSV does not contain valid Nordea-values!');
+                return res.status(400).send("CSV does not contain valid Nordea-values!");
               }
             }
-            if (filetype === 'handelsbanken') {
+            if (filetype === "handelsbanken") {
               // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
 
               const belopp = Object.keys(source[0])[6];
               const beskrivning = Object.keys(source[0])[7];
-              if (typeof beskrivning !== 'string' || typeof belopp !== 'string') {
+              if (typeof beskrivning !== "string" || typeof belopp !== "string") {
                 deleteFile(`${__dirname}/${file.name}`);
-                return res.status(400).send('File does not contain valid Handelsbanken-values!');
+                return res.status(400).send("File does not contain valid Handelsbanken-values!");
               }
               // check all number fields and make sure they are numbers
               for (const preset of source) {
@@ -276,11 +273,11 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
                 // const convertToNum: number = parseFloat(Object.values(preset)[6][Object.values(preset)[6].length - 1]);
                 if (isNaN(convertToNum)) {
                   deleteFile(`${__dirname}/${file.name}`);
-                  return res.status(400).send('File does not contain valid Handelsbanken-values!');
+                  return res.status(400).send("File does not contain valid Handelsbanken-values!");
                 }
               }
             }
-            if (filetype === 'RFC4180') {
+            if (filetype === "RFC4180") {
               let validRFC4180 = true;
               let rowlength = 0;
               source.map((row) => {
@@ -295,7 +292,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
               if (!validRFC4180) {
                 deleteFile(`${__dirname}/${file.name}`);
 
-                return res.status(400).send('CSV does not contain valid RFC4180-values!');
+                return res.status(400).send("CSV does not contain valid RFC4180-values!");
               }
             }
 
@@ -304,7 +301,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
           });
       } catch (err: unknown) {
         console.log(err);
-        if (err instanceof Error) return res.status(500).send('Something wrong: ');
+        if (err instanceof Error) return res.status(500).send("Something wrong: ");
       }
     }
   };
@@ -313,7 +310,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     try {
       if (newpresets.length === 0) {
         await deleteFile(`${__dirname}/${file.name}`);
-        return res.status(400).send('No values recognised!');
+        return res.status(400).send("No values recognised!");
       }
       // valid file
       req.newpresets = newpresets;
@@ -321,7 +318,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
       next();
     } catch (err) {
       await deleteFile(`${__dirname}/${file.name}`);
-      res.status(500).json({ msg: 'Server Error' });
+      res.status(500).json({ msg: "Server Error" });
     }
   };
 };
