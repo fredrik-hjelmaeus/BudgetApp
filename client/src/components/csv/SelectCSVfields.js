@@ -46,8 +46,8 @@ const SelectCSVfields = () => {
   };
 
   const updateAndExit = (fieldValue) => {
-    // update csvpresets to complete INewPreset
-    // Preparing data, adding name,number & id field to csvpresets, fullfilling INewPreset-interface-requirements
+    // update csvpresets to complete ICsvPreset
+    // Preparing data, adding name,number & id field to csvpresets, fullfilling ICsvPreset-interface-requirements
     csvpresets.map((preset) =>
       updateCsvPresets({
         id: preset.id,
@@ -55,7 +55,7 @@ const SelectCSVfields = () => {
         number: preset.row[fieldValue],
       })
     );
-    // Moving on to CsvPresetCreateModal / Create Transactions were we turn INewPreset into ICsvPresetItem
+    // Moving on to CsvPresetCreateModal / Create Transactions were we turn ICsvPreset into ICsvPresetItem
     toggleModal("");
   };
 
