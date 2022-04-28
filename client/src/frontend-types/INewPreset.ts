@@ -1,6 +1,6 @@
 import { IPiggybank } from "./IPiggybank";
 
-export interface ICsvPresetItem {
+export interface INewPreset {
   id: string;
   name: string;
   number: number;

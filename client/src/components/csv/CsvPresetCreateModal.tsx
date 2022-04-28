@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState, Fragment } from "react";
 import PresetContext from "../../context/preset/presetContext";
+import { INewPreset } from "../../frontend-types/INewPreset";
 import CsvPresetItem from "./CsvPresetItem";
+
 import CsvPrompt from "./CsvPrompt";
 
 const CsvPresetCreateModal = () => {
   // context
   const presetContext = useContext(PresetContext);
-  const { csvpresets, submitCsvItems, clearCsv } = presetContext;
+  const { submitCsvItems, clearCsv, newPresets } = presetContext;
 
   // state
   const [Prompt, setPrompt] = useState(false);
-  const [validCsv, setValidCsv] = useState(null);
+  const [validCsv, setValidCsv] = useState<INewPreset[] | null>(null);
 
   // logic
   const onClick = () => {
@@ -20,24 +22,25 @@ const CsvPresetCreateModal = () => {
 
   //useEffect
   useEffect(() => {
+    // TODO: all switched from csvpreset to newPresets, correct?
     //check for valid csv to add by filter out all with not valid cat and markdel set to true
     const checkcsv =
-      csvpresets && csvpresets.filter((item) => item.category && item.markdelete === false);
+      newPresets && newPresets.filter((item) => item.category && item.markdelete === false);
 
-    setValidCsv(checkcsv);
+    checkcsv && setValidCsv(checkcsv);
 
-    if (checkcsv.length !== 0 && checkcsv.length !== csvpresets.length) {
+    if (checkcsv?.length !== 0 && checkcsv?.length !== newPresets?.length) {
       setPrompt(true);
     } else {
       submitCsvItems("submit");
     }
 
-    if (csvpresets.length <= 1) {
+    if (newPresets && newPresets.length <= 1) {
       clearCsv();
       setPrompt(false);
     }
     //eslint-disable-next-line
-  }, [csvpresets]); //breaks if you add clearCsv and submitCsvItems
+  }, [newPresets]); //breaks if you add clearCsv and submitCsvItems
 
   // jsx
   return (
@@ -47,7 +50,7 @@ const CsvPresetCreateModal = () => {
         <div className="modal-csvpresets__card">
           <h1 className="all-center m-1">Create Transactions</h1>
 
-          {csvpresets.map((item) => (
+          {newPresets?.map((item) => (
             <CsvPresetItem Item={item} key={item.id} />
           ))}
 
