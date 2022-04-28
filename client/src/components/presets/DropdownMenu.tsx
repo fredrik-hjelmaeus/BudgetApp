@@ -1,5 +1,5 @@
 import React from "react";
-import { ICsvPresetItem } from "../../frontend-types/ICsvPresetItem";
+import { INewPreset } from "../../frontend-types/INewPreset";
 /* import {
   Bankfee,
   Commute,
@@ -77,7 +77,7 @@ import { ICsvPresetItem } from "../../frontend-types/ICsvPresetItem";
 }; */
 
 interface DropdownMenuProps {
-  localpreset: ICsvPresetItem;
+  localpreset: INewPreset;
   onDropdownClick: React.MouseEventHandler<HTMLButtonElement>;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }

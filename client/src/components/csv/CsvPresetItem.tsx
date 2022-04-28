@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState, useRef, useEffect } from "react";
-import { INewPreset } from "../../../../middleware/INewPreset";
+import { ICsvPreset } from "../../../../middleware/ICsvPreset";
 import PresetContext from "../../context/preset/presetContext";
-import { ICsvPresetItem } from "../../frontend-types/ICsvPresetItem";
+import { INewPreset } from "../../frontend-types/INewPreset";
 
 import DeleteButton from "../presets/DeleteButton";
 import DropdownMenu from "../presets/DropdownMenu";
@@ -9,13 +9,14 @@ import DropdownMenu from "../presets/DropdownMenu";
 // Here we modify csvpresets, adding month,year,category,piggybank and markdelete.
 // Final form before creating an preset/IPreset.
 
-const CsvPresetItem = ({ Item }: { Item: INewPreset }) => {
+const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
   const presetContext = useContext(PresetContext);
-  const { month, year, doSubmitCsv, updateCsvPresets, addPreset, removeCSV } = presetContext;
+  const { month, year, doSubmitCsv, updateCsvPresets, addPreset, removeCSV, setNewPresets } =
+    presetContext;
   const { id, number, name } = Item;
 
   //local preset used to update preset via function presetContext.sendEdit
-  const [localpreset, setlocalPreset] = useState<ICsvPresetItem>({
+  const [localpreset, setlocalPreset] = useState<INewPreset>({
     id: id,
     name: name ? name : "",
     number: number ? number : 0,
@@ -72,6 +73,9 @@ const CsvPresetItem = ({ Item }: { Item: INewPreset }) => {
   };
 
   const addToDB = () => {
+    // TODO: add to db should be done/called once in presetContext on csvpresets,
+    // filtering out markdelete and no category selected presets.
+    // Atm we are calling database on every CsvPresetItem.
     if (name && number && month && year) {
       addPreset({
         name: name,
@@ -82,14 +86,14 @@ const CsvPresetItem = ({ Item }: { Item: INewPreset }) => {
         type: localpreset.type,
         piggybank: [{ month, year, savedAmount: 0 }],
       });
-      removeCSV(localpreset);
+      removeCSV(localpreset.id);
     }
   };
 
   useEffect(() => {
     doSubmitCsv === "step1" &&
       localpreset.category !== "Select Category" &&
-      updateCsvPresets(localpreset);
+      setNewPresets(localpreset);
 
     doSubmitCsv === "submit" &&
       localpreset.category !== "Select Category" &&

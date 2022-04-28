@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
-import { INewPreset } from "./INewPreset";
+import { ICsvPreset } from "./ICsvPreset";
 const ofx = require("ofx"); // not migrated to ts
 
 // DATA STRUCTURE OF req.files:
@@ -29,7 +29,7 @@ const ofx = require("ofx"); // not migrated to ts
 declare global {
   namespace Express {
     export interface Request {
-      newpresets: INewPreset[];
+      newpresets: ICsvPreset[];
     }
   }
 }
@@ -108,14 +108,14 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     runConversion(filetype, file);
   });
 
-  let newpresets: INewPreset[] = [];
+  let newpresets: ICsvPreset[] = [];
 
   // Push new values to array
   const pushData = (filetype: string, source: any[] | []) => {
     //nordea
     if (filetype === "nordea") {
       source.map((preset) => {
-        const newNordeaObj: INewPreset = {
+        const newNordeaObj: ICsvPreset = {
           number: preset.Belopp,
           name: preset.Rubrik,
           id: uuidv4(),
@@ -135,7 +135,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
           return res.status(400).send("File does not contain valid Handelsbanken-values!");
         }
 
-        const newHandelsbankenObj: INewPreset = {
+        const newHandelsbankenObj: ICsvPreset = {
           number: lastNumberValue,
           name: nameValue,
           id: uuidv4(),

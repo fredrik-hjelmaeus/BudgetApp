@@ -48,10 +48,12 @@ import {
   CLEAR_CSV,
   REMOVE_CSV,
   PRESET_CLEAR_ERRORS,
+  SET_NEWPRESETS,
 } from "../types";
 import { IPresetContext, IPresetState } from "../../frontend-types/IPresetContext";
 import { IPreset } from "../../frontend-types/IPreset";
 import { ICategoryAndSumItem } from "../../frontend-types/ICategoryAndSumItem";
+import { INewPreset } from "../../frontend-types/INewPreset";
 
 const PresetState = (props: { children: ReactNode }) => {
   const initialState: IPresetState = {
@@ -66,6 +68,7 @@ const PresetState = (props: { children: ReactNode }) => {
     filteredmonthandposnum: null, // year implemented
     filteredmonthandnegnum: null, // year implemented
     csvpresets: null, // used to store values from csv-file in stagingarea
+    newPresets: null, // used to store values from csv-file in stagingarea, step 2
     AllMonthSum: [], // year implemented
     PosMonthSum: null, // gets data from filteredmonthandnegnum
     NegMonthSum: null, // gets data from filteredmonthandposnum
@@ -974,14 +977,29 @@ const PresetState = (props: { children: ReactNode }) => {
     listOfCapitalItems && dispatch({ type: SET_CAPITAL_LIST, payload: listOfCapitalItems });
   };
 
-  //Update CSV
+  //Update csvpresets
   const updateCsvPresets: IPresetContext["updateCsvPresets"] = (preset) => {
     dispatch({ type: UPDATE_CSV, payload: preset });
   };
 
+  // add/set newpresets
+  const setNewPresets: IPresetContext["setNewPresets"] = (newpreset) => {
+    if (!state.newPresets) {
+      // if no newpresets exist, create new array with provided newpreset inside
+      dispatch({ type: SET_NEWPRESETS, payload: [newpreset] });
+    } else {
+      // if newpreset does not exist in array, add it, else do nothing.
+      const isExistingPreset = state.newPresets.find(
+        (preset: INewPreset) => preset.id === newpreset.id
+      );
+      if (!isExistingPreset)
+        dispatch({ type: SET_NEWPRESETS, payload: [...state.newPresets, newpreset] });
+    }
+  };
+
   //Remove CSV
-  const removeCSV: IPresetContext["removeCSV"] = (preset) => {
-    dispatch({ type: REMOVE_CSV, payload: preset });
+  const removeCSV: IPresetContext["removeCSV"] = (id) => {
+    dispatch({ type: REMOVE_CSV, payload: id });
   };
 
   // Clear CSV
@@ -1029,6 +1047,7 @@ const PresetState = (props: { children: ReactNode }) => {
         filteredmonthandposnum: state.filteredmonthandposnum,
         filteredmonthandnegnum: state.filteredmonthandnegnum,
         csvpresets: state.csvpresets,
+        newPresets: state.newPresets,
         AllMonthSum: state.AllMonthSum,
         PosMonthSum: state.PosMonthSum,
         NegMonthSum: state.NegMonthSum,
@@ -1049,7 +1068,6 @@ const PresetState = (props: { children: ReactNode }) => {
         SumPiggybanksMonth: state.SumPiggybanksMonth,
         MonthBalance: state.MonthBalance,
         doSubmitCsv: state.doSubmitCsv,
-
         savingsList: state.savingsList,
         capitalList: state.capitalList,
         calcSum,
@@ -1095,8 +1113,8 @@ const PresetState = (props: { children: ReactNode }) => {
         removeCSV,
         clearCsv,
         clearPresetErrors,
-
         getGuidePresets,
+        setNewPresets,
       }}
     >
       {props.children}
