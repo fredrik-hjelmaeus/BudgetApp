@@ -1,9 +1,10 @@
 import React, { useContext, useState, Fragment } from "react";
 import PresetContext from "../../context/preset/presetContext";
-import CsvSelectFieldsItem from "./CsvSelectFieldsItem";
+
 import CssContext from "../../context/css/cssContext";
 import AlertContext from "../../context/alert/alertContext";
-import Alerts from "../../components/layout/Alerts";
+import Alerts from "../layout/Alerts";
+import SelectCSVfieldsItem from "./SelectCSVfieldsItem";
 
 // Here we modify csvpresets with name,id and number fields.
 const SelectCSVfields = () => {
@@ -22,39 +23,48 @@ const SelectCSVfields = () => {
   const onClick = () => {};
 
   // validate selected value field by iterating csvpresets and make sure all fields is a number
-  const validateValueField = (field) => {
+
+  const validateValueField = (field: string) => {
     let isValid = true;
-    csvpresets.map((preset) => (isNaN(preset.row[field]) ? (isValid = false) : null));
+    csvpresets &&
+      csvpresets.map((preset) => (preset.row && isNaN(parseInt(field)) ? (isValid = false) : null)); // TODO: doublecheck parseInt works here
     return isValid;
   };
 
   // when a field is selected
-  const fieldSelect = (e) => {
+  const fieldSelect: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     if (selectPhase === "description") {
-      setFields({ ...fields, description: e.target.value });
+      setFields({ ...fields, description: e.currentTarget.value });
       setSelectPhase("value");
     }
 
     if (selectPhase === "value") {
-      if (!validateValueField(e.target.value)) {
+      if (!validateValueField(e.currentTarget.value)) {
         setAlert("Please select a valid number field", "danger");
       } else {
-        setFields({ ...fields, value: e.target.value });
-        updateAndExit(e.target.value);
+        setFields({ ...fields, value: e.currentTarget.value });
+        updateAndExit(e.currentTarget.value);
       }
     }
   };
 
-  const updateAndExit = (fieldValue) => {
+  const updateAndExit = (fieldValue: string) => {
     // update csvpresets to complete ICsvPreset
     // Preparing data, adding name,number & id field to csvpresets, fullfilling ICsvPreset-interface-requirements
-    csvpresets.map((preset) =>
-      updateCsvPresets({
-        id: preset.id,
-        name: preset.row[fields.description],
-        number: preset.row[fieldValue],
-      })
-    );
+    const { description } = fields;
+
+    csvpresets &&
+      csvpresets.map((preset) => {
+        const presetRow = preset.row;
+        if (presetRow) {
+          updateCsvPresets({
+            id: preset.id,
+            name: presetRow[parseInt(description)],
+            number: parseInt(presetRow[parseInt(fieldValue)]) || 0,
+          });
+        }
+        return preset;
+      });
     // Moving on to CsvPresetCreateModal / Create Transactions were we turn ICsvPreset into ICsvPresetItem
     toggleModal("");
   };
@@ -90,17 +100,20 @@ const SelectCSVfields = () => {
           </p>
 
           {/* Header-field constructed from CSV */}
-          <CsvSelectFieldsItem
-            rowItem={csvpresets[0]}
-            key={0}
-            header={true}
-            fieldSelect={fieldSelect}
-          />
+          {csvpresets && (
+            <SelectCSVfieldsItem
+              rowItem={csvpresets[0]}
+              key={0}
+              header={true}
+              fieldSelect={fieldSelect}
+            />
+          )}
 
           {/* csv-list */}
-          {csvpresets.map((rowItem) => (
-            <CsvSelectFieldsItem rowItem={rowItem} key={rowItem.id} />
-          ))}
+          {csvpresets &&
+            csvpresets.map((rowItem) => (
+              <SelectCSVfieldsItem rowItem={rowItem} key={rowItem.id} header={false} />
+            ))}
 
           {/* button add */}
           <button className="btn modal-csvpresets__btn__addtobudget all-center" onClick={onClick}>
