@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="aESVqKsndSF4p3bQTo5-" name="Page-1">
-        <mxGraphModel dx="1221" dy="1424" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1898" dy="1683" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -171,7 +171,7 @@
                 <mxCell id="40" value="CategoryBalance" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="2464" y="504" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="Sum" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="41" value="Sum" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="1722" y="504" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="42" value="MonthSavingsSummary" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -297,7 +297,7 @@
                         <mxPoint x="1489" y="637" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="80" value="SelectFile" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="80" value="SelectFile" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="2325" y="502" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="81" value="EditPreset" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
@@ -321,7 +321,7 @@
                 <mxCell id="87" value="EditPiggybankModal" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="3195" y="504" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="88" value="SelectSupportedFileFormat" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="88" value="SelectSupportedFileFormat" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="2325" y="671" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="89" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" target="88" edge="1">
