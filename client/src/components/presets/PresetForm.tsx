@@ -6,6 +6,7 @@ import CssContext from "../../context/css/cssContext";
 import CheckBoxField from "./CheckBoxField";
 import SelectField from "./SelectField";
 import Alerts from "../layout/Alerts";
+import { IPreset } from "../../frontend-types/IPreset";
 
 const PresetForm = () => {
   const alertContext = useContext(AlertContext);
@@ -22,12 +23,12 @@ const PresetForm = () => {
     if (guide !== "8" && guide !== "9" && guide !== "10") {
       setPreset({
         name: "",
-        number: "",
-        month,
-        year,
+        number: 0,
+        month: month ? month : "",
+        year: year ? year : 0,
         category,
         type: "overhead",
-        piggybank: [{ month, year, savedAmount: 0 }],
+        piggybank: [{ month: month ? month : "", year: year ? year : 0, savedAmount: 0 }],
       });
     }
 
@@ -37,35 +38,35 @@ const PresetForm = () => {
 
   const [expand, setExpand] = useState(false);
 
-  const [preset, setPreset] = useState({
+  const [preset, setPreset] = useState<IPreset>({
     name: "",
-    number: "",
-    month,
-    year,
+    number: 0,
+    month: month ? month : "",
+    year: year ? year : 0,
     category: "Select an category ^",
     type: "overhead",
-    piggybank: [{ month, year, savedAmount: "" }],
+    piggybank: [{ month: month ? month : "", year: year ? year : 0, savedAmount: 0 }],
   });
 
-  const onChange = (e) => {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setPreset({ ...preset, [e.target.name]: e.target.value });
   };
 
-  const selectChange = (e) => {
+  const selectChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     setPreset({ ...preset, category: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (preset.type === "savings") {
-      if (parseFloat(preset.number) > MonthSum) {
+      if (MonthSum && preset.number > MonthSum) {
         setAlert("Insufficient month surplus for this saving", "danger");
         return;
       }
     }
 
     if (preset.category !== "Select an category ^") {
-      if (preset.name === "" || preset.number === "") {
+      if (preset.name === "" || preset.number === 0) {
         setAlert("Please fill in both fields", "danger");
         return;
       } else {
@@ -82,18 +83,19 @@ const PresetForm = () => {
         } else {
           addPreset(preset);
         }
-        if (preset.name !== "" || preset.number !== "") {
+        if (preset.name !== "" || preset.number !== 0) {
           calcSum();
         }
       }
 
       setPreset({
         name: "",
-        number: "",
-        month,
-        year,
+        number: 0,
+        month: month ? month : "",
+        year: year ? year : 0,
         category: "Select an category ^",
         type: "overhead",
+        piggybank: [{ month: month ? month : "", year: year ? year : 0, savedAmount: 0 }],
       });
     } else {
       setAlert("Please select an category", "danger");
@@ -107,7 +109,11 @@ const PresetForm = () => {
   // expands the budget tab for the guide
   useEffect(() => {
     guide === "5" && setExpand(false);
-    !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) <= 11 && setExpand(true);
+    guide &&
+      !isNaN(parseInt(guide)) &&
+      parseInt(guide) >= 6 &&
+      parseInt(guide) <= 11 &&
+      setExpand(true);
     guide === "8" && setPreset({ ...preset, type: "capital" });
     guide === "9" && setPreset({ ...preset, type: "savings" });
     guide === "10" && setPreset({ ...preset, type: "purchase" });
@@ -131,7 +137,7 @@ const PresetForm = () => {
         <form
           onSubmit={onSubmit}
           className={
-            !isNaN(guide) && parseInt(guide) >= 6 && parseInt(guide) < 12
+            guide && !isNaN(parseInt(guide)) && parseInt(guide) >= 6 && parseInt(guide) < 12
               ? "presetform guide__presetform"
               : "presetform"
           }
@@ -161,7 +167,7 @@ const PresetForm = () => {
             />
           </span>
 
-          <SelectField guide={guide} selectChange={selectChange} category={category} />
+          {guide && <SelectField guide={guide} selectChange={selectChange} category={category} />}
 
           <div
             className="presetform__optionsfield"
@@ -175,7 +181,7 @@ const PresetForm = () => {
                 : null
             }
           >
-            <CheckBoxField guide={guide} preset={preset} onChange={onChange} />
+            {guide && <CheckBoxField guide={guide} preset={preset} onChange={onChange} />}
 
             <div>
               <button
