@@ -1,8 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import PresetContext from '../../context/preset/presetContext';
-import CssContext from '../../context/css/cssContext';
-import DeleteSVG from '../layout/images/DeleteSVG';
-import piggyicon from '../layout/images/piggybank.svg';
+import React, { useContext, useState, useEffect } from "react";
+import PresetContext from "../../context/preset/presetContext";
+import CssContext from "../../context/css/cssContext";
+import DeleteSVG from "../layout/images/DeleteSVG";
+
+import PiggybankSVG from "../layout/images/PiggybankSVG";
+import { IPreset } from "../../frontend-types/IPreset";
+import { IPiggybank } from "../../frontend-types/IPiggybank";
 
 /* import {
   Bankfee,
@@ -27,13 +30,16 @@ import piggyicon from '../layout/images/piggybank.svg';
   Travel,
   Car,
 } from '../layout/images/index'; */
-
-const MonthSavingsItem = ({ Item, SumOfPreset }) => {
+interface MonthSavingsItemProps {
+  Item: IPreset;
+  SumOfPreset: number;
+}
+const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
   const { toggleModal, setModalprops } = cssContext;
   const { presets, deletePreset, month, sendEdit, setEdit } = presetContext;
-  const { name, number, category } = Item;
+  const { name, category } = Item;
   /*  const getCategoryIcon = (category) => {
     switch (category) {
       case 'Commute':
@@ -83,7 +89,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
     }
   }; */
   const [preset, setPreset] = useState({
-    _id: Item._id,
+    _id: Item.id,
     name: Item.name,
     number: SumOfPreset,
     month: Item.month,
@@ -105,31 +111,31 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   };
   const onDelete = () => {
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
-    Item.type === 'savings' ? deletePreset(Item._id) : deletePiggybankItem(Item);
+    Item && Item.id && Item.type === "savings" ? deletePreset(Item.id) : deletePiggybankItem(Item);
   };
 
-  const onEdit = (e) => {
+  const onEdit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     // purchase means it's piggybank saving. Piggybank saving should not be able to change category or name
-    if (Item.type === 'purchase') {
-      if (e.currentTarget.value !== 'category' && e.currentTarget.value !== 'name') {
+    if (Item.type === "purchase") {
+      if (e.currentTarget.value !== "category" && e.currentTarget.value !== "name") {
         setModalprops(Item);
-        toggleModal('editpiggybank');
+        toggleModal("editpiggybank");
       }
     } else {
       setEdit(preset);
-      toggleModal('editpreset');
+      toggleModal("editpreset");
     }
   };
 
-  const deletePiggybankItem = (Item) => {
-    let newPiggybankArray = [];
+  const deletePiggybankItem = (Item: IPreset) => {
+    let newPiggybankArray: IPiggybank[] = [];
     presets &&
       presets.map((preset) =>
-        preset._id === Item._id
+        preset.id === Item.id
           ? Item.piggybank.filter((piggybank) =>
               piggybank.month !== month || piggybank.savedAmount === 0
                 ? newPiggybankArray.push({
-                    _id: piggybank._id,
+                    // _id: piggybank._id, TODO: Make sure this works in the backend/db
                     month: piggybank.month,
                     year: piggybank.year,
                     savedAmount: piggybank.savedAmount,
@@ -141,7 +147,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
 
     setPreset({
       ...preset,
-      _id: Item._id,
+      _id: Item.id,
       name: Item.name,
       number: Item.number,
       month: Item.month,
@@ -159,43 +165,61 @@ const MonthSavingsItem = ({ Item, SumOfPreset }) => {
   }, [preset]);
 
   return (
-    <div className='monthitem'>
-      <div className='namebutton'>
+    <div className="monthitem">
+      <div className="namebutton">
         <h4>
           <button
             onClick={onEdit}
-            value='name'
-            className={Item.type === 'purchase' ? ' text-primary btn-form no-wrap noHover' : ' text-primary btn-form no-wrap'}
+            value="name"
+            className={
+              Item.type === "purchase"
+                ? " text-primary btn-form no-wrap noHover"
+                : " text-primary btn-form no-wrap"
+            }
           >
             {name}
           </button>
         </h4>
       </div>
       <div>
-        <button onClick={onEdit} className='text-orange btn-form' value='number'>
+        <button onClick={onEdit} className="text-orange btn-form" value="number">
           {SumOfPreset}
         </button>
       </div>
       <div>
-        <button onClick={onEdit} className={Item.type === 'purchase' ? 'btn-form noHover' : 'btn-form '} value='category' name='category'>
-          <img src={`/icons/${category}.svg`} alt={`${category} icon`} style={{ height: '20px', width: '20px' }} />
+        <button
+          onClick={onEdit}
+          className={Item.type === "purchase" ? "btn-form noHover" : "btn-form "}
+          value="category"
+          name="category"
+        >
+          <img
+            src={`/icons/${category}.svg`}
+            alt={`${category} icon`}
+            style={{ height: "20px", width: "20px" }}
+          />
         </button>
       </div>
-      {Item.type !== 'savings' && (
+      {Item.type !== "savings" && (
         <div>
-          <img src={piggyicon} alt='piggybank_icon' style={{ width: '26px' }} />
+          <PiggybankSVG fill="var(--gray-color)" /> {/* TODO: confirm this is working */}
+          {/*  <img src={piggyicon} alt='piggybank_icon' style={{ width: '26px' }} /> */}
         </div>
       )}
       <div>
         <button
-          className='btn text-primary delete'
-          value='delbtn'
+          className="btn text-primary delete"
+          value="delbtn"
           name={name}
           onMouseEnter={onHover}
           onMouseLeave={stopHover}
           onClick={onDelete}
         >
-          {DelbtnColor === true ? <DeleteSVG fill='var(--danger-color)' /> : <DeleteSVG fill='var(--light-color)' />}
+          {DelbtnColor === true ? (
+            <DeleteSVG fill="var(--danger-color)" />
+          ) : (
+            <DeleteSVG fill="var(--light-color)" />
+          )}
         </button>
       </div>
     </div>
