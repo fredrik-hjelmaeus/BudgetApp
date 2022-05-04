@@ -58,7 +58,7 @@ export interface IPresetContext extends IPresetState {
   filterOutPositiveNumsAndMonth(month: string): void;
   filterOutNegativeNumsAndMonth(month: string): void;
   resetSums(): void;
-  uploadCSV(formData: IUploadCsv): Promise<void>;
+  uploadCSV(formData: FormData): Promise<void>;
   calcPosMonth(): void;
   calcNegMonth(): void;
   calcCategoryByMonth(month: string): void;
