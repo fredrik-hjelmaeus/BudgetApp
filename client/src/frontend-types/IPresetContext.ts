@@ -51,7 +51,7 @@ export interface IPresetContext extends IPresetState {
   sendEdit(preset: IPreset): Promise<void>; // Should be named updatePreset ?. It sends the edit-preset.
   clearPresets(): void;
   calcSum(): void;
-  addMonth(month: string): void;
+  addMonth(month: string | null): void;
   calcMonthSum(month: string): void;
   setYear(year: number): void;
   filterOutPositiveNumsAndMonth(month: string): void;
