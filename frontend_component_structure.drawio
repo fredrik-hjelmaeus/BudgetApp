@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="aESVqKsndSF4p3bQTo5-" name="Page-1">
-        <mxGraphModel dx="1898" dy="1683" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1397" dy="1683" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -174,7 +174,7 @@
                 <mxCell id="41" value="Sum" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="1722" y="504" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="42" value="MonthSavingsSummary" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="42" value="MonthSavingsSummary" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="1876" y="504" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="43" value="MonthSummary" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
@@ -471,7 +471,7 @@
                         <mxPoint x="1625" y="637" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="119" value="MonthSavingsItem" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="119" value="MonthSavingsItem" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" parent="1" vertex="1">
                     <mxGeometry x="1780" y="636" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="120" value="" style="endArrow=classic;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="42" target="119" edge="1">
