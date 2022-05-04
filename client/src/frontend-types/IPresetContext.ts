@@ -3,7 +3,6 @@ import { ICategoryAndSumItem } from "./ICategoryAndSumItem";
 import { INewPreset } from "./INewPreset";
 import { IPiggybank } from "./IPiggybank";
 import { IPreset } from "./IPreset";
-import { IUploadCsv } from "./IUploadCsv";
 
 export interface IPresetState {
   presets: null | IPreset[];
