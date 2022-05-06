@@ -4,6 +4,6 @@ export interface IGuideState {
 }
 
 export interface IGuideContext extends IGuideState {
-  setGuide: (guide: string) => void;
+  setGuide: (guide: string | null) => void;
   setUserExited: (exited: boolean) => void;
 }
