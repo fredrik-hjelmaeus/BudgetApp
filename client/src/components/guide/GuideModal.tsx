@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import GuideContext from '../../context/guide/guideContext';
-import AuthContext from '../../context/auth/authContext';
-import PresetContext from '../../context/preset/presetContext';
-import CssContext from '../../context/css/cssContext';
-import GuideSteps from './GuideSteps';
-import { animateScroll } from 'react-scroll';
+import React, { useContext } from "react";
+import GuideContext from "../../context/guide/guideContext";
+import AuthContext from "../../context/auth/authContext";
+import PresetContext from "../../context/preset/presetContext";
+import CssContext from "../../context/css/cssContext";
+import GuideSteps from "./GuideSteps";
+import { animateScroll } from "react-scroll";
 
 /* 
 Actions triggered to make this guide work:
@@ -25,7 +25,8 @@ const GuideModal = () => {
   const authContext = useContext(AuthContext);
   const guideContext = useContext(GuideContext);
   const { guide, setGuide, setUserExited } = guideContext;
-  const { getGuidePresets, clearPresets, setYear, getPresets, addMonth } = useContext(PresetContext);
+  const { getGuidePresets, clearPresets, setYear, getPresets, addMonth } =
+    useContext(PresetContext);
   const { isAuthenticated, user } = authContext;
   const { dimensions } = useContext(CssContext);
   // When user exits guide
@@ -41,147 +42,162 @@ const GuideModal = () => {
   };
 
   const nextStep = () => {
-    setGuide((parseInt(guide) + 1).toString());
+    guide && setGuide((parseInt(guide) + 1).toString());
   };
 
   const prevStep = () => {
-    !isNaN(guide) && parseInt(guide) > 1 && setGuide((parseInt(guide) - 1).toString());
+    guide &&
+      !isNaN(parseInt(guide)) &&
+      parseInt(guide) > 1 &&
+      setGuide((parseInt(guide) - 1).toString());
   };
 
   // These guide-actions is in useeffect as both nextStep and DotStepsMenu should trigger these changes/actions.
   React.useEffect(() => {
     // between step 4 and step 11 the guide is in the month tab. Rest of the steps is in year-tab.
-    guide === '1' && setYear('2021');
-    guide === '2' && setYear('2021');
-    guide === '3' && setYear('2021');
-    guide === '4' && addMonth('January');
-    guide === '5' && addMonth('January');
-    guide === '6' && addMonth('January');
-    guide === '7' && addMonth('January');
-    guide === '8' && addMonth('January');
-    guide === '9' && addMonth('January');
-    guide === '10' && addMonth('January');
-    guide === '11' && addMonth('January');
-    guide === '12' && addMonth('January');
-    guide === '13' && setYear('2021');
-    guide === '14' && setYear('2021');
-    guide === '15' && setYear('2021');
-    guide === '16' && setYear('2021');
+    guide === "1" && setYear(2021);
+    guide === "2" && setYear(2021);
+    guide === "3" && setYear(2021);
+    guide === "4" && addMonth("January");
+    guide === "5" && addMonth("January");
+    guide === "6" && addMonth("January");
+    guide === "7" && addMonth("January");
+    guide === "8" && addMonth("January");
+    guide === "9" && addMonth("January");
+    guide === "10" && addMonth("January");
+    guide === "11" && addMonth("January");
+    guide === "12" && addMonth("January");
+    guide === "13" && setYear(2021);
+    guide === "14" && setYear(2021);
+    guide === "15" && setYear(2021);
+    guide === "16" && setYear(2021);
     // scroll view
-    !isNaN(guide) && parseInt(guide) <= 10 && animateScroll.scrollToTop(); // if guidestep less than 11 scroll to top
-    !isNaN(guide) && parseInt(guide) > 16 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top
+    guide && !isNaN(parseInt(guide)) && parseInt(guide) <= 10 && animateScroll.scrollToTop(); // if guidestep less than 11 scroll to top
+    guide && !isNaN(parseInt(guide)) && parseInt(guide) > 16 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top
 
-    guide === '11' && animateScroll.scrollToBottom();
-    guide === '12' && animateScroll.scrollToTop();
-    guide === '13' && animateScroll.scrollToBottom();
-    guide === '14' && animateScroll.scrollToBottom();
-    guide === '15' && animateScroll.scrollToBottom();
-    guide === '16' && animateScroll.scrollToBottom();
+    guide === "11" && animateScroll.scrollToBottom();
+    guide === "12" && animateScroll.scrollToTop();
+    guide === "13" && animateScroll.scrollToBottom();
+    guide === "14" && animateScroll.scrollToBottom();
+    guide === "15" && animateScroll.scrollToBottom();
+    guide === "16" && animateScroll.scrollToBottom();
 
     // Loads guide-data. Dummydata to have something to show the user.
-    !isNaN(guide) && parseInt(guide) >= 2 && getGuidePresets();
+    guide && !isNaN(parseInt(guide)) && parseInt(guide) >= 2 && getGuidePresets();
 
     // eslint-disable-next-line
   }, [guide]);
 
   return (
     <>
-      <div className='guide__modal' style={{ zIndex: guide === '17' ? 33 : 1 }}></div>
+      <div className="guide__modal" style={{ zIndex: guide === "17" ? 33 : 1 }}></div>
       <div>
-        {guide === '1' && (
-          <div className='guide__card'>
-            <h1 className='guide__title'>Budget App Guide</h1>
-            <h3 className='guide__title__h3'>Welcome {isAuthenticated && user?.name}!</h3>
-            <p>To be able to properly use this App we suggest following this quick guided tour of all the features.</p>
-            <div className='guide__btn__group'>
-              <button className='guide__btn__group__next' onClick={nextStep}>
+        {guide === "1" && (
+          <div className="guide__card">
+            <h1 className="guide__title">Budget App Guide</h1>
+            <h3 className="guide__title__h3">Welcome {isAuthenticated && user?.name}!</h3>
+            <p>
+              To be able to properly use this App we suggest following this quick guided tour of all
+              the features.
+            </p>
+            <div className="guide__btn__group">
+              <button className="guide__btn__group__next" onClick={nextStep}>
                 Start Guide
               </button>
-              <button className='guide__btn__group__exit' onClick={onExit}>
+              <button className="guide__btn__group__exit" onClick={onExit}>
                 Decline
               </button>
             </div>
           </div>
         )}
-        {guide === '2' && (
+        {guide === "2" && (
           <GuideSteps
             nextStep={nextStep}
             prevStep={prevStep}
             onExit={onExit}
-            text={'The date-menu is your main navigationpoint in the app. Here you navigate in your timeline'}
+            text={
+              "The date-menu is your main navigationpoint in the app. Here you navigate in your timeline"
+            }
             guide={guide}
             setGuide={setGuide}
           />
         )}
-        {guide === '3' && (
+        {guide === "3" && (
           <GuideSteps
             nextStep={nextStep}
             prevStep={prevStep}
             onExit={onExit}
-            text={'Under year you will find a statistic summary for the year'}
+            text={"Under year you will find a statistic summary for the year"}
             guide={guide}
             setGuide={setGuide}
           />
         )}
 
-        {guide === '4' && (
+        {guide === "4" && (
           <GuideSteps
             nextStep={nextStep}
             prevStep={prevStep}
             onExit={onExit}
-            text={'Under month you will find a statistic summary for the month'}
+            text={"Under month you will find a statistic summary for the month"}
             guide={guide}
             setGuide={setGuide}
           />
         )}
-        {guide === '5' && (
-          <GuideSteps prevStep={prevStep} nextStep={nextStep} onExit={onExit} text={'Add to Budget'} guide={guide} setGuide={setGuide} />
-        )}
-        {guide === '6' && (
+        {guide === "5" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Add to Budget: Overhead'}
+            text={"Add to Budget"}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
           />
         )}
-        {guide === '7' && (
+        {guide === "6" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Add to Budget: Upload CSV'}
+            text={"Add to Budget: Overhead"}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '8' && (
+        {guide === "7" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Add to Budget: Capital'}
+            text={"Add to Budget: Upload CSV"}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '9' && (
+        {guide === "8" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Add to Budget: Savings'}
+            text={"Add to Budget: Capital"}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '10' && (
+        {guide === "9" && (
+          <GuideSteps
+            prevStep={prevStep}
+            nextStep={nextStep}
+            onExit={onExit}
+            text={"Add to Budget: Savings"}
+            guide={guide}
+            setGuide={setGuide}
+            placement={"guide__card guide__card__bottom"}
+          />
+        )}
+        {guide === "10" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
@@ -190,10 +206,10 @@ const GuideModal = () => {
           month surplus, you can add some amount to that planned purchase piggybank`}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__top'}
+            placement={"guide__card guide__card__top"}
           />
         )}
-        {guide === '11' && (
+        {guide === "11" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
@@ -205,57 +221,61 @@ const GuideModal = () => {
           then be moved into that months transactions.`}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__top'}
+            placement={"guide__card guide__card__top"}
           />
         )}
-        {guide === '12' && (
+        {guide === "12" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'To go back to year summary you press the year in the datemenu'}
+            text={"To go back to year summary you press the year in the datemenu"}
             guide={guide}
             setGuide={setGuide}
           />
         )}
-        {guide === '13' && (
+        {guide === "13" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
             text={
               dimensions.width < 800
-                ? 'Under year there are 4 summary tabs you can reach by swiping right and left on the charts'
-                : 'Under year there are 4 summary tabs you can reach by clicking on the different subject fields on the left'
+                ? "Under year there are 4 summary tabs you can reach by swiping right and left on the charts"
+                : "Under year there are 4 summary tabs you can reach by clicking on the different subject fields on the left"
             }
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '14' && (
+        {guide === "14" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Under expense summary in year-tab, you get a good overview of your expenditure during the year'}
+            text={
+              "Under expense summary in year-tab, you get a good overview of your expenditure during the year"
+            }
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '15' && (
+        {guide === "15" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
             onExit={onExit}
-            text={'Income summary gives you a chart representation of your income divided into categories'}
+            text={
+              "Income summary gives you a chart representation of your income divided into categories"
+            }
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '16' && (
+        {guide === "16" && (
           <GuideSteps
             prevStep={prevStep}
             nextStep={nextStep}
@@ -263,13 +283,13 @@ const GuideModal = () => {
             text={`Savings summary gives overview of all your savings: general savings, capital and piggybank/targeted savings and their progress`}
             guide={guide}
             setGuide={setGuide}
-            placement={'guide__card guide__card__bottom'}
+            placement={"guide__card guide__card__bottom"}
           />
         )}
-        {guide === '17' && (
+        {guide === "17" && (
           <GuideSteps
             prevStep={prevStep}
-            nextStep={false}
+            nextStep={nextStep}
             onExit={onExit}
             text={`Guide complete!. 
             A good startingpoint now is to add your initial capital under month/add to budget, and from there you can then input your monthly transactions`}

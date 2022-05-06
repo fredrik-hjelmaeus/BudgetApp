@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect } from "react";
-import PresetForm from "../presets/PresetForm";
+import PresetForm from "./PresetForm";
 import DeletePurchaseModal from "./DeletePurchaseModal";
 import AddtoPiggybankModal from "./AddtoPiggybankModal";
 import EditPiggybankModal from "./EditPiggybankModal";
@@ -11,8 +11,8 @@ import CssContext from "../../context/css/cssContext";
 import Purchases from "./Purchases";
 import MonthSummary from "./MonthSummary";
 import CategoryBalance from "./CategoryBalance";
-import Sum from "../presets/Sum";
-import MonthSavingsSummary from "../presets/MonthSavingsSummary";
+import Sum from "./Sum";
+import MonthSavingsSummary from "./MonthSavingsSummary";
 import UserProfileModal from "../auth/UserProfileModal";
 import SelectFile from "../csv/SelectFile";
 import SelectCSVfields from "../csv/SelectCSVfields";
@@ -42,10 +42,10 @@ const Month = () => {
   useEffect(() => {
     presets && calcSum();
     presets && setPurchase();
-    presets && calcMonthSum(month);
+    presets && month && calcMonthSum(month);
     presets && calcMonthSavings();
-    presets && getMonthSavings(month);
-    presets && getMonthPiggySavings(month);
+    presets && month && getMonthSavings(month);
+    presets && month && getMonthPiggySavings(month);
     // eslint-disable-next-line
   }, [presets, month]);
 
@@ -56,9 +56,9 @@ const Month = () => {
       {modal === "SelectCSVfields" && <SelectCSVfields />}
       {modal === "profile" && <UserProfileModal />}
       {csvpresets && modal === "" && <CsvPresetCreateModal />}
-      {modal === "deletepurchase" && <DeletePurchaseModal Item={modalprops} />}
-      {modal === "addtopiggybank" && <AddtoPiggybankModal Item={modalprops} />}
-      {modal === "editpiggybank" && <EditPiggybankModal Item={modalprops} />}
+      {modal === "deletepurchase" && modalprops && <DeletePurchaseModal Item={modalprops} />}
+      {modal === "addtopiggybank" && modalprops && <AddtoPiggybankModal Item={modalprops} />}
+      {modal === "editpiggybank" && modalprops && <EditPiggybankModal Item={modalprops} />}
       <Datemenu />
       {((!isNaN(guide) && parseInt(guide) >= 4) || parseInt(guide) <= 9) && <GuideModal />}
       <div
@@ -89,7 +89,7 @@ const Month = () => {
         <div className="bgmonthright monthgrid__sums">
           <Sum />
           {(monthsavings !== null && <MonthSavingsSummary />) ||
-            (monthpiggysavings?.length !== 0 && <MonthSavingsSummary />)}
+            (monthpiggysavings !== 0 && monthpiggysavings?.length !== 0 && <MonthSavingsSummary />)}
           <MonthSummary />
         </div>
       </div>
