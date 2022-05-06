@@ -1,8 +1,14 @@
 import React from "react";
 
-const DotStepsMenu = ({ guide, setGuide }) => {
-  const onStepBtnClick = (e) => {
-    setGuide(e.target.value);
+interface DotStepsMenuProps {
+  guide: null | string;
+  setGuide: (guide: string) => void;
+}
+
+const DotStepsMenu = ({ guide, setGuide }: DotStepsMenuProps) => {
+  const onStepBtnClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    const { value } = e.currentTarget;
+    setGuide(value);
   };
 
   return (

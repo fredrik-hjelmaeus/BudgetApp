@@ -60,7 +60,9 @@ const Month = () => {
       {modal === "addtopiggybank" && modalprops && <AddtoPiggybankModal Item={modalprops} />}
       {modal === "editpiggybank" && modalprops && <EditPiggybankModal Item={modalprops} />}
       <Datemenu />
-      {((!isNaN(guide) && parseInt(guide) >= 4) || parseInt(guide) <= 9) && <GuideModal />}
+      {guide && ((!isNaN(parseInt(guide)) && parseInt(guide) >= 4) || parseInt(guide) <= 9) && (
+        <GuideModal />
+      )}
       <div
         className="monthgrid"
         data-tooltip={
