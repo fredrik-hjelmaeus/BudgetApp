@@ -9,7 +9,8 @@ const Expense = () => {
   const presetContext = useContext(PresetContext);
   const { categorysumonlynegnumbyyear, categorynameonlynegnumbyyear } = presetContext;
   const { dimensions } = useContext(CssContext);
-  const YearExpense = categorysumonlynegnumbyyear.reduce((a, b) => a + b, 0);
+  const YearExpense =
+    categorysumonlynegnumbyyear && categorysumonlynegnumbyyear.reduce((a, b) => a + b, 0);
   //colors set here so expense and income can have different colors in their chart
   const colors = [
     "#67b7dc",
@@ -35,7 +36,7 @@ const Expense = () => {
     "#67cec3",
     "#6ec5d2",
   ];
-  const yearmonthavg = parseInt(parseFloat(YearExpense / 12));
+  const yearmonthavg = YearExpense !== undefined && YearExpense && YearExpense / 12.0;
 
   // Scroll for guide
   const { guide } = useContext(GuideContext);
@@ -61,13 +62,15 @@ const Expense = () => {
     <div>
       <Element name="myScrollToElement"></Element>
       <div className={guide === "14" ? "expense__card guide__expense__card" : "expense__card"}>
-        <div style={{ margin: "0 0 1rem 0" }}>
-          <DonutChart
-            sums={categorysumonlynegnumbyyear}
-            names={categorynameonlynegnumbyyear}
-            colors={colors}
-          />
-        </div>
+        {categorysumonlynegnumbyyear && categorynameonlynegnumbyyear && (
+          <div style={{ margin: "0 0 1rem 0" }}>
+            <DonutChart
+              sums={categorysumonlynegnumbyyear}
+              names={categorynameonlynegnumbyyear}
+              colors={colors}
+            />
+          </div>
+        )}
         <div className="donuttitle">Expenses</div>
         <div className="flexrow">
           <div className="flexcolumn">
