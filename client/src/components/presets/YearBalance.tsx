@@ -4,7 +4,8 @@ import PresetContext from "../../context/preset/presetContext";
 
 const YearBalance = () => {
   const presetContext = useContext(PresetContext);
-  const yearmonthavg = parseInt(parseFloat(presetContext.yearsum / 12));
+  const { yearsum, capital, savings, sum } = presetContext;
+  const yearmonthavg = yearsum && yearsum / 12;
 
   return (
     <div>
@@ -34,15 +35,19 @@ const YearBalance = () => {
               <ul className="flexrow">
                 <li>Year Summary: </li>
                 <li
-                  name="year_summary_number"
-                  className={presetContext.yearsum > 0 ? "text-success px" : "text-danger px"}
+                  // name="year_summary_number"
+                  className={yearsum && yearsum > 0 ? "text-success px" : "text-danger px"}
                 >
                   {presetContext.yearsum}
                 </li>
               </ul>
               <ul className="flexrow">
                 <li>Monthly Average: </li>
-                <li className={yearmonthavg > 0 ? "text-success px" : "text-danger px"}>
+                <li
+                  className={
+                    yearmonthavg && yearmonthavg > 0 ? "text-success px" : "text-danger px"
+                  }
+                >
                   {yearmonthavg}
                 </li>
               </ul>
@@ -50,21 +55,19 @@ const YearBalance = () => {
             <div className="flexcolumn">
               <ul className="flexrow">
                 <li>Capital: </li>
-                <li className={presetContext.capital > 0 ? "text-primary px" : "text-danger px"}>
-                  {presetContext.capital}
+                <li className={capital && capital > 0 ? "text-primary px" : "text-danger px"}>
+                  {capital}
                 </li>
               </ul>
               <ul className="flexrow">
                 <li>Savings: </li>
-                <li className={presetContext.savings > 0 ? "text-primary px" : "text-danger px"}>
-                  {presetContext.savings}
+                <li className={savings && savings > 0 ? "text-primary px" : "text-danger px"}>
+                  {savings}
                 </li>
               </ul>
               <ul className="flexrow">
                 <li>Account Balance: </li>
-                <li className={presetContext.sum > 0 ? "text-success px" : "text-danger px"}>
-                  {presetContext.sum}
-                </li>
+                <li className={sum && sum > 0 ? "text-success px" : "text-danger px"}>{sum}</li>
               </ul>
             </div>
           </div>
