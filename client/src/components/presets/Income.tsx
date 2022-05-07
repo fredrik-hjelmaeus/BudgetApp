@@ -10,7 +10,7 @@ const Income = () => {
   const { categorysumonlyposnumbyyear, categorynameonlyposnumbyyear } = presetContext;
   const { dimensions } = useContext(CssContext);
   const YearExpense = categorysumonlyposnumbyyear?.reduce((a, b) => a + b, 0);
-  const yearmonthavg = parseInt(parseFloat(YearExpense / 12));
+  const yearmonthavg = YearExpense !== undefined && YearExpense / 12.0;
   //colors set here so expense and income can have different colors in their chart
   const colors = [
     "#8a0d2d",
@@ -66,13 +66,15 @@ const Income = () => {
           guide === "15" ? "expense__card bold guide__expense__card" : "expense__card bold"
         }
       >
-        <div style={{ margin: "0 0 1rem 0" }}>
-          <DonutChart
-            sums={categorysumonlyposnumbyyear}
-            names={categorynameonlyposnumbyyear}
-            colors={colors}
-          />
-        </div>
+        {categorysumonlyposnumbyyear && categorynameonlyposnumbyyear && (
+          <div style={{ margin: "0 0 1rem 0" }}>
+            <DonutChart
+              sums={categorysumonlyposnumbyyear}
+              names={categorynameonlyposnumbyyear}
+              colors={colors}
+            />
+          </div>
+        )}
         <div className="donuttitle">Income</div>
         <div className="flexrow">
           <div className="flexcolumn">

@@ -1,8 +1,14 @@
-import React, { useEffect, Fragment, useState, useContext } from 'react';
-import Chart from 'react-apexcharts';
-import CssContext from '../../context/css/cssContext';
+import React, { useEffect, Fragment, useState, useContext } from "react";
+import Chart from "react-apexcharts";
+import CssContext from "../../context/css/cssContext";
 
-const DonutChart = ({ sums, names, colors }) => {
+interface DonutChartProps {
+  sums: number[];
+  names: string[];
+  colors: string[];
+}
+
+const DonutChart = ({ sums, names, colors }: DonutChartProps) => {
   const cssContext = useContext(CssContext);
   const { dimensions } = cssContext;
   useEffect(() => {
@@ -16,12 +22,12 @@ const DonutChart = ({ sums, names, colors }) => {
           sparkline: {
             enabled: true,
           },
-          background: '#fff',
+          background: "#fff",
         },
         labels: names,
         legend: {
           show: true,
-          fontSize: '10px',
+          fontSize: "10px",
         },
         colors,
         dataLabels: {
@@ -49,16 +55,16 @@ const DonutChart = ({ sums, names, colors }) => {
 
   const [options, setOptions] = useState({});
 
-  const [series, setSeries] = useState([]);
+  const [series, setSeries] = useState<Array<number>>([]);
 
   return (
     <Fragment>
-      {' '}
+      {" "}
       <Chart
         options={options}
         series={series}
-        type='donut'
-        height={dimensions.width > 700 ? '305px' : '205px'}
+        type="donut"
+        height={dimensions.width > 700 ? "305px" : "205px"}
       />
     </Fragment>
   );
