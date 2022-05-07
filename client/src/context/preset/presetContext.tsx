@@ -35,6 +35,8 @@ const presetContext = createContext<IPresetContext>({
   doSubmitCsv: "",
   savingsList: [],
   capitalList: [],
+  newPresets: [],
+  setNewPresets: () => {},
   addPreset: () => {},
   getPresets: () => Promise.resolve(),
   deletePreset: () => Promise.resolve(),

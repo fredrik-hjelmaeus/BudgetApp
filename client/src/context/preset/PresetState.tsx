@@ -234,7 +234,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Add month-val coming from Datemenu
   const addMonth: IPresetContext["addMonth"] = (month) => {
-    dispatch({ type: ADD_MONTH, payload: month });
+    month && dispatch({ type: ADD_MONTH, payload: month });
   };
 
   // Calc month sum
