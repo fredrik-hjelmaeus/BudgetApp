@@ -3,8 +3,12 @@ import TrashiconSVG from "../layout/images/TrashiconSVG";
 import PresetContext from "../../context/preset/presetContext";
 import { IPreset } from "../../frontend-types/IPreset";
 
-const CapitalItem = ({ capitalItem }: { capitalItem: IPreset }) => {
-  const { deletePreset, presets, calcCapital } = React.useContext(PresetContext);
+interface SavingsItemProps {
+  savingsItem: IPreset;
+}
+
+const SavingsItem = ({ savingsItem }: SavingsItemProps) => {
+  const { deletePreset, presets, calcSavings } = React.useContext(PresetContext);
   const [trashIconIsHover, setTrashIconIsHover] = React.useState(false);
   //on delete button hover
   const onHover = () => {
@@ -16,22 +20,22 @@ const CapitalItem = ({ capitalItem }: { capitalItem: IPreset }) => {
   };
   const onDelete = () => {
     // TODO: if id is missing show error. Or should id be required?
-    capitalItem.id && deletePreset(capitalItem.id);
+    savingsItem.id && deletePreset(savingsItem.id);
   };
   React.useEffect(() => {
-    presets && calcCapital();
+    presets && calcSavings();
   }, [presets]);
+
   return (
     <div className="card-piggy">
       <div className="no-wrap" style={{ overflow: "hidden" }}>
-        {capitalItem.name}
+        {savingsItem.name}
       </div>
 
       <div className="flexrow-piggycard">
-        <div className="px text-gray">{capitalItem.year}</div>
-        <div className="px text-gray">{capitalItem.month}</div>
-        <div className="px text-gray">{capitalItem.category}</div>
-        <div className="text-primary px">{capitalItem.number}</div>
+        <div className="px text-gray">{savingsItem.month}</div>
+        <div className="px text-gray">{savingsItem.category}</div>
+        <div className="text-primary px">{savingsItem.number}</div>
         <button
           className="card-piggyItem__btn"
           value="delbtn"
@@ -45,4 +49,4 @@ const CapitalItem = ({ capitalItem }: { capitalItem: IPreset }) => {
     </div>
   );
 };
-export default CapitalItem;
+export default SavingsItem;

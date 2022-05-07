@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import PresetContext from "../../context/preset/presetContext";
-import piggyicon from "../layout/images/piggybank.svg";
+//import piggyicon from "../layout/images/piggybank.svg";
 import PiggybankSavings from "./PiggybankSavings";
 import GuideContext from "../../context/guide/guideContext";
 import SavingsItem from "./SavingsItem";
 import CapitalItem from "./CapitalItem";
+import PiggybankSVG from "../layout/images/PiggybankSVG";
 
 const Savings = () => {
   const { guide } = useContext(GuideContext);
@@ -18,6 +19,7 @@ const Savings = () => {
     getSavingsList();
     getCapitalList();
   }, [presets]);
+
   const onClick = () => {
     setShowIndividualSavingsList(!showIndividualSavingsList);
   };
@@ -32,11 +34,9 @@ const Savings = () => {
         }
       >
         <div className="flexcolumn ">
-          <button className="flexrow-2 borderdivider" onClick={onClick}>
+          <button className="flexrow-2 borderdivider" onClick={onClick} name="expandsavings">
             <div>General Savings: </div>
-            <div className={"text-success px text-left expandbutton"} name="expandsavings">
-              {savings}
-            </div>
+            <div className={"text-success px text-left expandbutton"}>{savings}</div>
           </button>
           {showIndividualSavingsList &&
             savingsList &&
@@ -54,7 +54,8 @@ const Savings = () => {
             ))}
           <div className="flexrow-2 savings__piggyiconandtitle">
             <div>
-              <img src={piggyicon} alt="" className="savings__piggyicon" />{" "}
+              <PiggybankSVG fill="var(--primary-color)" />
+              {/*  <img src={piggyicon} alt="" className="savings__piggyicon" />{" "} */}
             </div>
             <div>Piggybank Purchase Savings</div>
           </div>
