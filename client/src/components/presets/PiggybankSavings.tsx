@@ -1,8 +1,8 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, FunctionComponent, useContext, useEffect } from "react";
 import PiggyBankSavingItem from "./PiggyBankSavingItem";
 import PresetContext from "../../context/preset/presetContext";
 
-const PiggybankSavings = () => {
+const PiggybankSavings: FunctionComponent = () => {
   const presetContext = useContext(PresetContext);
   const { purchases, presets, setPurchase } = presetContext;
 
@@ -17,7 +17,7 @@ const PiggybankSavings = () => {
   return (
     <Fragment>
       {purchases &&
-        purchases.map((purchase) => <PiggyBankSavingItem key={purchase._id} purchase={purchase} />)}
+        purchases.map((purchase) => <PiggyBankSavingItem key={purchase?.id} preset={purchase} />)}
     </Fragment>
   );
 };
