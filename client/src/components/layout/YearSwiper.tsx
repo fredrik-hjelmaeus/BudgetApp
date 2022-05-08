@@ -19,7 +19,7 @@ SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 interface YearSwiperProps {
   guide: string;
-  setYearSummary: React.Dispatch<React.SetStateAction<string>>;
+  setYearSummary: (yearsummary: string) => void;
   yearsummary: string;
 }
 
