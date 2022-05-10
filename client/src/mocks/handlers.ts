@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import { IEditPreset } from "../frontend-types/IEditPreset";
 import { IPreset } from "../frontend-types/IPreset";
 
 // mocking backend/context responses: happy paths
@@ -389,7 +390,7 @@ export const handlers = [
     );
   }),
   // edit one preset
-  rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+  rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
 
     return res(
@@ -426,17 +427,20 @@ export const handlers = [
     );
   }),
   // update user name and email
-  rest.put(`http://localhost/api/auth/updatedetails`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        _id: "61ed72d16f895b1100dbab66",
-        name: req.body.name,
-        email: req.body.email,
-        date: "2022-02-09T15:47:55.671Z",
-        __v: 0,
-      })
-    );
-  }),
+  rest.put<UpdateUserAndEmailResponse>(
+    `http://localhost/api/auth/updatedetails`,
+    (req, res, ctx) => {
+      return res(
+        ctx.json({
+          _id: "61ed72d16f895b1100dbab66",
+          name: req?.body?.name,
+          email: req.body.email,
+          date: "2022-02-09T15:47:55.671Z",
+          __v: 0,
+        })
+      );
+    }
+  ),
   // update user password
   rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
     return res(
@@ -446,3 +450,11 @@ export const handlers = [
     );
   }),
 ];
+
+interface UpdateUserAndEmailResponse {
+  _id: string;
+  name: string;
+  email: string;
+  date: string;
+  __v: number;
+}
