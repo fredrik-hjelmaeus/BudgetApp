@@ -10,6 +10,9 @@ import App from "../../../App";
 
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
+import React from "react";
+import { IEditPreset } from "../../../frontend-types/IEditPreset";
+import { IPreset } from "../../../frontend-types/IPreset";
 
 describe("MonthSavingsSummary unit tests", () => {
   beforeEach(async () => {
@@ -18,7 +21,7 @@ describe("MonthSavingsSummary unit tests", () => {
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
-    fireEvent.click(januaryButton);
+    januaryButton && fireEvent.click(januaryButton);
 
     // assert/await inital month state, IMPORTANT TO INIT SUMMATION VALUES as they are used in the tests
     const sum = await screen.findAllByText("799");
@@ -62,7 +65,7 @@ describe("MonthSavingsSummary unit tests", () => {
     });
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -94,7 +97,7 @@ describe("MonthSavingsSummary unit tests", () => {
 
     // expect summation fields to be updated
     expect(screen.getByText("Month Income:").textContent).toBe("Month Income:    10799");
-    expect(screen.getByText("Month Surplus:").parentElement.children[1].textContent).toBe("10544");
+    expect(screen.getByText("Month Surplus:").parentElement?.children[1].textContent).toBe("10544");
     expect(screen.getByText("Month Expenses:").textContent).toBe("Month Expenses:    -255");
     expect(screen.getByText("Account Balance:").textContent).toBe("Account Balance:554977 ");
     expect(screen.getByText("Month Balance:").textContent).toBe("Month Balance:8544");
@@ -121,7 +124,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(savingsCheckbox).toBeChecked();
 
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -169,14 +172,17 @@ describe("MonthSavingsSummary unit tests", () => {
     // change number to something more than 544 and submit
     const editPresetNameField = screen
       .getAllByPlaceholderText("Name")
-      .find((field) => field.value === "valid_saving_sum");
+      .find((field) => (field as HTMLInputElement).value === "valid_saving_sum");
     const editPresetNumField = screen
       .getAllByPlaceholderText("Number")
-      .find((field) => field.value === "500");
-    userEvent.clear(editPresetNumField);
-    userEvent.clear(editPresetNameField);
-    userEvent.type(editPresetNumField, "1000");
-    userEvent.type(editPresetNameField, "invalid_saving_sum");
+      .find((field) => (field as HTMLInputElement).value === "500");
+    if (editPresetNumField && editPresetNameField) {
+      userEvent.clear(editPresetNumField);
+      userEvent.clear(editPresetNameField);
+      userEvent.type(editPresetNumField, "1000");
+      userEvent.type(editPresetNameField, "invalid_saving_sum");
+    } else throw console.error("Could not find edit preset fields");
+
     fireEvent.click(updateBtn);
 
     // expect alert message to appear in edit preset
@@ -194,9 +200,11 @@ describe("MonthSavingsSummary unit tests", () => {
     // press number on piggybank saving
     const MonthSavingsComponentTree = screen.getByRole("heading", {
       name: /month surplus put to savings/i,
-    }).parentElement.parentElement;
-    const categoryBtn = await within(MonthSavingsComponentTree).findByAltText(/travel/i);
-    fireEvent.click(categoryBtn);
+    }).parentElement?.parentElement;
+    const categoryBtn =
+      MonthSavingsComponentTree &&
+      (await within(MonthSavingsComponentTree).findByAltText(/travel/i));
+    categoryBtn && fireEvent.click(categoryBtn);
     const header = screen.queryByRole("heading", { name: "Amount to save" }); // using query allows heading not to be found but also NOT throw error
     expect(header).not.toBeInTheDocument();
   });
@@ -209,10 +217,10 @@ describe("MonthSavingsSummary unit tests", () => {
     // press deletebutton
     const MonthSavingsComponentTree = screen.getByRole("heading", {
       name: /month surplus put to savings/i,
-    }).parentElement.parentElement;
-    const deleteBtn = MonthSavingsComponentTree.children[1].children[4].children[0];
+    }).parentElement?.parentElement;
+    const deleteBtn = MonthSavingsComponentTree?.children[1].children[4].children[0];
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
         return res(
           ctx.json({
@@ -231,7 +239,7 @@ describe("MonthSavingsSummary unit tests", () => {
         );
       })
     );
-    fireEvent.click(deleteBtn);
+    deleteBtn && fireEvent.click(deleteBtn);
 
     // expect piggybank to have been deleted
     await waitForElementToBeRemoved(deleteBtn);
@@ -244,19 +252,19 @@ describe("MonthSavingsSummary unit tests", () => {
   test("editing name,number and category on saving works correctly", async () => {
     // go to april month
     const aprilButton = screen.queryByRole("button", { name: /april/i });
-    fireEvent.click(aprilButton);
+    aprilButton && fireEvent.click(aprilButton);
 
     // click number on saving
     fireEvent.click(await screen.findByRole("button", { name: /456788/i }));
 
     // edit number
     const numberField = await screen.findByLabelText("Number");
-    expect(numberField.value).toBe("456788");
+    expect((numberField as HTMLInputElement).value).toBe("456788");
     userEvent.clear(numberField);
     userEvent.type(numberField, "66");
     const updateBtn = screen.getByRole("button", { name: /update/i });
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -317,7 +325,7 @@ const addIncomePreset = async () => {
   userEvent.selectOptions(await screen.findByRole("combobox"), "Travel");
   //override server response:
   server.use(
-    rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+    rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
       return res(
         ctx.json({
           _id: "6203e22b2bdb63c78b35b672",
@@ -356,7 +364,7 @@ const createPiggybankSaving = async () => {
   //create piggybank saving
   fireEvent.click(await screen.findByRole("button", { name: /5 months/i }));
   server.use(
-    rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+    rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
       const { _id } = req.params;
       return res(
         ctx.json({
