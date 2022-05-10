@@ -1,5 +1,6 @@
 // add / install jest-dom so we get access to custom jest matchers to assert on DOM-nodes.
 import "@testing-library/jest-dom";
+import React from "react";
 
 // src/setupTests.js
 import { server } from "./mocks/server.js";

@@ -10,6 +10,7 @@ import { server } from "../../../mocks/server";
 import { rest } from "msw";
 import path from "path";
 import React from "react";
+import { IPreset } from "../../../frontend-types/IPreset";
 
 // Integration tests of user interaction triggered from presetform,purchases,monthsummary or monthsavingssummary.
 // The result of such interaction affects summations and display in multiple month components
@@ -21,7 +22,7 @@ describe("Summation functionality", () => {
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
-    fireEvent.click(januaryButton);
+    januaryButton && fireEvent.click(januaryButton);
 
     // click add to budget button
     const addToBudgetButton = await screen.findByRole("button", {
@@ -78,7 +79,7 @@ describe("Summation functionality", () => {
     const AccBal = screen.getByText("545977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("1544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:1544");
@@ -143,7 +144,7 @@ describe("Summation functionality", () => {
     expect(MonthExpenses).toBe("-1255");
 
     //Month Balance: -456
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Balance Month:-456");
 
     //Month Savings: 0
@@ -154,16 +155,25 @@ describe("Summation functionality", () => {
     // starting point is month January with expanded preset form
 
     // delete preset
-    const presetElement_DeleteButton = screen
+    const presetElement_DeleteButton: HTMLElement | undefined = screen
       .queryAllByRole("button")
-      .find((btn) => btn.value === "delbtn" && btn.name === "sadas");
-    fireEvent.click(presetElement_DeleteButton);
+      .find(
+        (btn) =>
+          (btn as HTMLButtonElement).value === "delbtn" &&
+          (btn as HTMLButtonElement).name === "sadas"
+      );
+
+    presetElement_DeleteButton && fireEvent.click(presetElement_DeleteButton);
     await waitForElementToBeRemoved(presetElement_DeleteButton);
 
     // expect to not find deleted preset
     const deletedPreset = screen
       .queryAllByRole("button")
-      .find((btn) => btn.value === "delbtn" && btn.name === "sadas");
+      .find(
+        (btn) =>
+          (btn as HTMLButtonElement).value === "delbtn" &&
+          (btn as HTMLButtonElement).name === "sadas"
+      );
     expect(deletedPreset).toBeUndefined();
 
     // expect summation values to update:
@@ -230,8 +240,8 @@ describe("Summation functionality", () => {
     // delete the second field
     const presetDeleteBtn = screen
       .getAllByTestId("deleteCsvPresetBtn")
-      .find((btn) => btn.name === "Mercury");
-    fireEvent.click(presetDeleteBtn);
+      .find((btn) => (btn as HTMLButtonElement).name === "Mercury");
+    presetDeleteBtn && fireEvent.click(presetDeleteBtn);
 
     // overwrite the addPreset endpoint response
     server.use(
@@ -264,9 +274,9 @@ describe("Summation functionality", () => {
     // submit the new csvpresets
     const submitBtn = screen
       .getAllByRole("button", { name: /add to budget/i })
-      .find((b) => b.value !== "ADD TO BUDGET");
+      .find((b) => (b as HTMLButtonElement).value !== "ADD TO BUDGET");
     expect(submitBtn).toBeInTheDocument();
-    fireEvent.click(submitBtn);
+    submitBtn && fireEvent.click(submitBtn);
 
     // handle the prompt
     const confirmButton = screen.getByRole("button", {
@@ -294,7 +304,7 @@ describe("Summation functionality", () => {
     expect(MonthExpenses).toBe("-255");
 
     //Month Balance:
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Month Surplus:1100");
 
     //Month Savings: 0
@@ -340,7 +350,7 @@ describe("Summation functionality", () => {
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("-255");
     //Month Balance:
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Month Surplus:4441100");
     //Month Savings: 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
@@ -384,7 +394,7 @@ describe("Summation functionality", () => {
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("-200");
     //Month Balance:
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Month Surplus:599");
     //Month Savings: 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
@@ -418,7 +428,7 @@ describe("Summation functionality", () => {
     // expect preset to have been moved in monthsummary
     const preset = await screen.findByText("switcher");
     expect(
-      preset.parentElement.parentElement.parentElement.parentElement.parentElement.children[0]
+      preset.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.children[0]
         .textContent
     ).toBe("Expenses");
     expect(preset).toBeInTheDocument();
@@ -433,7 +443,7 @@ describe("Summation functionality", () => {
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("-455");
     //Month Balance:
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Balance Month:-100");
     //Month Savings: 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
@@ -467,7 +477,7 @@ describe("Summation functionality", () => {
     // expect preset to have been moved in monthsummary from expense presets to income presets
     const preset = await screen.findByText("switcher");
     expect(
-      preset.parentElement.parentElement.parentElement.parentElement.parentElement.children[0]
+      preset.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.children[0]
         .textContent
     ).toBe("Income");
     expect(preset).toBeInTheDocument();
@@ -482,7 +492,7 @@ describe("Summation functionality", () => {
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("0");
     //Month Balance:
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Month Surplus:3799");
     //Month Savings: 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
@@ -505,7 +515,7 @@ describe("Summation functionality", () => {
 
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -554,7 +564,7 @@ describe("Summation functionality", () => {
     const AccBal = screen.getByText("544977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
@@ -598,7 +608,7 @@ describe("Summation functionality", () => {
     const AccBal = screen.getByText("544977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
