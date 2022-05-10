@@ -11,6 +11,7 @@ import { rest } from "msw";
 import path from "path";
 import React from "react";
 import { IPreset } from "../../../frontend-types/IPreset";
+import { IEditPreset } from "../../../frontend-types/IEditPreset";
 
 // Integration tests of user interaction triggered from presetform,purchases,monthsummary or monthsavingssummary.
 // The result of such interaction affects summations and display in multiple month components
@@ -621,8 +622,10 @@ describe("Summation functionality", () => {
     const presetToDelete = await screen.findByRole("button", { name: /Resa/i });
 
     // click purchase preset deletebutton
-    const deleteButton = screen.getAllByRole("button").find((b) => b.value === "trashicon");
-    fireEvent.click(deleteButton);
+    const deleteButton = screen
+      .getAllByRole("button")
+      .find((b) => (b as HTMLButtonElement).value === "trashicon");
+    deleteButton && fireEvent.click(deleteButton);
 
     // expect DeletePurchaseModal to be activated
     const header = screen.getByRole("heading", { name: "Confirm delete" });
@@ -683,7 +686,7 @@ describe("Summation functionality", () => {
 
     // setup addPreset server response that is used when pressing buy button:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -723,12 +726,12 @@ describe("Summation functionality", () => {
     const newPreset = presets_afterClickingBUY.find(
       (p) => p.textContent === "-55000" && p.hasAttribute("data-testid")
     );
-    expect(newPreset.getAttribute("data-testid")).toEqual("presetitem");
+    newPreset && expect(newPreset.getAttribute("data-testid")).toEqual("presetitem");
     expect(newPreset).toBeInTheDocument();
 
     // expect summation fields to be updated
     expect(screen.getByText("Month Income:").textContent).toBe("Month Income:    100799");
-    expect(screen.getByText("Month Surplus:").parentElement.children[1].textContent).toBe("45544");
+    expect(screen.getByText("Month Surplus:").parentElement?.children[1].textContent).toBe("45544");
     expect(screen.getByText("Month Expenses:").textContent).toBe("Month Expenses:    -55255");
     expect(screen.getByText("Account Balance:").textContent).toBe("Account Balance:589977 ");
     expect(screen.getByText("Month Balance:").textContent).toBe("Month Balance:45544");
@@ -809,13 +812,13 @@ describe("Summation functionality", () => {
 
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
           ctx.json({
-            _id,
-            user: req.body.user,
+            _id, // preset id
+            user: req.body.user, // user id
             name: req.body.name,
             number: req.body.number,
             month: "January",
@@ -859,7 +862,7 @@ describe("Summation functionality", () => {
     const AccBal = screen.getByText("564977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("20544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
@@ -922,14 +925,16 @@ describe("Summation functionality", () => {
     expect(await screen.findByRole("button", { name: /saving/i })).toBeInTheDocument();
     expect(await screen.findByRole("button", { name: /200/i })).toBeInTheDocument();
     expect(
-      await (await screen.findAllByAltText("Travel icon")).find((i) => i.name === "edit category")
+      await (
+        await screen.findAllByAltText("Travel icon")
+      ).find((i) => (i as HTMLButtonElement).name === "edit category")
     ).toBeInTheDocument();
 
     // expect sum values to have been updated
     const newMonthIncomeSum = screen.getByText("799");
     expect(newMonthIncomeSum).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("544");
     const AccBal = screen.getByText("544777"); // 544977 - 200
     expect(AccBal).toBeInTheDocument();
@@ -973,7 +978,7 @@ describe("Summation functionality", () => {
     const newMonthIncomeSumEdit = screen.getByText("799");
     expect(newMonthIncomeSumEdit).toBeInTheDocument();
     const monthSurplusValueEdit =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValueEdit).toBe("544");
     const AccBalEdit = screen.getByText("544577"); // 544977 - 400
     expect(AccBalEdit).toBeInTheDocument();
@@ -1037,7 +1042,7 @@ describe("Summation functionality", () => {
     const newMonthIncomeSum = screen.getByText("799");
     expect(newMonthIncomeSum).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
@@ -1059,8 +1064,8 @@ describe("Summation functionality", () => {
 
     // find the deletebutton in the html-tree and click it
     const presetToDeleteBtn =
-      presetToDelete.parentElement.parentElement.parentElement.children[3].children[0];
-    fireEvent.click(presetToDeleteBtn);
+      presetToDelete.parentElement?.parentElement?.parentElement?.children[3].children[0];
+    presetToDeleteBtn && fireEvent.click(presetToDeleteBtn);
 
     // expect preset to have been deleted
     await waitForElementToBeRemoved(presetToDelete);
@@ -1076,7 +1081,7 @@ describe("Summation functionality", () => {
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("0");
     // Month Balance: -456711 + 456788 = 77
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Month Surplus:77");
     // Month Savings: 456788 - 456788 = 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
@@ -1154,7 +1159,7 @@ describe("Summation functionality", () => {
 
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1204,7 +1209,7 @@ describe("Summation functionality", () => {
     const AccBal = screen.getByText("564977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("20544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
@@ -1215,8 +1220,8 @@ describe("Summation functionality", () => {
 
     // delete piggybank saving
     // find the deletebutton in the html-tree and click it
-    const presetToDeleteBtn = preset.parentElement.parentElement.children[4].children[0];
-    fireEvent.click(presetToDeleteBtn);
+    const presetToDeleteBtn = preset?.parentElement?.parentElement?.children[4].children[0];
+    presetToDeleteBtn && fireEvent.click(presetToDeleteBtn);
 
     // expect preset to have been deleted
     await waitForElementToBeRemoved(preset);
@@ -1232,7 +1237,7 @@ describe("Summation functionality", () => {
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("-255");
     // Month surplus: unchanged
-    const MonthSurplus = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthSurplus = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthSurplus).toBe("Month Surplus:20544");
     // Month Balance 544 + 20000 = 20544
     const monthBalanceField = screen.getByText("Month Balance:").textContent;
@@ -1251,7 +1256,7 @@ describe("Summation functionality", () => {
     });
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1293,7 +1298,7 @@ describe("Summation functionality", () => {
     // month income,surplus and expenses is unchanged
     const monthIncomeSum = (await screen.findByText("Month Income:")).children[0].textContent;
     expect(monthIncomeSum).toBe("799");
-    const MonthSurplus = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthSurplus = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthSurplus).toBe("Month Surplus:544");
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("-255");
@@ -1308,7 +1313,7 @@ describe("PresetForm interaction", () => {
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
-    fireEvent.click(januaryButton);
+    januaryButton && fireEvent.click(januaryButton);
 
     // click add to budget button
     const addToBudgetButton = await screen.findByRole("button", {
@@ -1353,7 +1358,7 @@ describe("PresetForm interaction", () => {
 
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1402,7 +1407,7 @@ describe("PresetForm interaction", () => {
     const AccBal = screen.getByText("544977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
@@ -1426,7 +1431,7 @@ describe("PresetForm interaction", () => {
 
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1466,7 +1471,7 @@ describe("PresetForm interaction", () => {
       name: "purchase",
     });
     expect(purchaseElement).toBeInTheDocument();
-    expect(purchaseElement.parentElement.children[1].textContent).toBe("10000");
+    expect(purchaseElement.parentElement?.children[1].textContent).toBe("10000");
     expect(screen.getByText("18 months")).toBeInTheDocument();
 
     // expect no sum fields to get changed
@@ -1475,7 +1480,7 @@ describe("PresetForm interaction", () => {
     const AccBal = screen.getByText("544977");
     expect(AccBal).toBeInTheDocument();
     const monthSurplusValue =
-      screen.getByText("Month Surplus:").parentElement.children[1].textContent;
+      screen.getByText("Month Surplus:").parentElement?.children[1].textContent;
     expect(monthSurplusValue).toBe("544");
     const monthBalanceValue = screen.getByText("Month Balance:").textContent;
     expect(monthBalanceValue).toBe("Month Balance:544");
@@ -1506,8 +1511,8 @@ describe("PresetForm interaction", () => {
     // Expect add to fail and expect PresetForm to respond with an Alert
     expect(await screen.findByText(/savingone/i)).toBeTruthy();
     expect(
-      (await screen.findByText(/savingone/i)).parentElement.parentElement.parentElement
-        .parentElement.childElementCount
+      (await screen.findByText(/savingone/i)).parentElement?.parentElement?.parentElement
+        ?.parentElement?.childElementCount
     ).toBe(2);
     expect(screen.getByText("Insufficient month surplus for this saving")).toBeInTheDocument();
   });
@@ -1521,7 +1526,7 @@ describe("Purchases interaction", () => {
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
-    fireEvent.click(januaryButton);
+    januaryButton && fireEvent.click(januaryButton);
 
     // click add to budget button
     const addToBudgetButton = await screen.findByRole("button", {
@@ -1558,7 +1563,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1592,7 +1597,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1621,7 +1626,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1652,7 +1657,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(await screen.findByRole("button", { name: /8 months/i }));
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1681,7 +1686,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     // server response
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1732,7 +1737,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1766,7 +1771,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1795,7 +1800,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1826,7 +1831,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(await screen.findByRole("button", { name: /8 months/i }));
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1855,7 +1860,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     // server response
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1892,7 +1897,7 @@ describe("Purchases interaction", () => {
 
     // expect confirm delete modal to have been opened and then click deletebutton
     const delBtn = screen.queryByText("Delete");
-    fireEvent.click(delBtn);
+    delBtn && fireEvent.click(delBtn);
 
     // expect deletemodal to been closed
     expect(screen.queryByText("Delete")).not.toBeInTheDocument();
@@ -1931,7 +1936,7 @@ describe("Purchases interaction", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -1965,7 +1970,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -1992,17 +1997,17 @@ describe("Purchases interaction", () => {
       await screen.findByRole("heading", {
         name: /month surplus put to savings/i,
       })
-    ).parentElement.parentElement.children[1].children[1].children[0].textContent;
+    ).parentElement?.parentElement?.children[1].children[1].children[0].textContent;
     expect(monthSavingSumPreset).toBe("10544");
 
     const monthSavingSumDeleteButton = (
       await screen.findByRole("heading", {
         name: /month surplus put to savings/i,
       })
-    ).parentElement.parentElement.children[1].children[4].children[0];
+    ).parentElement?.parentElement?.children[1].children[4].children[0];
 
     // delete this saving
-    fireEvent.click(monthSavingSumDeleteButton);
+    monthSavingSumDeleteButton && fireEvent.click(monthSavingSumDeleteButton);
 
     // expect saving to disappear
     await waitForElementToBeRemoved(
@@ -2047,14 +2052,14 @@ describe("Purchases interaction", () => {
     const monthIncomeSum = (await screen.findByText("Month Income:")).children[0].textContent;
     expect(monthIncomeSum).toBe("799");
     // Account Balance
-    const AccountBalance = (await screen.findByText("Month Income:")).parentElement.children[3]
+    const AccountBalance = (await screen.findByText("Month Income:")).parentElement?.children[3]
       .children[0].textContent;
     expect(AccountBalance).toBe("544977 ");
     //Month Expenses:
     const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
     expect(MonthExpenses).toBe("-255");
     //Month Balance:
-    const MonthBalance = screen.getByText(/month balance/i).parentElement.children[1].textContent;
+    const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
     expect(MonthBalance).toBe("Month Surplus:544");
     //Month Savings: 0
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
@@ -2062,7 +2067,7 @@ describe("Purchases interaction", () => {
     //Purchases is changed/updated correct
     const purchaseItem = await (
       await screen.findByText("Trip")
-    ).parentElement.children[1].textContent;
+    ).parentElement?.children[1].textContent;
     expect(purchaseItem).toBe("25000");
   });
 
@@ -2075,7 +2080,7 @@ describe("Purchases interaction", () => {
     userEvent.type(screen.getByPlaceholderText("Number"), "10000");
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
