@@ -6,10 +6,12 @@ import {
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
-import MonthSummary from "../MonthSummary";
+
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
-import path from "path";
+import React from "react";
+import { IEditPreset } from "../../../frontend-types/IEditPreset";
+import { IPreset } from "../../../frontend-types/IPreset";
 
 describe("MonthSummary unit tests", () => {
   beforeEach(async () => {
@@ -18,7 +20,7 @@ describe("MonthSummary unit tests", () => {
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
-    fireEvent.click(januaryButton);
+    januaryButton && fireEvent.click(januaryButton);
 
     // click add to budget button
     const addToBudgetButton = await screen.findByRole("button", {
@@ -51,8 +53,9 @@ describe("MonthSummary unit tests", () => {
     // get presets
     const presets = screen.getAllByTestId("presetitem");
     // get deletebutton on the first preset and click it
-    const presetDeleteButton = presets[0].parentElement.parentElement.children[4];
-    fireEvent.click(presetDeleteButton);
+    const presetHtmlElement = presets && presets[0];
+    const presetDeleteButton = presetHtmlElement?.parentElement?.parentElement?.children[4];
+    presetDeleteButton && fireEvent.click(presetDeleteButton);
     // expect deletebutton to be gone
     await waitForElementToBeRemoved(presetDeleteButton);
     expect(presetDeleteButton).not.toBeInTheDocument();
@@ -62,11 +65,11 @@ describe("MonthSummary unit tests", () => {
     const presets = screen.getAllByTestId("presetitem");
 
     // get categoryselect on the first preset and change category
-    const category = presets[0].parentElement.parentElement.children[3];
+    const category = presets[0]?.parentElement?.parentElement?.children[3];
 
     //close presetform for easier query selection
     fireEvent.click(screen.getByTestId("presetform_closebtn"));
-    fireEvent.click(category);
+    category && fireEvent.click(category);
 
     // expect edit preset modal to be opened
     // change category and submit
@@ -83,7 +86,7 @@ describe("MonthSummary unit tests", () => {
     expect(presetsAgain.length).toBe(3);
     expect(await screen.findByAltText("Travel icon")).toBeInTheDocument(); // avoids unmounts somehow
     const typeIcon =
-      presetsAgain[0].parentElement.parentElement.children[3].children[0].getAttribute("alt");
+      presetsAgain[0]?.parentElement?.parentElement?.children[3].children[0].getAttribute("alt");
     expect(typeIcon).toBe("Travel icon");
   });
 
@@ -95,7 +98,7 @@ describe("MonthSummary unit tests", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -129,7 +132,7 @@ describe("MonthSummary unit tests", () => {
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -158,7 +161,7 @@ describe("MonthSummary unit tests", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     //override server response:
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",
@@ -189,7 +192,7 @@ describe("MonthSummary unit tests", () => {
     fireEvent.click(await screen.findByRole("button", { name: /8 months/i }));
     // create the expected server response with a piggybank object added
     server.use(
-      rest.put(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
 
         return res(
@@ -218,7 +221,7 @@ describe("MonthSummary unit tests", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "Travel");
     // server response
     server.use(
-      rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+      rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json({
             _id: "6203e22b2bdb63c78b35b672",

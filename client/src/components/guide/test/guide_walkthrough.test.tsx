@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "../../../test-utils/context-wrapper";
 import App from "../../../App";
+import React from "react";
 
 describe("guide functionality", () => {
   beforeEach(async () => {
@@ -15,10 +16,11 @@ describe("guide functionality", () => {
     // step 1
     const div = await (
       await screen.findByRole("button", { name: /2021/i })
-    ).parentElement.parentElement;
-    expect(div.getAttribute("data-tooltip")).toBe(
-      "This is the datemenu. Here you navigate in your timeline"
-    );
+    ).parentElement?.parentElement;
+    div &&
+      expect(div.getAttribute("data-tooltip")).toBe(
+        "This is the datemenu. Here you navigate in your timeline"
+      );
     expect(await screen.findByText(/the date-menu is your main/i)).toBeInTheDocument();
     // step 2
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -42,7 +44,7 @@ describe("guide functionality", () => {
     // step 5
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     const guideText = screen.getByTestId("presetform_closebtn");
-    expect(guideText.parentElement.getAttribute("data-tooltip")).toBe(
+    expect(guideText?.parentElement?.getAttribute("data-tooltip")).toBe(
       "Here you add transactions for this month by giving the name,number and category. Overhead option will add it to your income and expenses"
     );
     expect(screen.getByText(/add to budget: overhead/i)).toBeInTheDocument();
@@ -55,28 +57,28 @@ describe("guide functionality", () => {
     // step 7
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     const guideTextSeven = screen.getByRole("heading", { name: "Add to" });
-    expect(guideTextSeven.parentElement.parentElement.getAttribute("data-tooltip")).toBe(
+    expect(guideTextSeven?.parentElement?.parentElement?.getAttribute("data-tooltip")).toBe(
       "To add initial capital to your account, you select capital here. This will be added to your account balance and year summary"
     );
     expect(screen.getByText(/add to budget: capital/i)).toBeInTheDocument();
     // step 8
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     const guideTextEight = screen.getByRole("heading", { name: "Add to" });
-    expect(guideTextEight.parentElement.parentElement.getAttribute("data-tooltip")).toBe(
+    expect(guideTextEight?.parentElement?.parentElement?.getAttribute("data-tooltip")).toBe(
       "To add savings from your month surplus, you select savings here"
     );
     expect(screen.getByText(/add to budget: savings/i)).toBeInTheDocument();
     // step 9
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     const guideTextNine = screen.getByRole("heading", { name: "Add to" });
-    expect(guideTextNine.parentElement.parentElement.getAttribute("data-tooltip")).toBe(
+    expect(guideTextNine?.parentElement?.parentElement?.getAttribute("data-tooltip")).toBe(
       "To setup a purchase plan you select purchase here and fill in the cost of the purchase in Number field."
     );
     expect(screen.getByText(/you can make a purchase plan/i)).toBeInTheDocument();
     // step 10
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     const guideTextTen = screen.getByRole("heading", { name: "Purchases" });
-    expect(guideTextTen.parentElement.getAttribute("data-tooltip")).toBe("Purchases");
+    expect(guideTextTen?.parentElement?.getAttribute("data-tooltip")).toBe("Purchases");
     expect(screen.getByText(/if the month has sufficient month surplus/i)).toBeInTheDocument();
     // step 11
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -143,10 +145,11 @@ describe("guide functionality", () => {
     fireEvent.click(screen.getByLabelText("Guide-step 2"));
     const div = await (
       await screen.findByRole("button", { name: /2021/i })
-    ).parentElement.parentElement;
-    expect(div.getAttribute("data-tooltip")).toBe(
-      "This is the datemenu. Here you navigate in your timeline"
-    );
+    ).parentElement?.parentElement;
+    div &&
+      expect(div.getAttribute("data-tooltip")).toBe(
+        "This is the datemenu. Here you navigate in your timeline"
+      );
     expect(await screen.findByText(/the date-menu is your main/i)).toBeInTheDocument();
   });
 
@@ -168,7 +171,7 @@ describe("guide functionality", () => {
     expect(
       await (
         await screen.findByText("Year Summary:")
-      ).parentElement.children[1].textContent
+      ).parentElement?.children[1].textContent
     ).toBe("990543");
   });
 });

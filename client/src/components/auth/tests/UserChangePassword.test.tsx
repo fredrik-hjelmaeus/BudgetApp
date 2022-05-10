@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from "../../../test-utils/context-wrapper";
 import UserChangePassword from "../UserChangePassword";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 
 describe("UserChangePassword unit tests", () => {
   const onSubmitPassword = jest.fn();

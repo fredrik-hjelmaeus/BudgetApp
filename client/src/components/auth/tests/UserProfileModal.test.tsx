@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from "../../../test-utils/context-
 import App from "../../../App";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
+import React from "react";
 
 describe("User Details integration", () => {
   beforeEach(async () => {
