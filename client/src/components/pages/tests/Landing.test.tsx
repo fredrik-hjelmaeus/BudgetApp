@@ -3,6 +3,7 @@ import Landing from "../Landing";
 import App from "../../../App";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
+import React from "react";
 
 test("Landing page register button click activates register modal", () => {
   render(<Landing />);

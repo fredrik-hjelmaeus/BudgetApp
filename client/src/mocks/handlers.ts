@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import { IPreset } from "../frontend-types/IPreset";
 
 // mocking backend/context responses: happy paths
 
@@ -314,8 +315,9 @@ export const handlers = [
       ])
     );
   }),
+
   // create preset
-  rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
+  rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
     return res(
       ctx.json({
         _id: "6203e22b2bdb63c78b35b672",
