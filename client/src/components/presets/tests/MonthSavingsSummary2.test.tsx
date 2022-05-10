@@ -5,52 +5,16 @@ import {
   waitForElementToBeRemoved,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
-import { rest } from "msw";
-import { server } from "../../../mocks/server";
 import App from "../../../App";
 
-describe("Savings functionality", () => {
-  beforeEach(async () => {
-    render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: /savings/i }));
-    expect(await screen.findByText("Piggybank Purchase Savings")).toBeInTheDocument();
-  });
+import { server } from "../../../mocks/server";
+import { rest } from "msw";
+import React from "react";
+import { IEditPreset } from "../../../frontend-types/IEditPreset";
 
-  test("display saving items when expanding", async () => {
-    fireEvent.click(await screen.findByRole("button", { name: /general/i }));
-    expect(await screen.findByText("saving")).toBeInTheDocument();
-  });
-
-  test("displays capital items when expanding", async () => {
-    fireEvent.click(await screen.findByRole("button", { name: /capital/i }));
-    expect(screen.getByText("En inkomst")).toBeInTheDocument();
-  });
-
-  test("updates when deleting saving", async () => {
-    fireEvent.click(await screen.findByRole("button", { name: /general/i }));
-    const delBtn = await (await screen.findByText("saving")).parentElement.children[1].children[3];
-    fireEvent.click(delBtn);
-    await waitForElementToBeRemoved(delBtn);
-    expect(delBtn).not.toBeInTheDocument();
-  });
-
-  test("updates when deleting capital", async () => {
-    fireEvent.click(await screen.findByRole("button", { name: /capital/i }));
-    const delBtn = await (
-      await screen.findByText("En inkomst")
-    ).parentElement.children[1].children[4];
-    fireEvent.click(delBtn);
-    await waitForElementToBeRemoved(delBtn);
-    expect(delBtn).not.toBeInTheDocument();
-  });
-});
-
-describe("Piggybank savings", () => {
-  // requires modified rest.get handler
-  beforeEach(() => {
-    // Create a user with piggybank saving and override get user presets
+describe("delete put in separate module to prevent fail", () => {
+  test("deleting saving works correctly in MonthSavingSummary-Component", async () => {
     server.use(
-      // get one users presets
       rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json([
@@ -130,7 +94,6 @@ describe("Piggybank savings", () => {
                   savedAmount: 0,
                   _id: "6203c32b8015507e05a926ce",
                 },
-                { month: "January", year: "2021", savedAmount: 544 },
               ],
               date: "2022-02-09T13:35:39.173Z",
               __v: 0,
@@ -299,31 +262,109 @@ describe("Piggybank savings", () => {
         );
       })
     );
-
+    // go to month and expand preset form
     render(<App />);
-  });
 
-  test("updates when deleting piggybank saving", async () => {
-    // go to year savings view
-    fireEvent.click(await screen.findByRole("button", { name: /savings summary/i }));
-    const piggbankSavingBtn = await screen.findByRole("button", { name: /resa/i });
-    fireEvent.click(piggbankSavingBtn);
+    // go to month
+    const januaryButton = screen.queryByRole("button", { name: /january/i });
+    januaryButton && fireEvent.click(januaryButton);
 
-    // delete piggybank saving
-    const delBtn = screen.getAllByRole("button").find((btn) => btn.value === "delbtn");
-    fireEvent.click(delBtn);
-    await waitForElementToBeRemoved(delBtn);
-    expect(delBtn).not.toBeInTheDocument();
-  });
+    // assert/await inital month state, IMPORTANT TO INIT SUMMATION VALUES as they are used in the tests
+    const sum = await screen.findAllByText("799");
 
-  test("displays piggybank savings when expanding", async () => {
-    // go to year savings view
-    fireEvent.click(await screen.findByRole("button", { name: /savings summary/i }));
-    const piggbankSavingBtn = await screen.findByRole("button", { name: /resa/i });
-    fireEvent.click(piggbankSavingBtn);
+    expect(sum.length).toBe(1);
+    const expenses = await screen.findAllByText("-255");
+    expect(expenses.length).toBe(3);
+    const BalanceAndSurplus = await screen.findAllByText("544");
+    expect(BalanceAndSurplus.length).toBe(2);
+    const accountBalanceSum = await screen.findByText("544977");
+    const monthSavings = await screen.findByText("0");
+    const purchaseElement = await screen.findByRole("heading", {
+      name: /purchases/i,
+    });
+    const purchasePreset = await screen.findByText("55000");
+    const presetElement = await screen.findByText("sadas");
+    expect(presetElement).toBeInTheDocument();
+    expect(purchaseElement).toBeInTheDocument();
+    expect(purchasePreset).toBeInTheDocument();
+    expect(monthSavings).toBeInTheDocument();
+    expect(accountBalanceSum).toBeInTheDocument();
 
-    // delete piggybank saving
-    const delBtn = screen.getAllByRole("button").find((btn) => btn.value === "delbtn");
-    expect(delBtn).toBeInTheDocument();
+    // create saving preset
+    fireEvent.click(await screen.findByRole("button", { name: /add to budget/i }));
+    userEvent.type(await screen.findByPlaceholderText("Name"), "savingpreset");
+    userEvent.type(await screen.findByPlaceholderText("Number"), "400");
+    userEvent.selectOptions(await screen.findByRole("combobox"), "Travel");
+    fireEvent.click(screen.getByRole("checkbox", { name: /savings/i }));
+    //override server response:
+    server.use(
+      rest.post<IEditPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
+        return res(
+          ctx.json({
+            _id: "6203e22b2bdb63c78b35b672",
+            user: "6203e2152bdb63c78b35b670",
+            name: req.body.name,
+            number: req.body.number,
+            month: "January",
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: "January",
+                year: 2021,
+                savedAmount: 0,
+                _id: "61edb1a5c557568270d9349e",
+              },
+            ],
+            date: "2022-02-09T15:47:55.671Z",
+            __v: 0,
+          })
+        );
+      })
+    );
+    // submit form
+    fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
+    // expect form fields to be reset
+    expect(screen.getByPlaceholderText("Name")).toHaveValue("");
+    expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+    expect(screen.getByRole("combobox")).toHaveValue("Select an category");
+    expect(screen.getByRole("checkbox", { name: /overhead/i })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /savings/i })).not.toBeChecked();
+
+    server.use(
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: req.body.number,
+            month: "January",
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: req.body.piggybank,
+            date: "2022-02-10T13:33:37.780Z",
+            __v: 0,
+          })
+        );
+      })
+    );
+    // press deletebutton
+    const MonthSavingsComponentTree = await screen.findByRole("heading", {
+      name: /month surplus put to savings/i,
+    });
+    const deleteBtn =
+      MonthSavingsComponentTree?.parentElement?.parentElement?.children[1].children[3].children[0];
+    deleteBtn && fireEvent.click(deleteBtn);
+
+    // expect saving to have been deleted
+    await waitForElementToBeRemoved(deleteBtn);
+    expect(deleteBtn).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: /month surplus put to savings/i })
+    ).not.toBeInTheDocument();
   });
 });
