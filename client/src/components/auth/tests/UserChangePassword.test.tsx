@@ -5,7 +5,9 @@ import React from "react";
 
 describe("UserChangePassword unit tests", () => {
   const onSubmitPassword = jest.fn();
-  const ExpandChangePassword = jest.fn();
+  const setExpandChangePassword = jest.fn();
+  const DoExpandChangePassword: jest.Mock<any, any> = jest.fn();
+  const isExpanded = DoExpandChangePassword.mockReturnValue(true) as unknown as boolean; // TODO: not sure about this cast
   const currentPassword = "test123";
   const onChange = jest.fn();
   const password = "12345678";
@@ -15,7 +17,8 @@ describe("UserChangePassword unit tests", () => {
     render(
       <UserChangePassword
         onSubmitPassword={onSubmitPassword}
-        ExpandChangePassword={ExpandChangePassword}
+        ExpandChangePassword={isExpanded}
+        setExpandChangePassword={setExpandChangePassword}
         currentPassword={currentPassword}
         onChange={onChange}
         password={password}
