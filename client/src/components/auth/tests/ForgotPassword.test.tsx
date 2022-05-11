@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import App from "../../../App";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
+import React from "react";
 
 describe("forgot password modal", () => {
   test("email is successfully sent", async () => {

@@ -8,6 +8,7 @@ import App from "../../../App";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { server } from "../../../mocks/server";
+import React from "react";
 
 // These test will fail together with apex-charts. Disable/Comment out BarChart in YearBalance-component when testing.
 // Many issues with apex-charts regarding this, for example this: https://github.com/apexcharts/react-apexcharts/issues/4
@@ -34,7 +35,7 @@ describe("register flow", () => {
     // go to the register modal
     const registerButton = screen.queryByText(/register/i);
     expect(registerButton).toBeInTheDocument();
-    fireEvent.click(registerButton);
+    registerButton && fireEvent.click(registerButton);
     const registerModalH1element = screen.queryByRole("heading", { name: /account register/i });
     expect(registerModalH1element).toBeInTheDocument();
 
