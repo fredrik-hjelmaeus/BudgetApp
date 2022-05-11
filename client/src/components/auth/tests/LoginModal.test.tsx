@@ -1,31 +1,37 @@
-import { render, screen, fireEvent, waitForElementToBeRemoved } from '../../../test-utils/context-wrapper';
-import Landing from '../../pages/Landing';
-import App from '../../../App';
-import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
-import { server } from '../../../mocks/server';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitForElementToBeRemoved,
+} from "../../../test-utils/context-wrapper";
+import Landing from "../../pages/Landing";
+import App from "../../../App";
+import userEvent from "@testing-library/user-event";
+import { rest } from "msw";
+import { server } from "../../../mocks/server";
+import React from "react";
 
-describe('login flow', () => {
-  test('login button click activates login modal', () => {
+describe("login flow", () => {
+  test("login button click activates login modal", () => {
     render(<Landing />);
-    const loginButton = screen.getByRole('button', { name: /Login/i }); //<- use screen to grab
+    const loginButton = screen.getByRole("button", { name: /Login/i }); //<- use screen to grab
     fireEvent.click(loginButton);
 
-    const loginModalH1element = screen.getByRole('heading', { name: /account login/i });
+    const loginModalH1element = screen.getByRole("heading", { name: /account login/i });
     expect(loginModalH1element).toBeInTheDocument();
   });
 
-  test('login happy path', async () => {
+  test("login happy path", async () => {
     // startingstate: local storage has no token so we are directed to landing page
     server.use(
       // login endpoint
-      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+      rest.post("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(401),
           ctx.json({
             errors: [
               {
-                msg: 'Invalid Credentials',
+                msg: "Invalid Credentials",
               },
             ],
           })
@@ -33,11 +39,11 @@ describe('login flow', () => {
       }),
       // get current user via token endpoint
       //fail to get user and will only try if token is found.
-      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+      rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
           ctx.json({
-            msg: 'No token, authorization denied',
+            msg: "No token, authorization denied",
           })
         );
       })
@@ -52,28 +58,28 @@ describe('login flow', () => {
     // go to the login modal
     const loginButton = screen.queryByText(/login/i);
     expect(loginButton).toBeInTheDocument();
-    fireEvent.click(loginButton);
-    const loginModalH1element = screen.queryByRole('heading', { name: /account login/i });
+    loginButton && fireEvent.click(loginButton);
+    const loginModalH1element = screen.queryByRole("heading", { name: /account login/i });
     expect(loginModalH1element).toBeInTheDocument();
 
     // setup endpoints to respond with a 200 status,token and user
     server.use(
-      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+      rest.post("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.json({
             token:
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFlZDcyZDE2Zjg5NWIxMTAwZGJhYjY2In0sImlhdCI6MTY0MzgxMDg2OX0.QvfZLV0HBznOEIMFOMAQNIsEpWjmEKtz6EqUNh9D--s',
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFlZDcyZDE2Zjg5NWIxMTAwZGJhYjY2In0sImlhdCI6MTY0MzgxMDg2OX0.QvfZLV0HBznOEIMFOMAQNIsEpWjmEKtz6EqUNh9D--s",
           })
         );
       }),
       // get current user using token
-      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+      rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.json({
-            _id: '61ed72d16f895b1100dbab66',
-            name: 'dirk',
-            email: 'nisse@manpower.se',
-            date: '2022-01-23T15:22:57.772Z',
+            _id: "61ed72d16f895b1100dbab66",
+            name: "dirk",
+            email: "nisse@manpower.se",
+            date: "2022-01-23T15:22:57.772Z",
             __v: 0,
           })
         );
@@ -82,9 +88,9 @@ describe('login flow', () => {
 
     // fill in the login form,submit
     const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'nisse@manpower.se');
+    userEvent.type(emailField, "nisse@manpower.se");
     const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'Passw0rd!');
+    userEvent.type(passwordField, "Passw0rd!");
     const submitLoginButton = screen.getByDisplayValue(/login/i);
     fireEvent.click(submitLoginButton);
 
@@ -93,29 +99,31 @@ describe('login flow', () => {
     expect(submitLoginButton).not.toBeInTheDocument();
 
     // make sure we arrived to user home
-    const loggedInUserNameAndButton = await screen.findByRole('button', { name: /dirk/i });
+    const loggedInUserNameAndButton = await screen.findByRole("button", { name: /dirk/i });
     expect(loggedInUserNameAndButton).toBeInTheDocument();
 
     // logout user
-    const logoutButton = await screen.findByRole('button', { name: /logout/i });
+    const logoutButton = await screen.findByRole("button", { name: /logout/i });
     fireEvent.click(logoutButton);
 
     // check that we were logged out to landing page
-    const welcomeTextAgain = await screen.findByText(/An app that helps you organize your economy./i);
+    const welcomeTextAgain = await screen.findByText(
+      /An app that helps you organize your economy./i
+    );
     expect(welcomeTextAgain).toBeInTheDocument();
   });
 
-  test('login email and password field is required', async () => {
+  test("login email and password field is required", async () => {
     // startingstate: local storage has no token so we are directed to landing page
     server.use(
       // login endpoint
-      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+      rest.post("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(401),
           ctx.json({
             errors: [
               {
-                msg: 'Invalid Credentials',
+                msg: "Invalid Credentials",
               },
             ],
           })
@@ -123,11 +131,11 @@ describe('login flow', () => {
       }),
       // get current user via token endpoint
       //fail to get user and will only try if token is found.
-      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+      rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
           ctx.json({
-            msg: 'No token, authorization denied',
+            msg: "No token, authorization denied",
           })
         );
       })
@@ -136,32 +144,32 @@ describe('login flow', () => {
     render(<App />);
 
     //go to login form
-    const loginButton = await screen.findByRole('button', { name: /login/i });
+    const loginButton = await screen.findByRole("button", { name: /login/i });
     expect(loginButton).toBeInTheDocument();
     fireEvent.click(loginButton);
 
     // check the fields and make sure they have attribute required
-    expect(await screen.findByRole('heading', { name: /account login/i })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /account login/i })).toBeInTheDocument();
     const emailField = await screen.findByPlaceholderText(/Email Address/i);
     const passwordField = await screen.findByPlaceholderText(/password/i);
-    expect(emailField.hasAttribute('required')).toBeTruthy();
-    expect(passwordField.hasAttribute('required')).toBeTruthy();
+    expect(emailField.hasAttribute("required")).toBeTruthy();
+    expect(passwordField.hasAttribute("required")).toBeTruthy();
   });
 });
 
 // Keep in bottom as it overwrites handlers.js success response
-describe('login negative backend response', () => {
-  test('login error invalid credentials path', async () => {
+describe("login negative backend response", () => {
+  test("login error invalid credentials path", async () => {
     // override normal 200 response from handlers and make it report error like backend:
     server.resetHandlers(
       // login endpoint
-      rest.post('http://localhost/api/auth', (req, res, ctx) => {
+      rest.post("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
           ctx.json({
             errors: [
               {
-                msg: 'Invalid Credentials',
+                msg: "Invalid Credentials",
               },
             ],
           })
@@ -169,32 +177,32 @@ describe('login negative backend response', () => {
       }),
       // get current user via token endpoint
       //fail to get user and will only try if token is found.
-      rest.get('http://localhost/api/auth', (req, res, ctx) => {
+      rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
           ctx.json({
-            msg: 'No token, authorization denied',
+            msg: "No token, authorization denied",
           })
         );
       }),
-      rest.get('http://localhost/api/userpreset', (req, res, ctx) => {
+      rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(ctx.json([]));
       })
     );
 
     render(<App />);
     // click login button
-    const loginButton = await screen.findByRole('button', { name: /login/i }); //<- use screen to grab
+    const loginButton = await screen.findByRole("button", { name: /login/i }); //<- use screen to grab
     expect(loginButton).toBeInTheDocument();
     fireEvent.click(loginButton);
 
     // fill in login fields and press submit
-    const loginModalH1element = screen.getByRole('heading', { name: /account login/i });
+    const loginModalH1element = screen.getByRole("heading", { name: /account login/i });
     expect(loginModalH1element).toBeInTheDocument();
     const emailField = screen.getByPlaceholderText(/Email Address/i);
-    userEvent.type(emailField, 'dsf@dsfds.se');
+    userEvent.type(emailField, "dsf@dsfds.se");
     const passwordField = screen.getByPlaceholderText(/password/i);
-    userEvent.type(passwordField, 'AssfPassw0rd!');
+    userEvent.type(passwordField, "AssfPassw0rd!");
     const submitLoginButton = screen.getByDisplayValue(/login/i);
     fireEvent.click(submitLoginButton);
 

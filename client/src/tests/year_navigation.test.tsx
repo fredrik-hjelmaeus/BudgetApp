@@ -9,6 +9,7 @@ import userEvent from "@testing-library/user-event";
 import App from "../App";
 import { rest } from "msw";
 import { server } from "../mocks/server";
+import React from "react";
 
 describe("navigation through all year pages", () => {
   test("initial state correct in year", async () => {
@@ -670,7 +671,7 @@ describe("navigation through all year pages", () => {
 
     const expenseSummary = screen.queryByRole("button", { name: /Expense Summary/i });
     expect(expenseSummary).toBeInTheDocument();
-    fireEvent.click(expenseSummary);
+    expenseSummary && fireEvent.click(expenseSummary);
 
     const yearExpenseSum = screen
       .queryAllByRole("listitem")
@@ -991,7 +992,7 @@ describe("navigation through all year pages", () => {
 
     const incomeSummary = screen.queryByRole("button", { name: /Income Summary/i });
     expect(incomeSummary).toBeInTheDocument();
-    fireEvent.click(incomeSummary);
+    incomeSummary && fireEvent.click(incomeSummary);
 
     const incomeSum = screen
       .queryAllByRole("listitem")
@@ -1312,7 +1313,7 @@ describe("navigation through all year pages", () => {
 
     const savingsSummary = screen.queryByRole("button", { name: /Savings Summary/i });
     expect(savingsSummary).toBeInTheDocument();
-    fireEvent.click(savingsSummary);
+    savingsSummary && fireEvent.click(savingsSummary);
 
     expect(screen.getByText("456788")).toBeInTheDocument();
     expect(screen.getByText("4455")).toBeInTheDocument();
@@ -1628,11 +1629,11 @@ describe("navigation through all year pages", () => {
     // click to expense view
     const expenseSummary = screen.queryByRole("button", { name: /Expense Summary/i });
     expect(expenseSummary).toBeInTheDocument();
-    fireEvent.click(expenseSummary);
+    expenseSummary && fireEvent.click(expenseSummary);
 
     //click back to balance summary view
     const balanceSummary = screen.queryByRole("button", { name: /Balance Summary/i });
-    fireEvent.click(balanceSummary);
+    balanceSummary && fireEvent.click(balanceSummary);
 
     //check a value that is only in balance summary view
     const yearSumNumber = screen
