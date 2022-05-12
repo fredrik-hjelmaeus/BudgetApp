@@ -7,6 +7,7 @@ import React from "react";
 
 describe("Reset Password", () => {
   const props = {
+    // TODO: not needed ?
     match: {
       params: {
         id: "ef2233f97efcb6b39e6bea0b22cd4b1c2ac50518",

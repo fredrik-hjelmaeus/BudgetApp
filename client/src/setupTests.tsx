@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 
 // src/setupTests.js
-import { server } from "./mocks/server.js";
+import { server } from "./mocks/server";
 // Establish API mocking before all tests.
 
 // Tests will fail together with apex-charts. Below we mock all components using apex-charts.
