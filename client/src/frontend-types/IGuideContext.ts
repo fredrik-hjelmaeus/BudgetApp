@@ -1,6 +1,6 @@
 export interface IGuideState {
   guide: null | string;
-  exitedguide: boolean;
+  exitedguide: boolean | null;
 }
 
 export interface IGuideContext extends IGuideState {
