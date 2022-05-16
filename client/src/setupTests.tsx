@@ -1,5 +1,6 @@
 // add / install jest-dom so we get access to custom jest matchers to assert on DOM-nodes.
 import "@testing-library/jest-dom";
+import { rest } from "msw";
 import React from "react";
 
 // src/setupTests.js
@@ -21,17 +22,29 @@ jest.mock("./components/layout/DonutChart", () => {
 });
 
 beforeAll(() => {
+  console.log("beforeAll: starts a fake-backend-server");
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    console.log("token is in localStorage!");
+  } else {
+    console.log("No token in localStorage, setting token");
+  }
   server.listen();
 });
 
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests.
 afterEach(() => {
+  console.log("afterEach: resetting the handlers");
   server.resetHandlers();
   localStorage.clear();
 });
 
 // Clean up after the tests are finished.
-afterAll(() => server.close());
+afterAll(() => {
+  console.log("closing the fake-backend-server");
+  server.close();
+});
 
 jest.setTimeout(25000);

@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+//const s = require("./App.css");
 
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Home from "./components/pages/Home";
@@ -12,14 +13,15 @@ import ResetPassword from "./components/auth/ResetPassword";
 import PresetState from "./context/preset/PresetState";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
-
 import CssState from "./context/css/CssState";
-
 import GuideState from "./context/guide/GuideState";
 import DateState from "./context/date/DateState";
 import setAuthToken from "./utils/setAuthToken";
+import LoginModal from "./components/auth/LoginModal";
 
+console.log(localStorage.token);
 if (localStorage.token) {
+  console.log("trying to setAuthToken");
   setAuthToken(localStorage.token);
 }
 
@@ -31,12 +33,14 @@ const App = () => {
           <AlertState>
             <CssState>
               <GuideState>
-                <Router>
+                <BrowserRouter>
                   <Fragment>
                     <Navbar />
                     <div>
                       <Routes>
                         <Route path="/" element={<PrivateRoute component={Home} />} />
+                        <Route path="login" element={<LoginModal />} />
+                        {/*TODO: /login route created becuase logout.tests failed ,needed? and viable?*/}
                         <Route path="about" element={<About />} />
                         <Route path="Landing" element={<Landing />} />
                         <Route path="resetpassword/:id" element={<ResetPassword />} />
@@ -44,7 +48,7 @@ const App = () => {
                     </div>
                     <Footer />
                   </Fragment>
-                </Router>
+                </BrowserRouter>
               </GuideState>
             </CssState>
           </AlertState>

@@ -6,7 +6,7 @@ export const LogoIcon = () => (
     viewBox="-10 -10 50 50"
     className="iconLeft"
   >
-    <defs>
+    {/* <defs> comment out becuase of invalid style syntax for ts
       <linearGradient
         data-v-fde0c5aa=""
         gradientTransform="rotate(25)"
@@ -19,7 +19,7 @@ export const LogoIcon = () => (
         <stop data-v-fde0c5aa="" offset="0%" stop-color="#b6b6b6" stop-opacity="1"></stop>
         <stop data-v-fde0c5aa="" offset="100%" stop-color="#dddddd" stop-opacity="1"></stop>
       </linearGradient>
-    </defs>
+    </defs> */}
     <g
       data-v-fde0c5aa=""
       id="2bfd90fe-b0fc-495b-99ea-07ee1c4e6943"

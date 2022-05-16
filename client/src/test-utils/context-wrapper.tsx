@@ -8,13 +8,15 @@ import CssState from "../context/css/CssState";
 import GuideState from "../context/guide/GuideState";
 import DateState from "../context/date/DateState";
 
-import { BrowserRouter as Router } from "react-router-dom";
+//import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
 
 type AllTheProvidersProps = {
   children: ReactNode;
 };
 
 const AllTheProviders: FC<AllTheProvidersProps> = ({ children }) => {
+  console.log("contextwrapper RAN");
   return (
     <AuthState>
       <PresetState>
