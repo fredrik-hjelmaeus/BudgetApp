@@ -38,16 +38,20 @@ const AuthState = (props: { children: ReactNode }) => {
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
+  console.log("AuthState ran");
+  // set token on initial app loading
+  state.token && setAuthToken(state.token);
 
   // Load User
   const loadUser = async () => {
+    console.log("loadUser ran");
     // load token into global headers
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
       const res = await axios.get("/api/auth");
-
+      console.log(res);
       dispatch({
         type: USER_LOADED,
         payload: res.data,
@@ -63,6 +67,11 @@ const AuthState = (props: { children: ReactNode }) => {
       }
     }
   };
+
+  // load user on first run or refresh
+  if (state.loading) {
+    loadUser();
+  }
 
   // Register User
   const register = async (formData: IRegisterFormData): Promise<void> => {
