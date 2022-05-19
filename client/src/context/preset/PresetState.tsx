@@ -54,6 +54,7 @@ import { IPresetContext, IPresetState } from "../../frontend-types/IPresetContex
 import { IPreset } from "../../frontend-types/IPreset";
 import { ICategoryAndSumItem } from "../../frontend-types/ICategoryAndSumItem";
 import { INewPreset } from "../../frontend-types/INewPreset";
+import { IServerError } from "../../frontend-types/IServerError";
 
 const PresetState = (props: { children: ReactNode }) => {
   const initialState: IPresetState = {
@@ -103,10 +104,13 @@ const PresetState = (props: { children: ReactNode }) => {
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: PRESET_ERROR,
-          payload: err?.response?.data.msg,
-        });
+        const serverError = err as AxiosError<IServerError>;
+        if (serverError && serverError.response) {
+          dispatch({
+            type: PRESET_ERROR,
+            payload: serverError?.response?.data.msg,
+          });
+        }
       } else {
         // TODO: this error should be in the logger
         console.log(err);
@@ -127,15 +131,18 @@ const PresetState = (props: { children: ReactNode }) => {
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
+        const serverError = err as AxiosError<IServerError>;
+        if (serverError && serverError.response) {
+          dispatch({
+            type: PRESET_ERROR,
+            payload: serverError.response.data.msg,
+          });
+        }
+
         if (err.response === undefined) {
           dispatch({
             type: PRESET_ERROR,
             payload: "Server or you are offline",
-          });
-        } else {
-          dispatch({
-            type: PRESET_ERROR,
-            payload: err?.response?.data.msg,
           });
         }
       } else {
@@ -153,10 +160,13 @@ const PresetState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: PRESET_ERROR,
-          payload: err?.response?.data.msg,
-        });
+        const serverError = err as AxiosError<IServerError>;
+        if (serverError && serverError.response) {
+          dispatch({
+            type: PRESET_ERROR,
+            payload: serverError.response.data.msg,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -176,10 +186,13 @@ const PresetState = (props: { children: ReactNode }) => {
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: PRESET_ERROR,
-          payload: err?.response?.data.msg,
-        });
+        const serverError = err as AxiosError<IServerError>;
+        if (serverError && serverError.response) {
+          dispatch({
+            type: PRESET_ERROR,
+            payload: serverError.response?.data.msg,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -313,10 +326,13 @@ const PresetState = (props: { children: ReactNode }) => {
       dispatch({ type: UPLOAD_CSV, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: PRESET_ERROR,
-          payload: err?.response?.data,
-        });
+        const serverError = err as AxiosError<string>;
+        if (serverError && serverError.response) {
+          dispatch({
+            type: PRESET_ERROR,
+            payload: serverError?.response?.data,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -1023,10 +1039,15 @@ const PresetState = (props: { children: ReactNode }) => {
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: PRESET_ERROR,
-          payload: err?.response?.data.msg,
-        });
+        const serverError = err as AxiosError<IServerError>;
+        if (serverError.response?.data?.msg) {
+          dispatch({
+            type: PRESET_ERROR,
+            payload: serverError.response?.data?.msg,
+          });
+        } else {
+          console.log("unhandled error response: ", err);
+        }
       } else {
         console.log(err);
       }

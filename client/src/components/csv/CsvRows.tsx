@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
 
-function CsvRows({ col, row }) {
-  return <button className=' CsvRows__item'>{row[col]}</button>;
+interface CsvRowsProps {
+  col: string;
+  row: string;
+}
+
+function CsvRows({ col, row }: CsvRowsProps) {
+  return <button className=" CsvRows__item">{row[parseInt(col)]}</button>;
 }
 
 export default CsvRows;

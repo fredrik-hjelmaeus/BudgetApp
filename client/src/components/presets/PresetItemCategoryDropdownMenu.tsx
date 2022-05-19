@@ -1,4 +1,5 @@
 import React from "react";
+import { INewPreset } from "../../frontend-types/INewPreset";
 import { IPreset } from "../../frontend-types/IPreset";
 /* import {
   Bankfee,
@@ -77,7 +78,7 @@ import { IPreset } from "../../frontend-types/IPreset";
 }; */
 interface PresetItemCategoryDropdownMenuProps {
   onDropdownClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  localpreset: IPreset;
+  localpreset: INewPreset;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   category: string;
 }

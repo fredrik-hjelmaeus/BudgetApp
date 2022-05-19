@@ -68,7 +68,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
         isAuthenticated: false,
         loading: false,
         user: null,
-        errors: [...state.errors, action.payload],
+        errors: [...state.errors, action.payload], // TODO: is this working when adding [] into [] ?
       };
     case LOGOUT:
       localStorage.removeItem("token");

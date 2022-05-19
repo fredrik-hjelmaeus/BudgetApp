@@ -25,6 +25,8 @@ import {
 import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 import { IAuthState } from "../../frontend-types/IAuthContext";
 import { ILoginFormData } from "../../frontend-types/ILoginFormData";
+import { IServerError } from "../../frontend-types/IServerError";
+import { IValidationError } from "../../frontend-types/IValidationError";
 
 const AuthState = (props: { children: ReactNode }) => {
   const initialState: IAuthState = {
@@ -47,29 +49,41 @@ const AuthState = (props: { children: ReactNode }) => {
     console.log("loadUser ran");
     // load token into global headers
     if (localStorage.token) {
+      console.log("token is only in localstorage,  setting it in request headers aswell");
       setAuthToken(localStorage.token);
-    }
-    try {
-      const res = await axios.get("/api/auth");
-      console.log(res);
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data,
-      });
-    } catch (err: unknown | AxiosError) {
-      if (axios.isAxiosError(err)) {
+
+      try {
+        const res = await axios.get("/api/auth");
+        console.log(res);
         dispatch({
-          type: AUTH_ERROR,
-          payload: err?.response?.data?.msg /* err.response.data.errors[0] */,
+          type: USER_LOADED,
+          payload: res.data,
         });
-      } else {
-        console.log(err);
+      } catch (err: unknown | AxiosError) {
+        if (axios.isAxiosError(err)) {
+          const serverError = err as AxiosError<IServerError>;
+          if (serverError.response) {
+            dispatch({
+              type: AUTH_ERROR,
+              payload: serverError?.response?.data?.msg /* err.response.data.errors[0] */,
+            });
+          }
+        } else {
+          console.log(err);
+        }
       }
+    } else {
+      console.log("no token found, no user loaded, disabling loading and redirect to Landing");
+      /*   dispatch({
+        type: AUTH_ERROR,
+        payload: "No token found",
+      }); */
     }
   };
 
   // load user on first run or refresh
   if (state.loading) {
+    console.log("state.loading triggered");
     loadUser();
   }
 
@@ -92,10 +106,13 @@ const AuthState = (props: { children: ReactNode }) => {
       loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: REGISTER_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: REGISTER_FAIL,
+            payload: serverError?.response?.data.errors,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -104,6 +121,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // Login User
   const login = async (formData: ILoginFormData): Promise<void> => {
+    console.log("login ran");
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -113,6 +131,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
     try {
       const res: AxiosResponse = await axios.post("/api/auth", formData, config); //endpoint/url
+      console.log("login response confirmed");
       if (res.data.token) {
         dispatch({
           type: LOGIN_SUCCESS,
@@ -122,10 +141,13 @@ const AuthState = (props: { children: ReactNode }) => {
       loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: LOGIN_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: LOGIN_FAIL,
+            payload: serverError?.response?.data.errors,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -155,10 +177,13 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: FORGOT_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: FORGOT_FAIL,
+            payload: serverError?.response?.data.errors, // TODO: check if we want to add errors[0] or the whole array as now.
+          });
+        }
       } else {
         console.log(err);
       }
@@ -174,10 +199,13 @@ const AuthState = (props: { children: ReactNode }) => {
       dispatch({ type: RESET_PASSWORD_SUCCESS, payload: "Email sent" });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: RESET_PASSWORD_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: RESET_PASSWORD_FAIL,
+            payload: serverError?.response?.data.errors[0],
+          });
+        }
       } else {
         console.log(err);
       }
@@ -202,10 +230,13 @@ const AuthState = (props: { children: ReactNode }) => {
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         // console.log("updatedetailsfail", err.response.data.errors[0].msg);
-        dispatch({
-          type: UPDATE_DETAILS_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: UPDATE_DETAILS_FAIL,
+            payload: serverError?.response?.data.errors[0],
+          });
+        }
       } else {
         console.log(err);
       }
@@ -229,10 +260,13 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: UPDATE_PASSWORD_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: UPDATE_PASSWORD_FAIL,
+            payload: serverError?.response?.data.errors[0],
+          });
+        }
       } else {
         console.log(err);
       }
