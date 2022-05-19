@@ -1,16 +1,26 @@
 import React from "react";
 import DeleteSVG from "../layout/images/DeleteSVG";
-import AddSVG from "../layout/images/AddSVG";
+
+import { INewPreset } from "../../../../new-client/src/frontend-types/INewPreset";
+import AddSVG from "../../../../new-client/src/components/layout/images/AddSVG";
 
 interface DeleteButtonProps {
   name: string;
   onDelete: () => void;
   onHover: () => void;
   stopHover: () => void;
-  localpreset: any;
+  localpreset: INewPreset;
+  DelbtnColor: boolean;
 }
 
-const DeleteButton = ({ name, onDelete, onHover, stopHover, localpreset, DelbtnColor }) => {
+const DeleteButton = ({
+  name,
+  onDelete,
+  onHover,
+  stopHover,
+  localpreset,
+  DelbtnColor,
+}: DeleteButtonProps) => {
   return (
     <button
       className="btn text-primary modal-csvpresets__deletebtnadjust"

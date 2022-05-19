@@ -1,5 +1,5 @@
 import React, { ReactNode, useReducer } from "react";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 import AlertContext from "./alertContext";
 import alertReducer from "./alertReducer";
 import { SET_ALERT, REMOVE_ALERT } from "../types";
@@ -14,7 +14,7 @@ const AlertState = (props: { children: ReactNode }) => {
 
   // Set Alert
   const setAlert: IAlertContext["setAlert"] = (msg, type, timeout = 5000) => {
-    const id = uuid.v4();
+    const id = uuid();
 
     const alertObj: alertObject = {
       msg,
