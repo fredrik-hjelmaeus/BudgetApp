@@ -23,9 +23,7 @@ const AllTheProviders: FC<AllTheProvidersProps> = ({ children }) => {
         <DateState>
           <AlertState>
             <CssState>
-              <GuideState>
-                <Router>{children}</Router>
-              </GuideState>
+              <GuideState>{children}</GuideState>
             </CssState>
           </AlertState>
         </DateState>

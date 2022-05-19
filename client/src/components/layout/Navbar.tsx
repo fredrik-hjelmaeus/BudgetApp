@@ -58,6 +58,7 @@ const Navbar = ({ title }: { title?: string }) => {
             }}
           ></img> */}
           <LogoutIcon />
+          Logout
           {/* TODO: LogoutIcon probably missing some styling  */}
         </button>
       </li>
