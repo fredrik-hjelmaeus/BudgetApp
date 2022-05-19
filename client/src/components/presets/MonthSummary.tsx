@@ -10,6 +10,7 @@ const MonthSummary = () => {
   const { guide } = useContext(GuideContext);
   useEffect(() => {
     // TODO may need to not render on first render
+    console.log("monthSummary useEffect here");
     presets && !guide && getPresets();
     // eslint-disable-next-line
   }, []);

@@ -3,6 +3,7 @@ import Datemenu from "../layout/Datemenu";
 import PresetContext from "../../context/preset/presetContext";
 import CssContext from "../../context/css/cssContext";
 import GuideContext from "../../context/guide/guideContext";
+import AuthContext from "../../context/auth/authContext";
 import Savings from "./Savings";
 import YearBalance from "./YearBalance";
 import Expense from "./Expense";
@@ -18,6 +19,7 @@ const Year = () => {
   const presetContext = useContext(PresetContext);
   const cssContext = useContext(CssContext);
   const guideContext = useContext(GuideContext);
+  const authContext = useContext(AuthContext);
 
   const {
     getPresets,
@@ -39,7 +41,8 @@ const Year = () => {
 
   // loads presets from database when year-variable is updated
   useEffect(() => {
-    !guide && getPresets();
+    console.log("year useEffect here");
+    !guide && authContext.token && getPresets();
     // eslint-disable-next-line
   }, [year]);
 

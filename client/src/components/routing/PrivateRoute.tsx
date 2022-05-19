@@ -33,7 +33,7 @@ const PrivateRoute = ({ component: Component }: ComponentProps) => {
   console.log("loading: ", loading);
   if (loading) return <Spinner />;
   if (isAuthenticated && !loading) return <Component />;
-  return <Navigate to="/login" />;
+  return <Navigate to="/Landing" />;
 };
 
 export default PrivateRoute;

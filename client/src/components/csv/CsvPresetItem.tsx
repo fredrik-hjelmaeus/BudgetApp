@@ -156,7 +156,7 @@ const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
         {/* delete */}
         <div className="btn-form modal-csvpresets__item">
           <DeleteButton
-            name={name}
+            name={name ? name : "Unnamed"}
             onHover={onHover}
             stopHover={stopHover}
             localpreset={localpreset}

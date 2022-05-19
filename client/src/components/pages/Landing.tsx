@@ -19,6 +19,7 @@ const Landing = () => {
 
   useEffect(() => {
     if (token && !isAuthenticated && !user) {
+      console.log("trying to authenticate");
       tryToAuthenticate();
     }
 

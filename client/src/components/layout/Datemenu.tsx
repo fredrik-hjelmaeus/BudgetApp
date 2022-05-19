@@ -21,11 +21,11 @@ const Datemenu = () => {
   });
   function debounce(fn: Function, ms: number) {
     let timer: number | null;
-    return (_: any) => {
+    return (_: unknown) => {
       timer && clearTimeout(timer);
       timer = setTimeout((_) => {
         timer = null;
-        fn.apply(undefined, arguments); // <-- TODO: undefined instead of this works?
+        fn.apply(undefined, fn.arguments); // <-- TODO: undefined instead of this works?. fn.arguments works?
       }, ms); // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-2.html
     };
   }

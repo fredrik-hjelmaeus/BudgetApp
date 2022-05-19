@@ -1,8 +1,7 @@
 import React from "react";
 import DeleteSVG from "../layout/images/DeleteSVG";
-
-import { INewPreset } from "../../../../new-client/src/frontend-types/INewPreset";
-import AddSVG from "../../../../new-client/src/components/layout/images/AddSVG";
+import AddSVG from "../layout/images/AddSVG";
+import { INewPreset } from "../../frontend-types/INewPreset";
 
 interface DeleteButtonProps {
   name: string;
