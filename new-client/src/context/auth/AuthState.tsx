@@ -25,6 +25,8 @@ import {
 import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 import { IAuthState } from "../../frontend-types/IAuthContext";
 import { ILoginFormData } from "../../frontend-types/ILoginFormData";
+import { IServerError } from "../../frontend-types/IServerError";
+import { IValidationError } from "../../frontend-types/IValidationError";
 
 const AuthState = (props: { children: ReactNode }) => {
   const initialState: IAuthState = {
@@ -58,10 +60,13 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: AUTH_ERROR,
-          payload: err?.response?.data?.msg /* err.response.data.errors[0] */,
-        });
+        const serverError = err as AxiosError<IServerError>;
+        if (serverError.response) {
+          dispatch({
+            type: AUTH_ERROR,
+            payload: serverError?.response?.data?.msg /* err.response.data.errors[0] */,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -92,10 +97,13 @@ const AuthState = (props: { children: ReactNode }) => {
       loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: REGISTER_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: REGISTER_FAIL,
+            payload: serverError?.response?.data.errors,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -122,10 +130,13 @@ const AuthState = (props: { children: ReactNode }) => {
       loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: LOGIN_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: LOGIN_FAIL,
+            payload: serverError?.response?.data.errors,
+          });
+        }
       } else {
         console.log(err);
       }
@@ -155,10 +166,13 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: FORGOT_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: FORGOT_FAIL,
+            payload: serverError?.response?.data.errors, // TODO: check if we want to add errors[0] or the whole array as now.
+          });
+        }
       } else {
         console.log(err);
       }
@@ -174,10 +188,13 @@ const AuthState = (props: { children: ReactNode }) => {
       dispatch({ type: RESET_PASSWORD_SUCCESS, payload: "Email sent" });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: RESET_PASSWORD_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: RESET_PASSWORD_FAIL,
+            payload: serverError?.response?.data.errors[0],
+          });
+        }
       } else {
         console.log(err);
       }
@@ -202,10 +219,13 @@ const AuthState = (props: { children: ReactNode }) => {
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         // console.log("updatedetailsfail", err.response.data.errors[0].msg);
-        dispatch({
-          type: UPDATE_DETAILS_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: UPDATE_DETAILS_FAIL,
+            payload: serverError?.response?.data.errors[0],
+          });
+        }
       } else {
         console.log(err);
       }
@@ -229,10 +249,13 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        dispatch({
-          type: UPDATE_PASSWORD_FAIL,
-          payload: err?.response?.data.errors[0],
-        });
+        const serverError = err as AxiosError<IValidationError>;
+        if (serverError.response) {
+          dispatch({
+            type: UPDATE_PASSWORD_FAIL,
+            payload: serverError?.response?.data.errors[0],
+          });
+        }
       } else {
         console.log(err);
       }
