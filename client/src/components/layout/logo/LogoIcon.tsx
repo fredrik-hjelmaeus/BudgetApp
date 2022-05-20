@@ -1,12 +1,21 @@
 import * as React from "react";
-export const LogoIcon = () => (
+
+interface LogoIconProps {
+  width?: string;
+}
+export const LogoIcon = ({ width }: LogoIconProps) => (
   <svg
     data-v-fde0c5aa=""
     xmlns="http://www.w3.org/2000/svg"
     viewBox="-10 -10 50 50"
     className="iconLeft"
+    style={
+      width === undefined
+        ? { width: "66px", margin: "auto", marginBottom: "10px" }
+        : { width: width }
+    }
   >
-    {/* <defs> comment out becuase of invalid style syntax for ts
+    {/* <defs>
       <linearGradient
         data-v-fde0c5aa=""
         gradientTransform="rotate(25)"
@@ -24,7 +33,8 @@ export const LogoIcon = () => (
       data-v-fde0c5aa=""
       id="2bfd90fe-b0fc-495b-99ea-07ee1c4e6943"
       stroke="none"
-      fill="url('#myGradient')"
+      // fill="url('#myGradient')"
+      fill="white" // TODO: temporary override of gradient that isnt made ts-compatible by me yet
     >
       <path d="M9.382 8.675h13.943v13.943L32 31.293V0H.707zM22.618 23.325H8.675V9.382L0 .707V32h31.293z"></path>
     </g>

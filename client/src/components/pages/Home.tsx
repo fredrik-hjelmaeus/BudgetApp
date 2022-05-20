@@ -19,7 +19,8 @@ const Home = () => {
     console.log("Home useEffect here");
     //localStorage.token && authContext.loadUser();
     authContext?.loadUser(); // it always have to run because even if no user found we need to set loading to false
-    cssContext?.navbar === false && cssContext?.toggleNavbar(cssContext?.navbar); // makes navbar persistent
+    console.log("activating navbar");
+    cssContext?.navbar === false && cssContext?.toggleNavbar(true); // makes navbar persistent
 
     // eslint-disable-next-line
   }, []);

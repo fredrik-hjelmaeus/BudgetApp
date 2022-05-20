@@ -40,7 +40,7 @@ const AuthState = (props: { children: ReactNode }) => {
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
-  console.log("AuthState ran");
+  console.log("AuthState ran, token: ", state.token);
   // set token on initial app loading
   state.token && setAuthToken(state.token);
 
@@ -49,12 +49,14 @@ const AuthState = (props: { children: ReactNode }) => {
     console.log("loadUser ran");
     // load token into global headers
     if (localStorage.token) {
-      console.log("token is only in localstorage,  setting it in request headers aswell");
-      setAuthToken(localStorage.token);
-
+      if (!state.token) {
+        console.log("token is only in localstorage,  setting it in request headers aswell");
+        setAuthToken(localStorage.token);
+      }
+      console.log("making request to get user info");
       try {
         const res = await axios.get("/api/auth");
-        console.log(res);
+        console.log("user info: ", res);
         dispatch({
           type: USER_LOADED,
           payload: res.data,

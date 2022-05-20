@@ -25,9 +25,10 @@ const Landing = () => {
 
     if (user && isAuthenticated) {
       <Navigate to="/" />;
+      toggleNavbar(true);
+    } else {
+      toggleNavbar(false);
     }
-
-    toggleNavbar(true);
 
     return () => {
       toggleModal("");

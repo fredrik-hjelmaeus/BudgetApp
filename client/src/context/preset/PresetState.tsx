@@ -98,9 +98,10 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Get Presets
   const getPresets: IPresetContext["getPresets"] = async () => {
+    console.log("requesting presets...");
     try {
       const res: AxiosResponse = await axios.get("/api/userpreset");
-
+      console.log("getpresets response: ", res);
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
