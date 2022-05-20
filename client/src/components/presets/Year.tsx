@@ -41,7 +41,8 @@ const Year = () => {
 
   // loads presets from database when year-variable is updated
   useEffect(() => {
-    console.log("year useEffect token,user: ", authContext.token, authContext.user);
+    console.log("year useEffect user: ", authContext.user);
+    authContext.user && console.log("requesting presets...");
     !guide && authContext.user && getPresets();
     // eslint-disable-next-line
   }, [year, authContext.user]);

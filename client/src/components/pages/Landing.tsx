@@ -13,19 +13,19 @@ const Landing = () => {
   const { toggleNavbar, toggleModal, modal } = cssContext;
   const { isAuthenticated, token, loadUser, user } = authContext;
 
-  const tryToAuthenticate = async () => {
+  /* const tryToAuthenticate = async () => {
     await loadUser();
-  };
+  }; */
 
   useEffect(() => {
-    if (token && !isAuthenticated && !user) {
+    /*    if (token && !isAuthenticated && !user) {
       console.log("trying to authenticate");
       tryToAuthenticate();
-    }
+    } */
 
     if (user && isAuthenticated) {
       <Navigate to="/" />;
-      toggleNavbar(true);
+      // toggleNavbar(true);
     } else {
       toggleNavbar(false);
     }

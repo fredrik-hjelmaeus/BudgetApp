@@ -76,10 +76,10 @@ const AuthState = (props: { children: ReactNode }) => {
       }
     } else {
       console.log("no token found, no user loaded, disabling loading and redirect to Landing");
-      /*   dispatch({
+      dispatch({
         type: AUTH_ERROR,
         payload: "No token found",
-      }); */
+      });
     }
   };
 
@@ -105,7 +105,7 @@ const AuthState = (props: { children: ReactNode }) => {
         payload: res.data,
       });
 
-      loadUser();
+      // loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<IValidationError>;
@@ -140,7 +140,7 @@ const AuthState = (props: { children: ReactNode }) => {
           payload: res.data.token,
         });
       }
-      loadUser();
+      //loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<IValidationError>;
@@ -228,7 +228,7 @@ const AuthState = (props: { children: ReactNode }) => {
         type: UPDATE_DETAILS_SUCCESS,
         payload: "User details updated",
       });
-      loadUser();
+      //loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         // console.log("updatedetailsfail", err.response.data.errors[0].msg);
