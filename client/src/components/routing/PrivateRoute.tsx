@@ -29,6 +29,7 @@ const PrivateRoute = ({ component: Component }: ComponentProps) => {
   console.log("privateroutecomponent here");
   const authContext = useContext(AuthContext);
   const { isAuthenticated, loading } = authContext;
+
   console.log("isAuthenticated: ", isAuthenticated);
   console.log("loading: ", loading);
   if (loading) return <Spinner />;
