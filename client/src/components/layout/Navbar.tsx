@@ -10,6 +10,7 @@ import CssContext from "../../context/css/cssContext";
 import PersonIcon from "./images/PersonIcon";
 import Logo from "./Logo";
 import LogoutIcon from "./images/LogoutIcon";
+import { LogoIcon } from "./logo/LogoIcon";
 
 const Navbar = ({ title }: { title?: string }) => {
   const authContext = useContext(AuthContext);
@@ -93,7 +94,11 @@ const Navbar = ({ title }: { title?: string }) => {
                 top: "0.75rem",
               }}
             /> */}
-              <Logo /> <span className="navbar__title"> {title}</span>
+              {/*   <Logo title={"Budget App"} /> */}
+              <span className="navbar__title">
+                <LogoIcon width="66px" /> Budget App
+              </span>
+              {/*  <span className="navbar__title">{title}</span> */}
             </h1>
             <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
           </div>

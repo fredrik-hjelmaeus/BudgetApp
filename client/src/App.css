@@ -1710,6 +1710,7 @@ input::placeholder {
 
 .Logo {
   max-width: 1366px;
+  min-width: 1000px;
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;

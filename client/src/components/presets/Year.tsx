@@ -41,10 +41,10 @@ const Year = () => {
 
   // loads presets from database when year-variable is updated
   useEffect(() => {
-    console.log("year useEffect here");
-    !guide && authContext.token && getPresets();
+    console.log("year useEffect token,user: ", authContext.token, authContext.user);
+    !guide && authContext.user && getPresets();
     // eslint-disable-next-line
-  }, [year]);
+  }, [year, authContext.user]);
 
   // calculates initial account balance if and when presets is defined.
   useEffect(() => {

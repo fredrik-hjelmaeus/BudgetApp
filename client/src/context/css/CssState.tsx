@@ -12,7 +12,7 @@ import {
 // Provider in your app with Reducer
 const CssState = (props: { children: ReactNode }) => {
   const initialState = {
-    navbar: true,
+    navbar: false,
     modal: "",
     modalprops: null,
     yearsummary: "balance",
