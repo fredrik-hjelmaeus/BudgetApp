@@ -2,7 +2,7 @@ import React from "react";
 import { IPreset } from "../../frontend-types/IPreset";
 
 interface CheckBoxFieldProps {
-  guide?: string;
+  guide?: string | null;
   preset: IPreset;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

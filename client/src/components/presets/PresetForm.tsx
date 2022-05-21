@@ -167,7 +167,7 @@ const PresetForm = () => {
             />
           </span>
 
-          {guide && <SelectField guide={guide} selectChange={selectChange} category={category} />}
+          <SelectField guide={guide} selectChange={selectChange} category={category} />
 
           <div
             className="presetform__optionsfield"
@@ -181,7 +181,7 @@ const PresetForm = () => {
                 : null
             }
           >
-            {guide && <CheckBoxField guide={guide} preset={preset} onChange={onChange} />}
+            <CheckBoxField guide={guide} preset={preset} onChange={onChange} />
 
             <div>
               <button

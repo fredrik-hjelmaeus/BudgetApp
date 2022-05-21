@@ -17,6 +17,8 @@ const RegisterModal = () => {
   useEffect(() => {
     let isMounted = true;
     if (isAuthenticated) {
+      console.log("isAuthenticated:", isAuthenticated);
+      console.log("closing modal");
       isMounted && toggleModal("");
     }
     if (errors.length > 0 && isMounted) {

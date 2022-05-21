@@ -42,7 +42,7 @@ const AuthState = (props: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   console.log("AuthState ran, token: ", state.token);
   // set token on initial app loading
-  state.token && setAuthToken(state.token);
+  //state.token && setAuthToken(state.token);
 
   // Load User
   const loadUser = async () => {
@@ -50,7 +50,10 @@ const AuthState = (props: { children: ReactNode }) => {
     // load token into global headers
     if (localStorage.token) {
       if (!state.token) {
-        console.log("token is only in localstorage,  setting it in request headers aswell");
+        console.log(
+          "token is only in localstorage,  setting it in request headers aswell",
+          localStorage.token
+        );
         setAuthToken(localStorage.token);
       }
       console.log("making request to get user info");
@@ -91,6 +94,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // Register User
   const register = async (formData: IRegisterFormData): Promise<void> => {
+    console.log("register ran");
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -100,9 +104,10 @@ const AuthState = (props: { children: ReactNode }) => {
 
     try {
       const res: AxiosResponse = await axios.post("/api/users", formData, config); //endpoint/url
+      console.log("register response confirmed", res.data.token);
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data,
+        payload: res.data.token,
       });
 
       // loadUser();
@@ -133,7 +138,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
     try {
       const res: AxiosResponse = await axios.post("/api/auth", formData, config); //endpoint/url
-      console.log("login response confirmed");
+      console.log("login response confirmed", res.data.token);
       if (res.data.token) {
         dispatch({
           type: LOGIN_SUCCESS,

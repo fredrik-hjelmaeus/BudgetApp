@@ -54,6 +54,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
       return {
         ...state,
         // ...action.payload,
+        // token: action.payload, TODO: could make checking auth quicker, just not on page reload.
         isAuthenticated: true,
         loading: false,
       };
