@@ -1,7 +1,7 @@
 import React from "react";
 
 interface SelectFieldProps {
-  guide?: string;
+  guide?: string | null;
   selectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   category: string;
 }
