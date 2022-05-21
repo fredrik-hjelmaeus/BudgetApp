@@ -18,6 +18,7 @@ const PresetFilter = () => {
 
   useEffect(() => {
     if (month !== null && presets !== null && year !== null) {
+      console.log("detected month change, getting this month presets");
       filterOutPositiveNumsAndMonth(month);
       filterOutNegativeNumsAndMonth(month);
     } // eslint-disable-next-line
@@ -44,7 +45,6 @@ const PresetFilter = () => {
           {sortItemsByNum &&
             sortItemsByNum.map((preset) => (
               <CSSTransition key={preset.id} timeout={250} classNames="item">
-                {/* TODO: changed from preset._id to preset.id, ok? */}{" "}
                 <PresetItem preset={preset} />
               </CSSTransition>
             ))}
@@ -55,4 +55,7 @@ const PresetFilter = () => {
     </Fragment>
   );
 };
+
+/* TODO: changed from preset._id to preset.id, ok? */
+
 export default PresetFilter;
