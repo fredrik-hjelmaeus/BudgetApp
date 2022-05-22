@@ -3,23 +3,12 @@ import userEvent from "@testing-library/user-event";
 import ResetPassword from "../ResetPassword";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
-import React, { Fragment } from "react";
-import { Router, Route, Routes, MemoryRouter } from "react-router-dom";
+import React from "react";
+import { Route, Routes, MemoryRouter } from "react-router-dom";
 import Landing from "../../pages/Landing";
 
 describe("Reset Password", () => {
-  const props = {
-    // TODO: not needed ?
-    match: {
-      params: {
-        id: "ef2233f97efcb6b39e6bea0b22cd4b1c2ac50518",
-      },
-    },
-    //props.match.params.id
-  };
-
-  test.only("happy path,valid password provided", async () => {
-    //render(<ResetPassword />); // TODO: probably not working since react-router-dom update to v6.
+  const setup = () => {
     render(
       <MemoryRouter initialEntries={["/resetpassword/ef2233f97efcb6b39e6bea0b22cd4b1c2ac50518"]}>
         <Routes>
@@ -28,6 +17,11 @@ describe("Reset Password", () => {
         </Routes>
       </MemoryRouter>
     );
+  };
+
+  test("happy path,valid password provided", async () => {
+    //render(<ResetPassword />); // TODO: probably not working since react-router-dom update to v6.
+    setup();
     const heading = screen.getByRole("heading", { name: "Reset Password" });
 
     expect(heading).toBeInTheDocument();
@@ -41,13 +35,7 @@ describe("Reset Password", () => {
   });
 
   test("displays alert on invalid token", async () => {
-    render(
-      <MemoryRouter initialEntries={["/resetpassword/ef2233f97efcb6b39e6bea0b22cd4b1c2ac50518"]}>
-        <Routes>
-          <Route path="/resetpassword/:id" element={<ResetPassword />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    setup();
     expect(screen.getByRole("heading", { name: "Reset Password" })).toBeInTheDocument();
     userEvent.type(screen.getByPlaceholderText("New Password"), "password123");
     userEvent.type(screen.getByPlaceholderText("Confirm New Password"), "password123");
@@ -71,6 +59,7 @@ describe("Reset Password", () => {
   });
 
   test("displays alert on invalid password", async () => {
+    setup();
     const newPassword = screen.getByPlaceholderText("New Password");
     const confirmPassword = screen.getByPlaceholderText("Confirm New Password");
     const submitBtn = screen.getByRole("button", { name: /submit/i });
@@ -108,6 +97,7 @@ describe("Reset Password", () => {
   });
 
   test("cancel button takes you landing page", () => {
+    setup();
     const cancelBtn = screen.getByRole("button", { name: /cancel/i });
     fireEvent.click(cancelBtn);
     expect(screen.queryByRole("heading", { name: "Reset Password" })).not.toBeInTheDocument();
