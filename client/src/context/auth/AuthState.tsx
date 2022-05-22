@@ -40,23 +40,19 @@ const AuthState = (props: { children: ReactNode }) => {
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
-  console.log("AuthState ran, token: ", state.token);
+  //console.log("AuthState ran, token: ", state.token);
   // set token on initial app loading
   //state.token && setAuthToken(state.token);
 
   // Load User
   const loadUser = async () => {
-    console.log("loadUser ran");
+    // console.log("loadUser ran");
     // load token into global headers
     if (localStorage.token) {
       if (!state.token) {
-        console.log(
-          "token is only in localstorage,  setting it in request headers aswell",
-          localStorage.token
-        );
         setAuthToken(localStorage.token);
       }
-      console.log("making request to get user info");
+      //console.log("making request to get user info");
       try {
         const res = await axios.get("/api/auth");
         //console.log("user info: ", res);
@@ -78,7 +74,7 @@ const AuthState = (props: { children: ReactNode }) => {
         }
       }
     } else {
-      console.log("no token found, no user loaded, disabling loading and redirect to Landing");
+      //    console.log("no token found, no user loaded, disabling loading and redirect to Landing");
       dispatch({
         type: AUTH_ERROR,
         payload: "No token found",
@@ -88,13 +84,13 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // load user on first run or refresh
   if (state.loading) {
-    console.log("state.loading triggered");
+    //    console.log("state.loading triggered");
     loadUser();
   }
 
   // Register User
   const register = async (formData: IRegisterFormData): Promise<void> => {
-    console.log("register ran");
+    //  console.log("register ran");
     const config = {
       headers: {
         "Content-Type": "application/json",

@@ -15,8 +15,8 @@ import { IEditPreset } from "../../../frontend-types/IEditPreset";
 import { BrowserRouter } from "react-router-dom";
 
 describe("delete put in separate module to prevent fail", () => {
-  test("deleting saving works correctly in MonthSavingSummary-Component", async () => {
-    /*  server.use(
+  test.only("deleting saving works correctly in MonthSavingSummary-Component", async () => {
+    server.use(
       rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
           ctx.json([
@@ -263,17 +263,27 @@ describe("delete put in separate module to prevent fail", () => {
           ])
         );
       })
-    ); */
+    );
     // go to month and expand preset form
     render(<App />);
 
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
     // go to month
-    const januaryButton = screen.queryByRole("button", { name: /january/i });
-    januaryButton && fireEvent.click(januaryButton);
+    expect(yearElement).toBeInTheDocument();
+    const januaryButton = screen.getByRole("button", { name: /january/i });
+    screen.debug(januaryButton);
+    //  januaryButton && fireEvent.click(januaryButton);
+    fireEvent.click(januaryButton);
+    // eslint-disable-next-line testing-library/await-async-utils
 
+    //expect(await screen.findByText(/dirk/i)).toBeInTheDocument();
+    const sum = await screen.findAllByText("799");
     // assert/await inital month state, IMPORTANT TO INIT SUMMATION VALUES as they are used in the tests
-    /*  const sum = await screen.findAllByText("799");
-
+    // const sum = await screen.findAllByText("799");
+    /*
     expect(sum.length).toBe(1);
     const expenses = await screen.findAllByText("-255");
     expect(expenses.length).toBe(3);

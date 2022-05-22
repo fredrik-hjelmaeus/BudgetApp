@@ -64,9 +64,9 @@ type ActionType =
   | { type: typeof SEND_EDIT; payload: IPreset }
   | { type: typeof CLEAR_PRESETS }
   | { type: typeof SUM; payload: number }
-  | { type: typeof ADD_MONTH; payload: string }
+  | { type: typeof ADD_MONTH; payload: string | null }
   | { type: typeof MONTHSUM; payload: number }
-  | { type: typeof SET_YEAR; payload: number }
+  | { type: typeof SET_YEAR; payload: number | null }
   | { type: typeof FILTER_POSNUMANDMONTH; payload: string }
   | { type: typeof FILTER_NEGNUMANDMONTH; payload: string }
   | { type: typeof RESET_SUMS }
@@ -183,7 +183,6 @@ function presetReducer(state: IPresetState, action: ActionType) {
       return {
         ...state,
         year: action.payload,
-        month: null,
       };
     case ADD_MONTH:
       return {
