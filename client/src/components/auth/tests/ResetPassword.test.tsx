@@ -3,7 +3,9 @@ import userEvent from "@testing-library/user-event";
 import ResetPassword from "../ResetPassword";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
-import React from "react";
+import React, { Fragment } from "react";
+import { Router, Route, Routes, MemoryRouter } from "react-router-dom";
+import Landing from "../../pages/Landing";
 
 describe("Reset Password", () => {
   const props = {
@@ -15,12 +17,21 @@ describe("Reset Password", () => {
     },
     //props.match.params.id
   };
-  beforeEach(() => {
-    render(<ResetPassword />); // TODO: probably not working since react-router-dom update to v6.
-  });
-  test("happy path,valid password provided", async () => {
+
+  test.only("happy path,valid password provided", async () => {
+    //render(<ResetPassword />); // TODO: probably not working since react-router-dom update to v6.
+    render(
+      <MemoryRouter initialEntries={["/resetpassword/ef2233f97efcb6b39e6bea0b22cd4b1c2ac50518"]}>
+        <Routes>
+          <Route path="/resetpassword/:id" element={<ResetPassword />} />
+          <Route path="Landing" element={<Landing />} />
+        </Routes>
+      </MemoryRouter>
+    );
     const heading = screen.getByRole("heading", { name: "Reset Password" });
+
     expect(heading).toBeInTheDocument();
+
     userEvent.type(screen.getByPlaceholderText("New Password"), "password123");
     userEvent.type(screen.getByPlaceholderText("Confirm New Password"), "password123");
     fireEvent.click(screen.getByRole("button", { name: /submit/i }));
@@ -30,6 +41,13 @@ describe("Reset Password", () => {
   });
 
   test("displays alert on invalid token", async () => {
+    render(
+      <MemoryRouter initialEntries={["/resetpassword/ef2233f97efcb6b39e6bea0b22cd4b1c2ac50518"]}>
+        <Routes>
+          <Route path="/resetpassword/:id" element={<ResetPassword />} />
+        </Routes>
+      </MemoryRouter>
+    );
     expect(screen.getByRole("heading", { name: "Reset Password" })).toBeInTheDocument();
     userEvent.type(screen.getByPlaceholderText("New Password"), "password123");
     userEvent.type(screen.getByPlaceholderText("Confirm New Password"), "password123");

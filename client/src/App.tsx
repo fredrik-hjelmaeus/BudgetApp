@@ -33,22 +33,22 @@ const App = () => {
           <AlertState>
             <CssState>
               <GuideState>
-                <BrowserRouter>
-                  <Fragment>
-                    <Navbar />
-                    <div>
-                      <Routes>
-                        <Route path="/" element={<PrivateRoute component={Home} />} />
-                        <Route path="login" element={<LoginModal />} />
-                        {/*TODO: /login route created becuase logout.tests failed ,needed? and viable?*/}
-                        <Route path="about" element={<About />} />
-                        <Route path="Landing" element={<Landing />} />
-                        <Route path="resetpassword/:id" element={<ResetPassword />} />
-                      </Routes>
-                    </div>
-                    <Footer />
-                  </Fragment>
-                </BrowserRouter>
+                {/* <BrowserRouter> */}
+                <Fragment>
+                  <Navbar />
+                  <div>
+                    <Routes>
+                      <Route path="/" element={<PrivateRoute component={Home} />} />
+                      <Route path="login" element={<LoginModal />} />
+                      {/*TODO: /login route created becuase logout.tests failed ,needed? and viable?*/}
+                      <Route path="about" element={<About />} />
+                      <Route path="Landing" element={<Landing />} />
+                      <Route path="resetpassword/:id" element={<ResetPassword />} />
+                    </Routes>
+                  </div>
+                  <Footer />
+                </Fragment>
+                {/*  </BrowserRouter> */}
               </GuideState>
             </CssState>
           </AlertState>
