@@ -27,6 +27,7 @@ export const ResetPassword = () => {
   const [passwordSent, setPasswordSent] = useState(false);
 
   useEffect(() => {
+    console.log("useffect detected alert", alerts);
     if (errors.length > 0) {
       errors.map((error) => setAlert(error.msg, "danger"));
       clearErrors();
@@ -49,10 +50,12 @@ export const ResetPassword = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = (e: React.SyntheticEvent) => {
+    console.log("trying to submit new password");
     e.preventDefault();
     if (password === "") {
       setAlert("Please fill in all fields", "danger");
     } else if (password === password2) {
+      console.log(token, password);
       token && resetPassword({ token, password });
     } else {
       setAlert("Passwords do not match", "danger");

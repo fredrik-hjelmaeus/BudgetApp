@@ -54,18 +54,14 @@ router.post(
 
       // if no user found in db
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
       }
 
       // check that provided password matches fetched user from dbs password
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
       }
 
       // create object that will be input to jwt.sign
@@ -121,9 +117,7 @@ router.post(
       const user = await User.findOne({ email: req.body.email });
 
       if (!user) {
-        return res
-          .status(404)
-          .json({ errors: [{ msg: "There is no user with that email" }] });
+        return res.status(404).json({ errors: [{ msg: "There is no user with that email" }] });
       }
 
       // Get reset token
@@ -132,9 +126,7 @@ router.post(
       await user.save({ validateBeforeSave: false });
 
       // Create reset url
-      const resetUrl = `${req.protocol}://${req.get(
-        "host"
-      )}/api/auth/forgotpassword/${resetToken}`;
+      const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
       const resetUrlTwo =
         config.get("resetpasswordURL") === "development"
           ? `https://dry-eyrie-55051.herokuapp.com/resetpassword/${resetToken}`
@@ -211,7 +203,7 @@ router.put(
 
       await user.save();
 
-      res.status(200).json({ data: "Password Changed" });
+      res.status(200).json("Password Changed");
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
       res.status(500).send("Server Error");
@@ -239,9 +231,7 @@ router.put(
       const emailInUse = await User.findOne({ email: req.body.email });
       // if it exist a user with that email and it's not the id of the authenticated user ,cancel change
       if (emailInUse && emailInUse.id !== req.user.id) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: "This email is already in use" }] });
+        return res.status(401).json({ errors: [{ msg: "This email is already in use" }] });
       }
 
       // extract information from request
@@ -299,9 +289,7 @@ router.put(
 
       // Check current password
       if (!(await bcrypt.compare(req.body.currentPassword, user.password))) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: "Current Password is incorrect" }] });
+        return res.status(401).json({ errors: [{ msg: "Current Password is incorrect" }] });
       }
 
       // Set/Encrypt new password

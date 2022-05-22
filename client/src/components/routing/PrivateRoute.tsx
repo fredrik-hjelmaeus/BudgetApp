@@ -38,3 +38,4 @@ const PrivateRoute = ({ component: Component }: ComponentProps) => {
 };
 
 export default PrivateRoute;
+// alt way: return isAuthenticated ? <Component /> : <Navigate to="/Landing" />;

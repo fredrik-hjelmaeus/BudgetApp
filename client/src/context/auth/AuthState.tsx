@@ -59,7 +59,7 @@ const AuthState = (props: { children: ReactNode }) => {
       console.log("making request to get user info");
       try {
         const res = await axios.get("/api/auth");
-        console.log("user info: ", res);
+        //console.log("user info: ", res);
         dispatch({
           type: USER_LOADED,
           payload: res.data,
@@ -200,10 +200,11 @@ const AuthState = (props: { children: ReactNode }) => {
   //Reset Password
   const resetPassword = async (formData: { token: string; password: string }): Promise<void> => {
     const { token } = formData;
-
+    console.log("resetPassword detected token: ", token);
     try {
-      await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
-      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: "Email sent" });
+      const res = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
+      console.log("successfull response from resetPassword", res.data);
+      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<IValidationError>;
