@@ -16,7 +16,7 @@ type AllTheProvidersProps = {
 };
 
 const AllTheProviders: FC<AllTheProvidersProps> = ({ children }) => {
-  console.log("contextwrapper RAN");
+  //console.log("contextwrapper RAN");
   return (
     <AuthState>
       <PresetState>

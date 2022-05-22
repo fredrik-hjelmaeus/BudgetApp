@@ -101,7 +101,7 @@ const PresetState = (props: { children: ReactNode }) => {
     console.log("getPresets here calling backend...");
     try {
       const res: AxiosResponse = await axios.get("/api/userpreset");
-      console.log("getpresets response: ", res);
+      // console.log("getpresets response: ", res.data);
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -216,6 +216,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Clear presets
   const clearPresets: IPresetContext["clearPresets"] = () => {
+    console.log("clear presets ran");
     dispatch({ type: CLEAR_PRESETS });
   };
 
@@ -248,7 +249,8 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Add month-val coming from Datemenu
   const addMonth: IPresetContext["addMonth"] = (month) => {
-    month && dispatch({ type: ADD_MONTH, payload: month });
+    console.log("addmonth", month);
+    dispatch({ type: ADD_MONTH, payload: month });
   };
 
   // Calc month sum
@@ -293,6 +295,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // set year when yearbutton is pressed in datemenucomponent
   const setYear: IPresetContext["setYear"] = (year) => {
+    console.log("set year ran");
     dispatch({ type: SET_YEAR, payload: year });
   };
 

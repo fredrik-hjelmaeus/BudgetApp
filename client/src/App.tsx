@@ -19,7 +19,7 @@ import DateState from "./context/date/DateState";
 import setAuthToken from "./utils/setAuthToken";
 import LoginModal from "./components/auth/LoginModal";
 
-console.log("app: localstoragetoken: ", localStorage.token);
+//console.log("app: localstoragetoken: ", localStorage.token);
 if (localStorage.token) {
   console.log("Found token in localstorage, putting it in the request header aswell");
   setAuthToken(localStorage.token);
