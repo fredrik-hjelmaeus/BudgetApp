@@ -43,7 +43,7 @@ test("create preset works and resets after submit", () => {
   fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
 
   expect(screen.getByPlaceholderText("Name")).toHaveValue("");
-  expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+  expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
   expect(screen.getByRole("combobox")).toHaveValue("Select an category");
 });
 
@@ -95,7 +95,7 @@ test("number field only accepts negative or positive numbers", () => {
   fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
 
   expect(screen.getByPlaceholderText("Name")).toHaveValue("test");
-  expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+  expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
   expect(screen.getByRole("combobox")).toHaveValue("Reminderfees");
   expect(screen.getByText("Please fill in both fields")).toBeInTheDocument();
 });
@@ -132,7 +132,7 @@ test("checkboxfield works", () => {
 
   // expect fields to be reset after submit
   expect(screen.getByPlaceholderText("Name")).toHaveValue("");
-  expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+  expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
   expect(screen.getByRole("combobox")).toHaveValue("Select an category");
   expect(screen.getByRole("checkbox", { name: /overhead/i })).toBeChecked();
   // correct checkbox value sent to backend is tested in month integration test.
