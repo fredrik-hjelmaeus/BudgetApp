@@ -58,7 +58,7 @@ const SelectCSVfields = () => {
         const presetRow = preset.row;
         if (presetRow) {
           updateCsvPresets({
-            id: preset.id,
+            _id: preset._id,
             name: presetRow[parseInt(description)],
             number: parseInt(presetRow[parseInt(fieldValue)]) || 0,
           });
@@ -112,7 +112,7 @@ const SelectCSVfields = () => {
           {/* csv-list */}
           {csvpresets &&
             csvpresets.map((rowItem) => (
-              <SelectCSVfieldsItem rowItem={rowItem} key={rowItem.id} header={false} />
+              <SelectCSVfieldsItem rowItem={rowItem} key={rowItem._id} header={false} />
             ))}
 
           {/* button add */}

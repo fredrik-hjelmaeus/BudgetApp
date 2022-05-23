@@ -88,8 +88,8 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
         return Commute;
     }
   }; */
-  const [preset, setPreset] = useState({
-    _id: Item.id,
+  const [preset, setPreset] = useState<IPreset>({
+    _id: Item._id,
     name: Item.name,
     number: SumOfPreset,
     month: Item.month,
@@ -110,8 +110,11 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
     setDelbtnColor(false);
   };
   const onDelete = () => {
+    console.log("onDelete ran", Item);
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
-    Item && Item.id && Item.type === "savings" ? deletePreset(Item.id) : deletePiggybankItem(Item);
+    Item && Item._id && Item.type === "savings"
+      ? deletePreset(Item._id)
+      : deletePiggybankItem(Item);
   };
 
   const onEdit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -131,7 +134,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
     let newPiggybankArray: IPiggybank[] = [];
     presets &&
       presets.map((preset) =>
-        preset.id === Item.id
+        preset._id === Item._id
           ? Item.piggybank.filter((piggybank) =>
               piggybank.month !== month || piggybank.savedAmount === 0
                 ? newPiggybankArray.push({
@@ -147,7 +150,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
 
     setPreset({
       ...preset,
-      _id: Item.id,
+      _id: Item._id,
       name: Item.name,
       number: Item.number,
       month: Item.month,
@@ -214,6 +217,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
           onMouseEnter={onHover}
           onMouseLeave={stopHover}
           onClick={onDelete}
+          data-testid="monthitem-delete"
         >
           {DelbtnColor === true ? (
             <DeleteSVG fill="var(--danger-color)" />

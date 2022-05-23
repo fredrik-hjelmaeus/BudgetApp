@@ -51,7 +51,7 @@ const CsvPresetCreateModal = () => {
           <h1 className="all-center m-1">Create Transactions</h1>
 
           {newPresets?.map((item) => (
-            <CsvPresetItem Item={item} key={item.id} />
+            <CsvPresetItem Item={item} key={item._id} />
           ))}
 
           <button className="btn modal-csvpresets__btn__addtobudget all-center" onClick={onClick}>

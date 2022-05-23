@@ -153,8 +153,10 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // Delete preset
   const deletePreset: IPresetContext["deletePreset"] = async (id) => {
+    console.log("deleteing preset with id: ", id);
     try {
-      await axios.delete(`/api/userpreset/${id}`);
+      const res = await axios.delete(`/api/userpreset/${id}`);
+      console.log("dispatching");
       dispatch({
         type: DELETE_PRESET,
         payload: id,
@@ -182,7 +184,7 @@ const PresetState = (props: { children: ReactNode }) => {
     };
 
     try {
-      const res = await axios.put(`/api/userpreset/${preset.id}`, preset, config);
+      const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
 
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err: unknown | AxiosError) {
@@ -968,7 +970,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // calc month balance
   const calcMonthBalance: IPresetContext["calcMonthBalance"] = () => {
-    if (state.MonthSum && state.monthsavings) {
+    if (state.MonthSum !== null && state.monthsavings !== null) {
       const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
       dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
     }
@@ -1010,7 +1012,7 @@ const PresetState = (props: { children: ReactNode }) => {
     } else {
       // if newpreset does not exist in array, add it, else do nothing.
       const isExistingPreset = state.newPresets.find(
-        (preset: INewPreset) => preset.id === newpreset.id
+        (preset: INewPreset) => preset._id === newpreset._id
       );
       if (!isExistingPreset)
         dispatch({ type: SET_NEWPRESETS, payload: [...state.newPresets, newpreset] });

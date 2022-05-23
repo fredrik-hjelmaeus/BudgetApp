@@ -3,19 +3,15 @@ import {
   screen,
   fireEvent,
   waitForElementToBeRemoved,
-  within,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
-
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
-import React from "react";
 import { IEditPreset } from "../../../frontend-types/IEditPreset";
-import { BrowserRouter } from "react-router-dom";
 
 describe("delete put in separate module to prevent fail", () => {
-  test.only("deleting saving works correctly in MonthSavingSummary-Component", async () => {
+  test("deleting saving works correctly in MonthSavingSummary-Component", async () => {
     server.use(
       rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
         return res(
@@ -274,16 +270,10 @@ describe("delete put in separate module to prevent fail", () => {
     // go to month
     expect(yearElement).toBeInTheDocument();
     const januaryButton = screen.getByRole("button", { name: /january/i });
-    screen.debug(januaryButton);
-    //  januaryButton && fireEvent.click(januaryButton);
     fireEvent.click(januaryButton);
-    // eslint-disable-next-line testing-library/await-async-utils
 
-    //expect(await screen.findByText(/dirk/i)).toBeInTheDocument();
-    const sum = await screen.findAllByText("799");
     // assert/await inital month state, IMPORTANT TO INIT SUMMATION VALUES as they are used in the tests
-    // const sum = await screen.findAllByText("799");
-    /*
+    const sum = await screen.findAllByText("799");
     expect(sum.length).toBe(1);
     const expenses = await screen.findAllByText("-255");
     expect(expenses.length).toBe(3);
@@ -365,18 +355,12 @@ describe("delete put in separate module to prevent fail", () => {
       })
     );
     // press deletebutton
-    const MonthSavingsComponentTree = await screen.findByRole("heading", {
-      name: /month surplus put to savings/i,
-    });
-    const deleteBtn = within(MonthSavingsComponentTree).getByPlaceholderText("Username");
-    //  MonthSavingsComponentTree?.parentElement?.parentElement?.children[1].children[3].children[0];
-    deleteBtn && fireEvent.click(deleteBtn);
 
+    const delBtn = await screen.findByTestId("monthitem-delete");
+
+    delBtn && fireEvent.click(delBtn);
+    await waitForElementToBeRemoved(delBtn);
     // expect saving to have been deleted
-    await waitForElementToBeRemoved(deleteBtn);
-    expect(deleteBtn).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("heading", { name: /month surplus put to savings/i })
-    ).not.toBeInTheDocument();*/
+    expect(delBtn).not.toBeInTheDocument();
   });
 });

@@ -1,7 +1,7 @@
 import { IPiggybank } from "./IPiggybank";
 
 export interface INewPreset {
-  id: string;
+  _id: string;
   name: string;
   number: number;
   month: string;

@@ -56,7 +56,7 @@ const EditPiggybankModal = ({ Item }: { Item: IPreset }) => {
     if (modalprops !== null) {
       if (piggybanks.length !== 0 && piggybanks !== modalprops.piggybank) {
         sendMyEdit({
-          id: Item.id,
+          _id: Item._id,
           name: Item.name,
           number: Item.number,
           month: Item.month,

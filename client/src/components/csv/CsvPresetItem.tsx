@@ -13,11 +13,11 @@ const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
   const presetContext = useContext(PresetContext);
   const { month, year, doSubmitCsv, updateCsvPresets, addPreset, removeCSV, setNewPresets } =
     presetContext;
-  const { id, number, name } = Item;
+  const { _id, number, name } = Item;
 
   //local preset used to update preset via function presetContext.sendEdit
   const [localpreset, setlocalPreset] = useState<INewPreset>({
-    id: id,
+    _id: _id,
     name: name ? name : "",
     number: number ? number : 0,
     month: month ? month : "",
@@ -86,7 +86,7 @@ const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
         type: localpreset.type,
         piggybank: [{ month, year, savedAmount: 0 }],
       });
-      removeCSV(localpreset.id);
+      removeCSV(localpreset._id);
     }
   };
 

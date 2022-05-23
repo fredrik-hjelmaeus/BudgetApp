@@ -41,7 +41,7 @@ const Savings = () => {
           {showIndividualSavingsList &&
             savingsList &&
             savingsList.map((savingsItem) => (
-              <SavingsItem savingsItem={savingsItem} key={savingsItem.id} />
+              <SavingsItem savingsItem={savingsItem} key={savingsItem._id} />
             ))}
           <button className="flexrow-2 borderdivider" onClick={onCapitalClick}>
             <div>Capital: </div>
@@ -50,7 +50,7 @@ const Savings = () => {
           {showCapitalItems &&
             capitalList &&
             capitalList.map((capitalItem) => (
-              <CapitalItem capitalItem={capitalItem} key={capitalItem.id} />
+              <CapitalItem capitalItem={capitalItem} key={capitalItem._id} />
             ))}
           <div className="flexrow-2 savings__piggyiconandtitle">
             <div>

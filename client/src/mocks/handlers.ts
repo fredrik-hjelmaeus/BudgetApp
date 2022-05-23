@@ -423,7 +423,7 @@ export const handlers = [
   // delete one preset by id
   rest.delete(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
-
+    console.log(_id, "removed preset");
     return res(
       ctx.json({
         msg: "Preset removed",

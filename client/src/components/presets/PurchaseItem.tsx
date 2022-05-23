@@ -67,7 +67,7 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
       piggybank: [{ month: month ? month : "", year: year ? year : 0, savedAmount: 0 }],
     });
     // Delete purchase preset
-    if (Item.id) deletePreset(Item.id);
+    if (Item._id) deletePreset(Item._id);
   };
 
   const onSave = () => {

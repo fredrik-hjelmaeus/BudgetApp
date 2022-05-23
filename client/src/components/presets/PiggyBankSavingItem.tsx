@@ -38,7 +38,7 @@ const PiggyBankSavingItem = ({ preset }: PiggyBankSavingItemProps) => {
       setAlert("No id found for this piggybank item!", "danger");
     }
     // construct new piggybank-list where provided id is filtered out.
-    const newPiggybankList = piggybank.filter((piggyItem) => piggyItem.id !== piggyItemId);
+    const newPiggybankList = piggybank.filter((piggyItem) => piggyItem._id !== piggyItemId);
 
     // add new piggybank to deconstructed preset
     const newPreset = { ...preset, piggybank: newPiggybankList };
@@ -70,7 +70,7 @@ const PiggyBankSavingItem = ({ preset }: PiggyBankSavingItemProps) => {
           <PiggyItem
             onPiggyItemDelete={onPiggyItemDelete}
             piggyItem={piggyItem}
-            key={piggyItem.id}
+            key={piggyItem._id}
           />
         ))}
     </>

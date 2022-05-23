@@ -20,7 +20,7 @@ const SavingsItem = ({ savingsItem }: SavingsItemProps) => {
   };
   const onDelete = () => {
     // TODO: if id is missing show error. Or should id be required?
-    savingsItem.id && deletePreset(savingsItem.id);
+    savingsItem._id && deletePreset(savingsItem._id);
   };
   React.useEffect(() => {
     presets && calcSavings();

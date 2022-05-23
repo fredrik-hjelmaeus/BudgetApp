@@ -29,7 +29,7 @@ const PiggyItem = ({ piggyItem, onPiggyItemDelete }: PiggyItemProps) => {
           value="delbtn"
           onMouseEnter={onHover}
           onMouseLeave={stopHover}
-          onClick={() => onPiggyItemDelete(piggyItem.id)}
+          onClick={() => onPiggyItemDelete(piggyItem._id)}
         >
           <TrashiconSVG fill={trashIconIsHover ? "#ec5a23" : "gray"} />
         </button>

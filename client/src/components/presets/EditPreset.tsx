@@ -19,7 +19,7 @@ const EditPreset = () => {
   //State
   const [localPreset, setLocalPreset] = useState({
     // TODO: default values may be wrong, ts complains otherwise
-    _id: edit?.id || "",
+    _id: edit?._id || "",
     name: edit?.name ? edit?.name : "",
     number: edit?.number ? edit?.number : 0,
     month: edit?.month ? edit?.month : "",

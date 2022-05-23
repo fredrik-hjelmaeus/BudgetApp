@@ -13,15 +13,15 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
 
   const { deletePreset, setEdit, cancelEdit, calcSum, edit } = presetContext;
 
-  const { id, name, number, category, month, year, piggybank } = preset;
+  const { _id, name, number, category, month, year, piggybank } = preset;
 
   // TODO: this is a hack?, fix it?
   interface ILocalPreset extends Omit<IPreset, "id"> {
-    id?: string;
+    _id?: string;
   }
   //local preset used to update preset via function presetContext.sendEdit
   const [localpreset, setlocalPreset] = useState<ILocalPreset>({
-    id: id ? id : "",
+    _id: _id ? _id : "",
     name,
     number,
     month,
@@ -56,7 +56,7 @@ const PresetItem = ({ preset }: { preset: IPreset }) => {
     setDelbtnColor(false);
   };
   const onDelete = () => {
-    id && deletePreset(id); // TODO: is this working without id?
+    _id && deletePreset(_id); // TODO: is this working without id?
     cancelEdit();
     calcSum();
   };
