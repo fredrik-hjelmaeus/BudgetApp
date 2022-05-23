@@ -44,7 +44,7 @@ const PresetFilter = () => {
         <TransitionGroup>
           {sortItemsByNum &&
             sortItemsByNum.map((preset) => (
-              <CSSTransition key={preset.id} timeout={250} classNames="item">
+              <CSSTransition key={preset._id} timeout={250} classNames="item">
                 <PresetItem preset={preset} />
               </CSSTransition>
             ))}

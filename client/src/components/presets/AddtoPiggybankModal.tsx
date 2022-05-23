@@ -15,8 +15,8 @@ const AddtoPiggybankModal = ({ Item }: { Item: IPreset }) => {
   const { toggleModal, modalprops } = cssContext;
 
   //preset/item local state
-  const [preset, setPreset] = useState({
-    id: Item.id,
+  const [preset, setPreset] = useState<IPreset>({
+    _id: Item._id,
     name: Item.name,
     number: Item.number,
     month: Item.month,
@@ -77,7 +77,7 @@ const AddtoPiggybankModal = ({ Item }: { Item: IPreset }) => {
     ) {
       setPreset({
         ...preset,
-        id: Item.id,
+        _id: Item._id,
         name: Item.name,
         number: Item.number,
         month: Item.month,

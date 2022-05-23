@@ -19,7 +19,7 @@ const DeletePurchaseModal = ({ Item }: { Item: IPreset }) => {
 
   //cancel purchase
   const onDelete = () => {
-    Item.id && deletePreset(Item.id);
+    Item._id && deletePreset(Item._id);
     toggleModal("");
   };
 

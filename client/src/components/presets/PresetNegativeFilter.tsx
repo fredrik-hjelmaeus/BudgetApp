@@ -28,7 +28,7 @@ const PresetNegativeFilter = () => {
         <TransitionGroup>
           {reverseSort &&
             reverseSort.map((preset) => (
-              <CSSTransition key={preset.id} timeout={500} classNames="item">
+              <CSSTransition key={preset._id} timeout={500} classNames="item">
                 <PresetItem preset={preset} />
               </CSSTransition>
             ))}

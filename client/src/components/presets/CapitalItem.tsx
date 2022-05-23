@@ -16,7 +16,7 @@ const CapitalItem = ({ capitalItem }: { capitalItem: IPreset }) => {
   };
   const onDelete = () => {
     // TODO: if id is missing show error. Or should id be required?
-    capitalItem.id && deletePreset(capitalItem.id);
+    capitalItem._id && deletePreset(capitalItem._id);
   };
   React.useEffect(() => {
     presets && calcCapital();

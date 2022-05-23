@@ -118,7 +118,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
         const newNordeaObj: ICsvPreset = {
           number: preset.Belopp,
           name: preset.Rubrik,
-          id: uuidv4(),
+          _id: uuidv4(),
         };
         newpresets.push(newNordeaObj);
       });
@@ -138,7 +138,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
         const newHandelsbankenObj: ICsvPreset = {
           number: lastNumberValue,
           name: nameValue,
-          id: uuidv4(),
+          _id: uuidv4(),
         };
         newpresets.push(newHandelsbankenObj);
       });
@@ -150,7 +150,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
         newpresets.push({
           number: Number(JSON.stringify(row).split(",")[10]),
           name: JSON.stringify(row).split(",")[9],
-          id: uuidv4(),
+          _id: uuidv4(),
         })
       );
     }
@@ -160,7 +160,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
       source.map((row) =>
         newpresets.push({
           row,
-          id: uuidv4(),
+          _id: uuidv4(),
         })
       );
     }
@@ -171,7 +171,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
         newpresets.push({
           number: obj.value,
           name: obj.description,
-          id: uuidv4(),
+          _id: uuidv4(),
         })
       );
     }

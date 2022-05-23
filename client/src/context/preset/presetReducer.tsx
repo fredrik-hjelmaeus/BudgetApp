@@ -123,9 +123,10 @@ function presetReducer(state: IPresetState, action: ActionType) {
         loading: false,
       };
     case DELETE_PRESET:
+      console.log("delete preset reducer");
       return {
         ...state,
-        presets: state.presets && state.presets?.filter((preset) => preset.id !== action.payload),
+        presets: state.presets && state.presets?.filter((preset) => preset._id !== action.payload),
         loading: false,
       };
     case SEND_EDIT:
@@ -134,7 +135,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
         presets:
           state.presets &&
           state.presets?.map((preset) =>
-            preset.id === action.payload.id ? action.payload : preset
+            preset._id === action.payload._id ? action.payload : preset
           ),
         loading: false,
       };
@@ -376,7 +377,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
         csvpresets:
           state.csvpresets &&
           state.csvpresets.map((preset) =>
-            preset.id === action.payload.id ? action.payload : preset
+            preset._id === action.payload._id ? action.payload : preset
           ),
       };
     case SET_NEWPRESETS:
@@ -393,7 +394,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
       return {
         ...state,
         csvpresets:
-          state.csvpresets && state.csvpresets.filter((preset) => preset.id === action.payload),
+          state.csvpresets && state.csvpresets.filter((preset) => preset._id === action.payload),
       };
     case PRESET_CLEAR_ERRORS:
       return {

@@ -61,7 +61,7 @@ const MonthSavingsSummary = () => {
             MyArray.push({
               Item: monthpurchasewithpiggybank[i],
               SumOfPreset: SumOfAllPiggyBanksByMonthByPreset[i],
-              key: monthpurchasewithpiggybank[i].id,
+              key: monthpurchasewithpiggybank[i]._id,
             });
           }
         }
@@ -90,7 +90,7 @@ const MonthSavingsSummary = () => {
           <h3 className="all-center text-gray underline">Month Surplus put to Savings</h3>
         </div>
         {monthsavingspresets?.map((preset) => (
-          <MonthSavingsItem Item={preset} SumOfPreset={preset.number} key={preset.id} />
+          <MonthSavingsItem Item={preset} SumOfPreset={preset.number} key={preset._id} />
         ))}
         {localPiggy &&
           localPiggy.length !== 0 &&

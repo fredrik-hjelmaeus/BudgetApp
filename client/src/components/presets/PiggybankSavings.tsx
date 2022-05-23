@@ -17,7 +17,7 @@ const PiggybankSavings: FunctionComponent = () => {
   return (
     <Fragment>
       {purchases &&
-        purchases.map((purchase) => <PiggyBankSavingItem key={purchase?.id} preset={purchase} />)}
+        purchases.map((purchase) => <PiggyBankSavingItem key={purchase?._id} preset={purchase} />)}
     </Fragment>
   );
 };
