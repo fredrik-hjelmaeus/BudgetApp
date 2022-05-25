@@ -48,7 +48,7 @@ declare global {
 */
 
 const csvtojson = (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.files);
+  // console.log(req.files);
 
   // Check if file was provided in the formdata
   if (!req.files) {
@@ -100,6 +100,18 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
   }
   const deLimit: delimiterObject | undefined = setDelimiter(filetype);
 
+  type frontendMonthAndYear = {
+    month: string;
+    year: string;
+  };
+
+  const getMonthAndYearMetaDataFromFileName = (fileName: string): frontendMonthAndYear => {
+    const fileNameSplit = fileName.split(" ");
+    const month = fileNameSplit[0];
+    const year = fileNameSplit[1];
+    return { month, year };
+  };
+
   const uploadPath: string = `${__dirname}/${file.name}`;
 
   file.mv(uploadPath, function (err) {
@@ -116,8 +128,8 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     if (filetype === "nordea") {
       source.map((preset) => {
         const newNordeaObj: ICsvPreset = {
-          number: preset.Belopp,
-          name: preset.Rubrik,
+          number: parseInt(preset["Belopp"]),
+          name: preset["Rubrik"],
           _id: uuidv4(),
         };
         newpresets.push(newNordeaObj);
@@ -233,8 +245,8 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
             // Validation of data by filetype
             if (filetype === "swedbank") {
               // here we need to check source[1] as fields with citation "" may have , in them.
-              const belopp = JSON.stringify(source[1]).split(",")[10];
-              const beskrivning = JSON.stringify(source[1]).split(",")[9];
+              const belopp = JSON.stringify(source[1]).split(",")[10]; // note: JSON.stringify is event-loop-blocking
+              const beskrivning = JSON.stringify(source[1]).split(",")[9]; // note: JSON.stringify is event-loop-blocking
               if (typeof beskrivning !== "string") {
                 deleteFile(`${__dirname}/${file.name}`);
                 return res.status(400).send("CSV does not contain valid Swedbank-values!");
@@ -251,11 +263,74 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
             }
             if (filetype === "nordea") {
               // Check for new Nordea-csv
-              if (source[0].Belopp === undefined || source[0].Rubrik === undefined) {
+              const date: string | undefined = source[0]["Bokföringsdag"];
+              const number: string | undefined = source[0]["Belopp"];
+              const description: string | undefined = source[0]["Rubrik"];
+
+              if (date === undefined || number === undefined || description === undefined) {
                 deleteFile(`${__dirname}/${file.name}`);
                 return res.status(400).send("CSV does not contain valid Nordea-values!");
               }
+
+              // Create table with data from csv according to in what month&year user is opening the file in frontend.
+              // get date from filename,which is provided from frontend
+              const { month, year } = getMonthAndYearMetaDataFromFileName(file.name);
+              function convertMonthToNumber(month: string): string {
+                switch (month) {
+                  case "January":
+                    return "01";
+                  case "February":
+                    return "02";
+                  case "March":
+                    return "03";
+                  case "April":
+                    return "04";
+                  case "May":
+                    return "05";
+                  case "June":
+                    return "06";
+                  case "July":
+                    return "07";
+                  case "August":
+                    return "08";
+                  case "September":
+                    return "09";
+                  case "October":
+                    return "10";
+                  case "November":
+                    return "11";
+                  case "December":
+                    return "12";
+                  default:
+                    return "0";
+                }
+              }
+              const monthNumber = convertMonthToNumber(month);
+
+              const monthCsvData: Array<string> = [];
+              source.map((row, index) => {
+                if (index !== 0) {
+                  const date: string | undefined = row["Bokföringsdag"];
+                  if (date === undefined) {
+                    deleteFile(`${__dirname}/${file.name}`);
+                    return res.status(400).send("CSV does not contain valid Nordea-values!");
+                  }
+
+                  // extract month and year from date
+                  const dateArr: Array<string> = date.split("-");
+                  const csvYear: string = dateArr[0];
+                  const csvMonth: string = dateArr[1];
+
+                  if (csvYear === year && csvMonth === monthNumber) {
+                    monthCsvData.push(row);
+                  }
+                }
+              });
+
+              pushData(filetype, monthCsvData);
+              return sendAndCleanup();
             }
+
             if (filetype === "handelsbanken") {
               // Check for handelsbanken txt name(Object.keys(source[0])[7]) and value(Object.keys(source[0])[6])
 
@@ -310,6 +385,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
     try {
       if (newpresets.length === 0) {
         await deleteFile(`${__dirname}/${file.name}`);
+
         return res.status(400).send("No values recognised!");
       }
       // valid file
@@ -326,7 +402,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
 const deleteFile = async (filepath: string) => {
   fs.unlink(filepath, (err) => {
     if (err) throw err;
-    //console.log('Successfully deleted file');
+    console.log("Successfully deleted file");
   });
 };
 

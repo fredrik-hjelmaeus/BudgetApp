@@ -55,6 +55,7 @@ import { IPreset } from "../../frontend-types/IPreset";
 import { ICategoryAndSumItem } from "../../frontend-types/ICategoryAndSumItem";
 import { INewPreset } from "../../frontend-types/INewPreset";
 import { IServerError } from "../../frontend-types/IServerError";
+import { ICsvPreset } from "../../../../middleware/ICsvPreset";
 
 const PresetState = (props: { children: ReactNode }) => {
   const initialState: IPresetState = {
@@ -328,8 +329,13 @@ const PresetState = (props: { children: ReactNode }) => {
       },
     };
     try {
-      const res = await axios.post("/api/userpreset/upload", formData, config);
+      const res: AxiosResponse<Array<ICsvPreset>> = await axios.post(
+        "/api/userpreset/upload",
+        formData,
+        config
+      );
       dispatch({ type: UPLOAD_CSV, payload: res.data });
+      console.log(res.data);
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<string>;
