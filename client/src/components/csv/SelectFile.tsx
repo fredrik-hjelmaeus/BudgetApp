@@ -12,7 +12,7 @@ const SelectFile = () => {
   const cssContext = React.useContext(CssContext);
   const { toggleModal } = cssContext;
   const { setAlert } = alertContext;
-  const { uploadCSV, error, csvpresets, clearPresetErrors } = presetContext;
+  const { uploadCSV, error, csvpresets, clearPresetErrors, month, year } = presetContext;
 
   //state
   const [selectedFile, setSelectedFile] = React.useState<string | File>("");
@@ -79,11 +79,17 @@ const SelectFile = () => {
     // eslint-disable-next-line
   }, [error]);
 
-  //useeffect run uploadCSV when file is selected OLD
+  //useeffect run uploadCSV when file is selected
   React.useEffect(() => {
     const sendFile = () => {
       const formData = new FormData();
-      formData.append(format, selectedFile, selectedFileName);
+      month &&
+        year &&
+        formData.append(
+          format,
+          selectedFile,
+          month.concat(" ").concat(year.toString()).concat(" ").concat(selectedFileName)
+        );
       uploadCSV(formData);
       setSelectedFile("");
       setSelectedFileName("");

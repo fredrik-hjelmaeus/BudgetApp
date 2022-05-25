@@ -8,7 +8,7 @@ import CsvPrompt from "./CsvPrompt";
 const CsvPresetCreateModal = () => {
   // context
   const presetContext = useContext(PresetContext);
-  const { submitCsvItems, clearCsv, newPresets } = presetContext;
+  const { submitCsvItems, clearCsv, newPresets, csvpresets } = presetContext;
 
   // state
   const [Prompt, setPrompt] = useState(false);
@@ -50,7 +50,7 @@ const CsvPresetCreateModal = () => {
         <div className="modal-csvpresets__card">
           <h1 className="all-center m-1">Create Transactions</h1>
 
-          {newPresets?.map((item) => (
+          {csvpresets?.map((item) => (
             <CsvPresetItem Item={item} key={item._id} />
           ))}
 
