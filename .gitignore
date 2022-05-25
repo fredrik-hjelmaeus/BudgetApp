@@ -9,6 +9,7 @@ config/production.json
 *.JPG
 *.psd
 *.tif
+*.csv
 
 .gitignore
 misc/
