@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import PresetContext from "../../context/preset/presetContext";
+import { IPiggybank } from "../../frontend-types/IPiggybank";
 import { IPreset } from "../../frontend-types/IPreset";
 import MonthSavingsItem from "./MonthSavingsItem";
 
@@ -17,10 +18,10 @@ const MonthSavingsSummary = () => {
 
   useEffect(() => {
     let monthpurchasewithpiggybank: IPreset[] | null;
-    let filteroutbymonth;
-    let savedAmounts;
+    let filteroutbymonth: IPiggybank[][] | null;
+    let savedAmounts: Array<number[]> | null;
     let SumOfAllPiggyBanksByMonthByPreset: number[] | null;
-    let TotalOfAllPiggybanksThisMonth;
+    let TotalOfAllPiggybanksThisMonth: number;
 
     const calcPiggySavings = () => {
       // filters out presets that is type purchase and has piggybank savings
@@ -39,19 +40,32 @@ const MonthSavingsSummary = () => {
               piggybank.year.toString() === year?.toString()
           )
         );
-
+      //  console.log("filteroutbymonth: ", filteroutbymonth);
       // store only savedAmounts in an array
       savedAmounts =
         filteroutbymonth &&
         filteroutbymonth.map((first) => first.map((second) => second.savedAmount));
-      // sift through savedAmounts and count totalsum
+      // TODO: savedAmounts occured as strings somewhere, this is a an ugly fix for this.
+      const savedAmountsNumbers =
+        savedAmounts &&
+        savedAmounts?.map((item) =>
+          item.map((inner) => (typeof inner === "string" ? parseFloat(inner) : inner))
+        );
+
+      // sift through savedAmountsNumbers and count totalsum
       SumOfAllPiggyBanksByMonthByPreset =
-        savedAmounts && savedAmounts.map((inner) => inner.reduce((a, b) => a + b, 0));
-      TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset?.reduce((a, b) => a + b, 0);
+        savedAmountsNumbers && savedAmountsNumbers.map((inner) => inner.reduce((a, b) => a + b, 0));
+      if (SumOfAllPiggyBanksByMonthByPreset) {
+        console.log(SumOfAllPiggyBanksByMonthByPreset);
+        const TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset?.reduce(
+          (a, b) => a + b,
+          0
+        );
+        console.log("calculating TotalOfAllPiggybanksThisMonth", TotalOfAllPiggybanksThisMonth);
+        return TotalOfAllPiggybanksThisMonth;
+      } else return 0;
     };
-    if (presets) {
-      calcPiggySavings();
-    }
+
     const createSavingsItem = () => {
       if (SumOfAllPiggyBanksByMonthByPreset && monthpurchasewithpiggybank) {
         let i;
@@ -70,15 +84,13 @@ const MonthSavingsSummary = () => {
       }
     };
 
-    // if piggybank deposits have been made in this month, set them in localpiggy state for display.
-    if (presets && TotalOfAllPiggybanksThisMonth !== 0) {
+    if (presets) {
+      setTotalOfAllPiggybanksThisMonth(calcPiggySavings());
+      // if piggybank deposits have been made in this month, set them in localpiggy state for display.
       const savingsItem = createSavingsItem();
       savingsItem && setLocalPiggy(savingsItem);
     } else setLocalPiggy([]);
 
-    TotalOfAllPiggybanksThisMonth && TotalOfAllPiggybanksThisMonth !== 0
-      ? setTotalOfAllPiggybanksThisMonth(TotalOfAllPiggybanksThisMonth)
-      : setTotalOfAllPiggybanksThisMonth(0);
     // eslint-disable-next-line
   }, [month, presets, year]);
 

@@ -25,7 +25,9 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
       ? (MonthsLeft = ItemAfterPiggy / MonthBalance) // TODO: maybe use parseFloat here, ts conversion may have broken it.
       : (MonthsLeft = "+50");
 
-    setMonthsLeftBeforePurchase(MonthsLeft);
+    setMonthsLeftBeforePurchase(
+      typeof MonthsLeft === "number" ? Math.round(MonthsLeft) : MonthsLeft
+    );
   };
 
   //updates purchase values after modal change
@@ -174,6 +176,7 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
           </button>
         ) : (
           <button
+            data-testid="MonthsLeftBeforePurchase"
             className={
               MonthBalance && MonthBalance > 0
                 ? "btn-moremonthsleft"

@@ -15,7 +15,7 @@ const SelectFile = () => {
   const { uploadCSV, error, csvpresets, clearPresetErrors } = presetContext;
 
   //state
-  const [selectedFile, setSelectedFile] = React.useState("");
+  const [selectedFile, setSelectedFile] = React.useState<string | File>("");
   const [selectedFileName, setSelectedFileName] = React.useState("");
   const [format, setFormat] = React.useState("RFC4180");
 
@@ -23,14 +23,16 @@ const SelectFile = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   interface IFile extends HTMLInputElement {
-    files: FileList | null;
+    files: FileList;
   }
+
   //logic
   const onFileChange: React.ChangeEventHandler<IFile> = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFileName(e.target.files[0].name);
-      setSelectedFile(e.target.files[0].toString());
-      // e.target.value = null; // resets value so same file can trigger onchange again. https://github.com/ngokevin/react-file-reader-input/issues/11
+      setSelectedFile(e.target.files[0]);
+      // e.target.value = "";
+      // e.target.files = null; // resets value so same file can trigger onchange again. https://github.com/ngokevin/react-file-reader-input/issues/11
       // TODO: disabled above as its readonly value and typescript complains.
       // TODO: check if this is needed.
     }
@@ -77,14 +79,12 @@ const SelectFile = () => {
     // eslint-disable-next-line
   }, [error]);
 
-  //useeffect run uploadCSV when file is selected
+  //useeffect run uploadCSV when file is selected OLD
   React.useEffect(() => {
     const sendFile = () => {
-      const formData: FormData = new FormData();
+      const formData = new FormData();
       formData.append(format, selectedFile, selectedFileName);
-
       uploadCSV(formData);
-
       setSelectedFile("");
       setSelectedFileName("");
     };
@@ -93,7 +93,7 @@ const SelectFile = () => {
       setSelectedFile("");
       setSelectedFileName("");
     }
-  }, [selectedFile, selectedFileName, uploadCSV, format]);
+  }, [selectedFile, selectedFileName, uploadCSV]);
 
   // detect if the uploadCSV resulted in valid csvs and then close this modal to give room for csvpresetcreatemodal
   React.useEffect(() => {

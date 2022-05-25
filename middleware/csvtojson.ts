@@ -48,7 +48,7 @@ declare global {
 */
 
 const csvtojson = (req: Request, res: Response, next: NextFunction) => {
-  // console.log(req.files);
+  console.log(req.files);
 
   // Check if file was provided in the formdata
   if (!req.files) {
