@@ -13,8 +13,8 @@ const Home = () => {
 
   //const { toggleNavbar, navbar } = cssContext;
   const { month } = presetContext;
-  console.log(month);
-  console.log("home component here", month, authContext.user);
+  //console.log(month);
+  //console.log("home component here", month, authContext.user);
   useEffect(() => {
     //  console.log("Home useEffect here");
     //localStorage.token && authContext.loadUser();

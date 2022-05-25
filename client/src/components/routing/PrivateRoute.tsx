@@ -26,12 +26,12 @@ export default PrivateRoute; */
 //import React from 'react';
 
 const PrivateRoute = ({ component: Component }: ComponentProps) => {
-  console.log("privateroutecomponent here");
+  //  console.log("privateroutecomponent here");
   const authContext = useContext(AuthContext);
   const { isAuthenticated, loading } = authContext;
 
-  console.log("isAuthenticated: ", isAuthenticated);
-  console.log("loading: ", loading);
+  //  console.log("isAuthenticated: ", isAuthenticated);
+  //  console.log("loading: ", loading);
   if (loading) return <Spinner />;
   if (isAuthenticated && !loading) return <Component />;
   return <Navigate to="/Landing" />;

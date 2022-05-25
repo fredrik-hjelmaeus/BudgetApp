@@ -4,6 +4,7 @@ import {
   fireEvent,
   waitForElementToBeRemoved,
   within,
+  waitFor,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
@@ -15,13 +16,267 @@ import { IEditPreset } from "../../../frontend-types/IEditPreset";
 import { IPreset } from "../../../frontend-types/IPreset";
 
 describe("MonthSavingsSummary unit tests", () => {
-  beforeEach(async () => {
+  const setup = async () => {
+    server.use(
+      rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
+        return res(
+          ctx.json([
+            {
+              _id: "61ffc16219c0a7a8173c7f2d",
+              user: "61ed72d16f895b1100dbab66",
+              name: "En inkomst",
+              number: 666666,
+              month: "September",
+              year: 2021,
+              category: "Housing",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "September",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61ffc16219c0a7a8173c7f2e",
+                },
+              ],
+              date: "2022-02-06T12:38:58.720Z",
+              __v: 0,
+            },
+            {
+              _id: "61ffc14719c0a7a8173c7f16",
+              user: "61ed72d16f895b1100dbab66",
+              name: "saving",
+              number: 456788,
+              month: "April",
+              year: 2021,
+              category: "Salary",
+              type: "savings",
+              piggybank: [
+                {
+                  month: "April",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61ffc14719c0a7a8173c7f17",
+                },
+              ],
+              date: "2022-02-06T12:38:31.061Z",
+              __v: 0,
+            },
+            {
+              _id: "61fc0bdffdfe6258d87f5359",
+              user: "61ed72d16f895b1100dbab66",
+              name: "232",
+              number: 323232,
+              month: "February",
+              year: 2021,
+              category: "Food",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "February",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61fc0bdffdfe6258d87f535a",
+                },
+              ],
+              date: "2022-02-03T17:07:43.744Z",
+              __v: 0,
+            },
+            {
+              _id: "6203c32b8015507e05a926cd",
+              user: "61ed72d16f895b1100dbab66",
+              name: "Resa",
+              number: 55000,
+              month: "January",
+              year: 2021,
+              category: "Travel",
+              type: "purchase",
+              piggybank: [
+                {
+                  month: "January",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "6203c32b8015507e05a926ce",
+                },
+              ],
+              date: "2022-02-09T13:35:39.173Z",
+              __v: 0,
+            },
+            {
+              _id: "61edb2af5e11343d1268fa24",
+              user: "61ed72d16f895b1100dbab66",
+              name: "6776",
+              number: 6767,
+              month: "February",
+              year: 2022,
+              category: "Travel",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "February",
+                  year: 2022,
+                  savedAmount: 0,
+                  _id: "61edb2af5e11343d1268fa25",
+                },
+              ],
+              date: "2022-01-23T19:55:27.501Z",
+              __v: 0,
+            },
+            {
+              _id: "61ffc13019c0a7a8173c7f01",
+              user: "61ed72d16f895b1100dbab66",
+              name: "En inkomst",
+              number: 4455,
+              month: "June",
+              year: 2021,
+              category: "Food",
+              type: "capital",
+              piggybank: [
+                {
+                  month: "June",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61ffc13019c0a7a8173c7f02",
+                },
+              ],
+              date: "2022-02-06T12:38:08.883Z",
+              __v: 0,
+            },
+            {
+              _id: "61edb19ec557568270d9349a",
+              user: "61ed72d16f895b1100dbab66",
+              name: "sadas",
+              number: 444,
+              month: "January",
+              year: 2021,
+              category: "Car",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "January",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61edb19ec557568270d9349b",
+                },
+              ],
+              date: "2022-01-23T19:50:54.267Z",
+              __v: 0,
+            },
+            {
+              _id: "62039bb18015507e05a926a3",
+              user: "61ed72d16f895b1100dbab66",
+              name: "dsfs",
+              number: 355,
+              month: "January",
+              year: 2021,
+              category: "Commute",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "January",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "62039bb18015507e05a926a4",
+                },
+              ],
+              date: "2022-02-09T10:47:13.627Z",
+              __v: 0,
+            },
+            {
+              _id: "61edb2a15e11343d1268fa15",
+              user: "61ed72d16f895b1100dbab66",
+              name: "gty",
+              number: 77,
+              month: "April",
+              year: 2021,
+              category: "Car",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "April",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61edb2a15e11343d1268fa16",
+                },
+              ],
+              date: "2022-01-23T19:55:13.813Z",
+              __v: 0,
+            },
+            {
+              _id: "61ed73196f895b1100dbab72",
+              name: "wew",
+              number: 44,
+              month: "November",
+              year: 2021,
+              category: "Commute",
+              type: "overhead",
+              piggybank: [
+                {
+                  _id: "61ed73196f895b1100dbab73",
+                  month: "November",
+                  year: 2021,
+                  savedAmount: 0,
+                },
+              ],
+              user: "61ed72d16f895b1100dbab66",
+              date: "2022-01-23T15:24:09.301Z",
+              __v: 0,
+            },
+            {
+              _id: "61ed73256f895b1100dbab75",
+              name: "dsfds",
+              number: -20,
+              month: "November",
+              year: 2021,
+              category: "Commute",
+              type: "overhead",
+              piggybank: [
+                {
+                  _id: "61ed73256f895b1100dbab76",
+                  month: "November",
+                  year: 2021,
+                  savedAmount: 0,
+                },
+              ],
+              user: "61ed72d16f895b1100dbab66",
+              date: "2022-01-23T15:24:21.152Z",
+              __v: 0,
+            },
+            {
+              _id: "61edb1a5c557568270d9349d",
+              user: "61ed72d16f895b1100dbab66",
+              name: "sfdc",
+              number: -255,
+              month: "January",
+              year: 2021,
+              category: "Travel",
+              type: "overhead",
+              piggybank: [
+                {
+                  month: "January",
+                  year: 2021,
+                  savedAmount: 0,
+                  _id: "61edb1a5c557568270d9349e",
+                },
+              ],
+              date: "2022-01-23T19:51:01.383Z",
+              __v: 0,
+            },
+          ])
+        );
+      })
+    );
+
     // go to month and expand preset form
     render(<App />);
 
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
     // go to month
-    const januaryButton = screen.queryByRole("button", { name: /january/i });
-    januaryButton && fireEvent.click(januaryButton);
+    expect(yearElement).toBeInTheDocument();
+    const januaryButton = screen.getByRole("button", { name: /january/i });
+    fireEvent.click(januaryButton);
 
     // assert/await inital month state, IMPORTANT TO INIT SUMMATION VALUES as they are used in the tests
     const sum = await screen.findAllByText("799");
@@ -42,11 +297,14 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(purchasePreset).toBeInTheDocument();
     expect(monthSavings).toBeInTheDocument();
     expect(accountBalanceSum).toBeInTheDocument();
-  });
+  };
 
-  test("editing number on piggybank saving works correctly", async () => {
+  test.only("editing number on piggybank saving works correctly", async () => {
+    await setup();
     // see bottom helper functions
+    console.log("adding income preset");
     await addIncomePreset();
+    console.log("adding piggybank saving");
     await createPiggybankSaving();
 
     // press number on piggybank saving
@@ -61,7 +319,7 @@ describe("MonthSavingsSummary unit tests", () => {
 
     // change the amount to save value
     fireEvent.change(screen.getByTestId("inputamountrange"), {
-      target: { value: "2000" },
+      target: { value: 2000 },
     });
     // create the expected server response with a piggybank object added
     server.use(
@@ -100,8 +358,14 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(screen.getByText("Month Surplus:").parentElement?.children[1].textContent).toBe("10544");
     expect(screen.getByText("Month Expenses:").textContent).toBe("Month Expenses:    -255");
     expect(screen.getByText("Account Balance:").textContent).toBe("Account Balance:554977 ");
-    expect(screen.getByText("Month Balance:").textContent).toBe("Month Balance:8544");
-    expect(screen.getByText("Month Savings:").textContent).toBe("Month Savings: 2000");
+    const monthBalance = await screen.findByText("Month Balance:");
+    const monthSavings = await screen.findByText("Month Savings:");
+    await waitFor(() => {
+      expect(monthBalance.textContent).toBe("Month Balance:8544");
+    });
+    await waitFor(() => {
+      expect(monthSavings.textContent).toBe("Month Savings: 2000");
+    });
 
     const BalanceByCategory_TravelField = screen.getByText("Travel:").children[0].textContent;
     expect(BalanceByCategory_TravelField).toBe("9745");
@@ -153,9 +417,9 @@ describe("MonthSavingsSummary unit tests", () => {
     //click submit
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
 
-    // expect fields to be reset after submit
+    // expect fields to be reset after
     expect(screen.getByPlaceholderText("Name")).toHaveValue("");
-    expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+    expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
     expect(screen.getByRole("combobox")).toHaveValue("Select an category");
     expect(screen.getByRole("checkbox", { name: /overhead/i })).toBeChecked();
 
@@ -321,7 +585,8 @@ const addIncomePreset = async () => {
   // add income preset
   fireEvent.click(await screen.findByRole("button", { name: /add to budget/i }));
   userEvent.type(await screen.findByPlaceholderText("Name"), "incomepreset");
-  userEvent.type(await screen.findByPlaceholderText("Number"), "10000");
+  //userEvent.type(await screen.findByPlaceholderText("Number"), "10000");
+  fireEvent.change(await screen.findByPlaceholderText("Number"), { target: { value: 10000 } }); // works perfect
   userEvent.selectOptions(await screen.findByRole("combobox"), "Travel");
   //override server response:
   server.use(
@@ -331,7 +596,7 @@ const addIncomePreset = async () => {
           _id: "6203e22b2bdb63c78b35b672",
           user: "6203e2152bdb63c78b35b670",
           name: req.body.name,
-          number: req.body.number,
+          number: 10000, //req.body.number,
           month: "January",
           year: 2021,
           category: req.body.category,
@@ -354,15 +619,21 @@ const addIncomePreset = async () => {
   fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
   // expect form fields to be reset
   expect(screen.getByPlaceholderText("Name")).toHaveValue("");
-  expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+  expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
   expect(screen.getByRole("combobox")).toHaveValue("Select an category");
   expect(screen.getByRole("checkbox", { name: /overhead/i })).toBeChecked();
   expect(screen.getByRole("checkbox", { name: /purchase/i })).not.toBeChecked();
+  const newPreset = await screen.findByRole("button", { name: /incomepreset/i });
+
+  expect(newPreset).toBeInTheDocument();
+  const monthBal = await screen.findByText("10544");
+  expect(monthBal).toBeInTheDocument();
 };
 
 const createPiggybankSaving = async () => {
   //create piggybank saving
   fireEvent.click(await screen.findByRole("button", { name: /5 months/i }));
+  screen.debug(await screen.findByTestId("MonthsLeftBeforePurchase"));
   server.use(
     rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
       const { _id } = req.params;

@@ -120,6 +120,7 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // Add preset
   const addPreset: IPresetContext["addPreset"] = async (preset) => {
+    console.log("addpreset ran with preset: ", preset);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -128,7 +129,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.post("/api/userpreset", preset, config);
-
+      console.log(res.data);
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -153,10 +154,9 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // Delete preset
   const deletePreset: IPresetContext["deletePreset"] = async (id) => {
-    console.log("deleteing preset with id: ", id);
     try {
-      const res = await axios.delete(`/api/userpreset/${id}`);
-      console.log("dispatching");
+      await axios.delete(`/api/userpreset/${id}`);
+
       dispatch({
         type: DELETE_PRESET,
         payload: id,
@@ -879,8 +879,17 @@ const PresetState = (props: { children: ReactNode }) => {
     dispatch({ type: CATEGORY_SUMONLYNEGNUM_BYYEAR, payload: MajorArray });
   };
 
-  const addtoPiggybanks: IPresetContext["addtoPiggybanks"] = (object) => {
-    dispatch({ type: ADDTO_PIGGYBANK, payload: object });
+  const addtoPiggybanks: IPresetContext["addtoPiggybanks"] = (piggybankObject) => {
+    const { savedAmount } = piggybankObject;
+    if (typeof savedAmount === "number") {
+      dispatch({ type: ADDTO_PIGGYBANK, payload: piggybankObject });
+    } else {
+      console.log("addtoPiggybanks noticed irregular input");
+      dispatch({
+        type: ADDTO_PIGGYBANK,
+        payload: { ...piggybankObject, savedAmount: parseInt(savedAmount) },
+      });
+    }
   };
 
   const setActivePiggybank: IPresetContext["setActivePiggybank"] = (piggybankArray) => {
@@ -970,8 +979,11 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // calc month balance
   const calcMonthBalance: IPresetContext["calcMonthBalance"] = () => {
+    console.log("calcMonthBalance ran");
     if (state.MonthSum !== null && state.monthsavings !== null) {
       const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
+      console.log("calcMonthBalance actually ran", totalsum);
+
       dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
     }
   };

@@ -26,9 +26,9 @@ beforeAll(() => {
 
   const token = localStorage.getItem("token");
   if (token) {
-    console.log("token is in localStorage!");
+    //  console.log("token is in localStorage!");
   } else {
-    console.log("No token in localStorage, setting token");
+    //console.log("No token in localStorage, setting token");
   }
   server.listen();
 });

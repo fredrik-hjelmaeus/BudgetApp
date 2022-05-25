@@ -29,6 +29,7 @@ const Sum = () => {
       filteredmonthandposnum !== null &&
       filteredmonthandnegnum !== null
     ) {
+      console.log("calculating sums", monthsavings, SumPiggybanksMonth);
       calcPosMonth();
       calcNegMonth();
       calcMonthBalance();

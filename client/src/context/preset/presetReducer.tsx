@@ -359,7 +359,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
     case CALC_MONTH_BALANCE:
       return {
         ...state,
-        MonthBalance: action.payload,
+        MonthBalance: Math.round(action.payload),
       };
     case SUBMIT_CSV:
       return {
