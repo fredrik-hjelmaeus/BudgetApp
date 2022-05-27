@@ -2,12 +2,12 @@ import React, { Fragment, useContext, useState, useRef, useEffect } from "react"
 import { ICsvPreset } from "../../../../middleware/ICsvPreset";
 import PresetContext from "../../context/preset/presetContext";
 import { INewPreset } from "../../frontend-types/INewPreset";
-
 import DeleteButton from "../presets/DeleteButton";
 import DropdownMenu from "../presets/DropdownMenu";
 
-// Here we modify csvpresets, adding month,year,category,piggybank and markdelete.
-// Final form before creating an preset/IPreset.
+// Here we modify csvpresets(ICsvPreset) to INewPreset, adding month,year,category,piggybank and markdelete.
+// The user gets a list of potential new presets from the csv file. The user either selects category or marks it for delete.
+// This state is then used to create a new preset(IPreset) and add it to db.
 
 const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
   const presetContext = useContext(PresetContext);
@@ -91,6 +91,7 @@ const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
   };
 
   useEffect(() => {
+    console.log("doSubmitCsv", doSubmitCsv);
     doSubmitCsv === "step1" &&
       localpreset.category !== "Select Category" &&
       setNewPresets(localpreset);
