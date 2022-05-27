@@ -91,17 +91,18 @@ const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
   };
 
   useEffect(() => {
-    console.log("doSubmitCsv", doSubmitCsv);
+    console.log("doSubmitCsv-listener", doSubmitCsv, localpreset);
     doSubmitCsv === "step1" &&
       localpreset.category !== "Select Category" &&
       setNewPresets(localpreset);
+    doSubmitCsv === "step1" && localpreset.markdelete && setNewPresets(localpreset);
 
     doSubmitCsv === "submit" &&
       localpreset.category !== "Select Category" &&
       localpreset.markdelete !== true &&
       addToDB();
     //eslint-disable-next-line
-  }, [doSubmitCsv]);
+  }, [doSubmitCsv, localpreset]);
 
   return (
     <Fragment>

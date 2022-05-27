@@ -8,24 +8,30 @@ interface CsvPromptProps {
 
 const CsvPrompt = ({ setPrompt, validCsv }: CsvPromptProps) => {
   const presetContext = useContext(PresetContext);
-  const { submitCsvItems, newPresets } = presetContext;
+  const { submitCsvItems, newPresets, clearCsv, csvpresets } = presetContext;
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    if (e.currentTarget.name === "cancel") {
+    if (e.currentTarget.name === "cancel" || newPresets === null) {
+      console.log("cancelling");
       //TODO currentTarget instead of target works?
+      clearCsv();
       setPrompt(false);
       submitCsvItems("");
     }
-    if (e.currentTarget.name === "add") {
+    if (e.currentTarget.name === "add" && newPresets) {
+      console.log("setting submit csvprompt");
       submitCsvItems("submit");
+      setPrompt(false);
     }
   };
-
+  console.log(validCsv);
   return (
     <div id="myModal" className="modal-csvprompt" style={{ display: "block" }}>
       <div className="modal-csvpresets__card modal-csvpresets__card__flex">
         <h1 className="all-center modal-csvpresets__flex">
-          {newPresets && validCsv && newPresets.length - validCsv.length} of{" "}
-          {newPresets && newPresets.length} transactions does not have a category selected
+          {newPresets && validCsv && csvpresets && `${csvpresets.length - validCsv.length} of `}
+          {newPresets && csvpresets
+            ? `${csvpresets.length} transactions does not have a category selected`
+            : "You have not selected any categories on any transaction"}
         </h1>
         <div>
           <button
@@ -33,7 +39,9 @@ const CsvPrompt = ({ setPrompt, validCsv }: CsvPromptProps) => {
             name="add"
             onClick={onClick}
           >
-            Add the {validCsv && validCsv.length} transactions that has a category specified
+            {newPresets
+              ? `Add the transactions that has a category specified`
+              : "Exit without adding any transactions"}
           </button>
           <button
             className="btn modal-csvpresets__btn__goback all-center"

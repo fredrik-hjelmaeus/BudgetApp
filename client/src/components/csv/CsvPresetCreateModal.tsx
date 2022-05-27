@@ -8,7 +8,7 @@ import CsvPrompt from "./CsvPrompt";
 const CsvPresetCreateModal = () => {
   // context
   const presetContext = useContext(PresetContext);
-  const { submitCsvItems, clearCsv, newPresets, csvpresets } = presetContext;
+  const { submitCsvItems, clearCsv, newPresets, csvpresets, doSubmitCsv } = presetContext;
 
   // state
   const [Prompt, setPrompt] = useState(false);
@@ -16,31 +16,62 @@ const CsvPresetCreateModal = () => {
 
   // logic
   const onClick = () => {
-    // Run ContextApi fn that run fn in csvpresetitems that check for valid categories
-    submitCsvItems("step1");
-  };
+    console.log("onClick");
+    console.log(newPresets?.length, csvpresets?.length);
 
-  //useEffect
-  useEffect(() => {
-    // TODO: all switched from csvpreset to newPresets, correct?
-    //check for valid csv to add by filter out all with not valid cat and markdel set to true
-    const checkcsv =
-      newPresets && newPresets.filter((item) => item.category && item.markdelete === false);
-
-    checkcsv && setValidCsv(checkcsv);
-
-    if (checkcsv?.length !== 0 && checkcsv?.length !== newPresets?.length) {
+    if (newPresets?.length !== csvpresets?.length) {
+      console.log("prompting user as all presets havent been handled yet");
+      setValidCsv(countUserHandledCsvItems());
       setPrompt(true);
     } else {
-      submitCsvItems("submit");
+      submitCsvItems("step2");
     }
+  };
+  const countUserHandledCsvItems = (): INewPreset[] | null => {
+    if (newPresets) {
+      return newPresets.filter(
+        (item) => item.category !== "Select Category" || item.markdelete === true
+      );
+    } else {
+      return null;
+    }
+  };
+  //useEffect
+  useEffect(() => {
+    doSubmitCsv === "" && submitCsvItems("step1");
 
-    if (newPresets && newPresets.length <= 1) {
-      clearCsv();
-      setPrompt(false);
+    //check for valid csv to add by filter out all with not valid cat and markdel set to true
+    console.log(newPresets?.length, csvpresets?.length);
+    // When newPresets and csvpresets is the same length, all csv items have been handled by the user.
+    if (doSubmitCsv === "step2" && newPresets?.length === csvpresets?.length) {
+      // checkcsv looks how many csv items user selected categories and what was marked for deletion.
+      const checkcsv = countUserHandledCsvItems();
+
+      setValidCsv(checkcsv);
+      console.log("newPresets-listener: ", newPresets, checkcsv, csvpresets);
+      // if there are no valid csv items, or
+      if (
+        checkcsv?.length !== 0 &&
+        checkcsv?.length !== newPresets?.length
+        // &&  csvpresets === null
+      ) {
+        console.log("some csv items have not been handled by the user");
+        console.log("prompting user");
+        setPrompt(true);
+      } else {
+        console.log("all csv items have been handled by the user");
+        console.log("setting submit in submitCsvItems");
+        submitCsvItems("submit");
+      }
+
+      if (newPresets && newPresets.length <= 1) {
+        console.log("clearCsv ran", newPresets);
+        clearCsv();
+        setPrompt(false);
+      }
     }
     //eslint-disable-next-line
-  }, [newPresets]); //breaks if you add clearCsv and submitCsvItems
+  }, [newPresets, doSubmitCsv]); //breaks if you add clearCsv and submitCsvItems
 
   // jsx
   return (
@@ -48,20 +79,24 @@ const CsvPresetCreateModal = () => {
       {Prompt && <CsvPrompt setPrompt={setPrompt} validCsv={validCsv} />}
       <div id="myModal" className="modal-csvpresets" style={{ display: "block" }}>
         <div className="modal-csvpresets__card">
-          <h1 className="all-center m-1">Create Transactions</h1>
+          <h1 className="all-center m-1">
+            {doSubmitCsv !== "submit" ? "Create Transactions" : "Transactions added!"}
+          </h1>
 
           {csvpresets?.map((item) => (
             <CsvPresetItem Item={item} key={item._id} />
           ))}
 
-          <button className="btn modal-csvpresets__btn__addtobudget all-center" onClick={onClick}>
-            ADD TO BUDGET
-          </button>
+          {doSubmitCsv !== "submit" && (
+            <button className="btn modal-csvpresets__btn__addtobudget all-center" onClick={onClick}>
+              ADD TO BUDGET
+            </button>
+          )}
           <button
             className="btn modal-csvpresets__btn__addtobudget modal-csvpresets__btn__addtobudget__cancel all-center"
             onClick={() => clearCsv()}
           >
-            Cancel
+            {doSubmitCsv !== "submit" ? "Cancel" : "Exit"}
           </button>
         </div>
       </div>
