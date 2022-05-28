@@ -27,6 +27,7 @@ const CsvPresetCreateModal = () => {
       submitCsvItems("step2");
     }
   };
+
   const countUserHandledCsvItems = (): INewPreset[] | null => {
     if (newPresets) {
       return newPresets.filter(
@@ -36,6 +37,12 @@ const CsvPresetCreateModal = () => {
       return null;
     }
   };
+
+  const onExit = () => {
+    submitCsvItems("");
+    clearCsv();
+  };
+
   //useEffect
   useEffect(() => {
     doSubmitCsv === "" && submitCsvItems("step1");
@@ -94,7 +101,7 @@ const CsvPresetCreateModal = () => {
           )}
           <button
             className="btn modal-csvpresets__btn__addtobudget modal-csvpresets__btn__addtobudget__cancel all-center"
-            onClick={() => clearCsv()}
+            onClick={onExit}
           >
             {doSubmitCsv !== "submit" ? "Cancel" : "Exit"}
           </button>

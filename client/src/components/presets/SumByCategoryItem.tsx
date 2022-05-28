@@ -5,7 +5,7 @@ const SumByCategoryItem = ({ catsumitem }: { catsumitem: ICategoryAndSumItem }) 
   return (
     <div className="card-categorybalance bg-white">
       <span className="text-gray items-categorybalance">
-        {catsumitem.cat}:{"    "}
+        {catsumitem.cat}:
         <div
           className={
             catsumitem.SumOfCat > 0
@@ -15,8 +15,6 @@ const SumByCategoryItem = ({ catsumitem }: { catsumitem: ICategoryAndSumItem }) 
         >
           {catsumitem.SumOfCat}
         </div>
-        {/*        {presetContext.year && 'Montly Avg: '}  detta används vid årsrapport endast.
-        {presetContext.year && parseInt(parseFloat(catsumitem.SumOfCat / 12))} */}
       </span>
     </div>
   );

@@ -40,7 +40,7 @@ const MonthSavingsSummary = () => {
               piggybank.year.toString() === year?.toString()
           )
         );
-      //  console.log("filteroutbymonth: ", filteroutbymonth);
+
       // store only savedAmounts in an array
       savedAmounts =
         filteroutbymonth &&
@@ -56,12 +56,11 @@ const MonthSavingsSummary = () => {
       SumOfAllPiggyBanksByMonthByPreset =
         savedAmountsNumbers && savedAmountsNumbers.map((inner) => inner.reduce((a, b) => a + b, 0));
       if (SumOfAllPiggyBanksByMonthByPreset) {
-        console.log(SumOfAllPiggyBanksByMonthByPreset);
         const TotalOfAllPiggybanksThisMonth = SumOfAllPiggyBanksByMonthByPreset?.reduce(
           (a, b) => a + b,
           0
         );
-        console.log("calculating TotalOfAllPiggybanksThisMonth", TotalOfAllPiggybanksThisMonth);
+
         return TotalOfAllPiggybanksThisMonth;
       } else return 0;
     };

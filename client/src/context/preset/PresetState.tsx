@@ -99,10 +99,9 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Get Presets
   const getPresets: IPresetContext["getPresets"] = async () => {
-    console.log("getPresets here calling backend...");
     try {
       const res: AxiosResponse = await axios.get("/api/userpreset");
-      // console.log("getpresets response: ", res.data);
+
       dispatch({ type: GET_PRESETS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -121,7 +120,6 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // Add preset
   const addPreset: IPresetContext["addPreset"] = async (preset) => {
-    console.log("addpreset ran with preset: ", preset);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +128,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.post("/api/userpreset", preset, config);
-      console.log(res.data);
+
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -252,7 +250,6 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Add month-val coming from Datemenu
   const addMonth: IPresetContext["addMonth"] = (month) => {
-    console.log("addmonth", month);
     dispatch({ type: ADD_MONTH, payload: month });
   };
 
@@ -298,7 +295,6 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // set year when yearbutton is pressed in datemenucomponent
   const setYear: IPresetContext["setYear"] = (year) => {
-    console.log("set year ran");
     dispatch({ type: SET_YEAR, payload: year });
   };
 
@@ -985,10 +981,8 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // calc month balance
   const calcMonthBalance: IPresetContext["calcMonthBalance"] = () => {
-    console.log("calcMonthBalance ran");
     if (state.MonthSum !== null && state.monthsavings !== null) {
       const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
-      console.log("calcMonthBalance actually ran", totalsum);
 
       dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
     }

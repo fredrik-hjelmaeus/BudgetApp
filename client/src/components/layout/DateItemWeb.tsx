@@ -21,15 +21,12 @@ const DateItemWeb = () => {
   }, [month, year, LocalMonth, prevYear, nextYear, setYear]);
 
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    console.log("pressed some", e.currentTarget.value);
     if (e.currentTarget.value !== undefined) {
       if (isNaN(parseInt(e.currentTarget.value))) {
-        console.log("month button pressed", e.currentTarget.value);
         // month pressed
         addMonth(e.currentTarget.value);
         setLocalMonth(e.currentTarget.value);
       } else {
-        console.log("some year button was pressed");
         // previous year arrow pressed
         if (e.currentTarget.value.toString() === prevYear.toString()) {
           setYear(parseInt(prevYear));
@@ -47,7 +44,6 @@ const DateItemWeb = () => {
     }
     // year pressed
     if (e.currentTarget.value === year?.toString()) {
-      console.log("this also ran");
       if (guide === "12") {
         setYear(parseInt("2021"));
         setGuide((parseInt(guide) + 1).toString());

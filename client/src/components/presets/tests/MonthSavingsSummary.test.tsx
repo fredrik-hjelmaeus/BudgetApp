@@ -299,12 +299,12 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(accountBalanceSum).toBeInTheDocument();
   };
 
-  test.only("editing number on piggybank saving works correctly", async () => {
+  test("editing number on piggybank saving works correctly", async () => {
     await setup();
     // see bottom helper functions
-    console.log("adding income preset");
+
     await addIncomePreset();
-    console.log("adding piggybank saving");
+
     await createPiggybankSaving();
 
     // press number on piggybank saving
@@ -355,7 +355,8 @@ describe("MonthSavingsSummary unit tests", () => {
 
     // expect summation fields to be updated
     expect(screen.getByText("Month Income:").textContent).toBe("Month Income:    10799");
-    expect(screen.getByText("Month Surplus:").parentElement?.children[1].textContent).toBe("10544");
+    const monthSurplus = screen.getByText("Month Surplus:");
+    expect(monthSurplus.parentElement?.children[1]).toHaveTextContent("10544");
     expect(screen.getByText("Month Expenses:").textContent).toBe("Month Expenses:    -255");
     expect(screen.getByText("Account Balance:").textContent).toBe("Account Balance:554977 ");
     const monthBalance = await screen.findByText("Month Balance:");
@@ -363,12 +364,16 @@ describe("MonthSavingsSummary unit tests", () => {
     await waitFor(() => {
       expect(monthBalance.textContent).toBe("Month Balance:8544");
     });
+
     await waitFor(() => {
       expect(monthSavings.textContent).toBe("Month Savings: 2000");
     });
-
-    const BalanceByCategory_TravelField = screen.getByText("Travel:").children[0].textContent;
-    expect(BalanceByCategory_TravelField).toBe("9745");
+    const categoryBalanceHeader = await screen.findByRole("heading", {
+      name: /Balance By Category/i,
+    });
+    expect(categoryBalanceHeader).toBeInTheDocument();
+    const BalanceByCategory_TravelField = await screen.findByText(/travel:/i);
+    expect(BalanceByCategory_TravelField).toHaveTextContent("9745");
   });
 
   test("should not be able to add more to saving in edit when month balance is 0 or less", async () => {
@@ -633,7 +638,7 @@ const addIncomePreset = async () => {
 const createPiggybankSaving = async () => {
   //create piggybank saving
   fireEvent.click(await screen.findByRole("button", { name: /5 months/i }));
-  screen.debug(await screen.findByTestId("MonthsLeftBeforePurchase"));
+
   server.use(
     rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
       const { _id } = req.params;

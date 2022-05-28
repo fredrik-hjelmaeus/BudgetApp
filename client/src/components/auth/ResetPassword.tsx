@@ -27,7 +27,6 @@ export const ResetPassword = () => {
   const [passwordSent, setPasswordSent] = useState(false);
 
   useEffect(() => {
-    console.log("useffect detected alert", alerts);
     if (errors.length > 0) {
       errors.map((error) => setAlert(error.msg, "danger"));
       clearErrors();

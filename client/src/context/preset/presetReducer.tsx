@@ -123,7 +123,6 @@ function presetReducer(state: IPresetState, action: ActionType) {
         loading: false,
       };
     case DELETE_PRESET:
-      console.log("delete preset reducer");
       return {
         ...state,
         presets: state.presets && state.presets?.filter((preset) => preset._id !== action.payload),
@@ -232,7 +231,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
         MonthSum: null,
         PosMonthSum: null,
         NegMonthSum: null,
-        categorymonthsum: null,
+        categorymonthsum: [],
       };
 
     case UPLOAD_CSV:
@@ -405,6 +404,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
       return {
         ...state,
         csvpresets: null,
+        newPresets: null,
       };
 
     default:

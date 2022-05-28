@@ -10,7 +10,7 @@ const MonthSummary = () => {
   const { guide } = useContext(GuideContext);
   useEffect(() => {
     // TODO may need to not render on first render
-    console.log("monthSummary useEffect here");
+
     //presets && !guide && getPresets(); // do we need to get presets here?
     !presets && !guide && getPresets(); // TODO: we should only get presets if they are not already loaded ?
     // eslint-disable-next-line

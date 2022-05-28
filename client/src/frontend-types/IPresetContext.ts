@@ -20,7 +20,7 @@ export interface IPresetState {
   AllMonthSum: number[]; // sum of all presets in all months for the current/active year
   PosMonthSum: null | number; // gets data from filteredmonthandnegnum
   NegMonthSum: null | number; // gets data from filteredmonthandposnum
-  categorymonthsum: ICategoryAndSumItem[] | null; // sum of all presets in the current/active month by category
+  categorymonthsum: ICategoryAndSumItem[]; // sum of all presets in the current/active month by category
   categoryyearsum: ICategoryAndSumItem[]; // sum of all presets in the current/active year by category
   yearsum: null | number; // sum of all presets in the current/active year
   savings: null | number; // Sum of all savings

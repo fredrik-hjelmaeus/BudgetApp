@@ -29,7 +29,6 @@ const Sum = () => {
       filteredmonthandposnum !== null &&
       filteredmonthandnegnum !== null
     ) {
-      console.log("calculating sums", monthsavings, SumPiggybanksMonth);
       calcPosMonth();
       calcNegMonth();
       calcMonthBalance();
@@ -88,7 +87,7 @@ const Sum = () => {
           Month Savings:
           <span className={"text-orange"}>
             {" "}
-            {monthsavings && monthsavings + SumPiggybanksMonth}
+            {monthsavings !== null && monthsavings + SumPiggybanksMonth}
           </span>
         </div>
       </div>

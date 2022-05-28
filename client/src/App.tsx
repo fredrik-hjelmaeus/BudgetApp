@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-//const s = require("./App.css");
 
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Home from "./components/pages/Home";
@@ -19,9 +18,7 @@ import DateState from "./context/date/DateState";
 import setAuthToken from "./utils/setAuthToken";
 import LoginModal from "./components/auth/LoginModal";
 
-//console.log("app: localstoragetoken: ", localStorage.token);
 if (localStorage.token) {
-  console.log("Found token in localstorage, putting it in the request header aswell");
   setAuthToken(localStorage.token);
 }
 

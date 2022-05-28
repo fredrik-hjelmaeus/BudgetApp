@@ -18,7 +18,6 @@ const PresetFilter = () => {
 
   useEffect(() => {
     if (month !== null && presets !== null && year !== null) {
-      console.log("detected month change, getting this month presets");
       filterOutPositiveNumsAndMonth(month);
       filterOutNegativeNumsAndMonth(month);
     } // eslint-disable-next-line
