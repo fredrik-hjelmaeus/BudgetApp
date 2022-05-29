@@ -302,9 +302,7 @@ describe("MonthSavingsSummary unit tests", () => {
   test("editing number on piggybank saving works correctly", async () => {
     await setup();
     // see bottom helper functions
-
     await addIncomePreset();
-
     await createPiggybankSaving();
 
     // press number on piggybank saving
@@ -377,6 +375,7 @@ describe("MonthSavingsSummary unit tests", () => {
   });
 
   test("should not be able to add more to saving in edit when month balance is 0 or less", async () => {
+    await setup();
     // The user we are using has a month surplus of 544
     // Add saving that is 544
     fireEvent.click(await screen.findByRole("button", { name: /add to budget/i }));
@@ -399,7 +398,7 @@ describe("MonthSavingsSummary unit tests", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 500,
             month: "January",
             year: 2021,
             category: req.body.category,
@@ -461,7 +460,8 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(editPresetNumField).toBeInTheDocument();
   });
 
-  test("editing category on piggybank saving should not work", async () => {
+  test.only("editing category on piggybank saving should not work", async () => {
+    setup();
     // See bottom helper functions
     await addIncomePreset();
     await createPiggybankSaving();

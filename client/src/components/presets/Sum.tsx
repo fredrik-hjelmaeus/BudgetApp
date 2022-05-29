@@ -43,7 +43,7 @@ const Sum = () => {
     MonthSum,
     SumPiggybanksMonth,
   ]);
-
+  console.log("sum: ", sum);
   return (
     <Fragment>
       <div className="card_top_monthright bold Sum__grid no-wrap">
