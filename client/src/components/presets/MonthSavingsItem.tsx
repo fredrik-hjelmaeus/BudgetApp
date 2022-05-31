@@ -198,7 +198,7 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
         >
           <img
             src={`/icons/${category}.svg`}
-            alt={`${category} icon`}
+            alt={`${category} icon for month saving`}
             style={{ height: "20px", width: "20px" }}
           />
         </button>

@@ -43,7 +43,7 @@ const Sum = () => {
     MonthSum,
     SumPiggybanksMonth,
   ]);
-  console.log("sum: ", sum);
+
   return (
     <Fragment>
       <div className="card_top_monthright bold Sum__grid no-wrap">
@@ -73,7 +73,7 @@ const Sum = () => {
         {/* Account Balance */}
         <div className="text-gray">
           Account Balance:
-          <span className={sum && sum > 0 ? "text-success" : "text-danger"}>{sum} </span>
+          <span className={sum !== null && sum > 0 ? "text-success" : "text-danger"}>{sum} </span>
         </div>
         {/* Month Balance */}
         <div>

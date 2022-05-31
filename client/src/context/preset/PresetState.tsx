@@ -217,7 +217,6 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Clear presets
   const clearPresets: IPresetContext["clearPresets"] = () => {
-    console.log("clear presets ran");
     dispatch({ type: CLEAR_PRESETS });
   };
 
@@ -228,6 +227,7 @@ const PresetState = (props: { children: ReactNode }) => {
       // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
       if (sumArray.length !== 0) {
         TotalSum = sumArray.reduce((a, b) => a + b, 0);
+
         dispatch({ type: SUM, payload: TotalSum });
       } else {
         dispatch({ type: SUM, payload: 0 });

@@ -279,13 +279,13 @@ describe("MonthSavingsSummary unit tests", () => {
     fireEvent.click(januaryButton);
 
     // assert/await inital month state, IMPORTANT TO INIT SUMMATION VALUES as they are used in the tests
-    const sum = await screen.findAllByText("799");
-    expect(sum.length).toBe(1);
-    const expenses = await screen.findAllByText("-255");
+    const monthIncome = await screen.findAllByText("799"); // month income
+    expect(monthIncome.length).toBe(1);
+    const expenses = await screen.findAllByText("-255"); // month expenses
     expect(expenses.length).toBe(3);
-    const BalanceAndSurplus = await screen.findAllByText("544");
+    const BalanceAndSurplus = await screen.findAllByText("544"); // month balance
     expect(BalanceAndSurplus.length).toBe(2);
-    const accountBalanceSum = await screen.findByText("544977");
+    const accountBalanceSum = await screen.findByText("544977"); // account balance
     const monthSavings = await screen.findByText("0");
     const purchaseElement = await screen.findByRole("heading", {
       name: /purchases/i,
@@ -299,7 +299,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(accountBalanceSum).toBeInTheDocument();
   };
 
-  test("editing number on piggybank saving works correctly", async () => {
+  test.skip("editing number on piggybank saving works correctly", async () => {
     await setup();
     // see bottom helper functions
     await addIncomePreset();
@@ -374,7 +374,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(BalanceByCategory_TravelField).toHaveTextContent("9745");
   });
 
-  test("should not be able to add more to saving in edit when month balance is 0 or less", async () => {
+  test.skip("should not be able to add more to saving in edit when month balance is 0 or less", async () => {
     await setup();
     // The user we are using has a month surplus of 544
     // Add saving that is 544
@@ -461,19 +461,16 @@ describe("MonthSavingsSummary unit tests", () => {
   });
 
   test.only("editing category on piggybank saving should not work", async () => {
-    setup();
+    await setup();
     // See bottom helper functions
     await addIncomePreset();
     await createPiggybankSaving();
 
-    // press number on piggybank saving
-    const MonthSavingsComponentTree = screen.getByRole("heading", {
-      name: /month surplus put to savings/i,
-    }).parentElement?.parentElement;
-    const categoryBtn =
-      MonthSavingsComponentTree &&
-      (await within(MonthSavingsComponentTree).findByAltText(/travel/i));
+    // press onEdit on piggybank saving:
+    //NOTE: we are not testing the actual response of onEdit triggering by pressing categoryBtn in this test.
+    const categoryBtn = await screen.findByRole("img", { name: /travel icon for month saving/i });
     categoryBtn && fireEvent.click(categoryBtn);
+    // expect edit dialog not to have been opened
     const header = screen.queryByRole("heading", { name: "Amount to save" }); // using query allows heading not to be found but also NOT throw error
     expect(header).not.toBeInTheDocument();
   });
@@ -590,7 +587,6 @@ const addIncomePreset = async () => {
   // add income preset
   fireEvent.click(await screen.findByRole("button", { name: /add to budget/i }));
   userEvent.type(await screen.findByPlaceholderText("Name"), "incomepreset");
-  //userEvent.type(await screen.findByPlaceholderText("Number"), "10000");
   fireEvent.change(await screen.findByPlaceholderText("Number"), { target: { value: 10000 } }); // works perfect
   userEvent.selectOptions(await screen.findByRole("combobox"), "Travel");
   //override server response:

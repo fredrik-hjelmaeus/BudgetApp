@@ -67,7 +67,9 @@ const YearBalance = () => {
               </ul>
               <ul className="flexrow">
                 <li>Account Balance: </li>
-                <li className={sum && sum > 0 ? "text-success px" : "text-danger px"}>{sum}</li>
+                <li className={sum !== null && sum > 0 ? "text-success px" : "text-danger px"}>
+                  {sum}
+                </li>
               </ul>
             </div>
           </div>
