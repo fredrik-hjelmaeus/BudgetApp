@@ -298,7 +298,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(accountBalanceSum).toBeInTheDocument();
   };
 
-  test.skip("editing number on piggybank saving works correctly", async () => {
+  test("editing number on piggybank saving works correctly", async () => {
     await setup();
     // see bottom helper functions
     await addIncomePreset();
@@ -373,7 +373,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(BalanceByCategory_TravelField).toHaveTextContent("9745");
   });
 
-  test.skip("should not be able to add more to saving in edit when month balance is 0 or less", async () => {
+  test("should not be able to add more to saving in edit when month balance is 0 or less", async () => {
     await setup();
     // The user we are using has a month surplus of 544
     // Add saving that is 544
@@ -459,7 +459,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(editPresetNumField).toBeInTheDocument();
   });
 
-  test.skip("editing category on piggybank saving should not work", async () => {
+  test("editing category on piggybank saving should not work", async () => {
     await setup();
     // See bottom helper functions
     await addIncomePreset();
@@ -515,7 +515,9 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(monthSavingsHeader).not.toBeInTheDocument();
   });
 
-  test.only("editing name,number and category on saving works correctly", async () => {
+  test("editing name,number and category on saving works correctly", async () => {
+    await setup();
+
     // go to april month
     const aprilButton = screen.queryByRole("button", { name: /april/i });
     aprilButton && fireEvent.click(aprilButton);
@@ -560,23 +562,23 @@ describe("MonthSavingsSummary unit tests", () => {
 
     // submit edited number
     fireEvent.click(updateBtn);
-    waitForElementToBeRemoved(updateBtn);
+    // waitForElementToBeRemoved(updateBtn);
     expect(updateBtn).not.toBeInTheDocument();
 
     // expect the number to have been changed
     expect(await screen.findByRole("button", { name: /66/i })).toBeInTheDocument();
 
     // click name on saving
-    fireEvent.click(await screen.findByRole("button", { name: /saving/i }));
+    fireEvent.click(await screen.findByRole("button", { name: "saving" }));
 
     // close edit preset
     const cancelBtn = await screen.findByRole("button", { name: /cancel/i });
     fireEvent.click(cancelBtn);
-    waitForElementToBeRemoved(cancelBtn);
+    //await waitForElementToBeRemoved(cancelBtn);
     expect(cancelBtn).not.toBeInTheDocument();
 
     // click category on saving
-    fireEvent.click(screen.getByAltText(/salary icon/i));
+    fireEvent.click(screen.getByAltText(/salary icon for month saving/i));
     // expect edit preset to appear
     expect(await screen.findByRole("button", { name: /cancel/i })).toBeInTheDocument();
   });

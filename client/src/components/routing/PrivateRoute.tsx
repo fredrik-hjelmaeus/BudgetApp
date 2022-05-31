@@ -30,7 +30,7 @@ const PrivateRoute = ({ component: Component }: ComponentProps) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated, loading } = authContext;
 
-  //  console.log("isAuthenticated: ", isAuthenticated);
+  console.log("isAuthenticated: ", isAuthenticated);
   //  console.log("loading: ", loading);
   if (loading) return <Spinner />;
   if (isAuthenticated && !loading) return <Component />;
