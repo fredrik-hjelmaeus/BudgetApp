@@ -3,7 +3,6 @@ import {
   screen,
   fireEvent,
   waitForElementToBeRemoved,
-  within,
   waitFor,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
@@ -11,7 +10,7 @@ import App from "../../../App";
 
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
-import React from "react";
+
 import { IEditPreset } from "../../../frontend-types/IEditPreset";
 import { IPreset } from "../../../frontend-types/IPreset";
 
@@ -460,7 +459,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(editPresetNumField).toBeInTheDocument();
   });
 
-  test.only("editing category on piggybank saving should not work", async () => {
+  test.skip("editing category on piggybank saving should not work", async () => {
     await setup();
     // See bottom helper functions
     await addIncomePreset();
@@ -476,15 +475,12 @@ describe("MonthSavingsSummary unit tests", () => {
   });
 
   test("deleting piggybank saving works correctly", async () => {
+    await setup();
     // See bottom helper functions
     await addIncomePreset();
     await createPiggybankSaving();
-
-    // press deletebutton
-    const MonthSavingsComponentTree = screen.getByRole("heading", {
-      name: /month surplus put to savings/i,
-    }).parentElement?.parentElement;
-    const deleteBtn = MonthSavingsComponentTree?.children[1].children[4].children[0];
+    await screen.findByRole("img", { name: /travel icon for month saving/i });
+    const delBtn = await screen.findByTestId("monthitem-delete");
     server.use(
       rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
@@ -505,17 +501,21 @@ describe("MonthSavingsSummary unit tests", () => {
         );
       })
     );
-    deleteBtn && fireEvent.click(deleteBtn);
+    fireEvent.click(delBtn);
 
-    // expect piggybank to have been deleted
-    await waitForElementToBeRemoved(deleteBtn);
-    expect(deleteBtn).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("heading", { name: /month surplus put to savings/i })
-    ).not.toBeInTheDocument();
+    const monthSavingsHeader = await screen.findByRole("heading", {
+      name: /month surplus put to savings/i,
+    });
+
+    //expect piggybank item to be removed
+    await waitForElementToBeRemoved(delBtn);
+    expect(delBtn).not.toBeInTheDocument();
+
+    // since there is no other savings or piggybank savings this month: expect monthsavingssummary not to be rendered anymore
+    expect(monthSavingsHeader).not.toBeInTheDocument();
   });
 
-  test("editing name,number and category on saving works correctly", async () => {
+  test.only("editing name,number and category on saving works correctly", async () => {
     // go to april month
     const aprilButton = screen.queryByRole("button", { name: /april/i });
     aprilButton && fireEvent.click(aprilButton);
@@ -660,6 +660,6 @@ const createPiggybankSaving = async () => {
   await waitForElementToBeRemoved(submitBtn);
   expect(submitBtn).not.toBeInTheDocument();
   expect(
-    screen.getByRole("heading", { name: /month surplus put to savings/i })
+    await screen.findByRole("heading", { name: /month surplus put to savings/i })
   ).toBeInTheDocument();
 };

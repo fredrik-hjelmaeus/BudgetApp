@@ -110,7 +110,6 @@ const MonthSavingsItem = ({ Item, SumOfPreset }: MonthSavingsItemProps) => {
     setDelbtnColor(false);
   };
   const onDelete = () => {
-    console.log("onDelete ran", Item);
     //if type piggy delete this presets piggydeposits for this month, else its type normal and you should delete whole preset
     Item && Item._id && Item.type === "savings"
       ? deletePreset(Item._id)

@@ -94,7 +94,10 @@ const MonthSavingsSummary = () => {
   }, [month, presets, year]);
 
   // If no piggybankdeposits exist , don't render this component at all
-  if (localPiggy || (monthsavingspresets && monthsavingspresets.length > 0)) {
+  if (
+    (localPiggy && localPiggy.length > 0) ||
+    (monthsavingspresets && monthsavingspresets.length > 0)
+  ) {
     return (
       <div className="card_monthright_surplussavings bold">
         <div>
