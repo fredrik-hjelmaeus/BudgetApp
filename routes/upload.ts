@@ -8,7 +8,6 @@ import csvtojson from "../middleware/csvtojson";
 // @access  Private
 router.post("/", authMiddleware, csvtojson, async (req: Request, res: Response) => {
   try {
-    console.log("req.newpresets:", req.newpresets);
     res.json(req.newpresets);
   } catch (err: unknown) {
     if (err instanceof Error) console.error(err.message);

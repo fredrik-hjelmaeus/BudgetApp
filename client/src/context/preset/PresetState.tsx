@@ -128,7 +128,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.post("/api/userpreset", preset, config);
-
+      console.log(res.data);
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -221,13 +221,14 @@ const PresetState = (props: { children: ReactNode }) => {
   };
 
   const calcSum: IPresetContext["calcSum"] = () => {
+    console.log("calculating Sums");
     let TotalSum = 0;
 
     const dispatchSum = (sumArray: number[]) => {
       // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
       if (sumArray.length !== 0) {
         TotalSum = sumArray.reduce((a, b) => a + b, 0);
-
+        console.log(TotalSum);
         dispatch({ type: SUM, payload: TotalSum });
       } else {
         dispatch({ type: SUM, payload: 0 });
@@ -394,6 +395,7 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // Calc Positive month sum
   const calcPosMonth: IPresetContext["calcPosMonth"] = () => {
+    console.log("ran");
     //array att iterera igenom
     let presetArray: number[] = [];
     //håller uträknade summan

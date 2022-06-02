@@ -64,6 +64,11 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
 
   const file = req.files[filetype] as UploadedFile;
 
+  // Verify file contains a name
+  if (!file.name) {
+    return res.status(400).send("Invalid data");
+  }
+
   // Compare fileextension with provided filetype
   //ofx
   if (filetype === "ofx" && !file.name.endsWith("ofx")) {
@@ -108,7 +113,10 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
   const getMonthAndYearMetaDataFromFileName = (fileName: string): frontendMonthAndYear => {
     const fileNameSplit = fileName.split(" ");
     const month = fileNameSplit[0];
-    const year = fileNameSplit[1];
+    let year = "";
+    if (fileNameSplit[1]) {
+      year = fileNameSplit[1];
+    }
     return { month, year };
   };
 
@@ -275,6 +283,11 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
               // Create table with data from csv according to in what month&year user is opening the file in frontend.
               // get date from filename,which is provided from frontend
               const { month, year } = getMonthAndYearMetaDataFromFileName(file.name);
+              if (year === "") {
+                deleteFile(`${__dirname}/${file.name}`);
+                return res.status(400).send("Did not provide valid year in filename");
+              }
+
               function convertMonthToNumber(month: string): string {
                 switch (month) {
                   case "January":
@@ -307,25 +320,46 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
               }
               const monthNumber = convertMonthToNumber(month);
 
-              const monthCsvData: Array<string> = [];
-              source.map((row, index) => {
-                if (index !== 0) {
-                  const date: string | undefined = row["Bokföringsdag"];
-                  if (date === undefined) {
-                    deleteFile(`${__dirname}/${file.name}`);
-                    return res.status(400).send("CSV does not contain valid Nordea-values!");
-                  }
+              if (monthNumber === "0") {
+                deleteFile(`${__dirname}/${file.name}`);
+                return res.status(400).send("Did not provide valid month in filename");
+              }
 
-                  // extract month and year from date
-                  const dateArr: Array<string> = date.split("-");
-                  const csvYear: string = dateArr[0];
-                  const csvMonth: string = dateArr[1];
+              function getMonthCsvData(): Array<string> {
+                const monthCsvData: Array<string> = [];
 
-                  if (csvYear === year && csvMonth === monthNumber) {
-                    monthCsvData.push(row);
+                source.map((row, index) => {
+                  if (index !== 0) {
+                    const date: string | undefined = row["Bokföringsdag"];
+                    if (date === undefined) {
+                      deleteFile(`${__dirname}/${file.name}`);
+
+                      return res.status(400).send("CSV does not contain valid Nordea-values!");
+                    }
+
+                    // extract month and year from date
+                    const dateArr: Array<string> = date.split("-");
+                    const csvYear: string = dateArr[0];
+                    const csvMonth: string = dateArr[1];
+
+                    if (csvYear === year && csvMonth === monthNumber) {
+                      monthCsvData.push(row);
+                    }
                   }
-                }
-              });
+                });
+
+                return monthCsvData;
+              }
+              const monthCsvData = getMonthCsvData();
+
+              if (monthCsvData.length === 0) {
+                deleteFile(`${__dirname}/${file.name}`);
+                return res
+                  .status(400)
+                  .send(
+                    "CSV does not contain any values for the selected date: " + month + " " + year
+                  );
+              }
 
               pushData(filetype, monthCsvData);
               return sendAndCleanup();

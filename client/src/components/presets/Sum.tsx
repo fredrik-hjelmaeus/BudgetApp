@@ -42,8 +42,12 @@ const Sum = () => {
     monthsavings,
     MonthSum,
     SumPiggybanksMonth,
+    PosMonthSum,
+    NegMonthSum,
   ]);
-
+  //  console.log(month, filteredmonthandposnum, filteredmonthandnegnum);
+  console.log("Income sum: ", PosMonthSum);
+  console.log(MonthSum);
   return (
     <Fragment>
       <div className="card_top_monthright bold Sum__grid no-wrap">
