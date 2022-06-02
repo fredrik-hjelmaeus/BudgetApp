@@ -40,6 +40,7 @@ const Month = () => {
   } = presetContext;
 
   useEffect(() => {
+    console.log("detected change in month or presets", month, presets?.length);
     presets && calcSum();
     presets && setPurchase();
     presets && month && calcMonthSum(month);

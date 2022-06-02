@@ -29,6 +29,7 @@ const Sum = () => {
       filteredmonthandposnum !== null &&
       filteredmonthandnegnum !== null
     ) {
+      console.log("detected change");
       calcPosMonth();
       calcNegMonth();
       calcMonthBalance();
@@ -45,9 +46,8 @@ const Sum = () => {
     PosMonthSum,
     NegMonthSum,
   ]);
-  //  console.log(month, filteredmonthandposnum, filteredmonthandnegnum);
-  console.log("Income sum: ", PosMonthSum);
-  console.log(MonthSum);
+
+  console.log("NegMonthSum", NegMonthSum);
   return (
     <Fragment>
       <div className="card_top_monthright bold Sum__grid no-wrap">

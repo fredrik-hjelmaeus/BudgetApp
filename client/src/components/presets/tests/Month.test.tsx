@@ -315,7 +315,7 @@ describe("Summation functionality", () => {
     await setup();
   });
 
-  test.only("Add preset to overhead income works & updates all summation-fields", async () => {
+  test("Add preset to overhead income works & updates all summation-fields", async () => {
     // starting point is month January with expanded preset form setup in beforeEach
     server.use(
       rest.post<IPreset>("http://localhost/api/userpreset", (req, res, ctx) => {
@@ -326,7 +326,7 @@ describe("Summation functionality", () => {
             name: req.body.name,
             number: 1000,
             month: req.body.month,
-            year: 2021,
+            year: req.body.year,
             category: req.body.category,
             type: req.body.type,
             piggybank: [
@@ -372,7 +372,9 @@ describe("Summation functionality", () => {
     expect(AccBal).toBeInTheDocument();
 
     const monthBalance = screen.getByText("Month Balance:");
-    expect(monthBalance).toHaveTextContent("Month Balance:1544");
+    await waitFor(() => {
+      expect(monthBalance).toHaveTextContent("Month Balance:1544");
+    });
 
     const BalanceByCategory_TravelField = screen.getByText("Travel:").children[0].textContent;
     expect(BalanceByCategory_TravelField).toBe("745");
@@ -431,8 +433,10 @@ describe("Summation functionality", () => {
     expect(AccountBalance).toBeInTheDocument();
 
     //Month Expenses: -1255
-    const MonthExpenses = screen.getByText(/month expenses:/i).children[0].textContent;
-    expect(MonthExpenses).toBe("-1255");
+    const MonthExpenses = screen.getByText(/month expenses:/i);
+    await waitFor(() => {
+      expect(MonthExpenses).toHaveTextContent("-1255");
+    });
 
     //Month Balance: -456
     const MonthBalance = screen.getByText(/month balance/i).parentElement?.children[1].textContent;
@@ -442,6 +446,7 @@ describe("Summation functionality", () => {
     const MonthSavings = screen.getByText(/month savings:/i).children[0].textContent;
     expect(MonthSavings).toBe(" 0");
   });
+
   test("Deleting presetvalues updates all summation-fields", async () => {
     // starting point is month January with expanded preset form
 
@@ -489,7 +494,7 @@ describe("Summation functionality", () => {
     expect(MonthSavings).toBe(" 0");
   });
 
-  test("Adding overhead presetvalues through upload csv dialog updates all summation-fields correctly", async () => {
+  test.only("Adding overhead presetvalues through upload csv dialog updates all summation-fields correctly", async () => {
     // starting point is month January with expanded preset form
 
     // click upload csv button
