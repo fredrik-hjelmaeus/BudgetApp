@@ -27,7 +27,9 @@ const SelectCSVfields = () => {
   const validateValueField = (field: string) => {
     let isValid = true;
     csvpresets &&
-      csvpresets.map((preset) => (preset.row && isNaN(parseInt(field)) ? (isValid = false) : null)); // TODO: doublecheck parseInt works here
+      csvpresets.map((preset) =>
+        preset.row && isNaN(preset.row[field as keyof typeof preset.row]) ? (isValid = false) : null
+      ); // TODO: doublecheck parseInt works here
     return isValid;
   };
 

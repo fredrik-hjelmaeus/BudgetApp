@@ -511,9 +511,10 @@ describe("Summation functionality", () => {
     // click upload inside csv file format modal
     userEvent.upload(input, file);
     fireEvent.click(screen.getByRole("button", { name: "Upload" }));
-    await waitForElementToBeRemoved(screen.getByRole("button", { name: "Upload" }));
+    await waitForElementToBeRemoved(screen.queryByRole("button", { name: "Upload" }));
 
     // Assert on SelectCSVfields component and that it shows data values correct
+    // screen.debug(screen.getByRole("heading", { name: /select csv fields/i }));
     expect(screen.getByRole("heading", { name: /select csv fields/i })).toBeInTheDocument();
     expect(screen.getByText("description")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /e350/i })).toBeInTheDocument();
@@ -526,7 +527,7 @@ describe("Summation functionality", () => {
     // select saldo as value field
     fireEvent.click(screen.getByRole("button", { name: /saldo/i })); // 556 + 777
     // verify we got to create transactions dialog
-    expect(screen.getByRole("heading", { name: /create transactions/i }));
+    expect(screen.getByRole("heading", { name: /create transactions/i })).toBeInTheDocument();
 
     // select categories for the fields and change to commute
     const categoryButtons = screen.getAllByTestId("dropdownselect");
@@ -582,8 +583,8 @@ describe("Summation functionality", () => {
     expect(submitBtn).not.toBeInTheDocument();
 
     // expect new preset from csv in monthsummary
-    expect(await screen.findByText("Ford"));
-    expect(await screen.findByText("556"));
+    expect(await screen.findByText("Ford")).toBeInTheDocument();
+    expect(await screen.findByText("556")).toBeInTheDocument();
     const presets = await screen.findAllByTestId("presetitem");
     expect(presets.length).toBe(4);
 

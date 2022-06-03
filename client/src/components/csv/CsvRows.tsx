@@ -2,11 +2,15 @@ import React from "react";
 
 interface CsvRowsProps {
   col: string;
-  row: string;
+  row: object | string;
 }
 
 function CsvRows({ col, row }: CsvRowsProps) {
-  return <button className=" CsvRows__item">{row[parseInt(col)]}</button>;
+  return typeof row === "object" ? (
+    <button className=" CsvRows__item">{row[col as keyof typeof row]}</button>
+  ) : (
+    <button className=" CsvRows__item">{row}</button>
+  );
 }
 
 export default CsvRows;

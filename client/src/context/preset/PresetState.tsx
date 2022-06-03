@@ -128,7 +128,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.post("/api/userpreset", preset, config);
-      console.log(res.data);
+
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -221,14 +221,13 @@ const PresetState = (props: { children: ReactNode }) => {
   };
 
   const calcSum: IPresetContext["calcSum"] = () => {
-    console.log("calculating Sums");
     let TotalSum = 0;
 
     const dispatchSum = (sumArray: number[]) => {
       // checks if no presets exist then don't use .reduce , just return 0 for dispatch.
       if (sumArray.length !== 0) {
         TotalSum = sumArray.reduce((a, b) => a + b, 0);
-        console.log(TotalSum);
+
         dispatch({ type: SUM, payload: TotalSum });
       } else {
         dispatch({ type: SUM, payload: 0 });
@@ -256,7 +255,6 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Calc month sum
   const calcMonthSum: IPresetContext["calcMonthSum"] = (month) => {
-    console.log("calculating month sum");
     //array att iterera igenom
     let presetArray: number[] = [];
     //håller uträknade summan
@@ -333,7 +331,6 @@ const PresetState = (props: { children: ReactNode }) => {
         config
       );
       dispatch({ type: UPLOAD_CSV, payload: res.data });
-      console.log(res.data);
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<string>;
@@ -396,7 +393,6 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // Calc Positive month sum
   const calcPosMonth: IPresetContext["calcPosMonth"] = () => {
-    console.log("ran");
     //array att iterera igenom
     let presetArray: number[] = [];
     //håller uträknade summan
@@ -416,7 +412,6 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // Calc Negative month sum
   const calcNegMonth: IPresetContext["calcNegMonth"] = () => {
-    console.log("calcNegMonth ran", state.filteredmonthandnegnum);
     //array att iterera igenom
     let presetArray: number[] = [];
     //håller uträknade summan
@@ -428,7 +423,6 @@ const PresetState = (props: { children: ReactNode }) => {
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
       negnum = presetArray.reduce((a, b) => a + b, 0);
-      console.log(negnum);
       dispatch({ type: NEGMONTHSUM, payload: negnum });
     } else {
       dispatch({ type: NEGMONTHSUM, payload: 0 });
@@ -891,7 +885,6 @@ const PresetState = (props: { children: ReactNode }) => {
     if (typeof savedAmount === "number") {
       dispatch({ type: ADDTO_PIGGYBANK, payload: piggybankObject });
     } else {
-      console.log("addtoPiggybanks noticed irregular input");
       dispatch({
         type: ADDTO_PIGGYBANK,
         payload: { ...piggybankObject, savedAmount: parseInt(savedAmount) },
@@ -986,10 +979,9 @@ const PresetState = (props: { children: ReactNode }) => {
 
   // calc month balance
   const calcMonthBalance: IPresetContext["calcMonthBalance"] = () => {
-    console.log("calculating MonthBalance");
     if (state.MonthSum !== null && state.monthsavings !== null) {
       const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
-      console.log(totalsum);
+
       dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
     }
   };

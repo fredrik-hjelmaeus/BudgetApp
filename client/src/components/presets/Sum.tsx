@@ -47,7 +47,6 @@ const Sum = () => {
     NegMonthSum,
   ]);
 
-  console.log("NegMonthSum", NegMonthSum);
   return (
     <Fragment>
       <div className="card_top_monthright bold Sum__grid no-wrap">
