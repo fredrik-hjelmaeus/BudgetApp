@@ -7,6 +7,7 @@ import config from "config";
 import { check, validationResult } from "express-validator";
 import authMiddleware from "../middleware/auth";
 import sendEmail from "../utils/sendEmail";
+const sendMail = require("../utils/sendEmailwithSendInBlue");
 
 import User from "../models/User";
 
@@ -298,6 +299,75 @@ router.put(
 
       await user.save();
       res.status(200).json({ msg: "Password Updated" });
+    } catch (err: unknown) {
+      if (err instanceof Error) console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+// TEMP
+// @route   POST api/auth/sendinblue
+// @desc    Forgot password
+// @access  Public
+router.post(
+  "/sendinblue",
+  [check("email", "Please include a valid email").isEmail()],
+  async (req: Request, res: Response) => {
+    //validate : check if a valid mail syntax was used
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const user = await User.findOne({ email: req.body.email });
+
+      if (!user) {
+        return res.status(404).json({ errors: [{ msg: "There is no user with that email" }] });
+      }
+
+      // Get reset token
+      const resetToken = user.getResetPasswordToken();
+
+      await user.save({ validateBeforeSave: false });
+
+      // Create reset url
+      const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
+      const resetUrlTwo =
+        config.get("resetpasswordURL") === "development"
+          ? `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`
+          : `https://dry-eyrie-55051.herokuapp.com/resetpassword/${resetToken}`;
+
+      const message = `You are receiving this email because you (or someone else) has 
+                     requested the reset of a password. Please follow this link to 
+                     create new password: \n\n ${resetUrlTwo}`;
+      try {
+        const sender = {
+          email: "gemigpost@hotmail.com",
+          name: "Fred",
+        };
+        const receivers = [
+          {
+            email: user.email,
+          },
+        ];
+
+        await sendMail(sender, receivers, "Password Reset Request", message);
+
+        return res.status(200).json({ success: true, data: "Email sent" });
+      } catch (err) {
+        console.log(err);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false });
+
+        return res.status(500).json({ data: "Email could not be sent" });
+      }
+
+      res.status(200).json({ msg: "Email sent, check your mailbox", data: user });
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
       res.status(500).send("Server Error");
