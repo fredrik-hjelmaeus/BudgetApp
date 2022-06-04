@@ -297,6 +297,22 @@ describe("Update preset", () => {
 
     expect(response.body.name).toEqual("fett");
   });
+
+  it.only("fails on invalid number input", async () => {
+    const testSetupObjects = await setup();
+    if (typeof testSetupObjects === "string" || testSetupObjects === undefined) {
+      throw new Error("setup failed");
+    }
+
+    const response = await request(app)
+      .put(`/api/userpreset/${testSetupObjects.presetId}`)
+      .set("x-auth-token", testSetupObjects.token)
+      .send({ number: "fett" })
+      .expect(400);
+    expect(response.body.msg).toEqual(
+      "Number must be of type number, provided was of type: string"
+    );
+  });
 });
 
 describe("Delete preset", () => {

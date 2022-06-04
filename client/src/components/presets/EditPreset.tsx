@@ -32,6 +32,7 @@ const EditPreset = () => {
 
   // Logic
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    console.log(e.target.name, e.target.value, typeof e.target.value);
     setLocalPreset({ ...localPreset, [e.target.name]: e.target.value });
   };
 
@@ -40,9 +41,13 @@ const EditPreset = () => {
   };
 
   const onSubmitEditPreset = (e: React.SyntheticEvent) => {
+    console.log(localPreset);
+    console.log(typeof number);
+
     e.preventDefault();
     // client side field validation
     if (number !== undefined && MonthSum !== null) {
+      const verifiedNumber = typeof number === "string" ? parseInt(number) : number;
       if (type === "savings" && number > MonthSum) {
         setAlert("Insufficient Month Surplus for this saving number", "danger");
         return;

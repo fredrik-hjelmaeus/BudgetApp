@@ -396,7 +396,7 @@ export const handlers = [
   // edit one preset
   rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
-
+    console.log(req.body.number);
     return res(
       ctx.json({
         _id,

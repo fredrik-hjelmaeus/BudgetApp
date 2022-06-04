@@ -494,7 +494,7 @@ describe("Summation functionality", () => {
     expect(MonthSavings).toBe(" 0");
   });
 
-  test.only("Adding overhead presetvalues through upload csv dialog updates all summation-fields correctly", async () => {
+  test("Adding overhead presetvalues through upload csv dialog updates all summation-fields correctly", async () => {
     // starting point is month January with expanded preset form
 
     // click upload csv button
@@ -615,7 +615,7 @@ describe("Summation functionality", () => {
     expect(MonthSavings).toBe(" 0");
   });
 
-  test("Editing overhead income presetvalues updates all summation-fields", async () => {
+  test.only("Editing overhead income presetvalues updates all summation-fields", async () => {
     // press preset in monthsummary component
     fireEvent.click(screen.getByRole("button", { name: "444" }));
 
