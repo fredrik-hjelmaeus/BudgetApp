@@ -176,7 +176,7 @@ const PresetState = (props: { children: ReactNode }) => {
   };
   // send edit
   const sendEdit: IPresetContext["sendEdit"] = async (preset) => {
-    console.log("sendEdit: ", preset);
+    console.log("sendEdit: ", typeof preset.number);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -254,7 +254,7 @@ const PresetState = (props: { children: ReactNode }) => {
     dispatch({ type: ADD_MONTH, payload: month });
   };
 
-  // Calc month sum
+  // Calc month sum: Sum of all presets in month except purchase,savings and capital
   const calcMonthSum: IPresetContext["calcMonthSum"] = (month) => {
     //array att iterera igenom
     let presetArray: number[] = [];
@@ -978,11 +978,11 @@ const PresetState = (props: { children: ReactNode }) => {
     dispatch({ type: SUM_PIGGYBANKS_MONTH, payload: Sum });
   };
 
-  // calc month balance
+  // Month balance is sum all presets in month except,purchase,savings and capital and subtraction of this month savings.
   const calcMonthBalance: IPresetContext["calcMonthBalance"] = () => {
     if (state.MonthSum !== null && state.monthsavings !== null) {
       const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
-
+      console.log(totalsum, state.MonthSum, state.monthsavings, state.SumPiggybanksMonth);
       dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
     }
   };

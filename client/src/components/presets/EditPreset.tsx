@@ -6,6 +6,7 @@ import SelectField from "./SelectField";
 import CheckBoxField from "./CheckBoxField";
 
 import Alerts from "../layout/Alerts";
+import { IPreset } from "../../frontend-types/IPreset";
 
 const EditPreset = () => {
   // Context
@@ -17,7 +18,7 @@ const EditPreset = () => {
   const { setAlert } = alertContext;
   const { toggleModal } = cssContext;
   //State
-  const [localPreset, setLocalPreset] = useState({
+  const [localPreset, setLocalPreset] = useState<IPreset>({
     // TODO: default values may be wrong, ts complains otherwise
     _id: edit?._id || "",
     name: edit?.name ? edit?.name : "",
@@ -47,7 +48,10 @@ const EditPreset = () => {
     e.preventDefault();
     // client side field validation
     if (number !== undefined && MonthSum !== null) {
-      const verifiedNumber = typeof number === "string" ? parseInt(number) : number;
+      if (typeof number !== "number") {
+        setAlert("Please enter a number", "danger");
+        return;
+      }
       if (type === "savings" && number > MonthSum) {
         setAlert("Insufficient Month Surplus for this saving number", "danger");
         return;
