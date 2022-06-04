@@ -938,7 +938,7 @@ describe("Summation functionality", () => {
     expect(MonthSavings).toBe(" 0");
   });
 
-  test.only("Add purchase preset works and updates no summation-fields", async () => {
+  test("Add purchase preset works and updates no summation-fields", async () => {
     // starting point is month January with expanded preset form setup in beforeEach
     // fill in the form and submit
     const nameField = screen.getByPlaceholderText("Name");
@@ -984,7 +984,7 @@ describe("Summation functionality", () => {
 
     // expect form fields to be reset
     expect(screen.getByPlaceholderText("Name")).toHaveValue("");
-    expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+    expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
     expect(screen.getByRole("combobox")).toHaveValue("Select an category");
     expect(screen.getByRole("checkbox", { name: /overhead/i })).toBeChecked();
     expect(screen.getByRole("checkbox", { name: /purchase/i })).not.toBeChecked();
@@ -995,7 +995,7 @@ describe("Summation functionality", () => {
     });
     expect(purchaseElement).toBeInTheDocument();
     expect(screen.getByText("10000")).toBeInTheDocument();
-    expect(screen.getByText("18 months")).toBeInTheDocument();
+    expect(await screen.findByText("18 months")).toBeInTheDocument();
 
     // expect no sum fields to get changed
     const newMonthIncomeSum = screen.getByText("799");
@@ -1029,17 +1029,50 @@ describe("Summation functionality", () => {
     //change name and number of preset
     userEvent.clear(editNameField);
     userEvent.type(editNameField, "SuperResa");
-    userEvent.clear(editValueField);
-    userEvent.type(editValueField, "65000");
+    //userEvent.clear(editValueField);
+    //userEvent.type(editValueField, "65000");
+    // override handler as fireEvent.change or userEvent.type does not work with numbers atm.
+    server.use(
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: 65000,
+            month: req.body.month,
+            year: req.body.year,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: "January",
+                year: 2021,
+                savedAmount: 0,
+                _id: "6205143125ad67554798451b",
+              },
+            ],
+            date: "2022-02-10T13:33:37.780Z",
+            __v: 0,
+          })
+        );
+      })
+    );
 
     // submit form
-    fireEvent.click(screen.getByRole("button", { name: /update/i }));
+    const updateBtn = screen.getByRole("button", { name: /update/i });
+    fireEvent.click(updateBtn);
 
     // expect preset to be changed in purchases component
     const purchaseElement = await screen.findByText("SuperResa");
     expect(purchaseElement).toBeInTheDocument();
     expect(screen.getByText("65000")).toBeInTheDocument();
-    expect(screen.getByText("119 months")).toBeInTheDocument();
+    const monthsLeft = screen.getByTestId("MonthsLeftBeforePurchase");
+    await waitFor(() => {
+      expect(monthsLeft).toHaveTextContent("119 months");
+    });
 
     // expect no sum fields to be changed
     const newMonthIncomeSum = screen.getByText("799");
@@ -1081,7 +1114,7 @@ describe("Summation functionality", () => {
     expect(presetToDelete).not.toBeInTheDocument();
   });
 
-  test("Buy purchase updates all summation-fields and converts preset-type to overhead expense", async () => {
+  test.only("Buy purchase updates all summation-fields and converts preset-type to overhead expense", async () => {
     // add overhead preset income so buying button becomes visible
     server.use(
       rest.post("http://localhost/api/userpreset", (req, res, ctx) => {
