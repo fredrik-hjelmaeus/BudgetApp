@@ -354,8 +354,8 @@ router.post(
           },
         ];
 
-        await sendMail(sender, receivers, "Password Reset Request", message);
-
+        const sibResponse = await sendMail(sender, receivers, "Password Reset Request", message);
+        console.log(sibResponse);
         return res.status(200).json({ success: true, data: "Email sent" });
       } catch (err) {
         console.log(err);

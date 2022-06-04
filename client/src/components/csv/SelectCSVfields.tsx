@@ -58,11 +58,11 @@ const SelectCSVfields = () => {
     csvpresets &&
       csvpresets.map((preset) => {
         const presetRow = preset.row;
-        if (presetRow) {
+        if (presetRow && typeof presetRow === "object") {
           updateCsvPresets({
             _id: preset._id,
-            name: presetRow[parseInt(description)],
-            number: parseInt(presetRow[parseInt(fieldValue)]) || 0,
+            name: presetRow[description as keyof typeof presetRow],
+            number: parseInt(presetRow[fieldValue as keyof typeof presetRow]) || 0,
           });
         }
         return preset;

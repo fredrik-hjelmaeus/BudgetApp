@@ -576,8 +576,12 @@ describe("Summation functionality", () => {
     submitBtn && fireEvent.click(submitBtn);
 
     // handle the prompt
+    const promptMessage = screen.getByRole("heading", {
+      name: "1 of 2 transactions does not have a category selected",
+    });
+    expect(promptMessage).toBeInTheDocument();
     const confirmButton = screen.getByRole("button", {
-      name: /add the 1 transactions that has a category specified/i,
+      name: /add the transactions that has a category specified/i,
     });
     fireEvent.click(confirmButton);
     expect(submitBtn).not.toBeInTheDocument();
@@ -590,8 +594,10 @@ describe("Summation functionality", () => {
 
     //expect all summation fields to be updated
     //Month Income:
-    const monthIncomeSum = (await screen.findByText("Month Income:")).children[0].textContent;
-    expect(monthIncomeSum).toBe("1355");
+    const monthIncomeSum = (await screen.findByText("Month Income:")).children[0];
+    await waitFor(() => {
+      expect(monthIncomeSum).toHaveTextContent("1355");
+    });
 
     const AccountBalance = screen.getByText("545533"); //544977
     expect(AccountBalance).toBeInTheDocument();
