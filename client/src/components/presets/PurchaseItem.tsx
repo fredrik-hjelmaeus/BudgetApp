@@ -12,7 +12,7 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
 
   const { setEdit, MonthBalance, month, year, addPreset, deletePreset } = presetContext;
 
-  const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState<string | number>("");
+  const [MonthsLeftBeforePurchase, setMonthsLeftBeforePurchase] = useState<number>(0);
 
   const calcPiggybankSum = () => {
     // store only savedAmounts in an array
@@ -20,14 +20,14 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
     // sift through savedAmounts and count totalsum
     const SumOfPiggybanks = savedAmounts.reduce((a, b) => a + b, 0); // TODO: removed parseFloat here because of ts.
     const ItemAfterPiggy = Item.number - SumOfPiggybanks;
-    let MonthsLeft: number | string;
+    let MonthsLeft: number;
     MonthBalance && MonthBalance > 0 && MonthBalance !== null
       ? (MonthsLeft = ItemAfterPiggy / MonthBalance) // TODO: maybe use parseFloat here, ts conversion may have broken it.
-      : (MonthsLeft = "+50");
+      : (MonthsLeft = 100);
 
-    setMonthsLeftBeforePurchase(
-      typeof MonthsLeft === "number" ? Math.round(MonthsLeft) : MonthsLeft
-    );
+    const MonthsLeftToInteger = MonthsLeft > 1.0 ? Math.ceil(MonthsLeft) : 0;
+
+    setMonthsLeftBeforePurchase(MonthsLeftToInteger);
   };
 
   //updates purchase values after modal change
@@ -163,7 +163,7 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
           onMouseEnter={onPiggyHover}
           onMouseLeave={stopPiggyHover}
         >
-          {typeof MonthsLeftBeforePurchase === "number" && onPiggybank(MonthsLeftBeforePurchase)}
+          {MonthsLeftBeforePurchase && onPiggybank(MonthsLeftBeforePurchase)}
         </button>
 
         {MonthsLeftBeforePurchase === 0 ? (
@@ -184,7 +184,7 @@ const PurchaseItem = ({ Item }: { Item: IPreset }) => {
             }
             onClick={onSave}
           >
-            {`${MonthsLeftBeforePurchase} months`}
+            {`${MonthsLeftBeforePurchase < 50 ? MonthsLeftBeforePurchase : "50+"} months`}
           </button>
         )}
         <TrashDeleteButton

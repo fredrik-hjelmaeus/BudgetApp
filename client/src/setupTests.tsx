@@ -22,8 +22,6 @@ jest.mock("./components/layout/DonutChart", () => {
 });
 
 beforeAll(() => {
-  console.log("beforeAll: starts a fake-backend-server");
-
   server.listen();
 });
 beforeEach(() => {
@@ -43,14 +41,12 @@ beforeEach(() => {
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests.
 afterEach(() => {
-  console.log("afterEach: resetting the handlers");
   server.resetHandlers();
   localStorage.clear();
 });
 
 // Clean up after the tests are finished.
 afterAll(() => {
-  // console.log("closing the fake-backend-server");
   server.close();
 });
 

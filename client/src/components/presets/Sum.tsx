@@ -29,7 +29,6 @@ const Sum = () => {
       filteredmonthandposnum !== null &&
       filteredmonthandnegnum !== null
     ) {
-      console.log("detected change");
       calcPosMonth();
       calcNegMonth();
       calcMonthBalance();

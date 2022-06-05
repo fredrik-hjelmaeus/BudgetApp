@@ -128,7 +128,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.post("/api/userpreset", preset, config);
-
+      console.log(res.data);
       dispatch({ type: ADD_PRESET, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -982,7 +982,6 @@ const PresetState = (props: { children: ReactNode }) => {
   const calcMonthBalance: IPresetContext["calcMonthBalance"] = () => {
     if (state.MonthSum !== null && state.monthsavings !== null) {
       const totalsum = state.MonthSum - state.monthsavings - state.SumPiggybanksMonth;
-      console.log(totalsum, state.MonthSum, state.monthsavings, state.SumPiggybanksMonth);
       dispatch({ type: CALC_MONTH_BALANCE, payload: totalsum });
     }
   };

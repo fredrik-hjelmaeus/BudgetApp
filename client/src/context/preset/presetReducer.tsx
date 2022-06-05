@@ -119,7 +119,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
     case ADD_PRESET:
       return {
         ...state,
-        presets: state.presets && [...state.presets, action.payload],
+        presets: state.presets ? [...state.presets, action.payload] : [action.payload],
         loading: false,
       };
     case DELETE_PRESET:
