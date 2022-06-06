@@ -1900,7 +1900,7 @@ describe("PresetForm interaction", () => {
     expect(BalanceByCategory_TravelField).toBe("-255");
   });
 
-  test.only("Add preset to purchase works and converts negative number input", async () => {
+  test("Add preset to purchase works and converts negative number input", async () => {
     // starting point is month January with expanded preset form setup in beforeEach
     // fill in the form and submit
     const nameField = screen.getByPlaceholderText("Name");
@@ -1922,7 +1922,7 @@ describe("PresetForm interaction", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 10000,
             month: "January",
             year: 2021,
             category: "Travel",
@@ -1957,7 +1957,7 @@ describe("PresetForm interaction", () => {
     });
     expect(purchaseElement).toBeInTheDocument();
     expect(purchaseElement.parentElement?.children[1].textContent).toBe("10000");
-    expect(screen.getByText("18 months")).toBeInTheDocument();
+    expect(await screen.findByText("19 months")).toBeInTheDocument();
 
     // expect no sum fields to get changed
     const newMonthIncomeSum = screen.getByText("799");
@@ -2006,38 +2006,7 @@ describe("PresetForm interaction", () => {
 describe("Purchases interaction", () => {
   // Setup: logged in user at month January with presetform expanded
   beforeEach(async () => {
-    // go to month and expand preset form
-    render(<App />);
-
-    // go to month
-    const januaryButton = screen.queryByRole("button", { name: /january/i });
-    januaryButton && fireEvent.click(januaryButton);
-
-    // click add to budget button
-    const addToBudgetButton = await screen.findByRole("button", {
-      name: /add to budget/i,
-    });
-    fireEvent.click(addToBudgetButton);
-
-    // assert inital month state
-    const sum = await screen.findAllByText("799");
-    expect(sum.length).toBe(1);
-    const expenses = await screen.findAllByText("-255");
-    expect(expenses.length).toBe(3);
-    const BalanceAndSurplus = await screen.findAllByText("544");
-    expect(BalanceAndSurplus.length).toBe(2);
-    const accountBalanceSum = await screen.findByText("544977");
-    const monthSavings = await screen.findByText("0");
-    const purchaseElement = await screen.findByRole("heading", {
-      name: /purchases/i,
-    });
-    const purchasePreset = await screen.findByText("55000");
-    const presetElement = await screen.findByText("sadas");
-    expect(presetElement).toBeInTheDocument();
-    expect(purchaseElement).toBeInTheDocument();
-    expect(purchasePreset).toBeInTheDocument();
-    expect(monthSavings).toBeInTheDocument();
-    expect(accountBalanceSum).toBeInTheDocument();
+    await setup();
   });
 
   test("Buy purchase removes purchasefield and converts piggybank savings to expense downpayment presets", async () => {
@@ -2054,7 +2023,7 @@ describe("Purchases interaction", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 10000,
             month: "January",
             year: 2021,
             category: "Travel",
@@ -2077,7 +2046,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // make piggybank 10544
     const piggybankButton = await screen.findByRole("button", {
-      name: /5 months/i,
+      name: /6 month/i,
     });
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
@@ -2117,7 +2086,7 @@ describe("Purchases interaction", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 5000,
             month: req.body.month,
             year: 2021,
             category: req.body.category,
@@ -2139,7 +2108,7 @@ describe("Purchases interaction", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // make piggybank 5000
-    fireEvent.click(await screen.findByRole("button", { name: /8 months/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /9 months/i }));
     // create the expected server response with a piggybank object added
     server.use(
       rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
@@ -2214,7 +2183,7 @@ describe("Purchases interaction", () => {
     expect(await screen.findByRole("button", { name: /-10544/i })).toBeInTheDocument();
   });
 
-  test("Delete purchase and its piggybank savings", async () => {
+  test.only("Delete purchase and its piggybank savings", async () => {
     //Purchase preset Resa 55000 will get 2 piggybank savings added:
     // add income preset
     userEvent.type(screen.getByPlaceholderText("Name"), "piggyone");
