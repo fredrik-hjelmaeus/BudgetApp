@@ -91,7 +91,6 @@ const CsvPresetItem = ({ Item }: { Item: ICsvPreset }) => {
   };
 
   useEffect(() => {
-    console.log("doSubmitCsv-listener", doSubmitCsv, localpreset);
     doSubmitCsv === "step1" &&
       localpreset.category !== "Select Category" &&
       setNewPresets(localpreset);

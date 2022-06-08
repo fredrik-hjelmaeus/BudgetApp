@@ -11,19 +11,17 @@ const CsvPrompt = ({ setPrompt, validCsv }: CsvPromptProps) => {
   const { submitCsvItems, newPresets, clearCsv, csvpresets } = presetContext;
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     if (e.currentTarget.name === "cancel" || newPresets === null) {
-      console.log("cancelling");
       //TODO currentTarget instead of target works?
       clearCsv();
       setPrompt(false);
       submitCsvItems("");
     }
     if (e.currentTarget.name === "add" && newPresets) {
-      console.log("setting submit csvprompt");
       submitCsvItems("submit");
       setPrompt(false);
     }
   };
-  console.log(validCsv);
+
   return (
     <div id="myModal" className="modal-csvprompt" style={{ display: "block" }}>
       <div className="modal-csvpresets__card modal-csvpresets__card__flex">

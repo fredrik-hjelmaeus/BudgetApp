@@ -16,11 +16,7 @@ const CsvPresetCreateModal = () => {
 
   // logic
   const onClick = () => {
-    console.log("onClick");
-    console.log(newPresets?.length, csvpresets?.length);
-
     if (newPresets?.length !== csvpresets?.length) {
-      console.log("prompting user as all presets havent been handled yet");
       setValidCsv(countUserHandledCsvItems());
       setPrompt(true);
     } else {
@@ -48,31 +44,30 @@ const CsvPresetCreateModal = () => {
     doSubmitCsv === "" && submitCsvItems("step1");
 
     //check for valid csv to add by filter out all with not valid cat and markdel set to true
-    console.log(newPresets?.length, csvpresets?.length);
+
     // When newPresets and csvpresets is the same length, all csv items have been handled by the user.
     if (doSubmitCsv === "step2" && newPresets?.length === csvpresets?.length) {
       // checkcsv looks how many csv items user selected categories and what was marked for deletion.
       const checkcsv = countUserHandledCsvItems();
 
       setValidCsv(checkcsv);
-      console.log("newPresets-listener: ", newPresets, checkcsv, csvpresets);
+
       // if there are no valid csv items, or
       if (
         checkcsv?.length !== 0 &&
         checkcsv?.length !== newPresets?.length
         // &&  csvpresets === null
       ) {
-        console.log("some csv items have not been handled by the user");
-        console.log("prompting user");
+        //   console.log("some csv items have not been handled by the user");
+        //  console.log("prompting user");
         setPrompt(true);
       } else {
-        console.log("all csv items have been handled by the user");
-        console.log("setting submit in submitCsvItems");
+        //   console.log("all csv items have been handled by the user");
+        //   console.log("setting submit in submitCsvItems");
         submitCsvItems("submit");
       }
 
       if (newPresets && newPresets.length <= 1) {
-        console.log("clearCsv ran", newPresets);
         clearCsv();
         setPrompt(false);
       }

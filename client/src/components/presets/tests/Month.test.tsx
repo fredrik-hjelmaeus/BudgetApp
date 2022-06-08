@@ -996,7 +996,9 @@ describe("Summation functionality", () => {
     });
     expect(purchaseElement).toBeInTheDocument();
     expect(screen.getByText("10000")).toBeInTheDocument();
-    expect(await screen.findByText("18 months")).toBeInTheDocument();
+    await waitFor(() => {
+      screen.getByText("19 months");
+    });
 
     // expect no sum fields to get changed
     const newMonthIncomeSum = screen.getByText("799");
@@ -1070,9 +1072,9 @@ describe("Summation functionality", () => {
     const purchaseElement = await screen.findByText("SuperResa");
     expect(purchaseElement).toBeInTheDocument();
     expect(screen.getByText("65000")).toBeInTheDocument();
-    const monthsLeft = screen.getByTestId("MonthsLeftBeforePurchase");
     await waitFor(() => {
-      expect(monthsLeft).toHaveTextContent("119 months");
+      const monthsLeft = screen.getByTestId("MonthsLeftBeforePurchase");
+      expect(monthsLeft).toHaveTextContent("50+ months");
     });
 
     // expect no sum fields to be changed
@@ -2183,7 +2185,7 @@ describe("Purchases interaction", () => {
     expect(await screen.findByRole("button", { name: /-10544/i })).toBeInTheDocument();
   });
 
-  test.only("Delete purchase and its piggybank savings", async () => {
+  test("Delete purchase and its piggybank savings", async () => {
     //Purchase preset Resa 55000 will get 2 piggybank savings added:
     // add income preset
     userEvent.type(screen.getByPlaceholderText("Name"), "piggyone");
@@ -2197,7 +2199,7 @@ describe("Purchases interaction", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 10000,
             month: "January",
             year: 2021,
             category: "Travel",
@@ -2219,9 +2221,16 @@ describe("Purchases interaction", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // add piggybank 10544
-    const piggybankButton = await screen.findByRole("button", {
-      name: /5 months/i,
+    expect(screen.getByPlaceholderText("Name")).toHaveValue("");
+
+    await waitFor(() => {
+      screen.getByText("6 months");
     });
+
+    const piggybankButton = await screen.findByRole("button", {
+      name: "6 months",
+    });
+
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(
@@ -2282,7 +2291,7 @@ describe("Purchases interaction", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // add piggybank 5000
-    fireEvent.click(await screen.findByRole("button", { name: /8 months/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /9 month/i }));
     // create the expected server response with a piggybank object added
     server.use(
       rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
@@ -2396,7 +2405,7 @@ describe("Purchases interaction", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 10000,
             month: "January",
             year: 2021,
             category: "Travel",
@@ -2419,7 +2428,7 @@ describe("Purchases interaction", () => {
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // add piggybank 10544
     const piggybankButton = await screen.findByRole("button", {
-      name: /5 months/i,
+      name: /6 month/i,
     });
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
@@ -2486,14 +2495,43 @@ describe("Purchases interaction", () => {
 
     //change name and number of preset
     userEvent.clear(editNameField);
-    userEvent.clear(editValueField);
+    // userEvent.clear(editValueField);
     userEvent.type(editNameField, "Trip");
-    userEvent.type(editValueField, "25000");
+    // userEvent.type(editValueField, "25000");
 
     //submit change
     const submitChangesButton = await screen.findByRole("button", {
       name: /update/i,
     });
+
+    server.use(
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: 25000,
+            month: "January",
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: "January",
+                year: 2021,
+                savedAmount: 0,
+                _id: "6205143125ad67554798451b",
+              },
+            ],
+            date: "2022-02-10T13:33:37.780Z",
+            __v: 0,
+          })
+        );
+      })
+    );
     fireEvent.click(submitChangesButton);
     expect(submitChangesButton).not.toBeInTheDocument();
 
@@ -2540,7 +2578,7 @@ describe("Purchases interaction", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 10000,
             month: "January",
             year: 2021,
             category: "Travel",
@@ -2563,14 +2601,14 @@ describe("Purchases interaction", () => {
 
     // expect form fields to be reset
     expect(screen.getByPlaceholderText("Name")).toHaveValue("");
-    expect(screen.getByPlaceholderText("Number")).toHaveValue(null);
+    expect(screen.getByPlaceholderText("Number")).toHaveValue(0);
 
     // wait for the preset to be created
     expect(await screen.findByRole("button", { name: /income_preset/i })).toBeInTheDocument();
 
     // expect new months left calculation to have occured and be 5 months
     const piggybankButton = await screen.findByRole("button", {
-      name: /5 months/i,
+      name: /6 month/i,
     });
     expect(piggybankButton).toBeInTheDocument();
   });
@@ -2593,7 +2631,8 @@ describe("Purchases interaction", () => {
     // close the modal
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }));
     // press monthsleft
-    fireEvent.click(await screen.findByRole("button", { name: /101 months/i }));
+
+    fireEvent.click(await screen.findByRole("button", { name: "50+ months" }));
     // expect addtopiggybankmodal to have been opened
     expect(await screen.findByRole("heading", { name: /amount to save/i })).toBeInTheDocument();
   });

@@ -105,7 +105,7 @@ const SelectCSVfields = () => {
           {csvpresets && (
             <SelectCSVfieldsItem
               rowItem={csvpresets[0]}
-              key={0}
+              key={csvpresets[0]._id}
               header={true}
               fieldSelect={fieldSelect}
             />
