@@ -22,7 +22,7 @@ export interface IPresetState {
   NegMonthSum: null | number; // gets data from filteredmonthandposnum
   categorymonthsum: ICategoryAndSumItem[]; // sum of all presets in the current/active month by category
   categoryyearsum: ICategoryAndSumItem[]; // sum of all presets in the current/active year by category
-  yearsum: null | number; // sum of all presets in the current/active year
+  yearsum: number; // sum of all presets in the current/active year
   savings: null | number; // Sum of all savings
   capital: null | number; // Sum of all capital
   categorynameonlyposnumbyyear: null | string[]; // used in donut chart, setter fn name is setCategoryNameOnlyPosNumByYear

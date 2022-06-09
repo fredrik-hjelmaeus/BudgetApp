@@ -76,7 +76,7 @@ const PresetState = (props: { children: ReactNode }) => {
     NegMonthSum: null, // gets data from filteredmonthandposnum
     categorymonthsum: [], // year implemented
     categoryyearsum: [], // year implemented
-    yearsum: null, // year implemented
+    yearsum: 0, // year implemented
     savings: null, // year not used
     capital: null, // year not used
     categorynameonlyposnumbyyear: null, // year implemented

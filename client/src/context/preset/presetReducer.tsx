@@ -165,7 +165,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
         categorymonthsum: [],
         categoryyearsum: [],
         year: null,
-        yearsum: null,
+        yearsum: 0,
         savings: null,
         capital: null,
         MonthBalance: null,

@@ -18,7 +18,7 @@ const presetContext = createContext<IPresetContext>({
   NegMonthSum: null,
   categorymonthsum: [],
   categoryyearsum: [],
-  yearsum: null,
+  yearsum: 0,
   savings: null,
   capital: null,
   categorynameonlyposnumbyyear: null,

@@ -2538,7 +2538,7 @@ describe("navigation through all year pages", () => {
     });
   });
 
-  test("initial year state correct after stopping guide for user with own presets created", async () => {
+  test.only("initial year state correct after stopping guide for user with own presets created", async () => {
     render(<App />);
 
     // click user details

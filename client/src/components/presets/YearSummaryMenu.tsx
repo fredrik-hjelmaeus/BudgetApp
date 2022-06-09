@@ -25,7 +25,7 @@ const YearSummaryMenu = () => {
     const castTarget = e.target as HTMLButtonElement;
     setYearSummary(castTarget.value);
   };
-  // console.log(guide, dimensions);
+
   return (
     <div className="yearbalance__container card bg-light yearSummaryMenu ">
       <span className={guide === "13" ? "guide__expense" : undefined}>
