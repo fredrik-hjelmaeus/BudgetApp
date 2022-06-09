@@ -11,16 +11,16 @@ const Home = () => {
 
   const cssContext = useContext(CssContext);
 
-  //const { toggleNavbar, navbar } = cssContext;
+  //const { setNavbar, navbar } = cssContext;
   const { month } = presetContext;
-  //console.log(month);
+
   //console.log("home component here", month, authContext.user);
   useEffect(() => {
     //  console.log("Home useEffect here");
     //localStorage.token && authContext.loadUser();
     authContext?.loadUser(); // it always have to run because even if no user found we need to set loading to false
     //  console.log("activating navbar");
-    cssContext?.navbar === false && cssContext?.toggleNavbar(true); // makes navbar persistent
+    cssContext?.navbar === false && cssContext?.setNavbar(true); // makes navbar persistent
 
     // eslint-disable-next-line
   }, []);

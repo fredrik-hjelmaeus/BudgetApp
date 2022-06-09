@@ -5,7 +5,7 @@ import PresetContext from "../../context/preset/presetContext";
 const YearBalance = () => {
   const presetContext = useContext(PresetContext);
   const { yearsum, capital, savings, sum } = presetContext;
-  const yearmonthavg = yearsum && yearsum / 12;
+  const yearmonthavg = yearsum && Math.round(yearsum / 12);
 
   return (
     <div>

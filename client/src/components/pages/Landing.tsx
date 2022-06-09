@@ -10,7 +10,7 @@ import { Navigate } from "react-router-dom";
 const Landing = () => {
   const cssContext = useContext(CssContext);
   const authContext = useContext(AuthContext);
-  const { toggleNavbar, toggleModal, modal } = cssContext;
+  const { setNavbar, toggleModal, modal } = cssContext;
   const { isAuthenticated, token, loadUser, user } = authContext;
 
   /* const tryToAuthenticate = async () => {
@@ -24,10 +24,10 @@ const Landing = () => {
     } */
 
     if (user && isAuthenticated) {
+      setNavbar(true);
       <Navigate to="/" />;
-      // toggleNavbar(true);
     } else {
-      toggleNavbar(false);
+      setNavbar(false);
     }
 
     return () => {

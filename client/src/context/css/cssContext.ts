@@ -11,7 +11,7 @@ const cssContext = createContext<ICssContext>({
     height: 0,
     width: 0,
   },
-  toggleNavbar: (navbar: boolean) => {},
+  setNavbar: (navbar: boolean) => {},
   toggleModal: (modal: string) => {},
   setYearSummary: (yearsummary: string) => {},
   setModalprops: (props: IPreset | null) => {},

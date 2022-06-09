@@ -68,9 +68,13 @@ const GuideModal = () => {
     guide === "11" && addMonth("January");
     guide === "12" && addMonth("January");
     guide === "13" && setYear(2021);
+    guide === "13" && addMonth(null);
     guide === "14" && setYear(2021);
+    guide === "14" && addMonth(null);
     guide === "15" && setYear(2021);
+    guide === "15" && addMonth(null);
     guide === "16" && setYear(2021);
+    guide === "16" && addMonth(null);
     // scroll view
     guide && !isNaN(parseInt(guide)) && parseInt(guide) <= 10 && animateScroll.scrollToTop(); // if guidestep less than 11 scroll to top
     guide && !isNaN(parseInt(guide)) && parseInt(guide) > 16 && animateScroll.scrollToTop(); // if guidestep more than 14 scroll to top

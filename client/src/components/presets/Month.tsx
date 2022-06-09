@@ -28,6 +28,7 @@ const Month = () => {
     presets,
     calcSum,
     setPurchase,
+    purchases,
     MonthSum,
     calcMonthSum,
     month,
@@ -86,7 +87,8 @@ const Month = () => {
           <CategoryBalance />
         </div>
 
-        <div className="monthgrid__PurchasesOrder">{MonthSum !== null && <Purchases />}</div>
+        {/*  <div className="monthgrid__PurchasesOrder">{MonthSum !== null && <Purchases />}</div> */}
+        <div className="monthgrid__PurchasesOrder">{purchases && <Purchases />}</div>
 
         <div className="bgmonthright monthgrid__sums">
           <Sum />

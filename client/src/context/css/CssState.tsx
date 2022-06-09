@@ -2,7 +2,7 @@ import React, { useReducer, ReactNode } from "react";
 import CssContext from "./cssContext";
 import cssReducer from "./cssReducer";
 import {
-  HIDE_NAVBAR,
+  SET_NAVBAR,
   TOGGLE_MODAL,
   SET_YEARSUMMARY,
   SET_MODAL_PROPS,
@@ -24,7 +24,7 @@ const CssState = (props: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cssReducer, initialState);
 
   // Toggle Navbar
-  const toggleNavbar = (navbar: boolean) => dispatch({ type: HIDE_NAVBAR, payload: navbar });
+  const setNavbar = (navbar: boolean) => dispatch({ type: SET_NAVBAR, payload: navbar });
 
   // Toggle modal
   const toggleModal = (modal: string) => dispatch({ type: TOGGLE_MODAL, payload: modal });
@@ -53,7 +53,7 @@ const CssState = (props: { children: ReactNode }) => {
         modalprops: state.modalprops,
         yearsummary: state.yearsummary,
         dimensions: state.dimensions,
-        toggleNavbar,
+        setNavbar,
         toggleModal,
         setYearSummary,
         setModalprops,

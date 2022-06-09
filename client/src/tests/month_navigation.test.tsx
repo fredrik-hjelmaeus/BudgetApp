@@ -6,6 +6,13 @@ describe("navigation through all month pages", () => {
   test("initial state correct in month", async () => {
     render(<App />);
     // user is logged in
+
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
+    expect(yearElement).toBeInTheDocument();
+
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
     januaryButton && fireEvent.click(januaryButton);
@@ -37,6 +44,12 @@ describe("navigation through all month pages", () => {
     render(<App />);
     // user is logged in
 
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
+    expect(yearElement).toBeInTheDocument();
+
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
     januaryButton && fireEvent.click(januaryButton);
@@ -54,12 +67,19 @@ describe("navigation through all month pages", () => {
     fireEvent.click(runGuideButton);
 
     // assert on a preset-value that is loaded when getting presets via the get guide-presets endpoint
-    const guidePresetValue = await screen.findAllByText("123456789");
-    expect(guidePresetValue.length).toBe(2);
+
+    const guidePresetValue = await screen.findByText("123456789");
+
+    expect(guidePresetValue).toBeInTheDocument();
   });
   test("navigate to other month works and updates all state", async () => {
     render(<App />);
     // user is logged in
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
+    expect(yearElement).toBeInTheDocument();
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
@@ -71,7 +91,7 @@ describe("navigation through all month pages", () => {
     // check all elements is there
     const addToBudgetButton = await screen.findByRole("button", { name: /add to budget/i });
     const sum = await screen.findAllByText("323232");
-    expect(sum.length).toBe(5);
+    expect(sum.length).toBe(3);
     const expenses = await screen.findAllByText("Please add a Value");
     expect(expenses.length).toBe(1);
     const accountBalanceSum = await screen.findByText("544977");
@@ -88,6 +108,11 @@ describe("navigation through all month pages", () => {
   test("click to year and back to month works", async () => {
     render(<App />);
     // user is logged in
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
+    expect(yearElement).toBeInTheDocument();
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
@@ -142,6 +167,11 @@ describe("navigation through all month pages", () => {
   test("add to budget expands and contracts correct", async () => {
     render(<App />);
     // user is logged in
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
+    expect(yearElement).toBeInTheDocument();
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
@@ -164,15 +194,22 @@ describe("navigation through all month pages", () => {
     const addToBudgetButtonAgain = await screen.findByRole("button", { name: /add to budget/i });
     expect(addToBudgetButtonAgain).toBeInTheDocument();
   });
+
   test("open user details modals works", async () => {
     render(<App />);
     // user is logged in
+    // expect year page to be rendered
+    const yearElement = await screen.findByText(
+      "Yearly summary and comparison analysis with last year. Here you can also see differences in income/costs over the year."
+    );
+    expect(yearElement).toBeInTheDocument();
 
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
     januaryButton && fireEvent.click(januaryButton);
 
     // go to user details
+
     const userDetailButton = await screen.findByRole("button", { name: /dirk/i });
     fireEvent.click(userDetailButton);
 

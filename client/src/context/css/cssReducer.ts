@@ -1,5 +1,5 @@
 import {
-  HIDE_NAVBAR,
+  SET_NAVBAR,
   TOGGLE_MODAL,
   SET_YEARSUMMARY,
   SET_MODAL_PROPS,
@@ -7,7 +7,7 @@ import {
 } from "../types";
 
 type ActionType =
-  | { type: typeof HIDE_NAVBAR; payload: boolean }
+  | { type: typeof SET_NAVBAR; payload: boolean }
   | { type: typeof TOGGLE_MODAL; payload: string }
   | { type: typeof SET_YEARSUMMARY; payload: string }
   | { type: typeof SET_MODAL_PROPS; payload: object }
@@ -15,10 +15,10 @@ type ActionType =
 
 const cssReducer = (state: any, action: ActionType) => {
   switch (action.type) {
-    case HIDE_NAVBAR:
+    case SET_NAVBAR:
       return {
         ...state,
-        navbar: (action.payload = !action.payload),
+        navbar: action.payload,
       };
     case TOGGLE_MODAL:
       return {

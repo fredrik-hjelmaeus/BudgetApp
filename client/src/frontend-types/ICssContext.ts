@@ -10,7 +10,7 @@ export interface ICssContext {
     height: number;
     width: number;
   };
-  toggleNavbar: (navbar: boolean) => void;
+  setNavbar: (navbar: boolean) => void;
   toggleModal: (modal: string) => void;
   setYearSummary: (yearsummary: string) => void;
   setModalprops: (props: IPreset | null) => void;

@@ -1,15 +1,18 @@
-import { render, screen, fireEvent } from "../../../test-utils/context-wrapper";
+import { render, screen, fireEvent, waitFor } from "../../../test-utils/context-wrapper";
 import App from "../../../App";
 import React from "react";
 
 describe("guide functionality", () => {
-  beforeEach(async () => {
+  const setup = async () => {
     render(<App />);
     // make sure we are logged in
     expect(await screen.findByRole("button", { name: /dirk/i })).toBeInTheDocument();
     fireEvent.click(await screen.findByRole("button", { name: /dirk/i }));
     fireEvent.click(await screen.findByRole("button", { name: /app guide/i }));
     fireEvent.click(await screen.findByRole("button", { name: /start/i }));
+  };
+  beforeEach(async () => {
+    await setup();
   });
 
   test("walkthrough displays all instruction-steps", async () => {
@@ -77,8 +80,10 @@ describe("guide functionality", () => {
     expect(screen.getByText(/you can make a purchase plan/i)).toBeInTheDocument();
     // step 10
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
-    const guideTextTen = screen.getByRole("heading", { name: "Purchases" });
-    expect(guideTextTen?.parentElement?.getAttribute("data-tooltip")).toBe("Purchases");
+    await waitFor(() => {
+      const guideTextTen = screen.getByRole("heading", { name: "Purchases" });
+      expect(guideTextTen?.parentElement?.getAttribute("data-tooltip")).toBe("Purchases");
+    });
     expect(screen.getByText(/if the month has sufficient month surplus/i)).toBeInTheDocument();
     // step 11
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -88,9 +93,11 @@ describe("guide functionality", () => {
     expect(screen.getByText(/to go back to year summary/i)).toBeInTheDocument();
     // step 12
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
-    expect(screen.getByRole("button", { name: /balance/i }).getAttribute("data-tooltip")).toBe(
-      "Balance Summary"
-    );
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /balance/i }).getAttribute("data-tooltip")).toBe(
+        "Balance Summary"
+      );
+    });
     expect(screen.getByText(/under year there are 4 summary/i)).toBeInTheDocument();
     // step 13
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -168,10 +175,11 @@ describe("guide functionality", () => {
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
     fireEvent.click(screen.getByRole("button", { name: /exit/i }));
-    expect(
-      await (
-        await screen.findByText("Year Summary:")
-      ).parentElement?.children[1].textContent
-    ).toBe("990543");
+    const yearSummaryElement = await (
+      await screen.findByText("Year Summary:")
+    ).parentElement?.children[1];
+    await waitFor(() => {
+      expect(yearSummaryElement).toHaveTextContent("990543");
+    });
   });
 });

@@ -183,6 +183,7 @@ function presetReducer(state: IPresetState, action: ActionType) {
       return {
         ...state,
         year: action.payload,
+        // month: null,
       };
     case ADD_MONTH:
       return {
