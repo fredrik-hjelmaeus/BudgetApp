@@ -6,7 +6,7 @@ const YearBalance = () => {
   const presetContext = useContext(PresetContext);
   const { yearsum, capital, savings, sum } = presetContext;
   const yearmonthavg = yearsum !== 0 ? Math.round(yearsum / 12) : 0;
-  console.log(yearsum);
+
   return (
     <div>
       <div className="container">

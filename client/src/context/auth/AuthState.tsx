@@ -124,7 +124,6 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // Login User
   const login = async (formData: ILoginFormData): Promise<void> => {
-    console.log("login ran");
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -134,7 +133,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
     try {
       const res: AxiosResponse = await axios.post("/api/auth", formData, config); //endpoint/url
-      console.log("login response confirmed", res.data.token);
+
       if (res.data.token) {
         dispatch({
           type: LOGIN_SUCCESS,

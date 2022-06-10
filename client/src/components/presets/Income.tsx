@@ -10,7 +10,7 @@ const Income = () => {
   const { categorysumonlyposnumbyyear, categorynameonlyposnumbyyear } = presetContext;
   const { dimensions } = useContext(CssContext);
   const YearExpense = categorysumonlyposnumbyyear?.reduce((a, b) => a + b, 0);
-  const yearmonthavg = YearExpense !== undefined && YearExpense / 12.0;
+  const yearmonthavg = YearExpense !== undefined && Math.round(YearExpense / 12.0);
   //colors set here so expense and income can have different colors in their chart
   const colors = [
     "#8a0d2d",

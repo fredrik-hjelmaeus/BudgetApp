@@ -7,7 +7,6 @@ import { IPreset } from "../frontend-types/IPreset";
 export const handlers = [
   //Login user
   rest.post("http://localhost/api/auth", (req, res, ctx) => {
-    //   console.log("login handler called");
     return res(
       ctx.json({
         token:
@@ -17,7 +16,6 @@ export const handlers = [
   }),
   // get current user using token
   rest.get("http://localhost/api/auth", (req, res, ctx) => {
-    //    console.log("get current user handler called");
     return res(
       ctx.json({
         _id: "61ed72d16f895b1100dbab66",
@@ -396,7 +394,7 @@ export const handlers = [
   // edit one preset
   rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
     const { _id } = req.params;
-    console.log(req.body.number);
+
     return res(
       ctx.json({
         _id,

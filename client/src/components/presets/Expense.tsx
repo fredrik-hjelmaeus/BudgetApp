@@ -36,7 +36,7 @@ const Expense = () => {
     "#67cec3",
     "#6ec5d2",
   ];
-  const yearmonthavg = YearExpense !== undefined && YearExpense && YearExpense / 12.0;
+  const yearmonthavg = YearExpense !== undefined && YearExpense && Math.round(YearExpense / 12.0);
 
   // Scroll for guide
   const { guide } = useContext(GuideContext);

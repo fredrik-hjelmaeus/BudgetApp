@@ -8,13 +8,15 @@ import {
 import { rest } from "msw";
 import { server } from "../../../mocks/server";
 import App from "../../../App";
-import React from "react";
 
 describe("Savings functionality", () => {
-  beforeEach(async () => {
+  const setup = async () => {
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: /savings/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /savings/i }));
     expect(await screen.findByText("Piggybank Purchase Savings")).toBeInTheDocument();
+  };
+  beforeEach(async () => {
+    await setup();
   });
 
   test("display saving items when expanding", async () => {
@@ -24,7 +26,7 @@ describe("Savings functionality", () => {
 
   test("displays capital items when expanding", async () => {
     fireEvent.click(await screen.findByRole("button", { name: /capital/i }));
-    expect(screen.getByText("En inkomst")).toBeInTheDocument();
+    expect(await screen.findByText("En inkomst")).toBeInTheDocument();
   });
 
   test("updates when deleting saving", async () => {
@@ -48,7 +50,7 @@ describe("Savings functionality", () => {
 
 describe("Piggybank savings", () => {
   // requires modified rest.get handler
-  beforeEach(() => {
+  const setup = async () => {
     // Create a user with piggybank saving and override get user presets
     server.use(
       // get one users presets
@@ -302,6 +304,9 @@ describe("Piggybank savings", () => {
     );
 
     render(<App />);
+  };
+  beforeEach(async () => {
+    await setup();
   });
 
   test("updates when deleting piggybank saving", async () => {
@@ -311,9 +316,9 @@ describe("Piggybank savings", () => {
     fireEvent.click(piggbankSavingBtn);
 
     // delete piggybank saving
-    const delBtn = screen
-      .getAllByRole("button")
-      .find((btn) => (btn as HTMLButtonElement).value === "delbtn");
+    const delBtn = await (
+      await screen.findAllByRole("button")
+    ).find((btn) => (btn as HTMLButtonElement).value === "delbtn");
     delBtn && fireEvent.click(delBtn);
     await waitForElementToBeRemoved(delBtn);
     expect(delBtn).not.toBeInTheDocument();
