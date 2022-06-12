@@ -132,7 +132,7 @@ describe("register flow", () => {
 });
 
 describe("register negative backend response", () => {
-  test("register shows error message when invalid EMAIL is submitted", async () => {
+  test.only("register shows error message when invalid EMAIL is submitted", async () => {
     // override normal 200 response from handlers and make it report error like backend:
     server.use(
       // login endpoint
@@ -200,7 +200,7 @@ describe("register negative backend response", () => {
     fireEvent.click(submitRegisterButton);
 
     //Expect AlertMessage: Please include a valid Email to be shown
-    const alertMessage = await screen.findByText(/Please include a valid Email/i);
+    const alertMessage = await screen.findByText(/please include a valid email/i);
     expect(alertMessage).toBeInTheDocument();
   });
 

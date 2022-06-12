@@ -95,7 +95,7 @@ router.post(
       }
     } catch (error: unknown) {
       if (error instanceof Error) console.error(error.message);
-      res.status(500).send("Server Error");
+      res.status(400).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -151,13 +151,14 @@ router.post(
 
         await user.save({ validateBeforeSave: false });
 
-        return res.status(500).json({ data: "Email could not be sent" });
+        return res.status(500).json({ errors: [{ msg: "Email could not be sent" }] });
       }
 
       // res.status(200).json({ msg: 'Email sent, check your mailbox', data: user });
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send("Server Error");
+
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -193,7 +194,7 @@ router.put(
       });
 
       if (!user) {
-        return res.status(400).json({ data: "Invalid token" });
+        return res.status(400).json({ errors: [{ msg: "Invalid token" }] });
       }
 
       // Set/Encrypt new password
@@ -207,7 +208,7 @@ router.put(
       res.status(200).json("Password Changed");
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -255,7 +256,7 @@ router.put(
       });
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -285,7 +286,7 @@ router.put(
       const user = await User.findById(req.user.id).select("+password");
 
       if (!user) {
-        return res.status(400).json({ msg: "No User found" });
+        return res.status(400).json({ errors: [{ msg: "No User found" }] });
       }
 
       // Check current password
@@ -301,7 +302,7 @@ router.put(
       res.status(200).json({ msg: "Password Updated" });
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -364,13 +365,11 @@ router.post(
 
         await user.save({ validateBeforeSave: false });
 
-        return res.status(500).json({ data: "Email could not be sent" });
+        return res.status(500).json({ errors: [{ msg: "Email could not be sent" }] });
       }
-
-      res.status(200).json({ msg: "Email sent, check your mailbox", data: user });
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );

@@ -21,9 +21,10 @@ const RegisterModal = () => {
       console.log("closing modal");
       isMounted && toggleModal("");
     }
+    console.log(errors);
     if (errors.length > 0 && isMounted) {
       //console.log('registermodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
-      errors.map((error) => error && setAlert(error?.msg, "danger"));
+      errors.map((error) => setAlert(error, "danger"));
       clearErrors();
     }
     return () => {

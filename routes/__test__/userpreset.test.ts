@@ -19,7 +19,7 @@ describe("Get logged in user all presets", () => {
   it("fails if not logged in", async () => {
     // get presets
     const res = await request(app).get("/api/userpreset").expect(401);
-    expect(res.body.msg).toEqual("No token, authorization denied"); // <-- auth middleware
+    expect(res.body.errors[0].msg).toEqual("No token, authorization denied"); // <-- auth middleware
   });
 });
 
@@ -47,7 +47,7 @@ describe("Add new preset", () => {
   });
   it("fails when not logged in", async () => {
     const res = await request(app).post("/api/userpreset").send(testpreset).expect(401);
-    expect(res.body.msg).toEqual("No token, authorization denied");
+    expect(res.body.errors[0].msg).toEqual("No token, authorization denied");
   });
   it("fails with empty body", async () => {
     // Relies on Signup to get token
@@ -61,7 +61,7 @@ describe("Add new preset", () => {
       .set("x-auth-token", response.body.token)
       .send({})
       .expect(400);
-    expect(res.body.errors.length).toBe(5);
+    expect(res.body.errors.length).toBe(6);
   });
   it("fails without name", async () => {
     const testpreset2 = { number: 200, month: "january", category: "test", type: "test" };
@@ -164,7 +164,7 @@ const setup = async () => {
   }
   // return setup;
 };
-console.log(typeof setup);
+
 describe("Update preset", () => {
   it("happy path, update all preset fields", async () => {
     const testSetupObjects = await setup();
@@ -206,7 +206,7 @@ describe("Update preset", () => {
         piggybank: [{ month: "feb", year: "2000", savedAmount: "200" }],
       })
       .expect(401);
-    expect(response.body.msg).toEqual("No token, authorization denied"); // <-- auth middleware
+    expect(response.body.errors[0].msg).toEqual("No token, authorization denied"); // <-- auth middleware
   });
 
   it("fails with no preset id in endpoint", async () => {
@@ -235,7 +235,7 @@ describe("Update preset", () => {
       .set("x-auth-token", token)
       .send({ name: "fett" })
       .expect(400);
-    expect(res.body.msg).toEqual("Invalid preset id provided");
+    expect(res.body.errors[0].msg).toEqual("Invalid preset id provided");
   });
 
   it("fails when trying to edit another users preset", async () => {
@@ -266,7 +266,7 @@ describe("Update preset", () => {
         piggybank: [{ month: "feb", year: "2000", savedAmount: "200" }],
       })
       .expect(401);
-    expect(response.body.msg).toEqual("Not authorized");
+    expect(response.body.errors[0].msg).toEqual("Not authorized");
   });
 
   it("fails when sending empty obj", async () => {
@@ -280,7 +280,7 @@ describe("Update preset", () => {
       .set("x-auth-token", testSetupObjects.token)
       .send({})
       .expect(400);
-    expect(response.body.msg).toEqual("Found no fields to update on preset");
+    expect(response.body.errors[0].msg).toEqual("Found no fields to update on preset");
   });
 
   it("update only a single field", async () => {
@@ -298,7 +298,7 @@ describe("Update preset", () => {
     expect(response.body.name).toEqual("fett");
   });
 
-  it.only("fails on invalid number input", async () => {
+  it("fails on invalid number input", async () => {
     const testSetupObjects = await setup();
     if (typeof testSetupObjects === "string" || testSetupObjects === undefined) {
       throw new Error("setup failed");
@@ -309,7 +309,7 @@ describe("Update preset", () => {
       .set("x-auth-token", testSetupObjects.token)
       .send({ number: "fett" })
       .expect(400);
-    expect(response.body.msg).toEqual(
+    expect(response.body.errors[0].msg).toEqual(
       "Number must be of type number, provided was of type: string"
     );
   });
@@ -337,7 +337,7 @@ describe("Delete preset", () => {
       .delete(`/api/userpreset/${testSetupObjects.presetId}`)
       .expect(401);
 
-    expect(res.body.msg).toEqual("No token, authorization denied");
+    expect(res.body.errors[0].msg).toEqual("No token, authorization denied");
   });
   it("fails with invalid preset id ", async () => {
     const testSetupObjects = await setup(); // create new user token and a new presetFields
@@ -350,7 +350,7 @@ describe("Delete preset", () => {
       .delete(`/api/userpreset/${invalidPresetId}`)
       .set("x-auth-token", token)
       .expect(404);
-    expect(res.body.msg).toEqual("Preset not found");
+    expect(res.body.errors[0].msg).toEqual("Preset not found");
 
     // not a valid mongoose hex id.
     const invalidMongoosePresetId = "61ed41d89e82db28547a6a033";
@@ -358,7 +358,7 @@ describe("Delete preset", () => {
       .delete(`/api/userpreset/${invalidMongoosePresetId}`)
       .set("x-auth-token", token)
       .expect(400);
-    expect(res2.body.msg).toEqual("Invalid preset id provided");
+    expect(res2.body.errors[0].msg).toEqual("Invalid preset id provided");
   });
   it("fails when trying to delete another users preset", async () => {
     const testSetupObjects = await setup(); // create new user token and a new presetId
@@ -382,6 +382,6 @@ describe("Delete preset", () => {
       .set("x-auth-token", response.body.token)
       .expect(401);
 
-    expect(res.body.msg).toEqual("Not authorized");
+    expect(res.body.errors[0].msg).toEqual("Not authorized");
   });
 });

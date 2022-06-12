@@ -92,7 +92,7 @@ describe("csvtojson", () => {
     // expect(res.body[0].number).toEqual("-276,40");
   });
 
-  it.only("Succeeds on new Nordea valid format", async () => {
+  it("Succeeds on new Nordea valid format", async () => {
     const responses = await request(app)
       .post("/api/users")
       .send({ email: "nisse@manpower.se", name: "nisse", password: "Passw0rd!" });
@@ -231,7 +231,7 @@ describe("csvtojson", () => {
         )
       )
       .expect(200);
-    console.log(res.text);
+    //console.log(res.text);
     expect(res.body[0].number).toEqual(1);
   });
   it("fail on invalid file-extension", async () => {

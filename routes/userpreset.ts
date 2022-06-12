@@ -63,7 +63,7 @@ router.post(
       res.json(preset);
     } catch (err: unknown) {
       if (err instanceof Error) console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -74,25 +74,27 @@ router.post(
 router.put("/:id", authMiddleware, async (req, res) => {
   // no :id provided
   if (!req.params.id) {
-    return res.status(404).json({ msg: "No preset id found" });
+    return res.status(404).json({ errors: [{ msg: "No preset id found" }] });
   }
 
   // Is the id a valid mongoose id?
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(400).json({ msg: "Invalid preset id provided" });
+    return res.status(400).json({ errors: [{ msg: "Invalid preset id provided" }] });
   }
 
   // check if any fields to update was found
   if (isObjectEmpty(req.body)) {
-    return res.status(400).json({ msg: "Found no fields to update on preset" });
+    return res.status(400).json({ errors: [{ msg: "Found no fields to update on preset" }] });
   }
   const { name, number, category, type, piggybank } = req.body;
 
   // verify number is number
-  if (typeof number !== "number") {
-    return res
-      .status(400)
-      .json({ msg: "Number must be of type number, provided was of type: " + typeof number });
+  if (number !== undefined) {
+    if (typeof number !== "number") {
+      return res.status(400).json({
+        errors: [{ msg: "Number must be of type number, provided was of type: " + typeof number }],
+      });
+    }
   }
 
   // Build preset object
@@ -106,11 +108,11 @@ router.put("/:id", authMiddleware, async (req, res) => {
   try {
     let preset = await Preset.findById(req.params.id);
 
-    if (!preset) return res.status(404).json({ msg: "Preset not found" });
+    if (!preset) return res.status(404).json({ errors: [{ msg: "Preset not found" }] });
 
     // Make sure user owns preset
     if (preset.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "Not authorized" });
+      return res.status(401).json({ errors: [{ msg: "Not authorized" }] });
     }
 
     preset = await Preset.findByIdAndUpdate(req.params.id, { $set: presetFields }, { new: true });
@@ -118,7 +120,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
     res.json(preset);
   } catch (err: unknown) {
     if (err instanceof Error) console.error(err.message);
-    res.status(500).send("Server Error");
+    return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 });
 
@@ -128,21 +130,21 @@ router.put("/:id", authMiddleware, async (req, res) => {
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     if (!req.params.id) {
-      return res.status(400).json({ msg: "No preset id found" });
+      return res.status(400).json({ errors: [{ msg: "No preset id found" }] });
     }
 
     // Is the id a valid mongoose id?
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ msg: "Invalid preset id provided" });
+      return res.status(400).json({ errors: [{ msg: "Invalid preset id provided" }] });
     }
 
     let preset = await Preset.findById(req.params.id);
 
-    if (!preset) return res.status(404).json({ msg: "Preset not found" });
+    if (!preset) return res.status(404).json({ errors: [{ msg: "Preset not found" }] });
 
     // Make sure user owns preset
     if (preset.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "Not authorized" });
+      return res.status(401).json({ errors: [{ msg: "Not authorized" }] });
     }
 
     await Preset.findByIdAndRemove(req.params.id);
@@ -150,7 +152,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     res.json({ msg: "Preset removed" });
   } catch (err: unknown) {
     if (err instanceof Error) console.error(err.message);
-    res.status(500).send("Server Error");
+    return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 });
 

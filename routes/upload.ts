@@ -12,7 +12,7 @@ router.post("/", authMiddleware, csvtojson, async (req: Request, res: Response) 
   } catch (err: unknown) {
     if (err instanceof Error) console.error(err.message);
     if (!res.headersSent) {
-      res.status(500).send("Server Error");
+      return res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 });

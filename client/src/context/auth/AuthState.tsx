@@ -90,7 +90,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // Register User
   const register = async (formData: IRegisterFormData): Promise<void> => {
-    //  console.log("register ran");
+    console.log("register ran");
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -111,6 +111,7 @@ const AuthState = (props: { children: ReactNode }) => {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<IValidationError>;
         if (serverError.response) {
+          console.log(serverError.response.data.errors);
           dispatch({
             type: REGISTER_FAIL,
             payload: serverError?.response?.data.errors,

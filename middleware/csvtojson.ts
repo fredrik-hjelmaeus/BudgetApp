@@ -94,8 +94,8 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
         return { delimiter: [",", ",,", ",,,"] };
       case "handelsbanken":
         return { delimiter: [",", ",,", ",,,"] };
-      default:
-        console.log("default");
+      default: //console.log("default");
+        null;
         break;
     }
   }
@@ -436,7 +436,7 @@ const csvtojson = (req: Request, res: Response, next: NextFunction) => {
 const deleteFile = async (filepath: string) => {
   fs.unlink(filepath, (err) => {
     if (err) throw err;
-    console.log("Successfully deleted file");
+    // console.log("Successfully deleted file");
   });
 };
 

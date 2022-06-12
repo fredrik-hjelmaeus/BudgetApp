@@ -59,7 +59,7 @@ describe("authorization flow", () => {
 
     it("does no get user data when not logged in and no token provided", async () => {
       const res = await request(app).get("/api/auth/").set("my_user-agent", "react").expect(401);
-      expect(res.body.msg).toEqual("No token, authorization denied"); // <-- auth middleware
+      expect(res.body.errors[0].msg).toEqual("No token, authorization denied"); // <-- auth middleware
     });
 
     it("does no get user data when invalid token is provided", async () => {
@@ -72,7 +72,7 @@ describe("authorization flow", () => {
     .set('my_user-agent', 'react')
     .set('x-auth-token', invalidToken)
     .expect(401);
-      expect(res.body.msg).toEqual("Token is not valid"); // <-- auth middleware
+      expect(res.body.errors[0].msg).toEqual("Token is not valid"); // <-- auth middleware
     });
 
     it("does no get user data with expired token", async () => {
@@ -84,7 +84,7 @@ describe("authorization flow", () => {
         .set('my_user-agent', 'react')
         .set('x-auth-token', expiredToken)
         .expect(401);
-      expect(res.body.msg).toEqual("Token is not valid"); // <-- auth middleware
+      expect(res.body.errors[0].msg).toEqual("Token is not valid"); // <-- auth middleware
     });
   });
   // Login
