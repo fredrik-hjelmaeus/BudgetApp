@@ -21,10 +21,11 @@ const RegisterModal = () => {
       console.log("closing modal");
       isMounted && toggleModal("");
     }
-    console.log(errors);
+
     if (errors.length > 0 && isMounted) {
-      //console.log('registermodalerrors:', errors); // TODO: replace this with logging message to report wrong structured error message response
-      errors.map((error) => setAlert(error, "danger"));
+      //console.log("registermodalerrors:", errors); // TODO: replace this with logging message to report wrong structured error message response
+
+      errors.map((error) => setAlert(error.msg, "danger"));
       clearErrors();
     }
     return () => {
@@ -96,18 +97,18 @@ const RegisterModal = () => {
                 name="name"
                 value={name}
                 onChange={onChange}
-                required
+                // required
               />
             </div>
 
             <div className="form-text">
               <input
-                type="email"
+                type="text"
                 placeholder="Email Address"
                 name="email"
                 value={email}
                 onChange={onChange}
-                required
+                //  required
               />
             </div>
             <div className="form-text">
@@ -117,7 +118,7 @@ const RegisterModal = () => {
                 name="password"
                 value={password}
                 onChange={onChange}
-                required
+                // required
               />
             </div>
             <div className="form-text">
@@ -127,7 +128,7 @@ const RegisterModal = () => {
                 name="password2"
                 value={password2}
                 onChange={onChange}
-                required
+                //  required
                 minLength={6}
               />
             </div>

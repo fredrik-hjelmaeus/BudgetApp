@@ -1,4 +1,5 @@
 import { IAuthState } from "../../frontend-types/IAuthContext";
+import { IError } from "../../frontend-types/IErrorResponse";
 
 import {
   REGISTER_SUCCESS,
@@ -23,20 +24,20 @@ import {
 type ActionType =
   | { type: typeof USER_LOADED; payload: object }
   | { type: typeof REGISTER_SUCCESS; payload: string }
-  | { type: typeof REGISTER_FAIL; payload: Array<string> }
+  | { type: typeof REGISTER_FAIL; payload: IError[] }
   | { type: typeof LOGIN_SUCCESS; payload: string }
-  | { type: typeof LOGIN_FAIL; payload: Array<string> }
-  | { type: typeof AUTH_ERROR; payload: string }
+  | { type: typeof LOGIN_FAIL; payload: IError[] }
+  | { type: typeof AUTH_ERROR; payload: IError[] }
   | { type: typeof LOGOUT }
-  | { type: typeof FORGOT_FAIL; payload: Array<string> }
+  | { type: typeof FORGOT_FAIL; payload: IError[] }
   | { type: typeof FORGOT_SUCCESS; payload: string }
-  | { type: typeof UPDATE_PASSWORD_FAIL; payload: string }
-  | { type: typeof UPDATE_DETAILS_FAIL; payload: string }
+  | { type: typeof UPDATE_PASSWORD_FAIL; payload: IError[] }
+  | { type: typeof UPDATE_DETAILS_FAIL; payload: IError[] }
   | { type: typeof UPDATE_PASSWORD_SUCCESS; payload: string }
   | { type: typeof CLEAR_ERRORS }
   | { type: typeof CLEAR_ALERTS }
   | { type: typeof UPDATE_DETAILS_SUCCESS; payload: string }
-  | { type: typeof RESET_PASSWORD_FAIL; payload: string }
+  | { type: typeof RESET_PASSWORD_FAIL; payload: IError[] }
   | { type: typeof RESET_PASSWORD_SUCCESS; payload: string };
 
 const authReducer = (state: IAuthState, action: ActionType) => {
@@ -62,7 +63,6 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case FORGOT_FAIL:
-      console.log("user failed to load,deleting token");
       localStorage.removeItem("token");
       return {
         ...state,
@@ -70,7 +70,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
         isAuthenticated: false,
         loading: false,
         user: null,
-        errors: [...state.errors, action.payload], // TODO: is this working when adding [] into [] ?
+        errors: [...state.errors, ...action.payload],
       };
     case LOGOUT:
       localStorage.removeItem("token");
@@ -96,7 +96,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case RESET_PASSWORD_FAIL:
       return {
         ...state,
-        errors: [state.errors, action.payload],
+        errors: [...state.errors, ...action.payload],
       };
     case UPDATE_PASSWORD_SUCCESS:
     case UPDATE_DETAILS_SUCCESS:

@@ -25,8 +25,7 @@ import {
 import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 import { IAuthState } from "../../frontend-types/IAuthContext";
 import { ILoginFormData } from "../../frontend-types/ILoginFormData";
-import { IServerError } from "../../frontend-types/IServerError";
-import { IValidationError } from "../../frontend-types/IValidationError";
+import { IErrorResponse } from "../../frontend-types/IErrorResponse";
 
 const AuthState = (props: { children: ReactNode }) => {
   const initialState: IAuthState = {
@@ -62,11 +61,11 @@ const AuthState = (props: { children: ReactNode }) => {
         });
       } catch (err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {
-          const serverError = err as AxiosError<IServerError>;
+          const serverError = err as AxiosError<IErrorResponse>;
           if (serverError.response) {
             dispatch({
               type: AUTH_ERROR,
-              payload: serverError?.response?.data?.msg /* err.response.data.errors[0] */,
+              payload: serverError?.response?.data.errors /* err.response.data.errors[0] */,
             });
           }
         } else {
@@ -77,7 +76,7 @@ const AuthState = (props: { children: ReactNode }) => {
       //    console.log("no token found, no user loaded, disabling loading and redirect to Landing");
       dispatch({
         type: AUTH_ERROR,
-        payload: "No token found",
+        payload: [{ msg: "No token found" }],
       });
     }
   };
@@ -109,9 +108,9 @@ const AuthState = (props: { children: ReactNode }) => {
       // loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        const serverError = err as AxiosError<IValidationError>;
+        const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
-          console.log(serverError.response.data.errors);
+          console.error(serverError.response.data.errors);
           dispatch({
             type: REGISTER_FAIL,
             payload: serverError?.response?.data.errors,
@@ -144,7 +143,7 @@ const AuthState = (props: { children: ReactNode }) => {
       //loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        const serverError = err as AxiosError<IValidationError>;
+        const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
           dispatch({
             type: LOGIN_FAIL,
@@ -180,7 +179,7 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        const serverError = err as AxiosError<IValidationError>;
+        const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
           dispatch({
             type: FORGOT_FAIL,
@@ -203,11 +202,11 @@ const AuthState = (props: { children: ReactNode }) => {
       dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        const serverError = err as AxiosError<IValidationError>;
+        const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
           dispatch({
             type: RESET_PASSWORD_FAIL,
-            payload: serverError?.response?.data.errors[0],
+            payload: serverError?.response?.data.errors,
           });
         }
       } else {
@@ -234,11 +233,11 @@ const AuthState = (props: { children: ReactNode }) => {
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
         // console.log("updatedetailsfail", err.response.data.errors[0].msg);
-        const serverError = err as AxiosError<IValidationError>;
+        const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
           dispatch({
             type: UPDATE_DETAILS_FAIL,
-            payload: serverError?.response?.data.errors[0],
+            payload: serverError?.response?.data.errors,
           });
         }
       } else {
@@ -264,11 +263,11 @@ const AuthState = (props: { children: ReactNode }) => {
       });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        const serverError = err as AxiosError<IValidationError>;
+        const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
           dispatch({
             type: UPDATE_PASSWORD_FAIL,
-            payload: serverError?.response?.data.errors[0],
+            payload: serverError?.response?.data.errors,
           });
         }
       } else {

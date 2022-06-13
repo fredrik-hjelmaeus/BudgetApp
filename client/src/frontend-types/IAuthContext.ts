@@ -1,3 +1,4 @@
+import { IError } from "./IErrorResponse";
 import { ILoginFormData } from "./ILoginFormData";
 import { IRegisterFormData } from "./IRegisterFormData";
 
@@ -6,7 +7,7 @@ export interface IAuthState {
   isAuthenticated: boolean;
   loading: boolean;
   user: any;
-  errors: any[];
+  errors: IError[];
   alerts: Array<string>;
   mailsentmsg: string | null;
 }
