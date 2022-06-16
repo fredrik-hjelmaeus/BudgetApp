@@ -37,9 +37,7 @@ test("Landing is loaded when not authenticated", async () => {
     rest.get("http://localhost/api/auth", (req, res, ctx) => {
       return res(
         ctx.status(500),
-        ctx.json({
-          msg: "No token, authorization denied",
-        })
+        ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
       );
     }),
     // get users presets

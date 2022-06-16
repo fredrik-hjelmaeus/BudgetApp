@@ -63,7 +63,6 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case FORGOT_FAIL:
-      console.log(action.payload);
       localStorage.removeItem("token");
       return {
         ...state,
