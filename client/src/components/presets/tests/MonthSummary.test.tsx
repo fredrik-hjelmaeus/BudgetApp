@@ -3,6 +3,7 @@ import {
   screen,
   fireEvent,
   waitForElementToBeRemoved,
+  waitFor,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
@@ -14,10 +15,11 @@ import { IEditPreset } from "../../../frontend-types/IEditPreset";
 import { IPreset } from "../../../frontend-types/IPreset";
 
 describe("MonthSummary unit tests", () => {
-  beforeEach(async () => {
+  const setup = async () => {
     // go to month and expand preset form
     render(<App />);
 
+    await screen.findByText(/yearly/i);
     // go to month
     const januaryButton = screen.queryByRole("button", { name: /january/i });
     januaryButton && fireEvent.click(januaryButton);
@@ -47,6 +49,9 @@ describe("MonthSummary unit tests", () => {
     expect(purchasePreset).toBeInTheDocument();
     expect(monthSavings).toBeInTheDocument();
     expect(accountBalanceSum).toBeInTheDocument();
+  };
+  beforeEach(async () => {
+    await setup();
   });
 
   test("Field gets deleted when delete button is pressed", async () => {
@@ -87,7 +92,7 @@ describe("MonthSummary unit tests", () => {
     expect(await screen.findByAltText("Travel icon")).toBeInTheDocument(); // avoids unmounts somehow
     const typeIcon =
       presetsAgain[0]?.parentElement?.parentElement?.children[3].children[0].getAttribute("alt");
-    expect(typeIcon).toBe("Travel icon");
+    expect(typeIcon).toBe("Car icon");
   });
 
   test("Buy purchase removes purchasefield and converts piggybank savings to expense downpayment presets", async () => {
@@ -104,7 +109,7 @@ describe("MonthSummary unit tests", () => {
             _id: "6203e22b2bdb63c78b35b672",
             user: "6203e2152bdb63c78b35b670",
             name: req.body.name,
-            number: req.body.number,
+            number: 10000,
             month: "January",
             year: 2021,
             category: "Travel",
@@ -126,9 +131,11 @@ describe("MonthSummary unit tests", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // make piggybank 10544
+
     const piggybankButton = await screen.findByRole("button", {
-      name: /5 months/i,
+      name: /6 month/i,
     });
+    // screen.debug(piggybankButton, 300000);
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(
@@ -189,7 +196,7 @@ describe("MonthSummary unit tests", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // make piggybank 5000
-    fireEvent.click(await screen.findByRole("button", { name: /8 months/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /9 months/i }));
     // create the expected server response with a piggybank object added
     server.use(
       rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
