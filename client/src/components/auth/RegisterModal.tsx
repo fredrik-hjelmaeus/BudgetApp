@@ -97,7 +97,7 @@ const RegisterModal = () => {
                 name="name"
                 value={name}
                 onChange={onChange}
-                // required
+                required
               />
             </div>
 
@@ -108,7 +108,7 @@ const RegisterModal = () => {
                 name="email"
                 value={email}
                 onChange={onChange}
-                //  required
+                required
               />
             </div>
             <div className="form-text">
@@ -118,7 +118,7 @@ const RegisterModal = () => {
                 name="password"
                 value={password}
                 onChange={onChange}
-                // required
+                required
               />
             </div>
             <div className="form-text">
@@ -128,7 +128,7 @@ const RegisterModal = () => {
                 name="password2"
                 value={password2}
                 onChange={onChange}
-                //  required
+                required
                 minLength={6}
               />
             </div>

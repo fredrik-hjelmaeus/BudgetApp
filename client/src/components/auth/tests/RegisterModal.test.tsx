@@ -3,6 +3,7 @@ import {
   screen,
   fireEvent,
   waitForElementToBeRemoved,
+  waitFor,
 } from "../../../test-utils/context-wrapper";
 import App from "../../../App";
 import userEvent from "@testing-library/user-event";
@@ -20,9 +21,7 @@ describe("register flow", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       })
     );
@@ -94,9 +93,7 @@ describe("register flow", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       })
     );
@@ -130,9 +127,9 @@ describe("register flow", () => {
     expect(alertMessage).toBeInTheDocument();
   });
 });
-
+// test works but not when all tests are run
 describe("register negative backend response", () => {
-  test.only("register shows error message when invalid EMAIL is submitted", async () => {
+  test("register shows error message when invalid EMAIL is submitted", async () => {
     // override normal 200 response from handlers and make it report error like backend:
     server.use(
       // login endpoint
@@ -153,9 +150,7 @@ describe("register negative backend response", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       }),
       rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
@@ -203,7 +198,7 @@ describe("register negative backend response", () => {
     const alertMessage = await screen.findByText(/please include a valid email/i);
     expect(alertMessage).toBeInTheDocument();
   });
-
+  // test works but not when all tests are run
   test("register shows error message when invalid PASSWORD is submitted", async () => {
     // override normal 200 response from handlers and make it report error like backend:
     server.use(
@@ -225,9 +220,7 @@ describe("register negative backend response", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       }),
       rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
@@ -272,13 +265,16 @@ describe("register negative backend response", () => {
     fireEvent.click(submitRegisterButton);
 
     //Expect AlertMessage: The password must be 6+ chars long and contain a number
-    const alertMessage = await screen.findByText(
-      "The password must be 6+ chars long and contain a number"
-    );
-    expect(alertMessage).toBeInTheDocument();
+    await waitFor(() => {
+      const alertMessage = screen.getByText(
+        "The password must be 6+ chars long and contain a number"
+      );
+      expect(alertMessage).toBeInTheDocument();
+    });
   });
 
-  test("register shows error message when user email is already in database", async () => {
+  test.only("register shows error message when user email is already in database", async () => {
+    // TODO: test works but not when all tests are run
     // override normal 200 response from handlers and make it report error like backend:
     server.use(
       // login endpoint
@@ -299,9 +295,7 @@ describe("register negative backend response", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       }),
       rest.get("http://localhost/api/userpreset", (req, res, ctx) => {
@@ -346,7 +340,9 @@ describe("register negative backend response", () => {
     fireEvent.click(submitRegisterButton);
 
     //Expect AlertMessage: The password must be 6+ chars long and contain a number
-    const alertMessage = await screen.findByText(/User already exists/i);
-    expect(alertMessage).toBeInTheDocument();
+    await waitFor(() => {
+      const alertMessage = screen.getByText(/User already exists/i);
+      expect(alertMessage).toBeInTheDocument();
+    });
   });
 });

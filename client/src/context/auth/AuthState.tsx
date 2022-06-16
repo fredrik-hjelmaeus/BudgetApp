@@ -63,6 +63,7 @@ const AuthState = (props: { children: ReactNode }) => {
         if (axios.isAxiosError(err)) {
           const serverError = err as AxiosError<IErrorResponse>;
           if (serverError.response) {
+            console.log("auth error in loaduser", serverError.response.data);
             dispatch({
               type: AUTH_ERROR,
               payload: serverError?.response?.data.errors /* err.response.data.errors[0] */,
@@ -73,7 +74,7 @@ const AuthState = (props: { children: ReactNode }) => {
         }
       }
     } else {
-      //    console.log("no token found, no user loaded, disabling loading and redirect to Landing");
+      console.log("no token found, no user loaded, disabling loading and redirect to Landing");
       dispatch({
         type: AUTH_ERROR,
         payload: [{ msg: "No token found" }],

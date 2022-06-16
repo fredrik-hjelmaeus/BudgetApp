@@ -10,7 +10,7 @@ type ComponentProps = {
 const PrivateRoute = ({ component: Component }: ComponentProps) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated, loading } = authContext;
-
+  console.log(isAuthenticated, loading);
   if (loading) return <Spinner />;
   if (isAuthenticated && !loading) return <Component />;
   return <Navigate to="/Landing" />;
