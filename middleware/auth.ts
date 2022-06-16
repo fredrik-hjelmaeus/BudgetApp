@@ -18,6 +18,7 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
 
   // Check if not token
   if (!token) {
+    console.log("no token found");
     return res.status(401).json({ errors: [{ msg: "No token, authorization denied" }] });
   }
   try {

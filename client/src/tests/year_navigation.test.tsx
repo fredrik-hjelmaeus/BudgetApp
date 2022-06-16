@@ -20,9 +20,7 @@ describe("navigation through all year pages", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       }),
       // get users presets
@@ -372,7 +370,11 @@ describe("navigation through all year pages", () => {
         return res(
           ctx.status(500),
           ctx.json({
-            msg: "No token, authorization denied",
+            errors: [
+              {
+                msg: "No token, authorization denied",
+              },
+            ],
           })
         );
       }),
@@ -671,9 +673,10 @@ describe("navigation through all year pages", () => {
 
     fireEvent.click(submitLoginButton);
     await waitForElementToBeRemoved(submitLoginButton);
-
-    const expenseSummary = screen.queryByRole("button", { name: /Expense Summary/i });
-    expect(expenseSummary).toBeInTheDocument();
+    const expenseSummary = screen.getByRole("button", { name: /Expense Summary/i });
+    await waitFor(() => {
+      expect(expenseSummary).toBeInTheDocument();
+    });
     expenseSummary && fireEvent.click(expenseSummary);
 
     await waitFor(() => {
@@ -699,7 +702,11 @@ describe("navigation through all year pages", () => {
         return res(
           ctx.status(500),
           ctx.json({
-            msg: "No token, authorization denied",
+            errors: [
+              {
+                msg: "No token, authorization denied",
+              },
+            ],
           })
         );
       }),
@@ -1023,9 +1030,7 @@ describe("navigation through all year pages", () => {
       rest.get("http://localhost/api/auth", (req, res, ctx) => {
         return res(
           ctx.status(500),
-          ctx.json({
-            msg: "No token, authorization denied",
-          })
+          ctx.json({ errors: [{ msg: "No token, authorization denied" }] })
         );
       }),
       // get users presets
@@ -1339,7 +1344,11 @@ describe("navigation through all year pages", () => {
         return res(
           ctx.status(500),
           ctx.json({
-            msg: "No token, authorization denied",
+            errors: [
+              {
+                msg: "No token, authorization denied",
+              },
+            ],
           })
         );
       }),
