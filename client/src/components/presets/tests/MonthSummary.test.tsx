@@ -131,11 +131,15 @@ describe("MonthSummary unit tests", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // make piggybank 10544
-
+    await waitFor(() => {
+      screen.getByRole("button", {
+        name: /6 month/i,
+      });
+    });
     const piggybankButton = await screen.findByRole("button", {
       name: /6 month/i,
     });
-    // screen.debug(piggybankButton, 300000);
+
     fireEvent.click(piggybankButton);
     // create the expected server response with a piggybank object added
     server.use(

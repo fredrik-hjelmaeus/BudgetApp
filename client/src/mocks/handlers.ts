@@ -41,7 +41,6 @@ export const handlers = [
   }),
 
   rest.put("http://localhost/api/auth/resetpassword/:resettoken", (req, res, ctx) => {
-    console.log("REQUEST DETECTED", req.body);
     return res(ctx.json("Password Changed"));
   }),
   // get presets used in the app guide

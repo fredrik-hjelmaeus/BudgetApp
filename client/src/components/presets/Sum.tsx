@@ -75,7 +75,9 @@ const Sum = () => {
         {/* Account Balance */}
         <div className="text-gray">
           Account Balance:
-          <span className={sum !== null && sum > 0 ? "text-success" : "text-danger"}>{sum} </span>
+          <span className={sum !== null && sum > 0 ? "text-success" : "text-danger"}>
+            {sum && sum}{" "}
+          </span>
         </div>
         {/* Month Balance */}
         <div>

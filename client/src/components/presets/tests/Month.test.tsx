@@ -2047,6 +2047,7 @@ describe("Purchases interaction", () => {
     // submit form
     fireEvent.click(screen.getByRole("button", { name: /add to budget/i }));
     // make piggybank 10544
+
     const piggybankButton = await screen.findByRole("button", {
       name: /6 month/i,
     });

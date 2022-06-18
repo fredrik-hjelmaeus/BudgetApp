@@ -45,16 +45,15 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // Load User
   const loadUser = async () => {
-    // console.log("loadUser ran");
     // load token into global headers
     if (localStorage.token) {
       if (!state.token) {
         setAuthToken(localStorage.token);
       }
-      //console.log("making request to get user info");
+
       try {
         const res = await axios.get("/api/auth");
-        //console.log("user info: ", res);
+
         dispatch({
           type: USER_LOADED,
           payload: res.data,
@@ -82,13 +81,11 @@ const AuthState = (props: { children: ReactNode }) => {
 
   // load user on first run or refresh
   if (state.loading) {
-    //    console.log("state.loading triggered");
     loadUser();
   }
 
   // Register User
   const register = async (formData: IRegisterFormData): Promise<void> => {
-    console.log("register ran");
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +95,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
     try {
       const res: AxiosResponse = await axios.post("/api/users", formData, config); //endpoint/url
-      console.log("register response confirmed", res.data.token);
+
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data.token,
@@ -109,7 +106,6 @@ const AuthState = (props: { children: ReactNode }) => {
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
-          console.error(serverError.response.data.errors);
           dispatch({
             type: REGISTER_FAIL,
             payload: serverError?.response?.data.errors,
@@ -197,7 +193,7 @@ const AuthState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
-      console.log("successfull response from resetPassword", res.data);
+
       dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -231,7 +227,6 @@ const AuthState = (props: { children: ReactNode }) => {
       //loadUser();
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
-        // console.log("updatedetailsfail", err.response.data.errors[0].msg);
         const serverError = err as AxiosError<IErrorResponse>;
         if (serverError.response) {
           dispatch({

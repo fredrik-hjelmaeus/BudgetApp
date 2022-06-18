@@ -86,7 +86,7 @@ const CsvPresetCreateModal = () => {
           </h1>
 
           {csvpresets?.map((item) => (
-            <CsvPresetItem Item={item} key={item._id} />
+            <CsvPresetItem key={item._id} Item={item} />
           ))}
 
           {doSubmitCsv !== "submit" && (
