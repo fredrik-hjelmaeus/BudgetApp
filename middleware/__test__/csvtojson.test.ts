@@ -231,7 +231,7 @@ describe("csvtojson", () => {
         )
       )
       .expect(200);
-    //console.log(res.text);
+
     expect(res.body[0].number).toEqual(1);
   });
   it("fail on invalid file-extension", async () => {

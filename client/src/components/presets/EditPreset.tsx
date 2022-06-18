@@ -33,7 +33,7 @@ const EditPreset = () => {
 
   // Logic
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setLocalPreset({ ...localPreset, [e.target.name]: e.target.value });
+    setLocalPreset({ ...localPreset, [e.target.name]: parseInt(e.target.value) });
   };
 
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,6 +44,7 @@ const EditPreset = () => {
     e.preventDefault();
     // client side field validation
     if (number !== undefined && MonthSum !== null) {
+      console.log(number);
       if (typeof number !== "number") {
         setAlert("Please enter a number", "danger");
         return;

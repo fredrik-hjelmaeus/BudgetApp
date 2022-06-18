@@ -14,7 +14,7 @@ import React from "react";
 import { IPreset } from "../../../frontend-types/IPreset";
 import { IEditPreset } from "../../../frontend-types/IEditPreset";
 
-// Integration tests of user interaction triggered from presetform,purchases,monthsummary or monthsavingssummary.
+// Integration tests of user interaction triggered from presetform,purchases,monthsummary or monthsavingssummary,editpreset.
 // The result of such interaction affects summations and display in multiple month components
 // Setup: logged in user at month January with presetform expanded
 const setup = async () => {
@@ -2637,4 +2637,16 @@ describe("Purchases interaction", () => {
     // expect addtopiggybankmodal to have been opened
     expect(await screen.findByRole("heading", { name: /amount to save/i })).toBeInTheDocument();
   });
+});
+
+describe("Edit Preset interaction/integration", () => {
+  beforeEach(async () => {
+    await setup();
+  });
+  test("editing number works", () => {});
+  test("editing name works", () => {});
+  test("editing category works", () => {});
+  test("editing overhead to savings works", () => {});
+  test("editing overhead to purchase works", () => {});
+  test("editing overhead to capital works", () => {});
 });

@@ -29,7 +29,6 @@ router.get("/", authMiddleware, async (req: Request, res: Response) => {
 // @access  Private
 router.post(
   "/",
-
   [
     check("email", "Email is required").isEmail(),
     check("password", "The password must be 6+ chars long and contain a number")
@@ -40,7 +39,6 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const myAgent = req.header("my_user-agent");
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

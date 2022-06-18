@@ -23,6 +23,7 @@ export const LoginModal = () => {
   });
 
   useEffect(() => {
+    console.log("detecting update", isAuthenticated);
     let isMounted = true;
     if (authContext?.isAuthenticated && isMounted) {
       toggleModal("");
