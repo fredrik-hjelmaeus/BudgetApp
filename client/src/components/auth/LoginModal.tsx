@@ -31,7 +31,9 @@ export const LoginModal = () => {
 
     if (errors.length > 0 && isMounted) {
       // TODO: replace this with logging message to report wrong structured error message response
-      errors.map((error) => error && setAlert(error?.msg, "danger"));
+      errors.map(
+        (error) => error && error.msg !== "No token found" && setAlert(error?.msg, "danger")
+      );
       clearErrors();
     }
 

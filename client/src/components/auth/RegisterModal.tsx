@@ -25,7 +25,7 @@ const RegisterModal = () => {
     if (errors.length > 0 && isMounted) {
       //console.log("registermodalerrors:", errors); // TODO: replace this with logging message to report wrong structured error message response
 
-      errors.map((error) => setAlert(error.msg, "danger"));
+      errors.map((error) => error.msg !== "No token found" && setAlert(error.msg, "danger"));
       clearErrors();
     }
     return () => {

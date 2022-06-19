@@ -2701,12 +2701,36 @@ describe("Edit Preset interaction/integration", () => {
       expect(presetName).toBeInTheDocument();
     });
   });
-  test.only("editing category works", () => {
+  test("editing category works", async () => {
+    //close presetform for easier selection of combobox
+    fireEvent.click(screen.getByTestId("presetform_closebtn"));
+
+    // change category
     userEvent.selectOptions(screen.getByRole("combobox"), "Reminderfees");
-    fireEvent.click(screen.getByRole("button", { name: /update/i }));
-    screen.debug(undefined, 3000000);
+
+    // press update and make sure edit preset dialog closes
+    const updateBtn = screen.getByRole("button", { name: /update/i });
+    fireEvent.click(updateBtn);
+    expect(updateBtn).not.toBeInTheDocument();
+
+    expect(await screen.findByAltText(/reminderfees icon/i)).toBeInTheDocument();
   });
-  test("editing overhead to savings works", () => {});
+  test.only("editing overhead to savings works", () => {
+    //close presetform for easier selection of combobox
+    fireEvent.click(screen.getByTestId("presetform_closebtn"));
+    // click savings and expect change
+    fireEvent.click(screen.getByRole("checkbox", { name: /savings/i }));
+    expect(screen.getByRole("checkbox", { name: /overhead/i })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /savings/i })).toBeChecked();
+
+    // press update and make sure edit preset dialog closes
+    const updateBtn = screen.getByRole("button", { name: /update/i });
+    fireEvent.click(updateBtn);
+    expect(updateBtn).not.toBeInTheDocument();
+    //screen.getByRole("button", { name: /sadas/i }).parentElement?.parentElement.parentElement
+
+    screen.debug(undefined, 5000000);
+  });
   test("editing overhead to purchase works", () => {});
   test("editing overhead to capital works", () => {});
 });

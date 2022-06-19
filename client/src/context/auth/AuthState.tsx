@@ -72,11 +72,12 @@ const AuthState = (props: { children: ReactNode }) => {
         }
       }
     } else {
-      // this is not relevant information to get for the user, so comment out
-      /* dispatch({
+      // This payload is not relevant to send to user, but AUTH_ERROR makes sure loading is set to false, otherwise endless loading
+      // This is filtered out in loginmodal and registermodal show it isnt displayed for user
+      dispatch({
         type: AUTH_ERROR,
         payload: [{ msg: "No token found" }],
-      }); */
+      });
     }
   };
 

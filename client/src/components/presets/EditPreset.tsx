@@ -66,7 +66,7 @@ const EditPreset = ({ what = 5 }) => {
         return;
       }
     }
-    console.log(localPreset);
+
     sendEdit(localPreset);
     calcSum();
     toggleModal("");
