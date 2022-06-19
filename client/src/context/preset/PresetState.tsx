@@ -184,7 +184,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
-
+      console.log(res.data);
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {
@@ -404,6 +404,7 @@ const PresetState = (props: { children: ReactNode }) => {
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
+      console.log(TotalMonthSum);
       dispatch({ type: POSMONTHSUM, payload: TotalMonthSum });
     } else {
       dispatch({ type: POSMONTHSUM, payload: 0 });
@@ -640,6 +641,7 @@ const PresetState = (props: { children: ReactNode }) => {
     // checks if no presets exist then don't use .reduce , just return presetnum-value for dispatch.
     if (presetArray.length !== 0) {
       TotalMonthSum = presetArray.reduce((a, b) => a + b, 0);
+
       dispatch({ type: CALCCAPITAL, payload: TotalMonthSum });
     } else {
       dispatch({ type: CALCCAPITAL, payload: 0 });

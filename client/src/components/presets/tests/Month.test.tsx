@@ -4,6 +4,7 @@ import {
   fireEvent,
   waitForElementToBeRemoved,
   waitFor,
+  within,
 } from "../../../test-utils/context-wrapper";
 import userEvent from "@testing-library/user-event";
 import App from "../../../App";
@@ -2657,7 +2658,7 @@ describe("Edit Preset interaction/integration", () => {
     server.use(
       rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
         const { _id } = req.params;
-        console.log("first");
+
         return res(
           ctx.json({
             _id,
@@ -2715,7 +2716,7 @@ describe("Edit Preset interaction/integration", () => {
 
     expect(await screen.findByAltText(/reminderfees icon/i)).toBeInTheDocument();
   });
-  test.only("editing overhead to savings works", () => {
+  test("editing overhead to savings works", async () => {
     //close presetform for easier selection of combobox
     fireEvent.click(screen.getByTestId("presetform_closebtn"));
     // click savings and expect change
@@ -2727,10 +2728,79 @@ describe("Edit Preset interaction/integration", () => {
     const updateBtn = screen.getByRole("button", { name: /update/i });
     fireEvent.click(updateBtn);
     expect(updateBtn).not.toBeInTheDocument();
-    //screen.getByRole("button", { name: /sadas/i }).parentElement?.parentElement.parentElement
-
-    screen.debug(undefined, 5000000);
+    const savingsPreset = await screen.findByTestId("monthitem-delete");
+    expect(savingsPreset.getAttribute("name")).toBe("sadas");
   });
-  test("editing overhead to purchase works", () => {});
-  test("editing overhead to capital works", () => {});
+  test("editing overhead to purchase works", async () => {
+    //close presetform for easier selection of combobox
+    fireEvent.click(screen.getByTestId("presetform_closebtn"));
+    // click savings and expect change
+    fireEvent.click(screen.getByRole("checkbox", { name: /purchase/i }));
+    expect(screen.getByRole("checkbox", { name: /overhead/i })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /purchase/i })).toBeChecked();
+
+    // create response with hardcoded number field of 11111, as neither fireEvent.change or userEvent.type can provide number type atm.
+    server.use(
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: 11111,
+            month: "January",
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: "January",
+                year: 2021,
+                savedAmount: 0,
+                _id: "6205143125ad67554798451b",
+              },
+            ],
+            date: "2022-02-10T13:33:37.780Z",
+            __v: 0,
+          })
+        );
+      })
+    );
+    // press update and make sure edit preset dialog closes
+    const updateBtn = screen.getByRole("button", { name: /update/i });
+    fireEvent.click(updateBtn);
+    expect(updateBtn).not.toBeInTheDocument();
+
+    // wait for the new purchase-element to appear
+    await screen.findByText("11111");
+
+    const purchasePresets = await screen.findAllByTestId("purchaseitem");
+
+    const newPurchaseElement = within(purchasePresets[1]).getByRole("button", { name: /sadas/i });
+    expect(newPurchaseElement).toBeInTheDocument();
+  });
+  test.only("editing overhead to capital works", async () => {
+    const monthIncome = screen.getByText("Month Income:");
+    within(monthIncome).getByText("799");
+
+    //close presetform for easier selection of combobox
+    fireEvent.click(screen.getByTestId("presetform_closebtn"));
+    // click savings and expect change
+    fireEvent.click(screen.getByRole("checkbox", { name: /capital/i }));
+    expect(screen.getByRole("checkbox", { name: /overhead/i })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /capital/i })).toBeChecked();
+
+    // press update and make sure edit preset dialog closes
+    const updateBtn = screen.getByRole("button", { name: /update/i });
+    fireEvent.click(updateBtn);
+    expect(updateBtn).not.toBeInTheDocument();
+
+    //  make sure month income is recalculated from 799-444
+    const monthIncome2 = await screen.findByText("Month Income:");
+    await waitFor(() => {
+      within(monthIncome2).getByText("355");
+    });
+  });
 });
