@@ -10,7 +10,7 @@ const Logo = ({ title }: LogoProps) => (
   <div className="Logo">
     <h1 className="Logo__card text-light">
       {/*  <img src={logoicon2} alt='logo' style={{ width: '66px', margin: 'auto', marginBottom: '10px' }} /> */}
-      <div style={{ width: "66px", margin: "auto", marginBottom: "10px" }}>
+      <div style={{ width: "66px", margin: "auto" }} className="all-center">
         <LogoIcon />
       </div>
       {title && <div className="all-center Logo__text">{title}</div>}

@@ -48,7 +48,7 @@ const Landing = () => {
       {modal === "forgot" && <ForgotPassword />}
       {modal === "" && (
         <div className="Landing">
-          <Logo />
+          <Logo title={"Budget App"} />
 
           <div>
             <textarea

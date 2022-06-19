@@ -2642,10 +2642,70 @@ describe("Purchases interaction", () => {
 describe("Edit Preset interaction/integration", () => {
   beforeEach(async () => {
     await setup();
+    // click on preset
+    fireEvent.click(screen.getByRole("button", { name: /sadas/i }));
+    expect(await screen.findByRole("heading", { name: /edit/i })).toBeInTheDocument();
   });
-  test("editing number works", () => {});
-  test("editing name works", () => {});
-  test("editing category works", () => {});
+  test("editing number works", async () => {
+    const numberInputField = screen
+      .getAllByPlaceholderText("Number")
+      .find((el) => (el as HTMLInputElement).value === "444");
+
+    numberInputField && userEvent.clear(numberInputField);
+    numberInputField && fireEvent.change(numberInputField, "1000");
+    // create response with hardcoded number field of 1000, as neither fireEvent.change or userEvent.type can provide number type atm.
+    server.use(
+      rest.put<IEditPreset>(`http://localhost/api/userpreset/:_id`, (req, res, ctx) => {
+        const { _id } = req.params;
+        console.log("first");
+        return res(
+          ctx.json({
+            _id,
+            user: req.body.user,
+            name: req.body.name,
+            number: 1000,
+            month: "January",
+            year: 2021,
+            category: req.body.category,
+            type: req.body.type,
+            piggybank: [
+              {
+                month: "January",
+                year: 2021,
+                savedAmount: 0,
+                _id: "6205143125ad67554798451b",
+              },
+            ],
+            date: "2022-02-10T13:33:37.780Z",
+            __v: 0,
+          })
+        );
+      })
+    );
+    fireEvent.click(screen.getByRole("button", { name: /update/i }));
+
+    const presetNumber = await screen.findByRole("button", { name: "1000" });
+
+    expect(presetNumber).toHaveAttribute("data-testid");
+  });
+  test("editing name works", async () => {
+    const nameInputField = screen
+      .getAllByPlaceholderText("Name")
+      .find((el) => (el as HTMLInputElement).value === "sadas");
+    nameInputField && userEvent.clear(nameInputField);
+    nameInputField && userEvent.type(nameInputField, "whatever");
+    fireEvent.click(screen.getByRole("button", { name: /update/i }));
+    await waitFor(() => {
+      const presetName = screen.getByText("whatever");
+
+      expect(presetName).toBeInTheDocument();
+    });
+  });
+  test.only("editing category works", () => {
+    userEvent.selectOptions(screen.getByRole("combobox"), "Reminderfees");
+    fireEvent.click(screen.getByRole("button", { name: /update/i }));
+    screen.debug(undefined, 3000000);
+  });
   test("editing overhead to savings works", () => {});
   test("editing overhead to purchase works", () => {});
   test("editing overhead to capital works", () => {});

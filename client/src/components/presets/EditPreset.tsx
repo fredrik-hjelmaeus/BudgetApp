@@ -8,7 +8,7 @@ import CheckBoxField from "./CheckBoxField";
 import Alerts from "../layout/Alerts";
 import { IPreset } from "../../frontend-types/IPreset";
 
-const EditPreset = () => {
+const EditPreset = ({ what = 5 }) => {
   // Context
   const alertContext = useContext(AlertContext);
   const presetContext = useContext(PresetContext);
@@ -33,7 +33,11 @@ const EditPreset = () => {
 
   // Logic
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setLocalPreset({ ...localPreset, [e.target.name]: parseInt(e.target.value) });
+    let targetValue: number | string = e.target.value;
+    if (e.target.name === "number") {
+      targetValue = parseInt(e.target.value);
+    }
+    setLocalPreset({ ...localPreset, [e.target.name]: targetValue });
   };
 
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,7 +48,6 @@ const EditPreset = () => {
     e.preventDefault();
     // client side field validation
     if (number !== undefined && MonthSum !== null) {
-      console.log(number);
       if (typeof number !== "number") {
         setAlert("Please enter a number", "danger");
         return;
@@ -63,7 +66,7 @@ const EditPreset = () => {
         return;
       }
     }
-
+    console.log(localPreset);
     sendEdit(localPreset);
     calcSum();
     toggleModal("");
@@ -105,7 +108,6 @@ const EditPreset = () => {
                 />
               </div>
             </div>
-
             <div className="flexrow ">
               <div>
                 <label className="form-text label" htmlFor="Number">
@@ -124,7 +126,14 @@ const EditPreset = () => {
                 />
               </div>
             </div>
-            <SelectField selectChange={selectChange} category={category} />
+            <div className="flexrow selectfield-margin">
+              <div>
+                <label className="form-text label selectfield-label" htmlFor="selectfield">
+                  Category
+                </label>
+              </div>
+              <SelectField selectChange={selectChange} category={category} />
+            </div>
             <CheckBoxField preset={localPreset} onChange={onChange} />
             <button type="submit" className="btn btn-dark btn-block my-1" value="register">
               Update

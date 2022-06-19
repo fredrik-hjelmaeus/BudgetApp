@@ -426,7 +426,7 @@ img {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  borsder: 1px solid blue;
+  bordesr: 1px solid blue;
 }
 
 .flexrow-2 {
@@ -848,6 +848,27 @@ input {
   font-size: 14px;
   background-color: red;
   bordser: 1px solid green;
+}
+
+.selectfield-label {
+  margin: auto;
+  margin-top: 0;
+  borsder: 1px solid red;
+  align-self: top;
+  align-items: flex-start;
+  align-self: start;
+  align-content: flex-start;
+  justify-self: flex-start;
+  justify-content: baseline;
+  justify-items: flex-start;
+  text-align: start;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 3rem;
+}
+.selectfield-margin {
+  margin-top: 1rem;
 }
 
 .form__inputOn {
@@ -1710,7 +1731,6 @@ input::placeholder {
 
 .Logo {
   max-width: 1366px;
-  min-width: 1000px;
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
@@ -1946,8 +1966,12 @@ table th {
   justify-content: center;
 }
 .modalloginicon {
+  margin-top: auto;
+  margin-bottom: auto;
   margin-right: 15px;
   padding-right: 1px;
+  padding-top: 0.25rem;
+  bosrder: 1px solid red;
 }
 .modallogin__forgotpassword {
   border: none;
@@ -3046,7 +3070,7 @@ input[type="range"]:focus::-ms-fill-lower {
 .deleteItemBtn {
   position: relative;
   z-index: 1;
-  border: 1px solid red;
+  bsorder: 1px solid red;
   background-color: #63ccca;
 }
 .new_drop {

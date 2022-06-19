@@ -10,6 +10,7 @@ const SelectField = ({ guide, selectChange, category }: SelectFieldProps) => {
   return (
     <span className="presetformselectcategory">
       <select
+        id="selectfield"
         onChange={selectChange}
         className={
           guide && guide === "6" ? "text-dark guide__presetformselectcategory" : "text-dark"

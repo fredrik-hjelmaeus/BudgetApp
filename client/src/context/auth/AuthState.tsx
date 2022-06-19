@@ -72,10 +72,11 @@ const AuthState = (props: { children: ReactNode }) => {
         }
       }
     } else {
-      dispatch({
+      // this is not relevant information to get for the user, so comment out
+      /* dispatch({
         type: AUTH_ERROR,
         payload: [{ msg: "No token found" }],
-      });
+      }); */
     }
   };
 
