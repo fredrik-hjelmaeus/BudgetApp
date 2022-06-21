@@ -5,9 +5,9 @@
   "engines": {
     "node": "^17.4.0"
   },
-  "main": "dist/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "clientinstall": "npm install --prefix client",
