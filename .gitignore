@@ -1,6 +1,7 @@
 node_modules/
 _data/
-
+.vscode/
+.vs/
 
 config/default.json
 config/production.json

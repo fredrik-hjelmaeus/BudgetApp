@@ -2781,7 +2781,7 @@ describe("Edit Preset interaction/integration", () => {
     const newPurchaseElement = within(purchasePresets[1]).getByRole("button", { name: /sadas/i });
     expect(newPurchaseElement).toBeInTheDocument();
   });
-  test.only("editing overhead to capital works", async () => {
+  test("editing overhead to capital works", async () => {
     const monthIncome = screen.getByText("Month Income:");
     within(monthIncome).getByText("799");
 
