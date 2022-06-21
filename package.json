@@ -12,7 +12,7 @@
     "client": "npm start --prefix client",
     "clientinstall": "npm install --prefix client",
     "dev": "concurrently \"npm run ts\" \"npm run client\"",
-    "heroku-postbuild": "build && NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build && npm install --prefix client && npm run build --prefix client",
     "test": "jest --watchAll ",
     "coverage": "npm test -- --coverage",
     "ts": "ts-node-dev --poll server.ts",
