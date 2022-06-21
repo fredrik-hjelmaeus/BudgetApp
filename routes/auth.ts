@@ -7,7 +7,7 @@ import config from "config";
 import { check, validationResult } from "express-validator";
 import authMiddleware from "../middleware/auth";
 import sendEmail from "../utils/sendEmail";
-const sendMail = require("../utils/sendEmailwithSendInBlue");
+import sendMail from "../utils/sendEmailwithSendInBlue";
 
 import User from "../models/User";
 
@@ -347,12 +347,9 @@ router.post(
           email: "gemigpost@hotmail.com",
           name: "Fred",
         };
-        const receivers = [
-          {
-            email: user.email,
-          },
-        ];
-
+        const receivers = {
+          email: user.email,
+        };
         const sibResponse = await sendMail(sender, receivers, "Password Reset Request", message);
         console.log(sibResponse);
         return res.status(200).json({ success: true, data: "Email sent" });

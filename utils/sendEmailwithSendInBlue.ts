@@ -27,7 +27,15 @@ const transactionalEmailApi = new Sib.TransactionalEmailsApi();
   },
 ]; */
 
-function sendMail(sender, receivers, subject, content) {
+type sender = {
+  email: string;
+  name: string;
+};
+type receivers = {
+  email: string;
+};
+
+function sendMail(sender: sender, receivers: receivers, subject: string, content: string) {
   // Should only be sent with either html or textcontent. But below
   // i show both. htmlcontent overrides textcontent
   // Send in blue also has a template system
@@ -55,4 +63,4 @@ function sendMail(sender, receivers, subject, content) {
     .catch(console.log); */
 }
 
-module.exports = sendMail;
+export default sendMail;
