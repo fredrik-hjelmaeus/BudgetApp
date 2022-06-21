@@ -20,17 +20,17 @@ const sendEmail = async (options: ISendEmailOptions) => {
 
   const transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo> =
     nodemailer.createTransport({
-      host: process.env.SMTP_HOST! || smtp.mailtrap.io,
-      port: process.env.SMTP_PORT!,
+      host: config.get("SMTP_HOST"),
+      port: config.get("SMTP_PORT"),
       auth: {
-        user: process.env.SMTP_EMAIL!,
-        pass: process.env.SMTP_PASSWORD!,
+        user: config.get("SMTP_EMAIL"),
+        pass: config.get("SMTP_PASSWORD"),
       },
     });
 
   //  define transport object
   const message = {
-    from: `${process.env.FROM_NAME!} <${process.env.FROM_EMAIL!}>`,
+    from: `${config.get("FROM_NAME")} <${config.get("FROM_EMAIL")}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,
