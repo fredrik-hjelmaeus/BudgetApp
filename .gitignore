@@ -39,4 +39,4 @@ coverage/
 config/test.json
 dist
 
-*.drawio
+/drawio
