@@ -75,7 +75,7 @@ router.post(
       if (myAgent && myAgent === "react") {
         jwt.sign(
           payload,
-          config.get("jwtSecret"),
+          process.env.jwtSecret!,
           {
             expiresIn: 3600,
           },
@@ -85,7 +85,7 @@ router.post(
           }
         );
       } else {
-        jwt.sign(payload, config.get("jwtSecret"), (err, token) => {
+        jwt.sign(payload, process.env.jwtSecret!, (err, token) => {
           if (err) throw err;
 
           res.json({ token });
@@ -127,7 +127,7 @@ router.post(
       // Create reset url
       const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
       const resetUrlTwo =
-        config.get("resetpasswordURL") === "development"
+        process.env.NODE_ENV === "production"
           ? `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
           : `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
 
@@ -335,9 +335,9 @@ router.post(
       // Create reset url
       const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
       const resetUrlTwo =
-        config.get("resetpasswordURL") === "development"
-          ? `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`
-          : `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`;
+        process.env.NODE_ENV === "production"
+          ? `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
+          : `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
 
       const message = `You are receiving this email because you (or someone else) has 
                      requested the reset of a password. Please follow this link to 

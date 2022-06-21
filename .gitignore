@@ -40,3 +40,4 @@ config/test.json
 dist
 
 /drawio
+.env

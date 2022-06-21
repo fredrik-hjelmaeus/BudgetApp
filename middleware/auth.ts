@@ -20,8 +20,9 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   if (!token) {
     return res.status(401).json({ errors: [{ msg: "No token, authorization denied" }] });
   }
+
   try {
-    const decoded: string | JwtPayload = jwt.verify(token, config.get("jwtSecret"));
+    const decoded: string | JwtPayload = jwt.verify(token, process.env.jwtSecret!);
 
     const decodedUser: IUser = typeof decoded !== "string" && decoded.user;
 

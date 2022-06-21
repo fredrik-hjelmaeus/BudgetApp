@@ -46,6 +46,7 @@
     "bcryptjs": "^2.4.3",
     "config": "^3.3.7",
     "csvtojson": "^2.0.10",
+    "dotenv": "^16.0.1",
     "express": "^4.17.2",
     "express-fileupload": "^1.2.1",
     "express-mongo-sanitize": "^2.2.0",

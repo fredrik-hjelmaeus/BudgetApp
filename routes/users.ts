@@ -66,7 +66,7 @@ router.post(
       if (myAgent && myAgent === "react") {
         jwt.sign(
           payload,
-          config.get("jwtSecret"),
+          process.env.jwtSecret!,
           {
             expiresIn: 3600,
           },
@@ -76,7 +76,7 @@ router.post(
           }
         );
       } else {
-        jwt.sign(payload, config.get("jwtSecret"), (err, token) => {
+        jwt.sign(payload, process.env.jwtSecret!, (err, token) => {
           if (err) throw err;
           res.status(201).json({ token });
         });

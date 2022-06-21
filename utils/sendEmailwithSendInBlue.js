@@ -1,12 +1,12 @@
 const Sib = require("sib-api-v3-sdk");
-const config = require("config");
+//const config = require("config");
 
 // Create a client instance
 const client = Sib.ApiClient.instance;
 
 // Set the client apikey
 const apiKey = client.authentications["api-key"];
-apiKey.apiKey = config.get("SENDINBLUE_API_KEY");
+apiKey.apiKey = process.env.SENDINBLUE_API_KEY; //config.get("SENDINBLUE_API_KEY");
 
 // Two types of transactional, transactional and email campaign
 // campaign is for newsletter and transactional for single sends
