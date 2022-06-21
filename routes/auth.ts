@@ -128,7 +128,7 @@ router.post(
       const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
       const resetUrlTwo =
         config.get("resetpasswordURL") === "development"
-          ? `https://dry-eyrie-55051.herokuapp.com/resetpassword/${resetToken}`
+          ? `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
           : `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
 
       const message = `You are receiving this email because you (or someone else) has 
@@ -337,7 +337,7 @@ router.post(
       const resetUrlTwo =
         config.get("resetpasswordURL") === "development"
           ? `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`
-          : `https://dry-eyrie-55051.herokuapp.com/resetpassword/${resetToken}`;
+          : `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`;
 
       const message = `You are receiving this email because you (or someone else) has 
                      requested the reset of a password. Please follow this link to 
