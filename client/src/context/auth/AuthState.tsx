@@ -192,10 +192,10 @@ const AuthState = (props: { children: ReactNode }) => {
   //Reset Password
   const resetPassword = async (formData: { token: string; password: string }): Promise<void> => {
     const { token } = formData;
-
+    console.log(token);
     try {
       const res = await axios.put(`/api/auth/resetpassword/${token}`, formData); //endpoint/url
-
+      console.log(res.data);
       dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {

@@ -9,7 +9,7 @@ import PersonIcon from "../layout/images/PersonIcon";
 
 export const ResetPassword = () => {
   const params = useParams(); // TODO : confirm this works, react router dom v6 new stuff.
-
+  console.log(params);
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
@@ -28,7 +28,9 @@ export const ResetPassword = () => {
 
   useEffect(() => {
     if (errors.length > 0) {
-      errors.map((error) => setAlert(error.msg, "danger"));
+      errors.map(
+        (error) => error && error.msg !== "No token found" && setAlert(error.msg, "danger")
+      );
       clearErrors();
     }
     if (alerts.length > 0) {
@@ -53,6 +55,7 @@ export const ResetPassword = () => {
     if (password === "") {
       setAlert("Please fill in all fields", "danger");
     } else if (password === password2) {
+      console.log("trying to reset password");
       token && resetPassword({ token, password });
     } else {
       setAlert("Passwords do not match", "danger");

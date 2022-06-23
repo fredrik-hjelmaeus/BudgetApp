@@ -124,12 +124,12 @@ router.post(
 
       await user.save({ validateBeforeSave: false });
 
-      // Create reset url
+      // Create frontend-reset url
       const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
       const resetUrlTwo =
         process.env.NODE_ENV === "production"
-          ? `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
-          : `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
+          ? `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}` //`https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
+          : `http://localhost:3000/resetpassword/${resetToken}`;
 
       const message = `You are receiving this email because you (or someone else) has 
                      requested the reset of a password. Please follow this link to 
@@ -178,7 +178,7 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
+    console.log("validation complete, checking token");
     try {
       // Get hashed token
       const resetPasswordToken = crypto
@@ -192,7 +192,7 @@ router.put(
       });
 
       if (!user) {
-        return res.status(400).json({ errors: [{ msg: "Invalid token" }] });
+        return res.status(400).json({ errors: [{ msg: "Expired or Invalid token" }] });
       }
 
       // Set/Encrypt new password

@@ -1,6 +1,7 @@
-import nodemailer from "nodemailer";
+//import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-const config = require("config");
+//const config = require("config");
+const nodemailer = require("nodemailer");
 import isObjectEmpty from "./isObjectEmpty";
 
 export interface ISendEmailOptions {
@@ -18,19 +19,18 @@ const sendEmail = async (options: ISendEmailOptions) => {
     return "No options provided to sendEmail";
   }
 
-  const transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo> =
-    nodemailer.createTransport({
-      host: process.env.SMTP_HOST, //config.get("SMTP_HOST"),
-      port: config.get("SMTP_PORT"),
-      auth: {
-        user: config.get("SMTP_EMAIL"),
-        pass: config.get("SMTP_PASSWORD"),
-      },
-    });
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+      user: process.env.SMTP_EMAIL, //config.get("SMTP_EMAIL"),
+      pass: process.env.SMTP_PASSWORD, //config.get("SMTP_PASSWORD"),
+    },
+  });
 
   //  define transport object
   const message = {
-    from: `${config.get("FROM_NAME")} <${config.get("FROM_EMAIL")}>`,
+    from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,
