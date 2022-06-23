@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import express from "express";
-const connectDB = require("./config/db");
+import connectDB from "./config/db";
 const app = express();
-import path from "path";
 import fileUpload from "express-fileupload";
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
@@ -16,57 +15,61 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // verify env vars is in the .env file
-if (!process.env.NODE_ENV) {
-  console.error("NODE_ENV is not defined");
-  process.exit(1);
-}
-if (!process.env.mongoURI) {
-  console.error("mongoURI is not defined");
-  process.exit(1);
-}
-if (!process.env.jwtSecret) {
-  console.error("jwtSecret is not defined");
-  process.exit(1);
-}
-if (!process.env.PORT) {
-  console.error("PORT is not defined");
-  process.exit(1);
-}
-if (!process.env.SMTP_HOST) {
-  console.error("SMTP_HOST is not defined");
-  process.exit(1);
-}
-if (!process.env.SMTP_PORT) {
-  console.error("SMTP_PORT is not defined");
-  process.exit(1);
-}
-if (!process.env.SMTP_EMAIL) {
-  console.error("SMTP_EMAIL is not defined");
-  process.exit(1);
-}
-if (!process.env.SMTP_PASSWORD) {
-  console.error("SMTP_PASSWORD is not defined");
-  process.exit(1);
-}
-if (!process.env.FROM_EMAIL) {
-  console.error("FROM_EMAIL is not defined");
-  process.exit(1);
-}
-if (!process.env.FROM_NAME) {
-  console.error("FROM_NAME is not defined");
-  process.exit(1);
-}
-if (!process.env.resetpasswordURL) {
-  console.error("resetpasswordURL is not defined");
-  process.exit(1);
-}
-if (!process.env.SENDINBLUE_API_KEY) {
-  console.error("SENDINBLUE_API_KEY is not defined");
-  process.exit(1);
-}
+const verifyEnvironmentVariables = () => {
+  console.log("verifying environment variables");
+  if (!process.env.NODE_ENV) {
+    console.error("NODE_ENV is not defined");
+    process.exit(1);
+  }
+  if (!process.env.mongoURI) {
+    console.error("mongoURI is not defined");
+    process.exit(1);
+  }
+  if (!process.env.jwtSecret) {
+    console.error("jwtSecret is not defined");
+    process.exit(1);
+  }
+  if (!process.env.PORT) {
+    console.error("PORT is not defined");
+    process.exit(1);
+  }
+  if (!process.env.SMTP_HOST) {
+    console.error("SMTP_HOST is not defined");
+    process.exit(1);
+  }
+  if (!process.env.SMTP_PORT) {
+    console.error("SMTP_PORT is not defined");
+    process.exit(1);
+  }
+  if (!process.env.SMTP_EMAIL) {
+    console.error("SMTP_EMAIL is not defined");
+    process.exit(1);
+  }
+  if (!process.env.SMTP_PASSWORD) {
+    console.error("SMTP_PASSWORD is not defined");
+    process.exit(1);
+  }
+  if (!process.env.FROM_EMAIL) {
+    console.error("FROM_EMAIL is not defined");
+    process.exit(1);
+  }
+  if (!process.env.FROM_NAME) {
+    console.error("FROM_NAME is not defined");
+    process.exit(1);
+  }
+  if (!process.env.resetpasswordURL) {
+    console.error("resetpasswordURL is not defined");
+    process.exit(1);
+  }
+  if (!process.env.SENDINBLUE_API_KEY) {
+    console.error("SENDINBLUE_API_KEY is not defined");
+    process.exit(1);
+  }
+};
 
 // Connect Database
-process.env.NODE_ENV !== "test" && connectDB();
+process.env.NODE_ENV !== "test" && verifyEnvironmentVariables();
+process.env.NODE_ENV !== "test" && process.env.mongoURI && connectDB(process.env.mongoURI);
 
 // Init Middleware
 //app.use(express.json({ extended: false }));

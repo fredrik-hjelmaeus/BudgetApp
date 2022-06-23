@@ -2,7 +2,6 @@ import app from "./app";
 import express from "express";
 import path from "path";
 
-console.log("server.js found!");
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
   // set static folder

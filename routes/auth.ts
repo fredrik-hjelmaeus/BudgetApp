@@ -315,7 +315,7 @@ router.post(
   async (req: Request, res: Response) => {
     //validate : check if a valid mail syntax was used
     const errors = validationResult(req);
-
+    console.log("first");
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }

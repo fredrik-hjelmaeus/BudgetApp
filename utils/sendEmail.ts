@@ -20,7 +20,7 @@ const sendEmail = async (options: ISendEmailOptions) => {
 
   const transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo> =
     nodemailer.createTransport({
-      host: config.get("SMTP_HOST"),
+      host: process.env.SMTP_HOST, //config.get("SMTP_HOST"),
       port: config.get("SMTP_PORT"),
       auth: {
         user: config.get("SMTP_EMAIL"),
