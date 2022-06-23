@@ -128,7 +128,7 @@ router.post(
       const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
       const resetUrlTwo =
         process.env.NODE_ENV === "production"
-          ? `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}` //`https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
+          ? `${req.protocol}s://${req.get("host")}/resetpassword/${resetToken}` //`https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
           : `http://localhost:3000/resetpassword/${resetToken}`;
 
       const message = `You are receiving this email because you (or someone else) has 
