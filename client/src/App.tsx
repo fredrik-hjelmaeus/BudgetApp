@@ -36,11 +36,11 @@ const App = () => {
                     <div>
                       <Routes>
                         <Route path="/" element={<PrivateRoute component={Home} />} />
-                        <Route path="login" element={<LoginModal />} />
+                        <Route path="/login" element={<LoginModal />} />
                         {/*TODO: /login route created becuase logout.tests failed ,needed? and viable?*/}
-                        <Route path="about" element={<About />} />
-                        <Route path="Landing" element={<Landing />} />
-                        <Route path="resetpassword/:id" element={<ResetPassword />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/Landing" element={<Landing />} />
+                        <Route path="/resetpassword/:id" element={<ResetPassword />} />
                       </Routes>
                     </div>
                     <Footer />
