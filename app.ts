@@ -10,6 +10,7 @@ const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 import dotenv from "dotenv";
+import path from "path";
 
 // Load env vars
 dotenv.config();
@@ -67,6 +68,7 @@ const verifyEnvironmentVariables = () => {
   }
 };
 
+console.log("env mode:", process.env.NODE_ENV);
 // Connect Database
 process.env.NODE_ENV !== "test" && verifyEnvironmentVariables();
 process.env.NODE_ENV !== "test" && process.env.mongoURI && connectDB(process.env.mongoURI);
@@ -116,5 +118,6 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/userpreset", require("./routes/userpreset"));
 app.use("/api/userpreset/upload", require("./routes/upload"));
 app.use("/api/guide", require("./routes/guide"));
+app.get("/*", (req, res) => res.sendFile(path.resolve(__dirname, "client", "build", "index.html")));
 
 export default app;
