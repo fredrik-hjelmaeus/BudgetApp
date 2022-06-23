@@ -119,7 +119,7 @@ app.use("/api/userpreset", require("./routes/userpreset"));
 app.use("/api/userpreset/upload", require("./routes/upload"));
 app.use("/api/guide", require("./routes/guide"));
 app.get("/*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "app", "client", "build", "index.html"))
+  res.sendFile(path.resolve("app", __dirname, "client", "build", "index.html"))
 );
 
 export default app;
