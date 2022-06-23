@@ -123,7 +123,7 @@ app.get(
   (req, res) => {
     console.log(__dirname);
     console.log(req.params);
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
   }
   // res.sendFile(path.join("dist", "client", "build", "public", "index.html"))
 );
