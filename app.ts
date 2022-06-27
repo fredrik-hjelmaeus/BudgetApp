@@ -121,7 +121,7 @@ app.use("/api/guide", require("./routes/guide"));
 
 if (process.env.NODE_ENV === "production") {
   // set static folder
-  app.use(express.static(path.join(__dirname, "/client")));
+  app.use(express.static(path.join(__dirname, "/client/build")));
 
   app.get("*", (req, res) => {
     console.log("detecting request in app.ts");
