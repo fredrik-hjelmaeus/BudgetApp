@@ -121,7 +121,10 @@ app.use("/api/guide", require("./routes/guide"));
 
 //production mode
 const productionPath = path.join(__dirname, "../", "client", "build", "index.html");
-app.get("/*", (req, res) => res.sendFile(productionPath));
+app.get("/*", (req, res) => {
+  console.log("catchallpath detected");
+  res.sendFile(productionPath);
+});
 
 /* app.get(
   "/*",
