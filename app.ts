@@ -119,7 +119,9 @@ app.use("/api/userpreset", require("./routes/userpreset"));
 app.use("/api/userpreset/upload", require("./routes/upload"));
 app.use("/api/guide", require("./routes/guide"));
 
-//app.get("/*", (req, res) => res.send("catchall,404"));
+//production mode
+const productionPath = path.join(__dirname, "../", "client", "build", "index.html");
+app.get("/*", (req, res) => res.sendFile(productionPath));
 
 /* app.get(
   "/*",

@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "production") {
     //res.sendFile(path.join(__dirname, 'build', 'index.html'));
 
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-
+    ("/app/dist/client/build/index.html");
     //old: res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
