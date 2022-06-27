@@ -7,9 +7,13 @@ if (process.env.NODE_ENV === "production") {
   // set static folder
   app.use(express.static("client/build"));
 
-  app.get("/", (req, res) => {
+  app.get("/*", (req, res) => {
     console.log("detecting request in server.ts");
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    //res.sendFile(path.join(__dirname, 'build', 'index.html'));
+
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+
+    //old: res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
 

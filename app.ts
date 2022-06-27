@@ -118,7 +118,9 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/userpreset", require("./routes/userpreset"));
 app.use("/api/userpreset/upload", require("./routes/upload"));
 app.use("/api/guide", require("./routes/guide"));
-app.get("/*", (req, res) => res.send("catchall,404"));
+
+//app.get("/*", (req, res) => res.send("catchall,404"));
+
 /* app.get(
   "/*",
   (req, res) => {
