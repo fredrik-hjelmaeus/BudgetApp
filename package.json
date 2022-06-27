@@ -7,7 +7,7 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "ls && node dist/server.js",
+    "start": "ls && node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "clientinstall": "npm install --prefix client",
