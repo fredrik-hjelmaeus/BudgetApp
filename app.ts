@@ -128,7 +128,7 @@ app.use("/api/guide", require("./routes/guide"));
   });
 } */
 
-app.get(
+/* app.get(
   "/*",
   (req, res) => {
     console.log(__dirname);
@@ -137,6 +137,6 @@ app.get(
     //res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
   }
   //res.sendFile(path.join("client", "build", "index.html"))
-);
+); */
 
 export default app;
