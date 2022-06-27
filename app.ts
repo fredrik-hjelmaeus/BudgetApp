@@ -119,36 +119,4 @@ app.use("/api/userpreset", require("./routes/userpreset"));
 app.use("/api/userpreset/upload", require("./routes/upload"));
 app.use("/api/guide", require("./routes/guide"));
 
-if (process.env.NODE_ENV === "production") {
-  // set static folder
-  app.use(express.static(path.join(__dirname, "/client/build")));
-
-  app.get("*", (req, res) => {
-    console.log("detecting request in app.ts");
-    const thePath = path.join(__dirname, "client", "build", "index.html");
-    console.log("running the path: ", thePath);
-    res.sendFile(thePath);
-  });
-}
-
-//production mode not working
-/* if (process.env.NODE_ENV === "production") {
-  const productionPath = path.join(__dirname, "../", "client", "build", "index.html");
-  app.get("/*", (req, res) => {
-    console.log("catchallpath detected");
-    res.sendFile(productionPath);
-  });
-} */
-
-/* app.get(
-  "/*",
-  (req, res) => {
-    console.log(__dirname);
-    console.log(req.params);
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
-    //res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
-  }
-  //res.sendFile(path.join("client", "build", "index.html"))
-); */
-
 export default app;
