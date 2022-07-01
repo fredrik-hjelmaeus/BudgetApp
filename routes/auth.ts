@@ -9,14 +9,17 @@ import authMiddleware from "../middleware/auth";
 import sendEmail from "../utils/sendEmail";
 import sendMail from "../utils/sendEmailwithSendInBlue";
 
-import User from "../models/User";
+import User, { IUser } from "../models/User";
 
 // @route   GET api/auth
 // @desc    Get logged in user
 // @access  Private
 router.get("/", authMiddleware, async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user: IUser | null = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(400).json({ msg: "User not found" });
+    }
     res.json(user);
   } catch (error: unknown) {
     if (error instanceof Error) console.error(error.message);

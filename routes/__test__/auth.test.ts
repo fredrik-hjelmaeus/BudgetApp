@@ -796,16 +796,17 @@ describe("authorization flow", () => {
         .send({})
         .expect(200);
       // Assert
-      const user: IUser = await request(app)
-        .get(`/api/auth`)
-        .set("x-auth-token", response.body.token)
-        .expect(200);
+      const res = await request(app)
+        .get("/api/auth/")
+        .set("my_user-agent", "react")
+        .set("x-auth-token", response.body.token);
 
-      expect(user.verifiedEmail).toBe(true);
+      expect(res.body.verifiedEmail).toBe(true);
     });
 
     it("fails to set verifiedEmail to true with invalid verifyToken", async () => {
       // Arrange
+      const response = await createValidUser();
       const invalidToken = "invalidToken";
       // Act
       await request(app)
@@ -814,12 +815,12 @@ describe("authorization flow", () => {
         .send({})
         .expect(200);
       // Assert
-      const user: IUser = await request(app)
+      const res = await request(app)
         .get(`/api/auth`)
         .set("x-auth-token", response.body.token)
         .expect(200);
 
-      expect(user.verifiedEmail).toBe(false);
+      expect(res.body.verifiedEmail).toBe(false);
     });
 
     it("fails to set verifiedEmail to true with expired verifyToken", async () => {
