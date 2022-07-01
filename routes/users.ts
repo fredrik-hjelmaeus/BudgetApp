@@ -4,8 +4,11 @@ import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "config";
+import crypto from "crypto";
 
-import User from "../models/User";
+import User, { IUser, IUserInput } from "../models/User";
+import sendEmail from "../utils/sendEmail";
+import verifyEmail from "../utils/verifyEmail";
 
 // @route   POST api/users
 // @desc    Register a user
@@ -34,7 +37,7 @@ router.post(
     const { name, email, password } = req.body;
 
     try {
-      let user = await User.findOne({ email });
+      const user = await User.findOne({ email });
 
       // if user exist, report errormsg
       if (user) {
@@ -42,22 +45,29 @@ router.post(
       }
 
       // if user mail don't exist, create a new user
-      user = new User({
+      const newUser: IUser = new User({
         name,
         email,
         password,
+        verifyEmailToken: crypto.randomBytes(20).toString("hex"),
+        verifyEmailExpire: new Date(Date.now() + 10 * 60 * 1000),
       });
 
       // encrypt password
       // salt is the time/quality of hash encryption
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
+      newUser.password = await bcrypt.hash(password, salt);
 
-      await user.save();
+      // save user to db
+      await newUser.save();
 
+      // send email with verifyEmailToken
+      await verifyEmail(req, res, newUser);
+
+      // create jsonwebtoken
       const payload = {
         user: {
-          id: user.id,
+          id: newUser.id,
         },
       };
 

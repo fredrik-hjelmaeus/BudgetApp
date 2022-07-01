@@ -684,6 +684,7 @@ describe("authorization flow", () => {
       expect(res.body.errors[0].msg).toEqual("must be at least 6 chars long");
     });
   });
+
   // Send Verify Email
   describe("POST api/auth/sendemailverification", () => {
     const createValidUser = async () => {
@@ -704,7 +705,7 @@ describe("authorization flow", () => {
       // Arrange
       // signup new user to retrieve a valid token
       // NOTE dependant on signup working.
-      const response = await request(app)
+      await request(app)
         .post("/api/users/")
         .set("my_user-agent", "react")
         .send({
@@ -717,7 +718,7 @@ describe("authorization flow", () => {
       expect(sendEmail).toBeCalledTimes(1);
     });
 
-    it("sends email-verification to valid user", async () => {
+    it("sends email-verification to valid user requesting new verification-token", async () => {
       // Arrange
       await createValidUser();
       // Act
@@ -725,7 +726,7 @@ describe("authorization flow", () => {
         .post("/api/auth/sendemailverification")
         .set("my_user-agent", "react")
         .send({ email: "test@test.com" })
-        .expect(201);
+        .expect(200);
       // Assert
       expect(sendEmail).toBeCalledTimes(2);
     });
@@ -737,15 +738,16 @@ describe("authorization flow", () => {
         .post("/api/auth/sendemailverification")
         .set("my_user-agent", "react")
         .send({ email: "invalid@user.com" })
-        .expect(400);
+        .expect(404);
       // Assert
       expect(sendEmail).toBeCalledTimes(0);
     });
 
-    it("creates verifyToken upon user creation", async () => {
+    it.only("creates verifyToken upon user creation", async () => {
       // Arrange
       // Act
       const response = await createValidUser();
+      console.log(response.body);
       // Assert
       expect(response.body.verifyToken).toBeDefined();
       expect(response.body.verifyTokenExpire).toBeDefined();

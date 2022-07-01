@@ -10,6 +10,7 @@ import sendEmail from "../utils/sendEmail";
 import sendMail from "../utils/sendEmailwithSendInBlue";
 
 import User, { IUser } from "../models/User";
+import verifyEmail from "../utils/verifyEmail";
 
 // @route   GET api/auth
 // @desc    Get logged in user
@@ -313,11 +314,23 @@ router.put(
 // @access  Public
 router.post("/sendemailverification", async (req, res) => {
   // get user email
+  const user = await User.findOne({ email: req.body.email });
   // if not exist, 400
-  // verify user exist and does not have a verified email.
+  if (!user) {
+    return res.status(404).json({ errors: [{ msg: "There is no user with that email" }] });
+  }
   // if already verified, 400
-  // create verifyEmailToken on user
+  if (user.verifiedEmail) {
+    return res.status(400).json({ errors: [{ msg: "User is already verified" }] });
+  }
+  // create verifyEmailToken on user and save
+  user.getVerifyEmailToken();
+  await user.save();
   // send email with verifyEmailToken
+  await verifyEmail(req, res, user);
+
+  // return 200
+  res.status(200).json({ msg: "Email Verification Sent" });
 });
 
 // @desc          Verify email/user
