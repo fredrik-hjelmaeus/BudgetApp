@@ -295,6 +295,7 @@ describe("authorization flow", () => {
       const res = await request(app).put(resetUrl).send({ password: "whatever4" }).expect(200);
       expect(res.body).toEqual("Password Changed");
     });
+
     it("The password must be 6+ chars long and contain a number", async () => {
       // create user
       // NOTE dependant on signup working.
@@ -681,6 +682,156 @@ describe("authorization flow", () => {
         .send({ currentPassword: "Passw0rd!", password: "w2at" })
         .expect(400);
       expect(res.body.errors[0].msg).toEqual("must be at least 6 chars long");
+    });
+  });
+  // Send Verify Email
+  describe("POST api/auth/sendemailverification", () => {
+    const createValidUser = async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      return await request(app)
+        .post("/api/users/")
+        .set("my_user-agent", "react")
+        .send({
+          email: "test@test.com",
+          name: "fredags",
+          password: "Passw0rd!",
+        })
+        .expect(201);
+    };
+
+    it("sends email-verification to registering user", async () => {
+      // Arrange
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      const response = await request(app)
+        .post("/api/users/")
+        .set("my_user-agent", "react")
+        .send({
+          email: "test@test.com",
+          name: "fredags",
+          password: "Passw0rd!",
+        })
+        .expect(201);
+      // Assert
+      expect(sendEmail).toBeCalledTimes(1);
+    });
+
+    it("sends email-verification to valid user", async () => {
+      // Arrange
+      await createValidUser();
+      // Act
+      await request(app)
+        .post("/api/auth/sendemailverification")
+        .set("my_user-agent", "react")
+        .send({ email: "test@test.com" })
+        .expect(201);
+      // Assert
+      expect(sendEmail).toBeCalledTimes(2);
+    });
+
+    it("Do not send email-verification to invalid user", async () => {
+      // Arrange
+      // Act
+      await request(app)
+        .post("/api/auth/sendemailverification")
+        .set("my_user-agent", "react")
+        .send({ email: "invalid@user.com" })
+        .expect(400);
+      // Assert
+      expect(sendEmail).toBeCalledTimes(0);
+    });
+
+    it("creates verifyToken upon user creation", async () => {
+      // Arrange
+      // Act
+      const response = await createValidUser();
+      // Assert
+      expect(response.body.verifyToken).toBeDefined();
+      expect(response.body.verifyTokenExpire).toBeDefined();
+    });
+
+    it("creates new verifyToken upon user request", async () => {
+      // Arrange
+      const response = await createValidUser();
+      const oldToken = response.body.verifyToken;
+      const oldExpire = response.body.verifyTokenExpire;
+      expect(oldToken).toBeDefined();
+      expect(oldExpire).toBeDefined();
+      // Act
+      const sameUserNewToken = await request(app)
+        .post("/api/auth/sendemailverification")
+        .set("my_user-agent", "react")
+        .send({ email: "test@test.com" })
+        .expect(200);
+      // Assert
+      expect(sameUserNewToken.body.verifyToken).not.toEqual(oldToken);
+      expect(sameUserNewToken.body.verifyTokenExpire).not.toEqual(oldExpire);
+    });
+  });
+
+  // Verify Email
+  describe("PUT /api/auth/verifyemail/:verifytoken", () => {
+    const createValidUser = async () => {
+      // signup new user to retrieve a valid token
+      // NOTE dependant on signup working.
+      return await request(app)
+        .post("/api/users/")
+        .set("my_user-agent", "react")
+        .send({
+          email: "test@test.com",
+          name: "fredags",
+          password: "Passw0rd!",
+        })
+        .expect(201);
+    };
+
+    it("sets verifiedEmail to true with valid verifyToken", async () => {
+      // Arrange
+      const response = await createValidUser();
+      // Act
+      await request(app)
+        .put(`/api/auth/verifyemail/${response.body.verifyToken}`)
+        .set("my_user-agent", "react")
+        .send({})
+        .expect(200);
+      // Assert
+      const user: IUser = await request(app)
+        .get(`/api/auth`)
+        .set("x-auth-token", response.body.token)
+        .expect(200);
+
+      expect(user.verifiedEmail).toBe(true);
+    });
+
+    it("fails to set verifiedEmail to true with invalid verifyToken", async () => {
+      // Arrange
+      const invalidToken = "invalidToken";
+      // Act
+      await request(app)
+        .put(`/api/auth/verifyemail/${invalidToken}`)
+        .set("my_user-agent", "react")
+        .send({})
+        .expect(200);
+      // Assert
+      const user: IUser = await request(app)
+        .get(`/api/auth`)
+        .set("x-auth-token", response.body.token)
+        .expect(200);
+
+      expect(user.verifiedEmail).toBe(false);
+    });
+
+    it("fails to set verifiedEmail to true with expired verifyToken", async () => {
+      // Arrange
+      const expiredToken = "missing atm, replace this when implemented";
+      // Act
+      await request(app)
+        .put(`/api/auth/verifyemail/${expiredToken}`)
+        .set("my_user-agent", "react")
+        .send({})
+        .expect(400);
+      // Assert
     });
   });
 });

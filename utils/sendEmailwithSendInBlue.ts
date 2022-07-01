@@ -23,7 +23,7 @@ const transactionalEmailApi = new Sib.TransactionalEmailsApi();
 // Create receivers
 /* const receivers = [
   {
-    email: "fredrik_hjelmaeus@hotmail.com",
+    email: "gemigpost@hotmail.com",
   },
 ]; */
 

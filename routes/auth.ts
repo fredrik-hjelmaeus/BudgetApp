@@ -178,7 +178,7 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    console.log("validation complete, checking token");
+
     try {
       // Get hashed token
       const resetPasswordToken = crypto
@@ -305,6 +305,30 @@ router.put(
   }
 );
 
+// @desc    Send email verification
+// @route   POST api/auth/sendemailverification
+// @access  Public
+router.post("/sendemailverification", async (req, res) => {
+  // get user email
+  // if not exist, 400
+  // verify user exist and does not have a verified email.
+  // if already verified, 400
+  // create verifyEmailToken on user
+  // send email with verifyEmailToken
+});
+
+// @desc          Verify email/user
+// @route         PUT /api/auth/verifyemail/:verifytoken
+// @access        Private via temp-token
+router.put("/verifyemail/:verifytoken", async (req, res) => {
+  // get token from params
+  // if no token, 400
+  // verify token
+  // if not verified, 400
+  // if verified, update userfield verifiedEmail:true in db.
+  // send user to webpage confirming email is verified
+});
+
 // TEMP
 // @route   POST api/auth/sendinblue
 // @desc    Forgot password
@@ -315,7 +339,7 @@ router.post(
   async (req: Request, res: Response) => {
     //validate : check if a valid mail syntax was used
     const errors = validationResult(req);
-    console.log("first");
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -351,7 +375,7 @@ router.post(
           email: user.email,
         };
         const sibResponse = await sendMail(sender, receivers, "Password Reset Request", message);
-        console.log(sibResponse);
+
         return res.status(200).json({ success: true, data: "Email sent" });
       } catch (err) {
         console.log(err);

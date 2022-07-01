@@ -68,7 +68,6 @@ const verifyEnvironmentVariables = () => {
   }
 };
 
-console.log("env mode:", process.env.NODE_ENV);
 // Connect Database
 process.env.NODE_ENV !== "test" && verifyEnvironmentVariables();
 process.env.NODE_ENV !== "test" && process.env.mongoURI && connectDB(process.env.mongoURI);
