@@ -198,7 +198,7 @@ describe("authorization flow", () => {
       expect(response.body.token).toBeUndefined();
     });
 
-    it.only("fails to login if email is not verified", async () => {
+    it("fails to login if email is not verified", async () => {
       // NOTE dependant on signup working.
       // signup new user to retrieve a valid token
       await request(app)

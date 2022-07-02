@@ -60,6 +60,11 @@ router.post(
         return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
       }
 
+      // if email is not verified
+      if (!user.verifiedEmail) {
+        return res.status(400).json({ errors: [{ msg: "Email is not verified" }] });
+      }
+
       // check that provided password matches fetched user from dbs password
       const isMatch = await bcrypt.compare(password, user.password);
 
