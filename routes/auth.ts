@@ -324,7 +324,7 @@ router.post("/sendemailverification", async (req, res) => {
     return res.status(400).json({ errors: [{ msg: "User is already verified" }] });
   }
   // create verifyEmailToken on user and save
-  const verifyToken = user.getVerifyEmailToken();
+  const verifyToken: string = user.getVerifyEmailToken(false);
   await user.save();
 
   // send email with verifyEmailToken
@@ -346,18 +346,16 @@ router.put("/verifyemail/:verifytoken", async (req, res) => {
       .update(req.params.verifytoken)
       .digest("hex");
 
-    console.log("verifyEmailtoken:", verifyEmailToken);
     const user = await User.findOne({
       verifyEmailToken,
-      //    verifyEmailExpire: { $gt: Date.now() },
+      verifyEmailExpire: { $gt: Date.now() },
     });
-    console.log(user);
+
     if (!user) {
       return res.status(400).json({ errors: [{ msg: "Expired or Invalid token" }] });
     }
 
     // set verifyEmail to true
-    console.log("did we get here ?");
     user.verifiedEmail = true;
 
     user.verifyEmailToken = undefined;

@@ -49,8 +49,6 @@ router.post(
         name,
         email,
         password,
-        //  verifyEmailToken: crypto.randomBytes(20).toString("hex"),
-        //   verifyEmailExpire: new Date(Date.now() + 10 * 60 * 1000),
       });
 
       // encrypt password
@@ -61,11 +59,11 @@ router.post(
       // save user to db
       await newUser.save();
 
-      const verifyToken = newUser.getVerifyEmailToken();
+      const verifyToken = newUser.getVerifyEmailToken(false);
 
+      // save yet another time user to db TODO: mongoose middleware.pre instead of this?
       await newUser.save();
 
-      console.log(newUser, new Date());
       // send email with verifyEmailToken
       await verifyEmail(req, res, newUser, verifyToken);
 

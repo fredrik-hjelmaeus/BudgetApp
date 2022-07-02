@@ -794,7 +794,7 @@ describe("authorization flow", () => {
   });
 
   // Verify Email
-  describe("PUT /api/auth/verifyemail/:verifytoken", () => {
+  describe.only("PUT /api/auth/verifyemail/:verifytoken", () => {
     const createValidUser = async () => {
       // signup new user to retrieve a valid token
       // NOTE dependant on signup working.
@@ -830,9 +830,10 @@ describe("authorization flow", () => {
       expect(thirdResponse.body).toBe(true);
     });
 
-    it.only("fails to set verifiedEmail to true with invalid verifyToken", async () => {
+    it("fails to set verifiedEmail to true with invalid verifyToken", async () => {
       // Arrange
       const response = await createValidUser();
+
       const invalidToken = "invalidToken";
       // Act & Assert
       await request(app)
@@ -851,14 +852,26 @@ describe("authorization flow", () => {
 
     it("fails to set verifiedEmail to true with expired verifyToken", async () => {
       // Arrange
-      const expiredToken = "missing atm, replace this when implemented";
-      // Act
+      await createValidUser();
+      let expiredToken: string = "";
+      try {
+        const user = await User.findOne({ email: "test@test.com" });
+        if (!user) {
+          throw new Error("User not found");
+        }
+        expiredToken = user.getVerifyEmailToken(true);
+        await user.save();
+        console.log(user);
+      } catch (error) {
+        console.log(error);
+      }
+
+      // Act & Assert
       await request(app)
         .put(`/api/auth/verifyemail/${expiredToken}`)
         .set("my_user-agent", "react")
         .send({})
         .expect(400);
-      // Assert
     });
   });
 });

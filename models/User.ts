@@ -15,7 +15,7 @@ export interface IUser extends IUserInput, mongoose.Document {
   verifyEmailToken: string | undefined;
   verifyEmailExpire: Date | undefined;
   getResetPasswordToken(): string;
-  getVerifyEmailToken(): string;
+  getVerifyEmailToken(expired: boolean): string;
 }
 
 const UserSchema = new mongoose.Schema({
@@ -61,15 +61,15 @@ UserSchema.methods.getResetPasswordToken = function (): string {
 };
 
 // Generate and hash verifyEmail-token
-UserSchema.methods.getVerifyEmailToken = function (): string {
+UserSchema.methods.getVerifyEmailToken = function (expired: boolean): string {
   // Generate token
   const verifyToken = crypto.randomBytes(20).toString("hex");
 
   // Hash token and set to resetPasswordToken field
   this.verifyEmailToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
 
-  // Set expire
-  this.verifyEmailExpire = Date.now() + 10 * 60 * 1000;
+  // Set expire, if expired is true it expires instantly. Used for testing purposes only.
+  this.verifyEmailExpire = expired ? Date.now() : Date.now() + 10 * 60 * 1000;
 
   return verifyToken;
 };
