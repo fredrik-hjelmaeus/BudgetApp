@@ -1,12 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import { IUser } from "../models/User";
 import sendEmail from "./sendEmail";
-const verifyEmail = async (req: Request, res: Response, user: IUser) => {
+const verifyEmail = async (req: Request, res: Response, user: IUser, verifyToken: string) => {
   // send email with verifyEmailToken
   const verifyEmailTokenURL =
     process.env.NODE_ENV === "production"
-      ? `${req.protocol}s://${req.get("host")}/verifyemail/${user.verifyEmailToken}` //`https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
-      : `http://localhost:3000/verifyemail/${user.verifyEmailToken}`;
+      ? `${req.protocol}s://${req.get("host")}/verifyemail/${verifyToken}` //`https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
+      : `http://localhost:3000/verifyemail/${verifyToken}`;
 
   const EmailMessage = `Please click here to verify your email: \n\n ${verifyEmailTokenURL}`;
 

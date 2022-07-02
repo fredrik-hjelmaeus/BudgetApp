@@ -743,32 +743,53 @@ describe("authorization flow", () => {
       expect(sendEmail).toBeCalledTimes(0);
     });
 
-    it.only("creates verifyToken upon user creation", async () => {
+    it("creates verifyToken upon user creation", async () => {
       // Arrange
-      // Act
       const response = await createValidUser();
-      console.log(response.body);
+      // Act
+
+      const res = await request(app)
+        .get("/api/auth/")
+        .set("my_user-agent", "react")
+        .set("x-auth-token", response.body.token)
+        .expect(200);
+
       // Assert
-      expect(response.body.verifyToken).toBeDefined();
-      expect(response.body.verifyTokenExpire).toBeDefined();
+      expect(res.body.verifyEmailToken).toBeDefined();
+      expect(res.body.verifyEmailExpire).toBeDefined();
     });
 
     it("creates new verifyToken upon user request", async () => {
       // Arrange
+      // create user
       const response = await createValidUser();
-      const oldToken = response.body.verifyToken;
-      const oldExpire = response.body.verifyTokenExpire;
+      // get user
+      const getUserResponse = await request(app)
+        .get("/api/auth/")
+        .set("my_user-agent", "react")
+        .set("x-auth-token", response.body.token)
+        .expect(200);
+      const oldToken = getUserResponse.body.verifyEmailToken;
+      const oldExpire = getUserResponse.body.verifyEmailExpire;
       expect(oldToken).toBeDefined();
       expect(oldExpire).toBeDefined();
       // Act
-      const sameUserNewToken = await request(app)
+      // request to send new verification to email
+      await request(app)
         .post("/api/auth/sendemailverification")
         .set("my_user-agent", "react")
         .send({ email: "test@test.com" })
         .expect(200);
       // Assert
-      expect(sameUserNewToken.body.verifyToken).not.toEqual(oldToken);
-      expect(sameUserNewToken.body.verifyTokenExpire).not.toEqual(oldExpire);
+      // get user
+      const res = await request(app)
+        .get("/api/auth/")
+        .set("my_user-agent", "react")
+        .set("x-auth-token", response.body.token)
+        .expect(200);
+
+      expect(res.body.verifyEmailToken).not.toEqual(oldToken);
+      expect(res.body.verifyEmailExpire).not.toEqual(oldExpire);
     });
   });
 
@@ -788,22 +809,25 @@ describe("authorization flow", () => {
         .expect(201);
     };
 
-    it("sets verifiedEmail to true with valid verifyToken", async () => {
+    it.only("sets verifiedEmail to true with valid verifyToken", async () => {
       // Arrange
+      // create user
       const response = await createValidUser();
       // Act
-      await request(app)
-        .put(`/api/auth/verifyemail/${response.body.verifyToken}`)
-        .set("my_user-agent", "react")
-        .send({})
-        .expect(200);
-      // Assert
+      // get user
       const res = await request(app)
         .get("/api/auth/")
         .set("my_user-agent", "react")
         .set("x-auth-token", response.body.token);
 
-      expect(res.body.verifiedEmail).toBe(true);
+      const thirdResponse = await request(app)
+        .put(`/api/auth/verifyemail/${response.body.verifyToken}`)
+        .set("my_user-agent", "react")
+        .send({})
+        .expect(200);
+
+      // Assert
+      expect(thirdResponse.body).toBe(true);
     });
 
     it("fails to set verifiedEmail to true with invalid verifyToken", async () => {

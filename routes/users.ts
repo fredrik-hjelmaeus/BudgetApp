@@ -49,8 +49,8 @@ router.post(
         name,
         email,
         password,
-        verifyEmailToken: crypto.randomBytes(20).toString("hex"),
-        verifyEmailExpire: new Date(Date.now() + 10 * 60 * 1000),
+        //  verifyEmailToken: crypto.randomBytes(20).toString("hex"),
+        //   verifyEmailExpire: new Date(Date.now() + 10 * 60 * 1000),
       });
 
       // encrypt password
@@ -61,8 +61,13 @@ router.post(
       // save user to db
       await newUser.save();
 
+      const verifyToken = newUser.getVerifyEmailToken();
+
+      await newUser.save();
+
+      console.log(newUser, new Date());
       // send email with verifyEmailToken
-      await verifyEmail(req, res, newUser);
+      await verifyEmail(req, res, newUser, verifyToken);
 
       // create jsonwebtoken
       const payload = {
@@ -82,13 +87,13 @@ router.post(
           },
           (err, token) => {
             if (err) throw err;
-            res.status(201).json({ token });
+            res.status(201).json({ token, verifyToken });
           }
         );
       } else {
         jwt.sign(payload, process.env.jwtSecret!, (err, token) => {
           if (err) throw err;
-          res.status(201).json({ token });
+          res.status(201).json({ token, verifyToken });
         });
       }
     } catch (err: unknown) {

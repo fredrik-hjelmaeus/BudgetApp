@@ -324,10 +324,11 @@ router.post("/sendemailverification", async (req, res) => {
     return res.status(400).json({ errors: [{ msg: "User is already verified" }] });
   }
   // create verifyEmailToken on user and save
-  user.getVerifyEmailToken();
+  const verifyToken = user.getVerifyEmailToken();
   await user.save();
+
   // send email with verifyEmailToken
-  await verifyEmail(req, res, user);
+  await verifyEmail(req, res, user, verifyToken);
 
   // return 200
   res.status(200).json({ msg: "Email Verification Sent" });
@@ -337,7 +338,37 @@ router.post("/sendemailverification", async (req, res) => {
 // @route         PUT /api/auth/verifyemail/:verifytoken
 // @access        Private via temp-token
 router.put("/verifyemail/:verifytoken", async (req, res) => {
-  // get token from params
+  try {
+    // get token from params
+    // Get hashed token
+    const verifyEmailToken = crypto
+      .createHash("sha256")
+      .update(req.params.verifytoken)
+      .digest("hex");
+
+    console.log("verifyEmailtoken:", verifyEmailToken);
+    const user = await User.findOne({
+      verifyEmailToken,
+      //    verifyEmailExpire: { $gt: Date.now() },
+    });
+    console.log(user);
+    if (!user) {
+      return res.status(400).json({ errors: [{ msg: "Expired or Invalid token" }] });
+    }
+
+    // set verifyEmail to true
+    console.log("did we get here ?");
+    user.verifiedEmail = true;
+
+    user.verifyEmailToken = undefined;
+    user.verifyEmailExpire = undefined;
+    await user.save();
+
+    res.status(200).json(user.verifiedEmail);
+  } catch (err: unknown) {
+    if (err instanceof Error) console.error(err.message);
+    res.status(500).json({ errors: [{ msg: "Server Error" }] });
+  }
   // if no token, 400
   // verify token
   // if not verified, 400
