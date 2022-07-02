@@ -809,7 +809,7 @@ describe("authorization flow", () => {
         .expect(201);
     };
 
-    it.only("sets verifiedEmail to true with valid verifyToken", async () => {
+    it("sets verifiedEmail to true with valid verifyToken", async () => {
       // Arrange
       // create user
       const response = await createValidUser();
@@ -830,16 +830,16 @@ describe("authorization flow", () => {
       expect(thirdResponse.body).toBe(true);
     });
 
-    it("fails to set verifiedEmail to true with invalid verifyToken", async () => {
+    it.only("fails to set verifiedEmail to true with invalid verifyToken", async () => {
       // Arrange
       const response = await createValidUser();
       const invalidToken = "invalidToken";
-      // Act
+      // Act & Assert
       await request(app)
         .put(`/api/auth/verifyemail/${invalidToken}`)
         .set("my_user-agent", "react")
         .send({})
-        .expect(200);
+        .expect(400);
       // Assert
       const res = await request(app)
         .get(`/api/auth`)
