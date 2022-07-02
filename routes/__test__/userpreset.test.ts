@@ -1,5 +1,6 @@
 import request from "supertest";
 import app from "../../app";
+jest.mock("../../utils/sendEmail");
 
 describe("Get logged in user all presets", () => {
   it("successfully gets only the users presets", async () => {

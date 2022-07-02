@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../../app";
 import path from "path";
+jest.mock("../../utils/sendEmail");
 
 // All below tests rely on testfiles stored in _data/csv_testfiles/ -folder
 

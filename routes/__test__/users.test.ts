@@ -1,5 +1,7 @@
 import app from "../../app";
 import request from "supertest";
+// prevents sendEmail from sending mail
+jest.mock("../../utils/sendEmail");
 
 describe("User SignUp", () => {
   it("returns a 201 on successful signup using mobile-app", async () => {

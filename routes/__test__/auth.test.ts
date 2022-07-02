@@ -8,6 +8,7 @@ jest.mock("../../utils/sendEmail");
 import sendEmail from "../../utils/sendEmail";
 
 describe("authorization flow", () => {
+  afterEach(() => jest.resetAllMocks());
   // Get Current User
   describe("GET api/auth", () => {
     it("get logged in user data", async () => {
@@ -195,7 +196,6 @@ describe("authorization flow", () => {
   });
   // Forgot Password
   describe("POST api/auth/forgotpassword", () => {
-    afterEach(() => jest.resetAllMocks());
     it("sentEmail called when correct email is provided", async () => {
       // NOTE dependant on signup working.
       // signup new user to retrieve a valid token
@@ -217,8 +217,9 @@ describe("authorization flow", () => {
       .send({ email: 'gris@test.com' })
       .expect(200)
 
-      expect(sendEmail).toBeCalledTimes(1);
+      expect(sendEmail).toBeCalledTimes(2); // sends one mail on user register to verify email and then a second when forgot password
     });
+
     it("sentEmail NOT called when invalid email is provided", async () => {
       // NOTE dependant on signup working.
       // signup new user to retrieve a valid token
@@ -240,7 +241,7 @@ describe("authorization flow", () => {
       .send({ email: 'gristest.com' })
       .expect(400)
 
-      expect(sendEmail).toBeCalledTimes(0);
+      expect(sendEmail).toBeCalledTimes(1); // sends one mail on user register to verify email
     });
     it("sentEmail NOT called when no email field is provided", async () => {
       // NOTE dependant on signup working.
@@ -263,7 +264,7 @@ describe("authorization flow", () => {
       .send({})
       .expect(400)
 
-      expect(sendEmail).toBeCalledTimes(0);
+      expect(sendEmail).toBeCalledTimes(1); // sends one mail on user register to verify email
     });
   });
   // Reset Password
@@ -794,7 +795,8 @@ describe("authorization flow", () => {
   });
 
   // Verify Email
-  describe.only("PUT /api/auth/verifyemail/:verifytoken", () => {
+  describe("PUT /api/auth/verifyemail/:verifytoken", () => {
+    afterEach(() => jest.resetAllMocks());
     const createValidUser = async () => {
       // signup new user to retrieve a valid token
       // NOTE dependant on signup working.
@@ -861,7 +863,6 @@ describe("authorization flow", () => {
         }
         expiredToken = user.getVerifyEmailToken(true);
         await user.save();
-        console.log(user);
       } catch (error) {
         console.log(error);
       }
