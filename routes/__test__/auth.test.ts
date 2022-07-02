@@ -114,6 +114,7 @@ describe("authorization flow", () => {
         .expect(200);
       expect(response.body.token).toBeDefined();
     });
+
     it("Auth user & get token mobile", async () => {
       // NOTE dependant on signup working.
       // signup new user to retrieve a valid token
@@ -136,6 +137,7 @@ describe("authorization flow", () => {
         .expect(200);
       expect(response.body.token).toBeDefined();
     });
+
     it("fails with valid email but no user in database", async () => {
       const response = await request(app)
         .post("/api/auth")
@@ -146,6 +148,7 @@ describe("authorization flow", () => {
         .expect(400);
       expect(response.body.token).toBeUndefined();
     });
+
     it("fails with invalid email", async () => {
       // NOTE dependant on signup working.
       // signup new user to retrieve a valid token
@@ -168,6 +171,7 @@ describe("authorization flow", () => {
         .expect(400);
       expect(response.body.token).toBeUndefined();
     });
+
     it("fails with invalid password", async () => {
       // NOTE dependant on signup working.
       // signup new user to retrieve a valid token
@@ -192,6 +196,29 @@ describe("authorization flow", () => {
       expect(response.body.errors[0].msg).toEqual("Invalid Credentials");
       // no token should be provided
       expect(response.body.token).toBeUndefined();
+    });
+
+    it.only("fails to login if email is not verified", async () => {
+      // NOTE dependant on signup working.
+      // signup new user to retrieve a valid token
+      await request(app)
+        .post("/api/users/")
+        .send({
+          email: "gris@test.com",
+          name: "fredags",
+          password: "Passw0rd!",
+        })
+        .expect(201);
+
+      //login user with email and password
+      const response = await request(app)
+        .post("/api/auth")
+        .send({
+          email: "gris@test.com",
+          password: "Passw0rd!",
+        })
+        .expect(400);
+      expect(response.body.errors[0].msg).toEqual("Email is not verified");
     });
   });
   // Forgot Password
