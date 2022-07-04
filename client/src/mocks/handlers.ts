@@ -435,6 +435,13 @@ export const handlers = [
       );
     }
   ),
+  rest.post("http://localhost/api/auth/sendemailverification", (req, res, ctx) => {
+    return res(
+      ctx.json({
+        msg: "Email Verification Sent",
+      })
+    );
+  }),
   // update user password
   rest.put(`http://localhost/api/auth/updatepassword`, (req, res, ctx) => {
     return res(
