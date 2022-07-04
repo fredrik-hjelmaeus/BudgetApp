@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import {
   render,
   screen,
@@ -803,7 +804,7 @@ describe("MonthSavingsSummary unit tests", () => {
     expect(monthSavingsHeader).not.toBeInTheDocument();
   });
 
-  test("editing name,number and category on saving works correctly", async () => {
+  test.only("editing name,number and category on saving works correctly", async () => {
     await setupSpecial();
 
     // go to april month
@@ -811,7 +812,6 @@ describe("MonthSavingsSummary unit tests", () => {
     aprilButton && fireEvent.click(aprilButton);
 
     // click number on saving
-
     fireEvent.click(await screen.findByRole("button", { name: /2000/i }));
 
     // edit number
@@ -852,12 +852,13 @@ describe("MonthSavingsSummary unit tests", () => {
     // submit edited number
     fireEvent.click(updateBtn);
     // await waitForElementToBeRemoved(updateBtn);
-
+    await waitFor(() => {
+      expect(updateBtn).not.toBeInTheDocument();
+    });
     // expect the number to have been changed
     await waitFor(() => {
-      expect(screen.getByLabelText("Number")).toHaveValue(66);
+      expect(screen.getByRole("button", { name: /66/i })).toBeInTheDocument();
     });
-    // expect(await screen.findByRole("button", { name: /66/i })).toBeInTheDocument();
 
     // click name on saving
     fireEvent.click(await screen.findByRole("button", { name: "saving" }));

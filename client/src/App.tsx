@@ -17,6 +17,7 @@ import GuideState from "./context/guide/GuideState";
 import DateState from "./context/date/DateState";
 import setAuthToken from "./utils/setAuthToken";
 import LoginModal from "./components/auth/LoginModal";
+import VerifyEmail from "./components/auth/VerifyEmail";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -41,6 +42,7 @@ const App = () => {
                         <Route path="/about" element={<About />} />
                         <Route path="/Landing" element={<Landing />} />
                         <Route path="/resetpassword/:id" element={<ResetPassword />} />
+                        <Route path="/verifyemail/:id" element={<VerifyEmail />} />
                       </Routes>
                     </div>
                     <Footer />

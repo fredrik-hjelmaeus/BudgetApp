@@ -21,6 +21,10 @@ import {
   UPDATE_DETAILS_SUCCESS,
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_SUCCESS,
+  SEND_VERIFICATION_SUCCESS,
+  SEND_VERIFICATION_FAIL,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAIL,
 } from "../types";
 import { IRegisterFormData } from "../../frontend-types/IRegisterFormData";
 import { IAuthState } from "../../frontend-types/IAuthContext";
@@ -189,6 +193,41 @@ const AuthState = (props: { children: ReactNode }) => {
     }
   };
 
+  // sendEmailVerification
+  const sendEmailVerification = async (formData: { email: string }) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "My_User-Agent": "react",
+      },
+    };
+
+    try {
+      const res: AxiosResponse = await axios.post(
+        "/api/auth/sendemailverification",
+        formData,
+        config
+      );
+
+      dispatch({
+        type: SEND_VERIFICATION_SUCCESS,
+        payload: res.data,
+      });
+    } catch (err: unknown | AxiosError) {
+      if (axios.isAxiosError(err)) {
+        const serverError = err as AxiosError<IErrorResponse>;
+        if (serverError.response) {
+          dispatch({
+            type: SEND_VERIFICATION_FAIL,
+            payload: serverError?.response?.data.errors,
+          });
+        }
+      } else {
+        console.log(err);
+      }
+    }
+  };
+
   //Reset Password
   const resetPassword = async (formData: { token: string; password: string }): Promise<void> => {
     const { token } = formData;
@@ -203,6 +242,26 @@ const AuthState = (props: { children: ReactNode }) => {
         if (serverError.response) {
           dispatch({
             type: RESET_PASSWORD_FAIL,
+            payload: serverError?.response?.data.errors,
+          });
+        }
+      } else {
+        console.log(err);
+      }
+    }
+  };
+
+  // verify Email
+  const verifyEmail = async (token: string): Promise<void> => {
+    try {
+      const res = await axios.put(`/api/auth/verifyToken/${token}`);
+      dispatch({ type: VERIFY_EMAIL_SUCCESS, payload: res.data });
+    } catch (err: unknown | AxiosError) {
+      if (axios.isAxiosError(err)) {
+        const serverError = err as AxiosError<IErrorResponse>;
+        if (serverError.response) {
+          dispatch({
+            type: VERIFY_EMAIL_FAIL,
             payload: serverError?.response?.data.errors,
           });
         }
@@ -294,6 +353,8 @@ const AuthState = (props: { children: ReactNode }) => {
         updateDetails,
         updatePassword,
         clearAlerts,
+        sendEmailVerification,
+        verifyEmail,
       }}
     >
       {props.children}

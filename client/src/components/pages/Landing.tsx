@@ -6,6 +6,7 @@ import RegisterModal from "../auth/RegisterModal";
 import ForgotPassword from "../auth/ForgotPassword";
 import AuthContext from "../../context/auth/authContext";
 import { Navigate } from "react-router-dom";
+import NotVerifiedEmailModal from "../auth/NotVerifiedEmailModal";
 
 const Landing = () => {
   const cssContext = useContext(CssContext);
@@ -46,6 +47,7 @@ const Landing = () => {
       {modal === "login" && <LoginModal />}
       {modal === "register" && <RegisterModal />}
       {modal === "forgot" && <ForgotPassword />}
+      {modal === "notVerifiedEmailModal" && <NotVerifiedEmailModal />}
       {modal === "" && (
         <div className="Landing">
           <Logo title={"Budget App"} />

@@ -19,6 +19,10 @@ import {
   UPDATE_DETAILS_SUCCESS,
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_SUCCESS,
+  SEND_VERIFICATION_SUCCESS,
+  SEND_VERIFICATION_FAIL,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAIL,
 } from "../types";
 
 type ActionType =
@@ -38,7 +42,11 @@ type ActionType =
   | { type: typeof CLEAR_ALERTS }
   | { type: typeof UPDATE_DETAILS_SUCCESS; payload: string }
   | { type: typeof RESET_PASSWORD_FAIL; payload: IError[] }
-  | { type: typeof RESET_PASSWORD_SUCCESS; payload: string };
+  | { type: typeof RESET_PASSWORD_SUCCESS; payload: string }
+  | { type: typeof SEND_VERIFICATION_SUCCESS; payload: string }
+  | { type: typeof SEND_VERIFICATION_FAIL; payload: IError[] }
+  | { type: typeof VERIFY_EMAIL_SUCCESS; payload: string }
+  | { type: typeof VERIFY_EMAIL_FAIL; payload: IError[] };
 
 const authReducer = (state: IAuthState, action: ActionType) => {
   switch (action.type) {
@@ -63,6 +71,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case FORGOT_FAIL:
+    case SEND_VERIFICATION_FAIL:
       localStorage.removeItem("token");
       return {
         ...state,
@@ -87,6 +96,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
         errors: [],
       };
     case FORGOT_SUCCESS:
+    case SEND_VERIFICATION_SUCCESS:
       return {
         ...state,
         mailsentmsg: action.payload,
@@ -94,6 +104,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case UPDATE_PASSWORD_FAIL:
     case UPDATE_DETAILS_FAIL:
     case RESET_PASSWORD_FAIL:
+    case VERIFY_EMAIL_FAIL:
       return {
         ...state,
         errors: [...state.errors, ...action.payload],
@@ -101,6 +112,7 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case UPDATE_PASSWORD_SUCCESS:
     case UPDATE_DETAILS_SUCCESS:
     case RESET_PASSWORD_SUCCESS:
+    case VERIFY_EMAIL_SUCCESS:
       return {
         ...state,
         alerts: [...state.alerts, action.payload],

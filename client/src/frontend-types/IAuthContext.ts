@@ -23,4 +23,6 @@ export interface IAuthContext extends IAuthState {
   updateDetails(details: object): void;
   updatePassword(formData: { currentPassword: string; password: string }): Promise<void>;
   clearAlerts(): void;
+  sendEmailVerification(formData: { email: string }): Promise<void>;
+  verifyEmail(token: string): Promise<void>;
 }

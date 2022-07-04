@@ -24,15 +24,25 @@ export const LoginModal = () => {
 
   useEffect(() => {
     let isMounted = true;
+
     if (authContext?.isAuthenticated && isMounted) {
       toggleModal("");
     }
 
     if (errors.length > 0 && isMounted) {
       // TODO: replace this with logging message to report wrong structured error message response
-      errors.map(
-        (error) => error && error.msg !== "No token found" && setAlert(error?.msg, "danger")
-      );
+      errors.map((error) => {
+        switch (error.msg) {
+          case "No token found":
+            break;
+          case "Email is not verified":
+            return toggleModal("notVerifiedEmailModal");
+          default:
+            return setAlert(error?.msg, "danger");
+        }
+
+        return null;
+      });
       clearErrors();
     }
 

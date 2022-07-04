@@ -367,7 +367,7 @@ router.put("/verifyemail/:verifytoken", async (req, res) => {
     user.verifyEmailExpire = undefined;
     await user.save();
 
-    res.status(200).json(user.verifiedEmail);
+    res.status(200).json("Email Verified");
   } catch (err: unknown) {
     if (err instanceof Error) console.error(err.message);
     res.status(500).json({ errors: [{ msg: "Server Error" }] });

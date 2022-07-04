@@ -184,7 +184,7 @@ const PresetState = (props: { children: ReactNode }) => {
 
     try {
       const res = await axios.put(`/api/userpreset/${preset._id}`, preset, config);
-      console.log(res.data);
+
       dispatch({ type: SEND_EDIT, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {

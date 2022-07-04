@@ -343,14 +343,7 @@ export const handlers = [
       })
     );
   }),
-  // delete preset
-  /*   rest.delete(`http://localhost/api/userpreset/61edb19ec557568270d9349a`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        msg: "Preset removed",
-      })
-    );
-  }), */
+
   // upload csv
   rest.post("http://localhost/api/userpreset/upload", (req, res, ctx) => {
     return res(

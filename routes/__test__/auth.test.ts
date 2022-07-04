@@ -856,7 +856,7 @@ describe("authorization flow", () => {
         .expect(200);
 
       // Assert
-      expect(thirdResponse.body).toBe(true);
+      expect(thirdResponse.body).toBe("Email Verified");
     });
 
     it("fails to set verifiedEmail to true with invalid verifyToken", async () => {

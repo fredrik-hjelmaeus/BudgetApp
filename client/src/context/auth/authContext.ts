@@ -21,6 +21,8 @@ const authContext = createContext<IAuthContext>({
   updateDetails: (formData: { name: string; email: string }) => Promise.resolve(),
   updatePassword: (formData: { currentPassword: string; password: string }) => Promise.resolve(),
   clearAlerts: () => {},
+  sendEmailVerification: (formData: { email: string }) => Promise.resolve(),
+  verifyEmail: () => Promise.resolve(),
 });
 
 export default authContext;

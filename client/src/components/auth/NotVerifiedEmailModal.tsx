@@ -3,17 +3,17 @@ import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
 import CssContext from "../../context/css/cssContext";
 import PersonIcon from "../layout/images/PersonIcon";
-import ForgotMailInput from "./ForgotMailInput";
-import ForgotMailSent from "./ForgotMailSent";
 import Alerts from "../layout/Alerts";
+import VerifyMailSent from "./VerifyMailSent";
+import VerifyMailInput from "./VerifyMailInput";
 
-export const ForgotPassword = () => {
+export const NotVerifiedEmailModal = () => {
   // Authentication
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { errors, clearErrors, forgotPassword, mailsentmsg } = authContext;
+  const { errors, clearErrors, sendEmailVerification, mailsentmsg } = authContext;
 
   const [user, setUser] = useState({
     email: "",
@@ -30,7 +30,7 @@ export const ForgotPassword = () => {
     if (email === "") {
       setAlert("Please fill in your email", "danger");
     } else {
-      forgotPassword({
+      sendEmailVerification({
         email,
       });
     }
@@ -67,13 +67,13 @@ export const ForgotPassword = () => {
               <PersonIcon />
             </div>
             {/*  <img src={personicon} alt='img'></img> */}
-            <h1>Forgot Password</h1>
+            {!mailSent && <h1>Email Not Verified</h1>}
           </div>
           <Alerts />
           {mailSent ? (
-            <ForgotMailSent email={email} />
+            <VerifyMailSent email={email} />
           ) : (
-            <ForgotMailInput
+            <VerifyMailInput
               email={email}
               onChange={onChange}
               onClick={onClick}
@@ -86,4 +86,4 @@ export const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default NotVerifiedEmailModal;
