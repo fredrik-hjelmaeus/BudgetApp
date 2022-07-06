@@ -383,7 +383,7 @@ router.put("/verifyemail/:verifyToken", async (req, res) => {
 // @route   POST api/auth/sendinblue
 // @desc    Forgot password
 // @access  Public
-router.post(
+/* router.post(
   "/sendinblue",
   [check("email", "Please include a valid email").isEmail()],
   async (req: Request, res: Response) => {
@@ -441,6 +441,6 @@ router.post(
       res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
-);
+); */
 
 export = router;
