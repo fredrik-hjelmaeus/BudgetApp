@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import { IUser } from "../models/User";
 import sendEmail from "./sendEmail";
+
 const verifyEmail = async (req: Request, res: Response, user: IUser, verifyToken: string) => {
   // send email with verifyEmailToken
   const verifyEmailTokenURL =

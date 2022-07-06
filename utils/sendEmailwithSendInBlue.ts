@@ -31,11 +31,19 @@ type sender = {
   email: string;
   name: string;
 };
-type receivers = {
+type receiver = {
   email: string;
 };
 
-function sendMail(sender: sender, receivers: receivers, subject: string, content: string) {
+function sendEMailWithSendInBlue(
+  sender: sender,
+  receiver: receiver,
+  subject: string,
+  content: string
+) {
+  const receivers = [];
+  receivers.push(receiver);
+  console.log("sib debug params:", sender, receiver, subject, content);
   // Should only be sent with either html or textcontent. But below
   // i show both. htmlcontent overrides textcontent
   // Send in blue also has a template system
@@ -63,4 +71,4 @@ function sendMail(sender: sender, receivers: receivers, subject: string, content
     .catch(console.log); */
 }
 
-export default sendMail;
+export default sendEMailWithSendInBlue;

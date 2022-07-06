@@ -1,42 +1,25 @@
-//import nodemailer from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
-//const config = require("config");
-const nodemailer = require("nodemailer");
-import isObjectEmpty from "./isObjectEmpty";
+import { ISendEmailOptions } from "./ISendEmailOptions";
+import sendEmailWithNodeMailer from "./sendEmailWithNodeMailer";
+import sendEmailWithSendInBlue from "./sendEmailWithSendInBlue";
 
-export interface ISendEmailOptions {
-  email: string;
-  subject: string;
-  message: string;
-}
-
-// This should be wrapped in outer function and instead Inject whatever mailserviceprovider we choose as an arg input.
-// If the the await fails,error is catched in the controller atm.
-// validation of email is also done in the controller
-const sendEmail = async (options: ISendEmailOptions) => {
-  //validate options argument recieved
-  if (isObjectEmpty(options)) {
-    return "No options provided to sendEmail";
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    auth: {
-      user: process.env.SMTP_EMAIL, //config.get("SMTP_EMAIL"),
-      pass: process.env.SMTP_PASSWORD, //config.get("SMTP_PASSWORD"),
-    },
-  });
-
-  //  define transport object
-  const message = {
-    from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
+const sendEmail = (options: ISendEmailOptions) => {
+  console.log(options);
+  //  Mapping to SendInBlue API
+  const sender = {
+    email: process.env.SENDINBLUE_SENDER_EMAIL || "",
+    name: process.env.SENDINBLUE_SENDER_NAME || "",
   };
-  const info = await transporter.sendMail(message);
-  process.env.NODE_ENV === "development" && console.log("Message sent: %s", info.messageId);
+  const receiver = {
+    email: options.email,
+  };
+
+  try {
+    process.env.NODE_ENV === "development"
+      ? sendEmailWithNodeMailer(options)
+      : sendEmailWithSendInBlue(sender, receiver, options.subject, options.message);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default sendEmail;
