@@ -254,7 +254,8 @@ const AuthState = (props: { children: ReactNode }) => {
   // verify Email
   const verifyEmail = async (token: string): Promise<void> => {
     try {
-      const res = await axios.put(`/api/auth/verifyToken/${token}`);
+      const res = await axios.put(`/api/auth/verifyEmail/${token}`);
+
       dispatch({ type: VERIFY_EMAIL_SUCCESS, payload: res.data });
     } catch (err: unknown | AxiosError) {
       if (axios.isAxiosError(err)) {

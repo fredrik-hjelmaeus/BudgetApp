@@ -42,7 +42,7 @@ const App = () => {
                         <Route path="/about" element={<About />} />
                         <Route path="/Landing" element={<Landing />} />
                         <Route path="/resetpassword/:id" element={<ResetPassword />} />
-                        <Route path="/verifyemail/:id" element={<VerifyEmail />} />
+                        <Route path="/verifyemail/:verifyToken" element={<VerifyEmail />} />
                       </Routes>
                     </div>
                     <Footer />

@@ -19,9 +19,10 @@ export const NotVerifiedEmailModal = () => {
     email: "",
   });
 
+  const [verifyStatus, setVerifyStatus] = useState<string>("verifying");
+
   const { email } = user;
 
-  const [mailSent, setMailSent] = useState(false);
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setUser({ ...user, [e.target.name]: e.target.value });
 
@@ -42,7 +43,7 @@ export const NotVerifiedEmailModal = () => {
       errors.map((error) => error && setAlert(error?.msg, "danger"));
       clearErrors();
     } else {
-      mailsentmsg && setMailSent(true);
+      mailsentmsg && setVerifyStatus("mail sent");
     }
   }, [mailsentmsg, setAlert, clearErrors, errors]);
   // Css: modal context
@@ -63,15 +64,14 @@ export const NotVerifiedEmailModal = () => {
 
           <div className="modalloginheader">
             <div className="modalloginicon">
-              {/* TODO: styling might be missing on PersonIcon, look in that component */}
               <PersonIcon />
             </div>
-            {/*  <img src={personicon} alt='img'></img> */}
-            {!mailSent && <h1>Email Not Verified</h1>}
+
+            {verifyStatus !== "verified" && <h1>Email Not Verified</h1>}
           </div>
           <Alerts />
-          {mailSent ? (
-            <VerifyMailSent email={email} />
+          {verifyStatus === "mail sent" ? (
+            <VerifyMailSent email={email} setVerifyStatus={setVerifyStatus} />
           ) : (
             <VerifyMailInput
               email={email}
