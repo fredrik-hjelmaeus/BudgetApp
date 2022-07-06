@@ -450,7 +450,7 @@ export const handlers = [
       })
     );
   }),
-  rest.put("http://localhost/api/auth/verifyemail/:verifytoken", (req, res, ctx) => {
+  rest.put("http://localhost/api/auth/verifyemail/:verifyToken", (req, res, ctx) => {
     return res(ctx.json("Email Verified"));
   }),
 ];

@@ -77,7 +77,7 @@ export const VerifyEmail = () => {
               <Alerts />
               {verifyStatus === "verified" ? (
                 <div className="form-container">
-                  <div className="all-center text-success bold py-3">Email Verified!</div>
+                  <div className="all-center text-success bold py-3 large">Email Verified!</div>
                   <button className="btn btn-outline btn-block bold" value="" onClick={onClick}>
                     Continue to Login
                   </button>

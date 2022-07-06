@@ -340,15 +340,15 @@ router.post("/sendemailverification", async (req, res) => {
 });
 
 // @desc          Verify email/user
-// @route         PUT /api/auth/verifyemail/:verifytoken
+// @route         PUT /api/auth/verifyemail/:verifyToken
 // @access        Private via temp-token
-router.put("/verifyemail/:verifytoken", async (req, res) => {
+router.put("/verifyemail/:verifyToken", async (req, res) => {
   try {
     // get token from params
     // Get hashed token
     const verifyEmailToken = crypto
       .createHash("sha256")
-      .update(req.params.verifytoken)
+      .update(req.params.verifyToken)
       .digest("hex");
 
     const user = await User.findOne({

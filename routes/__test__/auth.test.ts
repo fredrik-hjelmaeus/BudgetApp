@@ -822,7 +822,7 @@ describe("authorization flow", () => {
   });
 
   // Verify Email
-  describe("PUT /api/auth/verifyemail/:verifytoken", () => {
+  describe("PUT /api/auth/verifyemail/:verifyToken", () => {
     afterEach(() => jest.resetAllMocks());
     const createValidUser = async () => {
       // signup new user to retrieve a valid token

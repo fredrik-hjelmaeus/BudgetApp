@@ -1,4 +1,9 @@
-import { render, screen } from "../../../test-utils/context-wrapper";
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from "../../../test-utils/context-wrapper";
 import { server } from "../../../mocks/server";
 import { rest } from "msw";
 import React from "react";
@@ -11,7 +16,7 @@ describe("verify email", () => {
     <MemoryRouter initialEntries={["/verifyemail/ef79617b9c23749cb04a2429eab1655bad19bbbb"]}>
       <Routes>
         <Route path="/Landing" element={<Landing />} />
-        <Route path="/verifyemail/:verifytoken" element={<VerifyEmail />}></Route>
+        <Route path="/verifyemail/:verifyToken" element={<VerifyEmail />}></Route>
       </Routes>
     </MemoryRouter>
   );
@@ -24,9 +29,9 @@ describe("verify email", () => {
   test("should render no token found if invalid path&token", async () => {
     // override server response to be non valid token provided
     server.use(
-      rest.put("http://localhost/api/auth/verifyemail/:verifytoken", (req, res, ctx) => {
+      rest.put("http://localhost/api/auth/verifyemail/:verifyToken", (req, res, ctx) => {
         return res(
-          ctx.status(500),
+          ctx.status(400),
           ctx.json({
             errors: [
               {
@@ -38,6 +43,11 @@ describe("verify email", () => {
       })
     );
     render(<Elements />);
-    expect(await screen.findByText("Email Verified!")).toBeInTheDocument();
+    const loadingElement = await screen.findByText(`verifying...`);
+    expect(loadingElement).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText(/invalid/i)).toBeInTheDocument();
+    });
   });
 });
