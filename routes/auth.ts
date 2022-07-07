@@ -142,7 +142,7 @@ router.post(
                      requested the reset of a password. Please follow this link to 
                      create new password: \n\n ${resetUrlTwo}`;
       try {
-        await sendEmail({
+        sendEmail({
           email: user.email,
           subject: "Password reset token",
           message,
