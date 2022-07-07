@@ -14,7 +14,7 @@ const sendEmail = (options: ISendEmailOptions) => {
   };
 
   try {
-    process.env.NODE_ENV === "development"
+    process.env.NODE_ENV !== "development"
       ? sendEmailWithNodeMailer(options)
       : sendEmailWithSendInBlue(sender, receiver, options.subject, options.message);
   } catch (error) {

@@ -3,11 +3,7 @@ const router = express.Router();
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import config from "config";
-import crypto from "crypto";
-
-import User, { IUser, IUserInput } from "../models/User";
-import sendEmail from "../utils/sendEmail";
+import User, { IUser } from "../models/User";
 import verifyEmail from "../utils/verifyEmail";
 
 // @route   POST api/users

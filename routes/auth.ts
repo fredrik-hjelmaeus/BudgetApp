@@ -6,7 +6,7 @@ import crypto from "crypto";
 import config from "config";
 import { check, validationResult } from "express-validator";
 import authMiddleware from "../middleware/auth";
-import sendEmail from "../utils/sendEmail";
+import sendEmail from "../utils/sendMail";
 import User, { IUser } from "../models/User";
 import verifyEmail from "../utils/verifyEmail";
 
