@@ -62,9 +62,7 @@
     "sib-api-v3-sdk": "^8.3.0",
     "ts-node-dev": "^2.0.0",
     "uuid": "^8.3.2",
-    "xss-clean": "^0.1.1"
-  },
-  "devDependencies": {
+    "xss-clean": "^0.1.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/config": "^0.0.41",
     "@types/csvtojson": "^2.0.0",
@@ -74,7 +72,9 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/nodemailer": "^6.4.4",
     "@types/supertest": "^2.0.11",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^8.3.4"
+  },
+  "devDependencies": {
     "concurrently": "^7.0.0",
     "jest": "^27.4.7",
     "mongodb-memory-server": "^8.2.0",
