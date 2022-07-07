@@ -35,7 +35,7 @@ type receiver = {
   email: string;
 };
 
-function sendEMailWithSendInBlue(
+function sendEmailWithSendInBlue(
   sender: sender,
   receiver: receiver,
   subject: string,
@@ -71,4 +71,4 @@ function sendEMailWithSendInBlue(
     .catch(console.log); */
 }
 
-export default sendEMailWithSendInBlue;
+export default sendEmailWithSendInBlue;
