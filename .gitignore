@@ -41,3 +41,4 @@ dist
 
 /drawio
 .env
+utils/sendEmailWithSendInBlue.ts

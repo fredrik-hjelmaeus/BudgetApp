@@ -1,6 +1,6 @@
 import { ISendEmailOptions } from "./ISendEmailOptions";
 import sendEmailWithNodeMailer from "./sendEmailWithNodeMailer";
-import sendEmailWithSendInBlue from "./sendEmailWithSendInBlue";
+const sendEmailWithSendInBlue = require("./sendEmailWithSendInBlue");
 
 const sendEmail = (options: ISendEmailOptions) => {
   console.log(options);
