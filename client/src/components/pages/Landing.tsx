@@ -1,34 +1,24 @@
-import React, { useEffect, useContext, MouseEvent } from "react";
+import { useEffect, useContext, MouseEvent } from "react";
 import CssContext from "../../context/css/cssContext";
 import Logo from "../layout/Logo";
 import LoginModal from "../auth/LoginModal";
 import RegisterModal from "../auth/RegisterModal";
 import ForgotPassword from "../auth/ForgotPassword";
 import AuthContext from "../../context/auth/authContext";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NotVerifiedEmailModal from "../auth/NotVerifiedEmailModal";
 
 const Landing = () => {
   const cssContext = useContext(CssContext);
   const authContext = useContext(AuthContext);
   const { setNavbar, toggleModal, modal } = cssContext;
-  const { isAuthenticated, token, loadUser, user } = authContext;
-
-  /* const tryToAuthenticate = async () => {
-    await loadUser();
-  }; */
+  const { isAuthenticated, token, user } = authContext;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    /*    if (token && !isAuthenticated && !user) {
-      console.log("trying to authenticate");
-      tryToAuthenticate();
-    } */
-
     if (user && isAuthenticated) {
       setNavbar(true);
-      <Navigate to="/" />;
-    } else {
-      setNavbar(false);
+      navigate("/");
     }
 
     return () => {

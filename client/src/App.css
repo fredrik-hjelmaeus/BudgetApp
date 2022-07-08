@@ -845,7 +845,7 @@ input {
 
 .form-container {
   max-width: 90%;
-  margin: 0rem 1rem 1rem 1rem;
+  margin: 0rem 1rem 0;
   overflow: hidden;
   padding: 0 0.5rem;
 }

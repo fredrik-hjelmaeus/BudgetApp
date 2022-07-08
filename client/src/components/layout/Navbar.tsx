@@ -18,10 +18,11 @@ const Navbar = ({ title }: { title?: string }) => {
   const cssContext = useContext(CssContext);
   const { isAuthenticated, logout, user } = authContext;
   const { clearPresets } = presetContext;
-  const { toggleModal } = cssContext;
+  const { toggleModal, setNavbar } = cssContext;
 
   const onLogout: React.MouseEventHandler<HTMLButtonElement> = () => {
     clearPresets();
+    setNavbar(false);
     logout();
   };
   const onUserClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
