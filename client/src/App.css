@@ -1806,8 +1806,10 @@ input::placeholder {
 .Landing__showcase {
   margin: 0;
   padding: 0;
-  background: url("./components/layout/images/antelope-canyon-1868413_1920@2x.png") no-repeat
-    center/cover;
+  /*  background: url("./components/layout/images/antelope-canyon-1868413_1920@2x.png") no-repeat
+    center/cover; */
+  /* background: url("https://res.cloudinary.com/kirderfovane/image/upload/v1657368562/antelope-canyon-1868413_1920_2x_kx7qcy.png")
+    no-repeat center/cover; */
   width: 100%;
   height: 80vh;
   position: relative;
