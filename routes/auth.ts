@@ -17,12 +17,12 @@ router.get("/", authMiddleware, async (req: Request, res: Response) => {
   try {
     const user: IUser | null = await User.findById(req.user.id).select("-password");
     if (!user) {
-      return res.status(400).json({ msg: "User not found" });
+      return res.status(400).json({ errors: [{ msg: "User not found" }] });
     }
     res.json(user);
   } catch (error: unknown) {
     if (error instanceof Error) console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 });
 
@@ -100,7 +100,7 @@ router.post(
       }
     } catch (error: unknown) {
       if (error instanceof Error) console.error(error.message);
-      res.status(400).json({ errors: [{ msg: "Server Error" }] });
+      res.status(500).json({ errors: [{ msg: "Server Error" }] });
     }
   }
 );
@@ -370,75 +370,6 @@ router.put("/verifyemail/:verifyToken", async (req, res) => {
     if (err instanceof Error) console.error(err.message);
     res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
-  // if no token, 400
-  // verify token
-  // if not verified, 400
-  // if verified, update userfield verifiedEmail:true in db.
-  // send user to webpage confirming email is verified
 });
-
-// TEMP
-// @route   POST api/auth/sendinblue
-// @desc    Forgot password
-// @access  Public
-/* router.post(
-  "/sendinblue",
-  [check("email", "Please include a valid email").isEmail()],
-  async (req: Request, res: Response) => {
-    //validate : check if a valid mail syntax was used
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const user = await User.findOne({ email: req.body.email });
-
-      if (!user) {
-        return res.status(404).json({ errors: [{ msg: "There is no user with that email" }] });
-      }
-
-      // Get reset token
-      const resetToken = user.getResetPasswordToken();
-
-      await user.save({ validateBeforeSave: false });
-
-      // Create reset url
-      const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/forgotpassword/${resetToken}`;
-      const resetUrlTwo =
-        process.env.NODE_ENV === "production"
-          ? `https://budget-app-web.herokuapp.com/resetpassword/${resetToken}`
-          : `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
-
-      const message = `You are receiving this email because you (or someone else) has 
-                     requested the reset of a password. Please follow this link to 
-                     create new password: \n\n ${resetUrlTwo}`;
-      try {
-        const sender = {
-          email: "gemigpost@hotmail.com",
-          name: "Fred",
-        };
-        const receivers = {
-          email: user.email,
-        };
-        const sibResponse = await sendMail(sender, receivers, "Password Reset Request", message);
-
-        return res.status(200).json({ success: true, data: "Email sent" });
-      } catch (err) {
-        console.log(err);
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
-
-        await user.save({ validateBeforeSave: false });
-
-        return res.status(500).json({ errors: [{ msg: "Email could not be sent" }] });
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) console.error(err.message);
-      res.status(500).json({ errors: [{ msg: "Server Error" }] });
-    }
-  }
-); */
 
 export = router;
