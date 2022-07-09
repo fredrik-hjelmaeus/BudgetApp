@@ -16,22 +16,16 @@ const Landing = () => {
   const { isAuthenticated, token, user } = authContext;
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = React.useState<null | string>(null);
+
   const createUrl = () => {
-    /*  setImgUrl(
-      `https://res.cloudinary.com/kirderfovane/image/upload/c_fit,h_${
-        (window.innerHeight * 0.8) / 10
-      },w_${window.innerWidth / 10}/antelope-canyon-1868413_1920_2x_kx7qcy.png`
-    ); */
     const width = (window.innerHeight * 2).toFixed(0);
     const height = (window.innerWidth * 2).toFixed(0);
 
-    /*     setImgUrl(
-      `https://res.cloudinary.com/kirderfovane/image/upload/c_fit,h_600,w_600/antelope-canyon-1868413_1920_2x_kx7qcy.png`
-    ); */
     setImgUrl(
       `https://res.cloudinary.com/kirderfovane/image/upload/c_fit,h_${height},w_${width}/antelope-canyon-1868413_1920_2x_kx7qcy.png`
     );
   };
+
   useEffect(() => {
     createUrl();
 

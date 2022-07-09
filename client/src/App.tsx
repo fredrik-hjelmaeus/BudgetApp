@@ -19,7 +19,6 @@ import setAuthToken from "./utils/setAuthToken";
 import LoginModal from "./components/auth/LoginModal";
 import VerifyEmail from "./components/auth/VerifyEmail";
 import NotFound from "./components/pages/NotFound";
-import CloudinaryTest from "./components/pages/CloudinaryTest";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -45,7 +44,7 @@ const App = () => {
                         <Route path="/Landing" element={<Landing />} />
                         <Route path="/resetpassword/:id" element={<ResetPassword />} />
                         <Route path="/verifyemail/:verifyToken" element={<VerifyEmail />} />
-                        <Route path="*" element={<CloudinaryTest />} />
+                        <Route path="*" element={<NotFound />} />
                       </Routes>
                     </div>
                     <Footer />
