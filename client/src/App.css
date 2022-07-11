@@ -32,7 +32,19 @@ body {
 
 @media (max-width: 800px) {
   body {
-    background-color: var(--light-color);
+    fsont-family: "Arial";
+    fosnt-weight: 300;
+    fosnt-variant: "regular";
+    fosnt-size: 1rem;
+    linse-height: 1.6;
+    background-color: #000000;
+    color: #333;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 }
 
@@ -72,7 +84,7 @@ img {
     margin: auto;
     overflow: hidden;
     padding: 0;
-    bsorder: 1px solid green;
+    border: 1px solid green;
   }
 }
 
@@ -1769,7 +1781,7 @@ input::placeholder {
   padding: 0 1rem;
 }
 /* Iphone X */
-@media (max-width: 375px) {
+@media (max-width: 800px) {
   .Logo {
     max-width: none;
     width: 100%;
@@ -1845,19 +1857,37 @@ input::placeholder {
   color: var(--primary-color);
   border: #ccc solid 1px;
 }
+@media (max-width: 800px) {
+  .Landing__btn__white {
+    margin: 0.5rem auto 0rem auto;
+  }
+  .Landing__btn__black {
+    border: #8c8c8c solid;
+    border-radius: 4px;
+    max-width: 163px;
+    color: #fff;
+    padding: 0.4rem 1.3rem;
+    background: black;
+    font-size: 12px;
+    font-weight: bold;
+    transition: opacity 0.2s ease-in;
+    cursor: pointer;
+    margin: 0.8rem auto 2rem auto;
+  }
+}
 /* Iphone X */
 @media (max-width: 375px) {
   .Landing {
-    bosrder: 1px solid red;
+    border: 1px solid red;
     width: 100%;
   }
   .Landing__textarea {
-    bosrder: 1px solid red;
+    border: 1px solid red;
   }
   .Landing__showcase {
     width: 100%;
     overflow: hidden;
-    bordser: 1px solid green;
+    border: 1px solid green;
   }
 }
 
@@ -2717,13 +2747,37 @@ table th {
 }
 
 @media (max-width: 800px) {
+  .footer {
+    flex: 1;
+    background: var(--dark-color);
+    color: white;
+    position: relative;
+    height: 10vh;
+    width: 100%;
+    padding: 0;
+    margin: auto;
+    overflow: hidden;
+    bottom: 0;
+    borsder: 1px solid blue;
+  }
+
+  .Landing__showcase {
+    height: 90vh;
+  }
+
   .footer__cols {
-    display: none;
+    grid-gap: 0;
     display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: flex-start;
-    bosrder: solid 1px green;
+    flsex-direction: column;
+    flsex-wrap: nowrap;
+    jusstify-content: center;
+    alsign-items: flex-start;
+    bordesr: solid 1px green;
+    padding: 0;
+    margin: 0;
+    height: auto;
+    width: auto;
+    overflow: visible;
   }
 
   .footer__information_btn,
@@ -2739,7 +2793,13 @@ table th {
   }
 
   .footer__links {
-    bsorder: solid 1px red;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0;
+    padding: 0;
+    bosrder: solid 1px red;
   }
 }
 

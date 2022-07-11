@@ -16,6 +16,7 @@ const DateItemMobile = () => {
   const [LocalMonth] = useState<string | null>(null);
 
   const onDateClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    console.log(event.currentTarget.value);
     //shift the datelist
     const rotateDateList = (
       event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

@@ -18,8 +18,8 @@ const Landing = () => {
   const [imgUrl, setImgUrl] = React.useState<null | string>(null);
 
   const createUrl = () => {
-    const width = (window.innerHeight * 2).toFixed(0);
-    const height = (window.innerWidth * 2).toFixed(0);
+    const width = (window.innerHeight * 2.5).toFixed(0);
+    const height = (window.innerWidth * 2.5).toFixed(0);
 
     setImgUrl(
       `https://res.cloudinary.com/kirderfovane/image/upload/c_fit,h_${height},w_${width}/antelope-canyon-1868413_1920_2x_kx7qcy.png`

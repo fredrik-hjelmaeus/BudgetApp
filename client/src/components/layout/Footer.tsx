@@ -42,7 +42,7 @@ const Footer = () => {
         <li className="footer__links">
           <a href="https://www.instagram.com/leomessi/" className="footer__links_btn">
             <div className="footericons">
-              <InstagramIconSVG />
+              <InstagramIconSVG size="24" />
             </div>
             {/* <img src={instagramicon} alt="img" className="footericons" /> */}
           </a>
@@ -50,13 +50,13 @@ const Footer = () => {
           {"     "}
           <a href="https://twitter.com/imessi" className="footer__links_btn">
             <div className="footericons">
-              <TwitterIconSVG />
+              <TwitterIconSVG size="24" />
             </div>
             {/*   <img src={twittericon} alt="img" className="footericons" /> */}
           </a>
           <a href="https://www.facebook.com/leomessi/" className="footer__links_btn">
             <div className="footericons">
-              <FacebookIconSVG />
+              <FacebookIconSVG size="24" />
             </div>
             {/*  <img src={facebookicon} alt="img" className="footericons" /> */}
           </a>
