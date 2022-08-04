@@ -84,7 +84,6 @@ img {
     margin: auto;
     overflow: hidden;
     padding: 0;
-    border: 1px solid green;
   }
 }
 
@@ -996,7 +995,6 @@ input::placeholder {
   align-items: flex-end;
   margin: 5px 10px;
   border-bottom: 1px solid var(--light-color);
-  bosrder: 1px solid red;
 }
 
 .card_monthright {
@@ -1878,16 +1876,15 @@ input::placeholder {
 /* Iphone X */
 @media (max-width: 375px) {
   .Landing {
-    border: 1px solid red;
     width: 100%;
   }
   .Landing__textarea {
-    border: 1px solid red;
+    font-size: 1.25rem;
+    text-align: center;
   }
   .Landing__showcase {
     width: 100%;
     overflow: hidden;
-    border: 1px solid green;
   }
 }
 
@@ -1963,7 +1960,7 @@ table th {
   border: 1px solid #000000;
   border-radius: 8px;
   max-width: 461px;
-  max-height: 489px;
+  maxx-height: 489px;
   font-size: 14px;
 }
 
@@ -2595,7 +2592,6 @@ table th {
 }
 
 .navbar ul {
-  border: 1px solid red;
   display: flex;
   align-items: center;
   bordser: 1px solid orange;
