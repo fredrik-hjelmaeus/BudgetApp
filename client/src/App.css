@@ -76,11 +76,22 @@ img {
   overflow: hidden;
   pardding: 0 2rem;
 }
+.year__container {
+  margin: auto;
+  overflow: hidden;
+}
 
 @media (max-width: 800px) {
   .container {
     max-width: none;
     width: 90vw;
+    margin: auto;
+    overflow: hidden;
+    padding: 0;
+  }
+  .year__container {
+    max-width: none;
+    width: 100%;
     margin: auto;
     overflow: hidden;
     padding: 0;
@@ -437,7 +448,6 @@ img {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  bordesr: 1px solid blue;
 }
 
 .flexrow-2 {
@@ -1609,9 +1619,8 @@ input::placeholder {
 }
 @media (max-width: 800px) {
   .yearTitle {
-    bdorder: blue 1px solid;
     width: 100vw;
-    padding: 0rem 3rem 0rem 0rem;
+    padding: 0rem 2rem 0.5rem 1rem;
   }
 }
 
@@ -2508,11 +2517,10 @@ table th {
 @media (max-width: 800px) {
   .datemenu {
     display: grid;
-    grid-template-columns: 1rem 100px auto 100px 1rem;
-    justify-items: center;
+    height: 3rem;
+    grid-template-columns: auto auto auto auto auto;
+    justify-items: stretch;
     padding: 0;
-    width: 90%;
-    margin-bottom: 0;
     margin: auto;
   }
   .prev {
@@ -2673,14 +2681,14 @@ table th {
     display: block;
     padding: 0;
     margin: 0;
-    borsder: 1px solid green;
+
     width: 100%;
   }
   .navbar__layout_mobile {
     display: flex;
     justify-content: space-around;
     align-items: baseline;
-    borsder: 1px solid blue;
+
     margin-left: 1rem;
   }
 
@@ -2778,7 +2786,6 @@ table th {
     margin: auto;
     overflow: hidden;
     bottom: 0;
-    borsder: 1px solid blue;
   }
 
   .Landing__showcase {
@@ -3195,7 +3202,6 @@ input[type="range"]:focus::-ms-fill-lower {
 }
 
 .grid-2__column {
-  bordser: 1px solid blue;
   overflow: visible;
   masx-width: 350px;
   position: relative;

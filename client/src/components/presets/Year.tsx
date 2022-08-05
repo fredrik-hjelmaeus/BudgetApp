@@ -86,7 +86,7 @@ const Year = () => {
       {guide && <GuideModal />}
 
       <div className="grid-2">
-        <div className="container">
+        <div className="year__container">
           <YearTitle />
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
