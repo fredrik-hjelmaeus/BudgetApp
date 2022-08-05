@@ -1370,7 +1370,9 @@ input::placeholder {
   height: auto;
   padding: 2rem;
 }
-
+.logso-icon {
+  display: none;
+}
 .card-categorybalance {
   padding: 0.5rem 1rem;
   border: var(--gray-color) 1px solid;
@@ -2577,7 +2579,7 @@ table th {
   margin: auto;
 }
 
-.navbar__title {
+.navbar__logotexttitle {
   display: inline;
 
   /*  background: -webkit-linear-gradient(-50deg, #de476e, #e72559); */
@@ -2587,6 +2589,7 @@ table th {
 }
 
 .navbar__username {
+  display: flex;
   font-size: 1.3rem;
   margin-right: 1rem;
 }
@@ -2595,6 +2598,9 @@ table th {
   display: flex;
   align-items: center;
   bordser: 1px solid orange;
+}
+.navbar__mobile_icon {
+  display: none;
 }
 
 .navbar a {
@@ -2620,6 +2626,7 @@ table th {
   padding: 0;
   cursor: pointer;
   margin-right: 0;
+  font-size: 16px;
 }
 /*  Large screen   */
 @media (min-width: 1700px) {
@@ -2632,7 +2639,6 @@ table th {
 @media (min-width: 800px) and (max-width: 900px) {
   .navbar__inside {
     align-items: center;
-
     justify-content: space-between;
     padding: 0;
     margin: 0;
@@ -2654,43 +2660,61 @@ table th {
     margin-bottom: 1rem;
   }
 
+  .navbar__mobile_icon {
+    display: block;
+  }
+
   .navbar a {
     color: #fff;
     padding: 0;
     margin: 0;
   }
   .navbar__inside {
-    align-items: center;
-
-    justify-content: space-around;
+    display: block;
     padding: 0;
     margin: 0;
-    width: 100%;
-    display: flex;
-    margin: 0;
-
     borsder: 1px solid green;
+    width: 100%;
   }
-  .navbar__icon {
-    bordesr: 1px solid red;
+  .navbar__layout_mobile {
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    borsder: 1px solid blue;
+    margin-left: 1rem;
+  }
 
+  .navbar__icon {
     padding: 0;
     margin: 0;
   }
   .navbar__username {
-    font-size: 0.875rem;
-    margin-right: 1rem;
-    masrgin: 0;
+    justify-content: center;
+    flex: 1;
+    font-size: 1rem;
+    msargin-right: 1rem;
+    margin: 0;
     padding: 0;
-    align-self: center;
-
-    bordser: 1px solid red;
+    alisgn-self: center;
+    bosrder: 1px solid red;
+    vertical-align: middle;
+    marsgin-top: 1rem;
+  }
+  .navbar__logout {
+    borsder: 1px solid yellow;
+    align-self: stretch;
+    align-items: flex-end;
+    justify-content: flex-end;
+    justify-self: right;
+    margin-right: 1rem;
+    font-size: 0;
+    flex: 1;
   }
   .navbar__titlenudge {
     position: relative;
     bottom: 0.35rem;
   }
-  .navbar__title {
+  .navbar__logotexttitle {
     display: none;
   }
 }
@@ -2858,11 +2882,6 @@ table th {
   .navbar {
     display: block;
     text-align: center;
-  }
-
-  .navbar ul {
-    text-align: center;
-    justify-content: center;
   }
 }
 /* Animation (Add After) */

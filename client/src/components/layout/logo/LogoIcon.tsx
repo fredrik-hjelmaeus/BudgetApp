@@ -8,7 +8,7 @@ export const LogoIcon = ({ width }: LogoIconProps) => (
     data-v-fde0c5aa=""
     xmlns="http://www.w3.org/2000/svg"
     viewBox="-10 -10 50 50"
-    className="iconLeft"
+    className="navbar__icon"
     style={
       width === undefined
         ? { width: "66px", margin: "auto", marginBottom: "10px" }
