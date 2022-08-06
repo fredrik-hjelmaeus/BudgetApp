@@ -1627,6 +1627,7 @@ input::placeholder {
 .yearTitle h1 {
   font-size: 67px;
   margin-bottom: 16px;
+
   font-weight: Semibold;
 }
 @media (max-width: 800px) {
@@ -1643,7 +1644,7 @@ input::placeholder {
 @media (max-width: 800px) {
   .yearTitle h4 {
     font-size: 18px;
-    bdorder: 1px red solid;
+
     margin-bottom: 1.5rem;
   }
 }
@@ -2666,6 +2667,7 @@ table th {
     width: 100%;
     opacity: 1;
     margin-bottom: 1rem;
+    margin: 0;
   }
 
   .navbar__mobile_icon {
