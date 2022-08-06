@@ -91,9 +91,10 @@ const Year = () => {
           {dimensions.width > 700 && <YearSummaryMenu />}
         </div>
         <div className="year-bg">
-          {dimensions.width < 800 && guide && (
-            <YearSwiper guide={guide} setYearSummary={setYearSummary} yearsummary={yearsummary} />
+          {dimensions.width < 800 && (
+            <YearSwiper setYearSummary={setYearSummary} yearsummary={yearsummary} />
           )}
+
           {dimensions.width > 800 && yearsummary === "savings" && <Savings />}
           {dimensions.width > 800 && yearsummary === "expense" && <Expense />}
           {dimensions.width > 800 && yearsummary === "balance" && <YearBalance />}

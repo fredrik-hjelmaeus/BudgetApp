@@ -73,6 +73,12 @@ const authReducer = (state: IAuthState, action: ActionType) => {
     case FORGOT_FAIL:
     case SEND_VERIFICATION_FAIL:
       localStorage.removeItem("token");
+      console.log(
+        "not iterable crash log,action.payload:",
+        action.payload,
+        "errors:",
+        state.errors
+      );
       return {
         ...state,
         token: null,
