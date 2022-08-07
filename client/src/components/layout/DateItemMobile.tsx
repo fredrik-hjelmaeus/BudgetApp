@@ -31,20 +31,16 @@ const DateItemMobile = () => {
   // [x] next is pressed, change month and shift datelist.
   // [x] month is pressed,find out direction and shift datelist accordingly
   const onDateClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    console.log(event.currentTarget.value, "activeyear: ", year);
-
     // december is pressed when on active year
     if (event.currentTarget.value === "December" && dateList[6] === year) {
       // year is decremented
       setYear(year - 1);
-      // displayYear is set to year+1
 
-      //newDateList[6] = year + 1;
       // month is set to december
       addMonth("December");
       // dateList is rotated to the left
       unshiftDateList();
-      console.log("DECEMBER is pressed when on active year");
+
       return;
     }
 
@@ -52,14 +48,12 @@ const DateItemMobile = () => {
     if (event.currentTarget.value === "prev" && dateList[6] === year) {
       // year is decremented
       setYear(year - 1);
-      // displayYear is set to year+1
 
       // month is set to december
       addMonth("December");
       // dateList is rotated to the left
       unshiftDateList();
 
-      console.log("PREV is pressed when on active year");
       return;
     }
 
@@ -68,7 +62,6 @@ const DateItemMobile = () => {
       shiftDateList();
       addMonth("January");
 
-      console.log("NEXT is pressed when on active year");
       return;
     }
     // january is pressed when on active year
@@ -76,7 +69,6 @@ const DateItemMobile = () => {
       shiftDateList();
       addMonth("January");
 
-      console.log("JANUARY is pressed when on active year");
       return;
     }
 
@@ -90,7 +82,7 @@ const DateItemMobile = () => {
       shiftDateList();
       // year gets activated by setting month to null
       addMonth(null);
-      console.log("YEAR is pressed when on december");
+
       return;
     }
     // next is pressed when on december
@@ -103,33 +95,31 @@ const DateItemMobile = () => {
       shiftDateList();
       // year gets activated by setting month to null
       addMonth(null);
-      console.log("NEXT is pressed when on december");
+
       return;
     }
 
     // year is pressed when on active year
     if (event.currentTarget.value === "active" && dateList[6] === year) {
-      console.log("YEAR is pressed when on active year");
       return;
     }
     // year is pressed when on january
     if (event.currentTarget.value === year?.toString() && dateList[6] === "January") {
       addMonth(null);
       unshiftDateList();
-      console.log("YEAR is pressed when on january");
+
       return;
     }
     // year is pressed when on january
     if (event.currentTarget.value === "prev" && dateList[6] === "January") {
       addMonth(null);
       unshiftDateList();
-      console.log("PREV is pressed when on january");
+
       return;
     }
 
     // december is pressed when on november
     if (event.currentTarget.value === "December" && dateList[6] === "November") {
-      console.log("DESEMBER is pressed when on november");
       //displayyear should be year + 1
       if (dateList[8] === year) {
         dateList[8] = year + 1;
@@ -141,7 +131,6 @@ const DateItemMobile = () => {
 
     // next is pressed when on november
     if (event.currentTarget.value === "next" && dateList[6] === "November") {
-      console.log("DECEMBER is pressed when on november");
       //displayyear should be year + 1
       if (dateList[8] === year) {
         dateList[8] = year + 1;
@@ -153,37 +142,31 @@ const DateItemMobile = () => {
 
     // january is pressed when on february
     if (event.currentTarget.value === "January" && dateList[6] === "February") {
-      console.log("JANUARY is pressed when on february");
       // displayed year is updated
       dateList[4] = year ? year : 0;
       unshiftDateList();
-      console.log(dateList);
+
       addMonth(event.currentTarget.value);
       return;
     }
 
     // prev is pressed when on february
     if (event.currentTarget.value === "prev" && dateList[6] === "February") {
-      console.log("PREV is pressed when on february");
       // displayed year is updated
       dateList[4] = year ? year : 0;
       unshiftDateList();
-      console.log(dateList);
+
       addMonth(event.currentTarget.value);
       return;
     }
     // prev is pressed
     if (event.currentTarget.value === "prev") {
-      console.log("prev found,no krusidulls");
-      console.log("new active month should be:", dateList[5]);
       addMonth(dateList[5].toString());
       unshiftDateList();
       return;
     }
     // next is pressed
     if (event.currentTarget.value === "next") {
-      console.log("next found,no krusidulls");
-      console.log("new active month should be:", dateList[7]);
       addMonth(dateList[7].toString());
       shiftDateList();
       return;
