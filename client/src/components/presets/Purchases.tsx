@@ -10,7 +10,8 @@ const Purchases = () => {
   const { guide } = useContext(GuideContext);
 
   useEffect(() => {
-    MonthBalance === null || (piggybanks === [] && calcMonthBalance());
+    // TODO:should be this but wont compile: MonthBalance === null || (piggybanks === [] && calcMonthBalance());
+    MonthBalance === null && calcMonthBalance()
   }, [sendEdit, presets, calcMonthBalance, MonthBalance, piggybanks]);
 
   return (
